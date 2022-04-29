@@ -1,0 +1,40 @@
+﻿@model LoginRequestVm
+@{
+    ViewData["Title"] = "Login";
+}
+ 
+<div class="col-md-4 form-account">
+    <h1>ĐĂNG NHẬP</h1>
+    <div class="listError"></div>
+    <form action="/Account/Login?returnUrl=@ViewBag.ReturnUrl" method="post">
+        <h4>Điền thông tin để đăng nhập</h4>
+        <hr />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="UserName">UserName</label>
+            <input type="text" class="form-control" asp-for="UserName">
+            <span asp-validation-for="UserName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Password">Password</label>
+            <input type="password" asp-for="Password" class="form-control">
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Đăng nhập</button>
+        </div>
+        <div class="form-group">
+            <p>
+                <a id="forgot-password" href="/Account/ForgotPassword">Bạn quyên mật khẩu?</a>
+            </p>
+            <p>
+                <a href="/Account/Register">Chưa có tài khoản, đăng ký mới</a>
+            </p>
+        </div>
+        <div class="form-group">
+            <a href="/facebook-login?returnUrl=@ViewBag.ReturnUrl" class="btn btn-primary">Facebook</a>
+            <a href="/google-login?returnUrl=@ViewBag.ReturnUrl" class="btn btn-danger">Google</a>
+        </div>
+    </form>
+</div>
+

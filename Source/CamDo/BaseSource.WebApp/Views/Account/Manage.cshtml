@@ -1,0 +1,47 @@
+﻿@model UserInfoResponse
+@{
+    ViewData["Title"] = "Manage";
+}
+ 
+<div class="col-md-8 form-account">
+    <dl class="row">
+
+        <dt class="col-sm-3">
+            UserName
+        </dt>
+        <dd class="col-sm-9">
+            @Model.UserName
+        </dd>
+        <dt class="col-sm-3">
+            Họ Tên
+        </dt>
+        <dd class="col-sm-9">
+            @Model.FirstName
+        </dd>
+        <dt class="col-sm-3">
+            Email
+        </dt>
+        <dd class="col-sm-9">
+            @Model.Email
+        </dd>
+        <dt class="col-sm-3">
+            Ngày tạo
+        </dt>
+        <dd class="col-sm-9">
+            @Model.JoinedDate.ToString("dd/MM/yyyy")
+        </dd>
+        <dt class="col-sm-3">
+            Mật khẩu
+        </dt>
+        <dd class="col-sm-9">
+            <a asp-controller="Account" asp-action="ChangePassword">Thay đổi mật khẩu</a>
+        </dd>
+        <dt class="col-sm-3">
+
+        </dt>
+        <dd class="col-sm-9">
+            <a asp-controller="Account" asp-action="EditProfile" class="btn btn-primary">Chỉnh sửa</a>
+        </dd>
+    </dl>
+
+</div>

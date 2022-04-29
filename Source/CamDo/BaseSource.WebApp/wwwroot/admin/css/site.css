@@ -1,0 +1,27 @@
+﻿
+/*html {
+    font-size: 14px;
+}*/
+
+div::-webkit-scrollbar, ul::-webkit-scrollbar {
+    width: 8px;
+    height: 8px
+}
+
+div::-webkit-scrollbar-thumb, ul::-webkit-scrollbar-thumb {
+    background: rgba(0,0,0,.2);
+    border-radius: 10px
+}
+
+    div::-webkit-scrollbar-thumb:hover, ul::-webkit-scrollbar-thumb:hover {
+        background: rgba(0,0,0,.5)
+    }
+
+.fa-sync-alt.fa-spin {
+    margin-left: 5px;
+}
+
+#toast-container > div {
+    opacity: 1;
+    box-shadow: 0 5px 11px 0 rgba(0,0,0,.18), 0 4px 15px 0 rgba(0,0,0,.15) !important;
+}

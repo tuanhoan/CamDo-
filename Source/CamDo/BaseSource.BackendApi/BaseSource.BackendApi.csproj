@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="mailssave\**" />
+    <Content Remove="mailssave\**" />
+    <EmbeddedResource Remove="mailssave\**" />
+    <None Remove="mailssave\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation.AspNetCore" Version="9.3.0" />
+    <PackageReference Include="MailKit" Version="2.14.0" />
+    <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0" />
+    <PackageReference Include="MimeKit" Version="2.14.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.5" />
+    <PackageReference Include="X.PagedList" Version="8.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BaseSource.BackendApi.Services\BaseSource.BackendApi.Services.csproj" />
+    <ProjectReference Include="..\BaseSource.Data\BaseSource.Data.csproj" />
+    <ProjectReference Include="..\BaseSource.Shared\BaseSource.Shared.csproj" />
+    <ProjectReference Include="..\BaseSource.Utilities\BaseSource.Utilities.csproj" />
+    <ProjectReference Include="..\BaseSource.ViewModels\BaseSource.ViewModels.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,69 @@
+﻿@model ConfigViewModel
+@{
+    ViewBag.Title = "Update Config";
+}
+
+@using (Html.BeginForm("Index", "Setting", FormMethod.Post, null))
+{
+    @Html.AntiForgeryToken()
+
+    <!-- Page Heading -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-2">@ViewBag.Title</h1>
+        <button type="submit" class="d-inline-block btn btn-primary shadow-sm"><i class="fas fa-save fa-fw text-white-50"></i> Save change</button>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold">@ViewBag.Title</h6>
+        </div>
+        <div class="card-body">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.EmailSender, htmlAttributes: new { @class = "col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.EmailSender, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmailSender, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row">
+                @Html.LabelFor(model => model.EmailSenderPassword, htmlAttributes: new { @class = "col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.EmailSenderPassword, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmailSenderPassword, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <hr />
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.EmailHost, htmlAttributes: new { @class = "col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.EmailHost, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmailHost, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row">
+                @Html.LabelFor(model => model.EmailPort, htmlAttributes: new { @class = "col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.EmailPort, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmailPort, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group row">
+                @Html.LabelFor(model => model.EmailSSL, htmlAttributes: new { @class = "col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.EmailSSL, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmailSSL, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+        </div>
+    </div>
+}
+
+@section Scripts{
+    <script>
+        $(".setting-nav").addClass("active");
+    </script>
+}
