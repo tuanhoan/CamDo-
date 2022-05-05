@@ -10,6 +10,6 @@ namespace BaseSource.ViewModels.User
     public class EditProfileVm
     {
         [Required]
-        public string FirstName { get; set; }
+        public string FullName { get; set; }
     }
 }

@@ -81,8 +81,7 @@ namespace BaseSource.BackendApi.Controllers
                 var userDetail = new UserProfile()
                 {
                     UserId = appUser.Id.ToString(),
-                    FirstName = model.UserName,
-                    LastName = model.UserName,
+                    FullName = model.UserName,
                     CustomId = appUser.Id.ToString()
                 };
                 _db.UserProfiles.Add(userDetail);
@@ -239,8 +238,7 @@ namespace BaseSource.BackendApi.Controllers
             {
                 Id = user.Id.ToString(),
                 Email = user.Email,
-                FirstName = profile.FirstName,
-                LastName = profile.LastName,
+                FullName = profile.FullName,
                 UserName = user.UserName,
                 JoinedDate = profile.JoinedDate,
                 Roles = roles.ToList()
@@ -258,7 +256,7 @@ namespace BaseSource.BackendApi.Controllers
             }
 			
             var user = await _db.UserProfiles.FindAsync(UserId);
-            user.FirstName = model.FirstName;
+            user.FullName = model.FullName;
             await _db.SaveChangesAsync();
             return Ok(new ApiSuccessResult<string>());
 
@@ -345,8 +343,7 @@ namespace BaseSource.BackendApi.Controllers
                 _db.UserProfiles.Add(new UserProfile
                 {
                     CustomId = newUser.Id,
-                    FirstName = model.GivenName,
-                    LastName = model.Surname,
+                    FullName = model.GivenName,
                     JoinedDate = DateTime.Now,
                     UserId = newUser.Id
                 });

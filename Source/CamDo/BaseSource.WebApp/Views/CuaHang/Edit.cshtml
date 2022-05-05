@@ -1,0 +1,73 @@
+﻿@model EditCuaHangVm
+@{
+    ViewData["Title"] = "Cập nhật cửa hàng";
+}
+<div>
+    <div class="card shadow h-100">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="m-0 font-weight-bold">@ViewData["Title"]</h3>
+            <a class="btn btn-sm btn-secondary shadow-sm" asp-action="Index"><i class="fas fa-arrow-left fa-fw fa-sm text-white-50"></i> Back</a>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="Edit" data-name="ajaxFormUpload" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                @Html.HiddenFor(x => x.Id)
+                <div class="form-group row">
+                    <label asp-for="TenCuaHang" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="TenCuaHang" class="form-control " />
+                        <span asp-validation-for="TenCuaHang" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="SDT" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="SDT" class="form-control " />
+                        <span asp-validation-for="SDT" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="DiaChi" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="DiaChi" class="form-control " />
+                        <span asp-validation-for="DiaChi" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <div class="form-group row">
+                    <label asp-for="TenNguoiDaiDien" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="TenNguoiDaiDien" class="form-control " />
+                        <span asp-validation-for="TenNguoiDaiDien" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="VonDauTu" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="VonDauTu" class="form-control " />
+                        <span asp-validation-for="VonDauTu" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label asp-for="IsActive" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="IsActive" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Save Change</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts{
+    <script>
+        $(".cuahang-nav").addClass("active");
+    </script>
+}   

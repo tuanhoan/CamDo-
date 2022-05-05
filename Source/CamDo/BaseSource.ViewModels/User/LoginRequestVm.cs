@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authentication;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -13,5 +14,6 @@ namespace BaseSource.ViewModels.User
         public string UserName { get; set; }
         [Required]
         public string Password { get; set; }
+        public IList<AuthenticationScheme> ExternalLogins { get; set; }
     }
 }

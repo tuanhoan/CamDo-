@@ -17,6 +17,7 @@ $('form[data-name="ajaxForm"]').submit(function (e) {
             $btnSubmit.find("i").remove();
         },
         success: function (res) {
+            $btnSubmit.removeAttr("disabled");
             $form.find(".field-validation-valid").empty();
             if (res.IsSuccessed == true) {
                 localStorage.setItem("IsSuccessed", res.isSuccessed);
@@ -25,10 +26,9 @@ $('form[data-name="ajaxForm"]').submit(function (e) {
                 window.location.href = res.ResultObj;
             } else if (res.validationErrors != null && res.validationErrors.length) {
                 $.each(res.validationErrors, function (i, v) {
-                    debugger
                     $form.find("span[data-valmsg-for='" + v.pos + "']").html(v.error);
                 });
-                $btnSubmit.removeAttr("disabled");
+              
             } else if (res.Message != null) {
                 alert(res.Message);
             }
@@ -49,3 +49,17 @@ $(document).ready(function () {
         localStorage.clear();
     }
 });
+function setMoneyTextBox(selector) {
+
+    $(selector).change(function () {
+        var value = $(this).val();
+        var Re = new RegExp("\\,", "g");
+        value = value.replace(Re, "");
+        if (value == "") {
+            value = 0;
+        }
+        $(this).next().val(value);
+
+    });
+
+}

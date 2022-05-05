@@ -18,12 +18,12 @@ namespace BaseSource.Data.Configurations
             builder.HasIndex(x => x.CustomId).IsUnique();
 
             builder.Property(x => x.CustomId).IsRequired().HasMaxLength(128);
-            builder.Property(x => x.FirstName).IsRequired().HasMaxLength(250);
-            builder.Property(x => x.LastName).HasMaxLength(250);
+            builder.Property(x => x.FullName).IsRequired().HasMaxLength(256);
             builder.Property(x => x.JoinedDate).IsRequired().HasDefaultValueSql("GetDate()");
 
 
             builder.HasOne(x => x.AppUser).WithOne(x => x.UserProfile).HasForeignKey<UserProfile>(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(x => x.CuaHang).WithMany(x => x.UserProfiles).HasForeignKey(x => x.CuaHangId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

@@ -71,12 +71,13 @@ namespace BaseSource.WebApp.Controllers
 
             if (result.IsSuccessed)
             {
-                var message = new MessageResult()
-                {
-                    Title = "Đăng ký thành công",
-                    Content = "Một email đã gửi đến cho bạn. Vui lòng xác thực email bằng đường link đã gủi đến email."
-                };
-                return View("MessageViewResult", message);
+                //var message = new MessageResult()
+                //{
+                //    Title = "Đăng ký thành công",
+                //    Content = "Một email đã gửi đến cho bạn. Vui lòng xác thực email bằng đường link đã gủi đến email."
+                //};
+                //return View("MessageViewResult", message);
+                return RedirectToAction("Login");
 
             }
 
@@ -240,7 +241,7 @@ namespace BaseSource.WebApp.Controllers
         {
             var result = await _userApiClient.GetUserInfo();
             var model = new EditProfileVm();
-            model.FirstName = result.ResultObj.FirstName;
+            model.FullName = result.ResultObj.FullName;
             return View(model);
         }
 

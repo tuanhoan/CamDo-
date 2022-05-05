@@ -13,14 +13,14 @@ namespace BaseSource.Data.Entities
 
         public string CustomId { get; set; }
 
-        public string FirstName { get; set; }
-
-        public string LastName { get; set; }
+        public string FullName { get; set; }
 
         public DateTime JoinedDate { get; set; }
+        public int CuaHangId { get; set; }
 
 
         // object
         public virtual AppUser AppUser { get; set; }
+        public virtual CuaHang CuaHang { get; set; }
     }
 }

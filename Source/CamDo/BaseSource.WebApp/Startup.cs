@@ -17,6 +17,8 @@ using BaseSource.ApiIntegration.WebApi;
 using BaseSource.ApiIntegration.AdminApi;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
+using BaseSource.ApiIntegration.AdminApi.CauHinhHangHoa;
+using BaseSource.ApiIntegration.WebApi.CuaHang;
 
 namespace BaseSource.WebApp
 {
@@ -31,7 +33,7 @@ namespace BaseSource.WebApp
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        { 
+        {
             services.AddHttpClient();
             services.AddHttpClient(SystemConstants.AppSettings.BackendApiClient, (sp, httpClient) =>
             {
@@ -85,10 +87,12 @@ namespace BaseSource.WebApp
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IUserApiClient, UserApiClient>();
             services.AddTransient<IExampleApiClient, ExampleApiClient>();
+            services.AddTransient<ICuaHangApiClient, CuaHangApiClient>();
 
             #region admin
             services.AddTransient<IUserAdminApiClient, UserAdminApiClient>();
             services.AddTransient<ISettingAdminApiClient, SettingAdminApiClient>();
+            services.AddTransient<ICauHinhHangHoaAdminApiClient, CauHinhHangHoaAdminApiClient>();
             #endregion
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

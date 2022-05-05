@@ -1,0 +1,131 @@
+﻿@model CreateCauHinhHangHoaAdminVm
+@{
+    ViewData["Title"] = "Thêm mới cấu hình hàng hóa";
+}
+<div>
+    <div class="card shadow h-100">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="m-0 font-weight-bold">@ViewData["Title"]</h3>
+            <a class="btn btn-sm btn-secondary shadow-sm" asp-action="Index"><i class="fas fa-arrow-left fa-fw fa-sm text-white-50"></i> Back</a>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="Create" data-name="ajaxFormHangHoa" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group row">
+                    <label asp-for="LinhVuc" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <select class="form-control" asp-for="LinhVuc" asp-items="@Html.GetEnumSelectList<ELinhVucHangHoa>()">
+                            <option selected="selected" value="">--Chọn loại--</option>
+                        </select>
+                        <span asp-validation-for="LinhVuc" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="MaTS" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="MaTS" class="form-control " />
+                        <span asp-validation-for="MaTS" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="Ten" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Ten" class="form-control " />
+                        <span asp-validation-for="Ten" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="IsPublish" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="IsPublish" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="HinhThucLai" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <select class="form-control" asp-for="HinhThucLai" asp-items="@Html.GetEnumSelectList<EHinhThucLai>()">
+                            <option selected="selected" value="">--Chọn loại--</option>
+                        </select>
+                        <span asp-validation-for="HinhThucLai" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="SoTienCam" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="SoTienCam" class="form-control " />
+                        <span asp-validation-for="SoTienCam" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="Lai" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Lai" class="form-control " />
+                        <span asp-validation-for="Lai" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="KyLai" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="KyLai" class="form-control " />
+                        <span asp-validation-for="KyLai" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="SoNgayVay" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="SoNgayVay" class="form-control " />
+                        <span asp-validation-for="SoNgayVay" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="SoNgayQuaHan" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="SoNgayQuaHan" class="form-control " />
+                        <span asp-validation-for="SoNgayQuaHan" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="ListThuocTinh" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <div class="repeatThuocTinh">
+                            <button data-repeater-create type="button" class="btn btn-sm btn-success mb-3" value=""><i data-feather="plus"></i> Thêm thuộc tính</button>
+                            <div data-repeater-list="groupthuoctinh" class="col-md-6 p-0">
+                                <div data-repeater-item class="form-group d-flex">
+                                    <input type="text" class="form-control mr-3 group-thuoctinh-item" placeholder="Thuộc tính hàng hóa" name="thuoctinh" value="" />
+                                    <button data-repeater-delete type="button" class="btn btn-sm btn-danger"><i data-feather="minus"></i></button>
+                                </div>
+                            </div>
+
+                        </div>
+                        <input type="hidden" name="ListThuocTinh" id="ListThuocTinh" /> 
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('.repeatThuocTinh').repeater({
+                initEmpty: true,
+                show: function () {
+                    $(this).slideDown();
+                },
+                hide: function (deleteElement) {
+                    $(this).slideUp(deleteElement);
+
+                },
+            })
+        });
+
+        $(".cauhinhhanghoa-nav").addClass("active");
+    </script>
+}   

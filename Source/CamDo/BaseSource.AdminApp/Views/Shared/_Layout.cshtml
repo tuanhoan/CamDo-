@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - Admin</title>
+    <link href="~/css/styles.css" rel="stylesheet" />
+    <link href="~/libs/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <link href="~/libs/toastr/toastr.min.css" rel="stylesheet" />
+
+    <link href="~/css/site.css" rel="stylesheet" />
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body class="nav-fixed" id="page-top">
+    <nav class="topnav navbar navbar-expand shadow justify-content-between justify-content-sm-start navbar-light bg-white" id="sidenavAccordion">
+        @await Html.PartialAsync("_NavTopbar")
+    </nav>
+    <div id="layoutSidenav">
+        <div id="layoutSidenav_nav">
+            @await Html.PartialAsync("_SideBar")
+        </div>
+        <div id="layoutSidenav_content">
+            <main class="container-fluid py-4">
+                @RenderBody()
+            </main>
+            <footer class="footer mt-auto footer-light">
+                <div class="container-fluid">
+                    <div class="text-center">
+                        <div>© Copyright @DateTime.Now.Year by <a href="/">Kteam.</a> All Rights Reserved.</div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <script src="~/libs/jquery/dist/jquery.min.js"></script>
+    <script src="~/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <script src="~/libs/feather/feather.min.js"></script>
+    <script src="~/js/scripts.js"></script>
+
+    <script src="~/libs/toastr/toastr.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.repeater/1.2.1/jquery.repeater.js" integrity="sha512-bZAXvpVfp1+9AUHQzekEZaXclsgSlAeEnMJ6LfFAvjqYUVZfcuVXeQoN5LhD7Uw0Jy4NCY9q3kbdEXbwhZUmUQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="~/js/site.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

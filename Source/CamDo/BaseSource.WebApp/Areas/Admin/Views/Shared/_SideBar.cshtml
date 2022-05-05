@@ -3,7 +3,18 @@
         <div class="nav accordion" id="accordionSidenav">
 
             <div class="sidenav-menu-heading">DATA</div>
-           
+            <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse" data-target="#collapseCuahang" aria-expanded="false" aria-controls="collapseCTLQ">
+                <div class="nav-link-icon"><i data-feather="file-text"></i></div>
+                Quản lý cửa hàng
+                <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+            </a>
+            <div class="collapse" id="collapseCuahang" data-parent="#accordionSidenav">
+                <nav class="sidenav-menu-nested nav">
+                    <a class="nav-link cuahang-nav" href="@Url.Action("Index", "Store")">Danh sách cửa hàng</a>
+                    <a class="nav-link cauhinhhanghoa-nav" href="@Url.Action("Index", "CauHinhHangHoa")">Cấu hình hàng hóa</a>
+                </nav>
+            </div>
+
             <a class="nav-link user-nav" href="@Url.Action("Index", "User")">
                 <div class="nav-link-icon"><i data-feather="users"></i></div>
                 User

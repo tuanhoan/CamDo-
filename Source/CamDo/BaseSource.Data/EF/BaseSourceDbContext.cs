@@ -28,6 +28,10 @@ namespace BaseSource.Data.EF
 
             modelBuilder.ApplyConfiguration(new SettingConfiguration());
             modelBuilder.ApplyConfiguration(new UserProfileConfiguration());
+            modelBuilder.ApplyConfiguration(new CuaHangConfiguration());
+            modelBuilder.ApplyConfiguration(new KhachHangConfiguration());
+            modelBuilder.ApplyConfiguration(new CauHinhHangHoaConfiguration());
+            modelBuilder.ApplyConfiguration(new MoTaHinhThucLaiConfiguration());
 
             //modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("AppUserClaims").HasKey(x => x.Id);
             modelBuilder.Entity<IdentityUserClaim<string>>().Property(x => x.UserId).HasMaxLength(128);
@@ -58,6 +62,10 @@ namespace BaseSource.Data.EF
 
         public DbSet<Setting> Settings { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
+        public DbSet<CuaHang> CuaHangs { get; set; }
+        public DbSet<KhachHang> KhachHangs { get; set; }
+        public DbSet<CauHinhHangHoa> CauHinhHangHoas { get; set; }
+        public DbSet<MoTaHinhThucLai> MoTaHinhThucLais { get; set; }
 
     }
 }

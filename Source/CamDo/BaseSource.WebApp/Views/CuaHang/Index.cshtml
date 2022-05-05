@@ -1,0 +1,138 @@
+﻿@model PagedResult<CuaHangVm>
+@{
+    ViewData["Title"] = "Quản lý cửa hàng";
+    var lstStatus = SystemConstants.TrangThai.ListTrangThai();
+}
+
+
+<div class="row">
+    <!-- table  Lastest Tickets -->
+    <div class="col-12  ">
+        <div class="card shadow h-100 mb-4 ">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="m-0 font-weight-bold">@ViewData["Title"]</h3>
+                <a class="btn btn-primary btn-sm" asp-action="Create">Thêm mới</a>
+            </div>
+            <div class="card-body">
+                <form asp-action="Index" method="get" class="mb-4">
+                    <div class="form-group row">
+                        <label for="username" class="col-sm-2 font-weight-bolder text-dark col-form-label">Tên</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="ten" value="@Context.Request.Query["ten"]">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 font-weight-bolder text-dark col-form-label">Trạng thái</label>
+                        <div class="col-sm-10">
+                            @Html.DropDownList("status", new SelectList(lstStatus, "value", "text"), "--- Tất cả ---", new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="fas fa-search"></i>
+                                <span class="ml-1">Tìm kiếm</span>
+                            </button>
+                            <a asp-action="Index" class="btn btn-success btn-sm ml-2">
+                                <i class="fas fa-sync-alt"></i>
+                                <span class="ml-1">Reset</span>
+                            </a>
+                        </div>
+                    </div>
+                </form>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    Tên
+                                </th>
+                                <th scope="col">
+                                    Địa chỉ
+                                </th>
+                                <th scope="col">
+                                    Số điện thoại
+                                </th>
+                                <th scope="col">
+                                    Vốn đầu tư
+                                </th>
+                                <th scope="col">
+                                    Ngày tạo
+                                </th>
+                                <th scope="col">
+                                    Tình trạng
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Items.Count > 0)
+                            {
+                                foreach (var item in Model.Items)
+                                {
+                                    <tr>
+                                        <td>
+                                            @item.Ten
+                                        </td>
+                                        <td>
+                                            @item.DiaChi
+                                        </td>
+                                        <td>
+                                            @item.SDT
+                                        </td>
+                                        <td>
+                                            @item.VonDauTu
+                                        </td>
+                                        <td>
+                                            @item.CreatedTime.ToString("hh:mm dd/MM/yyyy")
+                                        </td>
+                                        <td>
+                                            @if (item.IsActive)
+                                            {
+                                                <span class="badge badge-primary">Hoạt động</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="badge badge-danger">Tạm dừng</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-secondary btn-sm" href="@Url.Action("Edit", new { id = item.Id })"><i class="fas fa-pencil-alt fa-fw"></i> Edit</a>
+                                            <button class="btn btn-sm btn-danger shadow-sm" data-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn xóa bài viết?" data-href="@Url.Action("Delete", new { id = item.Id })" title="Delete"><i class="fas fa-trash-alt fa-fw"></i> Delete</button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="5" class="text-center">Không có dữ liệu</td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+                @if (Model.PageCount > 1)
+                {
+                    <div>
+                        @await Html.PartialAsync("_Pager", new PagedResultBase()
+                   {
+                       PageNumber = Model.PageNumber,
+                       PageSize = Model.PageSize,
+                       TotalItemCount = Model.TotalItemCount,
+                       PageUrl = Url.Action("Index")
+                   })
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $(".cuahang-nav").addClass("active");
+    </script>
+}

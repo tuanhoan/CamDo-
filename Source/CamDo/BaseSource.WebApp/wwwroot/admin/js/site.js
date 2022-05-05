@@ -162,3 +162,46 @@ $('form[data-name="ajaxFormUpload"]').submit(function (e) {
         }
     });
 });
+
+$('form[data-name="ajaxFormHangHoa"]').submit(function (e) {
+    e.preventDefault();
+    debugger;
+    var $form = $(this);
+    if ($('.group-thuoctinh-item').length > 0) {
+        var lstThuocTinh = $('.repeatThuocTinh').repeaterVal();
+        var thuoctinh = JSON.stringify(lstThuocTinh.groupthuoctinh);
+        $form.find("input[id='ListThuocTinh']").val(JSON.stringify(thuoctinh));
+    }
+   
+
+    var $btnSubmit = $form.find("button[type='submit']");
+
+    $btnSubmit.attr("disabled", "true");
+    $.ajax({
+        method: $form.attr("method"),
+        url: $form.attr("action"),
+        data: $form.serializeArray(),
+        beforeSend: function () {
+            $btnSubmit.append(`<i class="fas fa-sync-alt fa-fw fa-spin"></i>`);
+        },
+        complete: function () {
+            $btnSubmit.find("i").remove();
+        },
+        success: function (res) {
+            $form.find(".field-validation-valid").empty();
+            if (res.isSuccessed == true) {
+                localStorage.setItem("IsSuccessed", res.isSuccessed);
+                localStorage.setItem("Message", "Successed!");
+
+                window.location.href = res.resultObj;
+            } else if (res.validationErrors != null && res.validationErrors.length) {
+                $.each(res.validationErrors, function (i, v) {
+                    $form.find("span[data-valmsg-for='" + v.pos + "']").html(v.error);
+                });
+                $btnSubmit.removeAttr("disabled");
+            } else if (res.message != null) {
+                toastr.error(res.message);
+            }
+        }
+    });
+});
