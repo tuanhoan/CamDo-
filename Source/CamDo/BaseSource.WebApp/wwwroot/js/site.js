@@ -19,18 +19,18 @@ $('form[data-name="ajaxForm"]').submit(function (e) {
         success: function (res) {
             $btnSubmit.removeAttr("disabled");
             $form.find(".field-validation-valid").empty();
-            if (res.IsSuccessed == true) {
+            if (res.isSuccessed == true) {
                 localStorage.setItem("IsSuccessed", res.isSuccessed);
                 localStorage.setItem("Message", "Successed!");
 
-                window.location.href = res.ResultObj;
+                window.location.href = res.resultObj;
             } else if (res.validationErrors != null && res.validationErrors.length) {
                 $.each(res.validationErrors, function (i, v) {
                     $form.find("span[data-valmsg-for='" + v.pos + "']").html(v.error);
                 });
               
-            } else if (res.Message != null) {
-                alert(res.Message);
+            } else if (res.message != null) {
+                alert(res.message);
             }
         }
     });
@@ -50,11 +50,10 @@ $(document).ready(function () {
     }
 });
 function setMoneyTextBox(selector) {
-
+    new AutoNumeric(selector, { currencySymbol: '', decimalPlacesOverride: 0, showWarnings: false, decimalPlaces:'0' })
     $(selector).change(function () {
         var value = $(this).val();
-        var Re = new RegExp("\\,", "g");
-        value = value.replace(Re, "");
+        value = value.replaceAll(",", "");
         if (value == "") {
             value = 0;
         }

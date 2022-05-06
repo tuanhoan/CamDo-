@@ -113,9 +113,7 @@
 
 @section Scripts{
     <script>
-         var lstThuocTinh = '@Html.Raw(Model.ListThuocTinh)';
-
-        $(document).ready(function () {
+          var lstThuocTinh = '@Html.Raw(Model.ListThuocTinh)';
             var $repeater = $('.repeatThuocTinh').repeater({
                 initEmpty: true,
                 show: function () {
@@ -126,14 +124,9 @@
                 },
             });
 
-               if (lstThuocTinh!='') {
-                   var temp=@Html.Raw(Model.ListThuocTinh);
-                   $repeater.setList(JSON.parse(temp));
-                }
-
-
-
-        });
+        if (lstThuocTinh != '') {
+          $repeater.setList(JSON.parse(@Html.Raw(Model.ListThuocTinh)));
+        }
         $(".cauhinhhanghoa-nav").addClass("active");
     </script>
 }   

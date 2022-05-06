@@ -31,7 +31,7 @@ namespace BaseSource.ViewModels.Admin
     public class CreateCauHinhHangHoaAdminVm
     {
         [Display(Name = "Lĩnh vực")]
-        [RequiredEnumField(ErrorMessage = "Address type is required.")]
+        [Required(ErrorMessage = "Vui lòng nhập lĩnh vực")]
         public ELinhVucHangHoa LinhVuc { get; set; }
         [Display(Name = "Mã hàng hóa")]
         [Required(ErrorMessage = "Vui lòng nhập mã hàng hóa")]
@@ -49,7 +49,7 @@ namespace BaseSource.ViewModels.Admin
         [Required(ErrorMessage = "Vui lòng nhập số tiền cầm")]
         public long SoTienCam { get; set; }
         [Display(Name = "Lãi")]
-     
+
         public int Lai { get; set; }
         [Display(Name = "Kỳ lãi")]
         [Required(ErrorMessage = "Vui lòng nhập kỳ lãi")]
@@ -69,17 +69,5 @@ namespace BaseSource.ViewModels.Admin
     {
         public int Id { get; set; }
     }
-    public class RequiredEnumFieldAttribute : RequiredAttribute
-    {
-        public override bool IsValid(object value)
-        {
-            if (value == null)
-            {
-                return false;
-            }
 
-            var type = value.GetType();
-            return type.IsEnum && System.Enum.IsDefined(type, value);
-        }
-    }
 }

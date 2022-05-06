@@ -1,9 +1,7 @@
-﻿@model PagedResult<CauHinhHangHoaAdminVm>
+﻿@model PagedResult<CauHinhHangHoaVm>
 @{
     ViewData["Title"] = "Cấu hình hàng hóa";
-    var lstStatus = new List<object>();
-    lstStatus.Add(new { value = 1, text = "Hoạt động" });
-    lstStatus.Add(new { value = 0, text = "Tạm dừng" });
+    var lstStatus = SystemConstants.TrangThai.ListTrangThai();
 }
 
 
@@ -97,7 +95,7 @@
                                             @item.MaTS
                                         </td>
                                         <td>
-                                            @item.SoTienCam
+                                            @item.SoTienCam.ToString("N0")
                                         </td>
                                         <td>
                                             @item.Lai
@@ -120,7 +118,7 @@
                                         </td>
                                         <td>
                                             <a class="btn btn-secondary btn-sm" href="@Url.Action("Edit", new { id = item.Id })"><i class="fas fa-pencil-alt fa-fw"></i> Edit</a>
-                                            <button class="btn btn-sm btn-danger shadow-sm" data-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn xóa bài viết?" data-href="@Url.Action("Delete", new { id = item.Id })" title="Delete"><i class="fas fa-trash-alt fa-fw"></i> Delete</button>
+                                            <button class="btn btn-sm btn-danger shadow-sm" data-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn xóa hàng hóa?" data-href="@Url.Action("Delete", new { id = item.Id })" title="Delete"><i class="fas fa-trash-alt fa-fw"></i> Delete</button>
                                         </td>
                                     </tr>
                                 }

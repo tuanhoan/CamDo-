@@ -1,5 +1,7 @@
 ﻿using BaseSource.ApiIntegration.AdminApi.CauHinhHangHoa;
+using BaseSource.ApiIntegration.WebApi.CauHinhHangHoa;
 using BaseSource.ViewModels.Admin;
+using BaseSource.ViewModels.CauHinhHangHoa;
 using BaseSource.ViewModels.Common;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,36 +13,43 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
 {
     public class CauHinhHangHoaController : BaseAdminController
     {
-        private readonly ICauHinhHangHoaAdminApiClient _cauHinhHangHoaAdminApiClient;
-        public CauHinhHangHoaController(ICauHinhHangHoaAdminApiClient cauHinhHangHoaAdminApiClient)
+        private readonly ICauHinhHangHoaApiClient _apiClient;
+        public CauHinhHangHoaController(ICauHinhHangHoaApiClient apiClient)
         {
-            _cauHinhHangHoaAdminApiClient = cauHinhHangHoaAdminApiClient;
+            _apiClient = apiClient;
         }
         public async Task<IActionResult> Index(string ten, int linhvuc, int? status, int page = 1)
         {
-            var request = new GetCauHinhHangHoaPagingRequest_Admin()
+            var request = new GetCauHinhHangHoaPagingRequest()
             {
                 Page = page,
                 PageSize = 10,
                 Ten = ten,
                 LinhVuc = linhvuc,
-                Status= status
+                Status = status
             };
-            var result = await _cauHinhHangHoaAdminApiClient.GetPagings(request);
+            var result = await _apiClient.GetPagings(request);
             return View(result.ResultObj);
         }
         public IActionResult Create()
         {
-            return View();
+            var model = new CreateCauHinhHangHoaVm()
+            {
+                SoTienCam = 10000000,
+                Lai = 3,
+                KyLai = 15,
+                SoNgayQuaHan = 10,
+            };
+            return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> Create(CreateCauHinhHangHoaAdminVm model)
+        public async Task<IActionResult> Create(CreateCauHinhHangHoaVm model)
         {
             if (!ModelState.IsValid)
             {
                 return Json(new ApiErrorResult<string>(ModelState.GetListErrors()));
             }
-            var result = await _cauHinhHangHoaAdminApiClient.Create(model);
+            var result = await _apiClient.Create(model);
             if (!result.IsSuccessed)
             {
                 return Json(new ApiErrorResult<string>(result.ValidationErrors));
@@ -49,12 +58,12 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         }
         public async Task<IActionResult> Edit(int id)
         {
-            var result = await _cauHinhHangHoaAdminApiClient.GetById(id);
+            var result = await _apiClient.GetById(id);
             if (!result.IsSuccessed)
             {
                 return NotFound();
             }
-            var model = new EditCauHinhHangHoaAdminVm()
+            var model = new EditCauHinhHangHoaVm()
             {
                 Id = result.ResultObj.Id,
                 LinhVuc = result.ResultObj.LinhVuc,
@@ -73,13 +82,13 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(EditCauHinhHangHoaAdminVm model)
+        public async Task<IActionResult> Edit(EditCauHinhHangHoaVm model)
         {
             if (!ModelState.IsValid)
             {
                 return Json(new ApiErrorResult<string>(ModelState.GetListErrors()));
             }
-            var result = await _cauHinhHangHoaAdminApiClient.Edit(model);
+            var result = await _apiClient.Edit(model);
             if (!result.IsSuccessed)
             {
                 return Json(new ApiErrorResult<string>(result.ValidationErrors));
@@ -89,7 +98,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-            var result = await _cauHinhHangHoaAdminApiClient.Delete(id);
+            var result = await _apiClient.Delete(id);
             if (result.IsSuccessed)
             {
                 return Json(new ApiSuccessResult<string>());

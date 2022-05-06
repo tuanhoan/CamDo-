@@ -5753,19 +5753,19 @@ input[type=button].btn-block {
 }
 
 .input-group-text {
-  display: flex;
-  align-items: center;
-  padding: 0.875rem 1.125rem;
-  margin-bottom: 0;
-  font-size: 0.875rem;
-  font-weight: 400;
-  line-height: 1;
-  color: #69707a;
-  text-align: center;
-  white-space: nowrap;
-  background-color: #fff;
-  border: 1px solid #c5ccd6;
-  border-radius: 0.35rem;
+    display: flex;
+    align-items: center;
+    padding: 0.875rem 1.125rem;
+    margin-bottom: 0;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1;
+    color: #69707a;
+    text-align: center;
+    white-space: nowrap;
+    background-color: #e9ecef;
+    border: 1px solid #c5ccd6;
+    border-radius: 0.35rem;
 }
 .input-group-text input[type=radio],
 .input-group-text input[type=checkbox] {

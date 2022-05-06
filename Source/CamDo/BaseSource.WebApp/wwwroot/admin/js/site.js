@@ -165,14 +165,13 @@ $('form[data-name="ajaxFormUpload"]').submit(function (e) {
 
 $('form[data-name="ajaxFormHangHoa"]').submit(function (e) {
     e.preventDefault();
-    debugger;
     var $form = $(this);
     if ($('.group-thuoctinh-item').length > 0) {
         var lstThuocTinh = $('.repeatThuocTinh').repeaterVal();
         var thuoctinh = JSON.stringify(lstThuocTinh.groupthuoctinh);
         $form.find("input[id='ListThuocTinh']").val(JSON.stringify(thuoctinh));
     }
-   
+
 
     var $btnSubmit = $form.find("button[type='submit']");
 
@@ -205,3 +204,17 @@ $('form[data-name="ajaxFormHangHoa"]').submit(function (e) {
         }
     });
 });
+function setMoneyTextBox(selector) {
+    new AutoNumeric.multiple(selector, { currencySymbol: '', decimalPlacesOverride: 0, showWarnings: false, decimalPlaces: '0' })
+    $(selector).change(function () {
+        var value = $(this).val();
+        value = value.replaceAll(",", "") * 1;
+        if (value == "" || value < 0) {
+            value = 0;
+            $(this).val(value);
+        }
+        $(this).next().val(value);
+
+    });
+
+}

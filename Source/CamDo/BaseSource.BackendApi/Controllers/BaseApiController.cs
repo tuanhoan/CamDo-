@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 namespace BaseSource.BackendApi.Controllers
 {
     [ApiController]
+    [Route("api/[controller]")]
     [Authorize]
     public class BaseApiController : ControllerBase
     {
@@ -18,6 +19,18 @@ namespace BaseSource.BackendApi.Controllers
         {
             get { return _userId ?? User.FindFirstValue(ClaimTypes.NameIdentifier); }
             set { _userId = value; }
+        }
+        public int CuaHangId
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(User.FindFirstValue("CuaHangId")))
+                {
+                    return int.Parse(User.FindFirstValue("CuaHangId"));
+                }
+                return 0;
+            }
+
         }
     }
 }

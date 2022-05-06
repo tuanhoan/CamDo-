@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 
 namespace BaseSource.BackendApi.Controllers
 {
-    [Route("api/[controller]")]
+
     public class AccountController : BaseApiController
     {
         private readonly BaseSourceDbContext _db;
@@ -238,9 +238,9 @@ namespace BaseSource.BackendApi.Controllers
             {
                 Id = user.Id.ToString(),
                 Email = user.Email,
-                FullName = profile.FullName,
+                FullName = profile?.FullName,
                 UserName = user.UserName,
-                JoinedDate = profile.JoinedDate,
+                JoinedDate = profile?.JoinedDate,
                 Roles = roles.ToList()
             };
 
@@ -254,7 +254,7 @@ namespace BaseSource.BackendApi.Controllers
             {
                 return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
             }
-			
+
             var user = await _db.UserProfiles.FindAsync(UserId);
             user.FullName = model.FullName;
             await _db.SaveChangesAsync();
@@ -269,7 +269,7 @@ namespace BaseSource.BackendApi.Controllers
             {
                 return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
             }
-			
+
             var user = await _userManager.FindByIdAsync(UserId);
 
             var result = await _userManager.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
@@ -370,15 +370,16 @@ namespace BaseSource.BackendApi.Controllers
         private async Task<string> GenerateJwtToken(AppUser user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
-
+            var profile = await _db.UserProfiles.FindAsync(user.Id);
 
             var roles = await _userManager.GetRolesAsync(user);
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Email,user.Email ?? ""),
                 new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
-            };
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                  new Claim("CuaHangId", profile?.CuaHangId.ToString())
+             };
 
             foreach (var item in roles)
             {

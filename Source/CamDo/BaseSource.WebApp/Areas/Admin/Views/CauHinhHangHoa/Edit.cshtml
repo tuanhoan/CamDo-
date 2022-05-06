@@ -1,6 +1,6 @@
-﻿@model EditCauHinhHangHoaAdminVm
+﻿@model EditCauHinhHangHoaVm
 @{
-    ViewData["Title"] = "Cập nhật cấu hình hàng hóa";
+    ViewData["Title"] = "Thêm mới cấu hình hàng hóa";
 }
 <div>
     <div class="card shadow h-100">
@@ -8,14 +8,15 @@
             <h3 class="m-0 font-weight-bold">@ViewData["Title"]</h3>
             <a class="btn btn-sm btn-secondary shadow-sm" asp-action="Index"><i class="fas fa-arrow-left fa-fw fa-sm text-white-50"></i> Back</a>
         </div>
+
         <div class="card-body">
-            <form asp-action="Edit" data-name="ajaxFormUpload" enctype="multipart/form-data">
+            <form asp-action="Edit" data-name="ajaxFormHangHoa" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                @Html.HiddenFor(x => x.Id)
+                @Html.HiddenFor(x => x.Id);
                 <div class="form-group row">
                     <label asp-for="LinhVuc" class="control-label col-md-2"></label>
                     <div class="col-md-10">
-                        <select class="form-control" disabled asp-for="LinhVuc" asp-items="@Html.GetEnumSelectList<ELinhVucHangHoa>()">
+                        <select class="form-control" asp-for="LinhVuc" asp-items="@Html.GetEnumSelectList<ELinhVucHangHoa>()">
                             <option selected="selected" value="">--Chọn loại--</option>
                         </select>
                         <span asp-validation-for="LinhVuc" class="text-danger"></span>
@@ -44,30 +45,53 @@
                 <div class="form-group row">
                     <label asp-for="HinhThucLai" class="control-label col-md-2"></label>
                     <div class="col-md-10">
-                        <select class="form-control" asp-for="HinhThucLai" asp-items="@Html.GetEnumSelectList<EHinhThucLai>()">
-                            <option selected="selected" value="">--Chọn loại--</option>
+                        <select class="form-control" asp-for="HinhThucLai" asp-items="@Html.GetEnumSelectList<EHinhThucLai>()" onchange="getMoTaHinhThucLai()">
                         </select>
                         <span asp-validation-for="HinhThucLai" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="form-group row">
+                    <label asp-for="IsThuLaiTruoc" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="IsThuLaiTruoc" />
+                    </div>
+                </div>
+                <div class="form-group row">
+
                     <label asp-for="SoTienCam" class="control-label col-md-2"></label>
                     <div class="col-md-10">
-                        <input asp-for="SoTienCam" class="form-control " />
+                        <div class="input-group">
+                            <input type="text" class="form-control money-textbox" value="@Model.SoTienCam">
+                            <input type="hidden" asp-for="SoTienCam" />
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="basic-addon2">VNĐ</span>
+                            </div>
+                        </div>
                         <span asp-validation-for="SoTienCam" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label asp-for="Lai" class="control-label col-md-2"></label>
                     <div class="col-md-10">
-                        <input asp-for="Lai" class="form-control " />
+                        <div class="input-group">
+                            <input type="text" class="form-control money-textbox" value="@Model.Lai">
+                            <input type="hidden" asp-for="Lai" />
+                            <div class="input-group-append">
+                                <span class="input-group-text tyLeLai" id="basic-addon2"></span>
+                            </div>
+                        </div>
                         <span asp-validation-for="Lai" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label asp-for="KyLai" class="control-label col-md-2"></label>
                     <div class="col-md-10">
-                        <input asp-for="KyLai" class="form-control " />
+                        <div class="input-group">
+                            <input asp-for="KyLai" min="0" class="form-control " />
+                            <div class="input-group-append">
+                                <span class="input-group-text motaKyLai" id="basic-addon2"></span>
+                            </div>
+                        </div>
                         <span asp-validation-for="KyLai" class="text-danger"></span>
                     </div>
                 </div>
@@ -81,13 +105,35 @@
                 <div class="form-group row">
                     <label asp-for="SoNgayQuaHan" class="control-label col-md-2"></label>
                     <div class="col-md-10">
-                        <input asp-for="SoNgayQuaHan" class="form-control " />
+                        <div class="input-group">
+                            <input asp-for="SoNgayQuaHan" class="form-control " />
+                            <div class="input-group-append">
+                                <span class="input-group-text" id="basic-addon2">ngày quá hạn</span>
+                            </div>
+                        </div>
                         <span asp-validation-for="SoNgayQuaHan" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="ListThuocTinh" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <div class="repeatThuocTinh">
+                            <button data-repeater-create type="button" class="btn btn-sm btn-success mb-3" value=""><i data-feather="plus"></i> Thêm thuộc tính</button>
+                            <div data-repeater-list="groupthuoctinh" class="col-md-6 p-0">
+                                <div data-repeater-item class="form-group d-flex">
+                                    <input type="text" class="form-control mr-3 group-thuoctinh-item" placeholder="Thuộc tính hàng hóa" name="thuoctinh" value="" />
+                                    <button data-repeater-delete type="button" class="btn btn-sm btn-danger"><i data-feather="minus"></i></button>
+                                </div>
+                            </div>
+
+                        </div>
+                        <input type="hidden" name="ListThuocTinh" id="ListThuocTinh" />
+
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Save Change</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
                 </div>
             </form>
         </div>
@@ -98,5 +144,37 @@
 @section Scripts{
     <script>
         $(".cauhinhhanghoa-nav").addClass("active");
+        setMoneyTextBox(".money-textbox");
+        $(document).ready(function () {
+          var lstThuocTinh = '@Html.Raw(Model.ListThuocTinh)';
+            var $repeater = $('.repeatThuocTinh').repeater({
+                initEmpty: true,
+                show: function () {
+                    $(this).slideDown();
+                },
+                hide: function (deleteElement) {
+                    $(this).slideUp(deleteElement);
+                },
+            });
+
+        if (lstThuocTinh != '') {
+          $repeater.setList(JSON.parse(@Html.Raw(Model.ListThuocTinh)));
+        }
+        });
+
+        function getMoTaHinhThucLai() {
+            var type = $('#HinhThucLai').val();
+            $.ajax({
+                type: "GET",
+                url: "/MoTaHinhThucLai/GetMoTaHinhThucLai",
+                data: { hinhThucLai: type },
+                success: function (data) {
+                    $('.tyLeLai').html(data[0].tyLeLai);
+                    $('.motaKyLai').html(data[0].moTaKyLai);
+                }
+            })
+        }
+
+
     </script>
 }   

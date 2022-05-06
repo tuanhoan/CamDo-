@@ -19,6 +19,8 @@ using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using BaseSource.ApiIntegration.AdminApi.CauHinhHangHoa;
 using BaseSource.ApiIntegration.WebApi.CuaHang;
+using BaseSource.ApiIntegration.WebApi.CauHinhHangHoa;
+using BaseSource.ApiIntegration.WebApi.MoTaHinhThucLai;
 
 namespace BaseSource.WebApp
 {
@@ -88,6 +90,8 @@ namespace BaseSource.WebApp
             services.AddTransient<IUserApiClient, UserApiClient>();
             services.AddTransient<IExampleApiClient, ExampleApiClient>();
             services.AddTransient<ICuaHangApiClient, CuaHangApiClient>();
+            services.AddTransient<ICauHinhHangHoaApiClient, CauHinhHangHoaApiClient>();
+            services.AddTransient<IMoTaHinhThucLaiApiClient, MoTaHinhThucLaiApiClient>();
 
             #region admin
             services.AddTransient<IUserAdminApiClient, UserAdminApiClient>();

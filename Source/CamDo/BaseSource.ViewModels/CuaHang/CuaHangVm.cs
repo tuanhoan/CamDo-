@@ -71,18 +71,20 @@ namespace BaseSource.ViewModels.CuaHang
         [Display(Name = "Tên cửa hàng")]
         [Required(ErrorMessage = "Tên cửa hàng")]
         public string TenCuaHang { get; set; }
+
+        private long _vonDauTu;
         [Display(Name = "Vốn đầu tư")]
         [Required(ErrorMessage = "Vui lòng nhập vốn đầu tư")]
-        private int _vonDauTu;
         public long VonDauTu
         {
             get
             {
-                return _vonDauTu;
+                return _vonDauTu = 1000000000;
             }
             set
             {
-                _vonDauTu = 1000000000;
+                _vonDauTu = value;
+
             }
         }
     }

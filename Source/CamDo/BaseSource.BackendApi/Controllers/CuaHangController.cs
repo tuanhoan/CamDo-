@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,22 +15,22 @@ using X.PagedList;
 
 namespace BaseSource.BackendApi.Controllers
 {
-    [Route("api/[controller]")]
     public class CuaHangController : BaseApiController
     {
         private readonly BaseSourceDbContext _db;
         private readonly UserManager<AppUser> _userManager;
-
-        public CuaHangController(BaseSourceDbContext db, UserManager<AppUser> userManager)
+        private readonly IServiceScopeFactory _serviceScopeFactory;
+        public CuaHangController(BaseSourceDbContext db, UserManager<AppUser> userManager, IServiceScopeFactory serviceScopeFactory)
         {
             _db = db;
             _userManager = userManager;
+            _serviceScopeFactory = serviceScopeFactory;
         }
         #region đăng ký cửa hàng
 
         [AllowAnonymous]
-        [HttpPost("Create")]
-        public async Task<IActionResult> Create(RegisterCuaHangVm model)
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register(RegisterCuaHangVm model)
         {
             if (!ModelState.IsValid)
             {
@@ -68,6 +69,7 @@ namespace BaseSource.BackendApi.Controllers
                     CuaHangId = cuaHang.Id
                 });
                 await _db.SaveChangesAsync();
+                var rs = Task.Run(() => KhoiTaoHangHoa(cuaHang.Id));
                 return Ok(new ApiSuccessResult<string>());
             }
 
@@ -82,7 +84,7 @@ namespace BaseSource.BackendApi.Controllers
         public async Task<IActionResult> GetPagings([FromQuery] GetCuaHangPagingRequest request)
         {
             var model = _db.CuaHangs.AsQueryable();
-
+           
             if (!string.IsNullOrEmpty(request.Ten))
             {
                 model = model.Where(x => x.Ten.Contains(request.Ten));
@@ -90,8 +92,13 @@ namespace BaseSource.BackendApi.Controllers
             if (!string.IsNullOrEmpty(request.Status))
             {
                 if (request.Status == "1")
+                {
                     model = model.Where(x => x.IsActive == true);
-                model = model.Where(x => !x.IsActive);
+                } 
+                else
+                {
+                    model = model.Where(x => !x.IsActive);
+                }    
             }
 
 
@@ -103,6 +110,7 @@ namespace BaseSource.BackendApi.Controllers
                 SDT = x.SDT,
                 TenNguoiDaiDien = x.TenNguoiDaiDien,
                 VonDauTu = x.VonDauTu,
+                IsActive = x.IsActive,
                 CreatedTime = x.CreatedTime,
             }).OrderByDescending(x => x.CreatedTime).ToPagedListAsync(request.Page, request.PageSize);
 
@@ -196,6 +204,20 @@ namespace BaseSource.BackendApi.Controllers
         #endregion
 
         #region helper
+        private async Task KhoiTaoHangHoa(int cuahangId)
+        {
+            using var _db = _serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<BaseSourceDbContext>();
+            var lstHangHoaDefault = await _db.CauHinhHangHoas.Where(x => x.CuaHangId == null && x.IsPublish == true).ToListAsync();
+            if (lstHangHoaDefault.Count > 0)
+            {
+                var lstHangHoa = lstHangHoaDefault.Select(c => { c.CuaHangId = cuahangId; c.Id = 0; return c; }).ToList();
+                _db.CauHinhHangHoas.AddRange(lstHangHoa);
+                await _db.SaveChangesAsync();
+            }
+
+
+
+        }
         private void AddErrors(IdentityResult result, string Property)
         {
             foreach (var error in result.Errors)

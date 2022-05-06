@@ -58,6 +58,7 @@ namespace BaseSource.Data.EF
             //Data seeding
             modelBuilder.Seed();
             base.OnModelCreating(modelBuilder);
+           
         }
 
         public DbSet<Setting> Settings { get; set; }
