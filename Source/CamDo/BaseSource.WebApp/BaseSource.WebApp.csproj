@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BaseSource.ApiIntegration\BaseSource.ApiIntegration.csproj" />
+    <ProjectReference Include="..\BaseSource.Data\BaseSource.Data.csproj" />
     <ProjectReference Include="..\BaseSource.Shared\BaseSource.Shared.csproj" />
     <ProjectReference Include="..\BaseSource.Utilities\BaseSource.Utilities.csproj" />
     <ProjectReference Include="..\BaseSource.ViewModels\BaseSource.ViewModels.csproj" />

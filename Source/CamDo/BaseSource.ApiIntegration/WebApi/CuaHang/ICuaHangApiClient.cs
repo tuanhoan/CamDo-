@@ -16,6 +16,7 @@ namespace BaseSource.ApiIntegration.WebApi.CuaHang
         Task<ApiResult<CuaHangVm>> GetById(int id);
         Task<ApiResult<string>> Edit(EditCuaHangVm model);
         Task<ApiResult<string>> Delete(int id);
+        Task<ApiResult<string>> ChangeShop(int id);
 
         Task<ApiResult<string>> RegisterCuaHang(RegisterCuaHangVm model);
     }

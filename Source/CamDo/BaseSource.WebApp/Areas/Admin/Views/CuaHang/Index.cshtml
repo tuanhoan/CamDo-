@@ -97,10 +97,16 @@
                                                 <span class="badge badge-danger">Tạm dừng</span>
                                             }
                                         </td>
-                                        <td>
-                                            <a class="btn btn-secondary btn-sm" href="@Url.Action("Edit", new { id = item.Id })"><i class="fas fa-pencil-alt fa-fw"></i> Edit</a>
-                                            <button class="btn btn-sm btn-danger shadow-sm" data-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn xóa bài viết?" data-href="@Url.Action("Delete", new { id = item.Id })" title="Delete"><i class="fas fa-trash-alt fa-fw"></i> Delete</button>
+                                        <td class="text-center">
+                                            <button class="btn btn-sm btn-cyan btn-icon btn-changeShop" data-name="@item.Ten" data-href="@Url.Action("ChangeShop")" data-id="@item.Id" type="button" title="Chuyển shop"><i class="fas fa-sign-in-alt"></i></button>
+                                            <a class="btn btn-sm btn-purple btn-icon" href="@Url.Action("Edit", new { id = item.Id })" title="Cập nhật">
+                                                <i class="fas fa-pencil-alt fa-fw"></i>
+                                            </a>
+                                            <button class="btn btn-sm btn-red btn-icon" type="button" data-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn xóa bài viết?" data-href="@Url.Action("Delete", new { id = item.Id })" title="Xóa cửa hàng">
+                                                <i class="fas fa-trash-alt fa-fw"></i>
+                                            </button>
                                         </td>
+
                                     </tr>
                                 }
                             }

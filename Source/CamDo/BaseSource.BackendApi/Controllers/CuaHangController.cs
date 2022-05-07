@@ -6,10 +6,15 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using X.PagedList;
 
@@ -19,12 +24,15 @@ namespace BaseSource.BackendApi.Controllers
     {
         private readonly BaseSourceDbContext _db;
         private readonly UserManager<AppUser> _userManager;
+        private readonly IConfiguration _configuration;
         private readonly IServiceScopeFactory _serviceScopeFactory;
-        public CuaHangController(BaseSourceDbContext db, UserManager<AppUser> userManager, IServiceScopeFactory serviceScopeFactory)
+        public CuaHangController(BaseSourceDbContext db, UserManager<AppUser> userManager,
+            IServiceScopeFactory serviceScopeFactory, IConfiguration configuration)
         {
             _db = db;
             _userManager = userManager;
             _serviceScopeFactory = serviceScopeFactory;
+            _configuration = configuration;
         }
         #region đăng ký cửa hàng
 
@@ -53,6 +61,7 @@ namespace BaseSource.BackendApi.Controllers
             {
                 UserName = model.UserName,
                 EmailConfirmed = true,
+                PhoneNumber=model.PhoneNumber
             };
 
             var result = await _userManager.CreateAsync(newUser, model.Password);
@@ -84,7 +93,7 @@ namespace BaseSource.BackendApi.Controllers
         public async Task<IActionResult> GetPagings([FromQuery] GetCuaHangPagingRequest request)
         {
             var model = _db.CuaHangs.AsQueryable();
-           
+
             if (!string.IsNullOrEmpty(request.Ten))
             {
                 model = model.Where(x => x.Ten.Contains(request.Ten));
@@ -94,11 +103,11 @@ namespace BaseSource.BackendApi.Controllers
                 if (request.Status == "1")
                 {
                     model = model.Where(x => x.IsActive == true);
-                } 
+                }
                 else
                 {
                     model = model.Where(x => !x.IsActive);
-                }    
+                }
             }
 
 
@@ -201,6 +210,37 @@ namespace BaseSource.BackendApi.Controllers
             }
             return Ok(new ApiErrorResult<string>("Not Found!"));
         }
+        [HttpPost("ChangeShop")]
+        public async Task<IActionResult> ChangeShop([FromForm] int id)
+        {
+            var jwtTokenHandler = new JwtSecurityTokenHandler();
+            var user = await _db.Users.FindAsync(UserId);
+            var roles = await _userManager.GetRolesAsync(user);
+            var claims = new List<Claim>()
+            {
+                new Claim(ClaimTypes.Email,user.Email ?? ""),
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                  new Claim("CuaHangId", id.ToString())
+             };
+
+            foreach (var item in roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, item));
+            }
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Tokens:Key"]));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(_configuration["Tokens:Issuer"],
+             _configuration["Tokens:Issuer"],
+             claims,
+             expires: DateTime.UtcNow.AddDays(15),
+             signingCredentials: creds);
+
+            var jwtToken = jwtTokenHandler.WriteToken(token);
+            return Ok(new ApiSuccessResult<string>(jwtToken));
+        }
         #endregion
 
         #region helper
@@ -214,10 +254,8 @@ namespace BaseSource.BackendApi.Controllers
                 _db.CauHinhHangHoas.AddRange(lstHangHoa);
                 await _db.SaveChangesAsync();
             }
-
-
-
         }
+
         private void AddErrors(IdentityResult result, string Property)
         {
             foreach (var error in result.Errors)

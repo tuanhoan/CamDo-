@@ -1,4 +1,4 @@
-
+﻿
 
 $(function () {
     // toastr ======================================================//
@@ -218,3 +218,21 @@ function setMoneyTextBox(selector) {
     });
 
 }
+$("body").on("click", '.btn-changeShop', function (e) {
+    var name = $(this).data("name");
+    $(this).attr("disabled", "true");
+    $.ajax({
+        url: $(this).attr("data-href"),
+        method: 'POST',
+        data: { id: $(this).data("id") },
+        beforeSend: function () {
+            $(this).html('<i class="fas fa-sync-alt fa-fw fa-spin"></i>');
+        },
+        success: function () {
+            toastr.info("Chuyển sang cửa hàng " + name + " thành công");
+            setTimeout(function () {
+                window.location.reload();
+            }, 500);
+        }
+    });
+});

@@ -19,6 +19,18 @@ namespace BaseSource.ApiIntegration.WebApi.CuaHang
         {
             _httpClientFactory = httpClientFactory;
         }
+
+        public async Task<ApiResult<string>> ChangeShop(int id)
+        {
+            var dic = new Dictionary<string, string>()
+            {
+                { "id", id.ToString() }
+            };
+
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.PostAsyncFormUrl<ApiResult<string>>("/api/CuaHang/ChangeShop", dic);
+        }
+
         public async Task<ApiResult<string>> Create(CreateCuaHangVm model)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);

@@ -1,10 +1,23 @@
 ﻿using BaseSource.ApiIntegration.WebApi.CuaHang;
+using BaseSource.Data.EF;
+using BaseSource.Data.Entities;
+using BaseSource.Shared.Constants;
 using BaseSource.ViewModels.Common;
 using BaseSource.ViewModels.CuaHang;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Logging;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace BaseSource.WebApp.Areas.Admin.Controllers
@@ -12,9 +25,11 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
     public class CuaHangController : BaseAdminController
     {
         private readonly ICuaHangApiClient _cuaHangApiClient;
-        public CuaHangController(ICuaHangApiClient cuaHangApiClient)
+        private readonly IConfiguration _configuration;
+        public CuaHangController(ICuaHangApiClient cuaHangApiClient, IConfiguration configuration)
         {
             _cuaHangApiClient = cuaHangApiClient;
+            _configuration = configuration;
         }
         public async Task<IActionResult> Index(string ten, string status, int page = 1)
         {
@@ -89,5 +104,40 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             }
             return Json(new ApiErrorResult<string>(result.Message));
         }
+        public async Task<IActionResult> ChangeShop(int id)
+        {
+            var result = await _cuaHangApiClient.ChangeShop(id);
+            var userPrincipal = this.ValidateToken(result.ResultObj);
+
+            var authProperties = new AuthenticationProperties
+            {
+                ExpiresUtc = DateTimeOffset.UtcNow.AddDays(15),
+                IsPersistent = false
+            };
+            HttpContext.Response.Cookies.Append(SystemConstants.AppSettings.Token, result.ResultObj, new CookieOptions { HttpOnly = true, Expires = DateTimeOffset.UtcNow.AddDays(15) });
+            await HttpContext.SignInAsync(
+                        CookieAuthenticationDefaults.AuthenticationScheme,
+                        userPrincipal, authProperties);
+            return Json(new ApiSuccessResult<string>());
+        }
+
+        private ClaimsPrincipal ValidateToken(string jwtToken)
+        {
+            IdentityModelEventSource.ShowPII = true;
+
+            SecurityToken validatedToken;
+            TokenValidationParameters validationParameters = new TokenValidationParameters();
+
+            validationParameters.ValidateLifetime = true;
+
+            validationParameters.ValidAudience = _configuration["Tokens:Issuer"];
+            validationParameters.ValidIssuer = _configuration["Tokens:Issuer"];
+            validationParameters.IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Tokens:Key"]));
+
+            ClaimsPrincipal principal = new JwtSecurityTokenHandler().ValidateToken(jwtToken, validationParameters, out validatedToken);
+
+            return principal;
+        }
+
     }
 }

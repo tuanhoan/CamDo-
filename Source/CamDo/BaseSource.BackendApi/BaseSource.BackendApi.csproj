@@ -29,4 +29,8 @@
     <ProjectReference Include="..\BaseSource.ViewModels\BaseSource.ViewModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\CuaHang\" />
+  </ItemGroup>
+
 </Project>
