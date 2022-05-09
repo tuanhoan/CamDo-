@@ -13,9 +13,17 @@
             </div>
         </h6>
         <div class="dropdown-divider"></div>
-        <a class="dropdown-item" href="@Url.Action("Manage", "Account", new { area = "" })">
+        @*<a class="dropdown-item" href="@Url.Action("Manage", "Account", new { area = "" })">
             <div class="dropdown-item-icon"><i data-feather="settings"></i></div>
             Manage
+        </a>*@
+        <a class="dropdown-item" id="edit-profile" href="#" data-href="@Url.Action("EditProfile", "Account")">
+            <div class="dropdown-item-icon"><i data-feather="users"></i></div>
+            Đổi thông tin cá nhân
+        </a>
+        <a class="dropdown-item" id="change-pass" href="#" data-href="@Url.Action("ChangePassword", "Account")">
+            <div class="dropdown-item-icon"><i data-feather="key"></i></div>
+            Thay đổi mật khẩu
         </a>
 
         <a class="dropdown-item" href="@Url.Action("Logout", "Account", new { area = "" })">

@@ -1,15 +1,14 @@
-﻿using BaseSource.BackendApi.Services.Helper;
+﻿using BaseSource.BackendApi.Services.Email;
 using BaseSource.Data.EF;
-using BaseSource.Shared.Constants;
-using BaseSource.ViewModels.Admin;
+using BaseSource.ViewModels.Mail;
 using MailKit.Security;
-using Microsoft.AspNet.Identity;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,37 +16,53 @@ namespace BaseSource.BackendApi.Services.Email
 {
     public class SendEmailService : ISendEmailService
     {
+        private readonly MailSettingsVm mailSettings;
         private readonly IConfiguration _configuration;
         private readonly BaseSourceDbContext _db;
-        public SendEmailService(IConfiguration configuration, BaseSourceDbContext db)
+        private readonly IWebHostEnvironment _appEnvironment;
+        public SendEmailService(IOptions<MailSettingsVm> _mailSettings, IConfiguration configuration, BaseSourceDbContext db, IWebHostEnvironment appEnvironment)
         {
+            mailSettings = _mailSettings.Value;
             _configuration = configuration;
             _db = db;
+            _appEnvironment = appEnvironment;
         }
 
-        private async Task SendMail(IdentityMessage message)
+        private async Task SendMail(MailContentVm model)
         {
-            var settings = SettingsData.Get(await _db.Settings.ToListAsync());
+            var mailSetting = new MailSettingsVm();
+            var host = _db.Settings.FirstOrDefault(x => x.Id == "EmailHost");
+            var portConfig = _db.Settings.FirstOrDefault(x => x.Id == "EmailPort");
+            int port = 0;
+            if (portConfig != null)
+            {
+                port = int.Parse(portConfig.Value);
+            }
+            var emailSender = _db.Settings.FirstOrDefault(x => x.Id == "EmailSender");
+            var emailPass = _db.Settings.FirstOrDefault(x => x.Id == "EmailSenderPassword");
+            var emailSSL = _db.Settings.FirstOrDefault(x => x.Id == "EmailSSL");
+            var displayName = _db.Settings.FirstOrDefault(x => x.Id == "DisplayName");
 
-            string emailSender = settings.EmailSender;
-            string emailPassword = settings.EmailSenderPassword;
-            string emailHost = settings.EmailHost;
-            int emailPort = Convert.ToInt32(settings.EmailPort);
-            bool emailSSL = Convert.ToBoolean(settings.EmailSSL);
 
-            await Send(message, emailSender, emailPassword, emailHost, emailPort, emailSSL);
+            mailSetting.Host = host?.Value;
+            mailSetting.Mail = emailSender?.Value;
+            mailSetting.Password = emailPass?.Value;
+            mailSetting.Port = port;
+            mailSetting.DisplayName = displayName?.Value;
+
+            var rs = Task.Run(() => CoreSendMail(model, mailSetting));
+
         }
-
-        private async Task Send(IdentityMessage message, string emailSender, string emailPassword, string emailHost, int emailPort, bool emailSSL)
+        public async Task CoreSendMail(MailContentVm model, MailSettingsVm setting)
         {
             var email = new MimeMessage();
-            email.Sender = new MailboxAddress(SystemConstants.SiteAuthorName, emailSender);
-            email.From.Add(new MailboxAddress(SystemConstants.SiteAuthorName, emailSender));
-            email.To.Add(MailboxAddress.Parse(message.Destination));
-            email.Subject = message.Subject;
+            email.Sender = new MailboxAddress(setting.DisplayName, setting.Mail);
+            email.From.Add(new MailboxAddress(setting.DisplayName, setting.Mail));
+            email.To.Add(MailboxAddress.Parse(model.To));
+            email.Subject = model.Subject;
 
             var builder = new BodyBuilder();
-            builder.HtmlBody = message.Body;
+            builder.HtmlBody = model.Body;
             email.Body = builder.ToMessageBody();
 
             // dùng SmtpClient của MailKit
@@ -55,8 +70,8 @@ namespace BaseSource.BackendApi.Services.Email
             {
                 try
                 {
-                    smtp.Connect(emailHost, emailPort, SecureSocketOptions.StartTls);
-                    smtp.Authenticate(emailSender, emailPassword);
+                    smtp.Connect(setting.Host, setting.Port, SecureSocketOptions.StartTls);
+                    smtp.Authenticate(setting.Mail, setting.Password);
                     await smtp.SendAsync(email);
                 }
                 catch (Exception ex)
@@ -70,36 +85,27 @@ namespace BaseSource.BackendApi.Services.Email
             }
         }
 
-        public async Task SendMailConfirmEmail(string username, string email, string userId, string code)
+        public async Task SendMailConfirmEmail(MailContentVm model)
         {
-
             string host = _configuration.GetValue<string>("WebBaseAddress");
-            string url = $"{host}/Account/ConfirmEmail?userId={userId}&code={code}";
-            string body = $"Hãy xác nhận địa chỉ email bằng cách <a href='{url}'>bấm vào đây</a>.";
-
-            var message = new IdentityMessage
-            {
-                Destination = email,
-                Subject = $"[{SystemConstants.SiteAuthorName}] Xác nhận Đăng ký",
-                Body = body
-            };
-            await SendMail(message);
+            string url = $"{host}/Account/ConfirmEmail?userId={model.UserID}&code={model.Code}";
+            model.Body = $"Hãy xác nhận địa chỉ email bằng cách <a href='{url}'>bấm vào đây</a>.";
+            model.Subject = "[Casa] Xác nhận địa chỉ email";
+            await SendMail(model);
 
         }
 
-        public async Task SendMailResetPassword(string username, string email, string code)
+        public async Task SendMailResetPassword(MailContentVm model)
         {
             string host = _configuration.GetValue<string>("WebBaseAddress");
-            string url = $"{host}/Account/ResetPassword?code={code}&email={email}";
-            var body = $"Vui lòng click <a href='{url}'>vào đây</a> để reset mật khẩu.";
+            string url = $"{host}/Account/ResetPassword?code={model.Code}&email={model.To}";
 
-            var message = new IdentityMessage
-            {
-                Destination = email,
-                Subject = $"[{SystemConstants.SiteAuthorName}] Reset your password",
-                Body = body
-            };
-            await SendMail(message);
+            model.Body = $"Vui lòng click <a href='{url}'>vào đây</a> để reset mật khẩu.";
+            model.Subject = "[Casa] Reset Password";
+
+            await SendMail(model);
         }
+
+        
     }
 }

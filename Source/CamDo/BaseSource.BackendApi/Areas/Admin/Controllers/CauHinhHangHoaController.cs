@@ -25,7 +25,7 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
         public async Task<IActionResult> GetPagings([FromQuery] GetCauHinhHangHoaPagingRequest_Admin request)
         {
             var model = _db.CauHinhHangHoas.AsQueryable();
-
+            model = model.Where(x => x.CuaHangId == null);
             if (!string.IsNullOrEmpty(request.Ten))
             {
                 model = model.Where(x => x.Ten.Contains(request.Ten));

@@ -1,4 +1,5 @@
 using BaseSource.ApiIntegration.AdminApi.CauHinhHangHoa;
+using BaseSource.ApiIntegration.AdminApi.FeedBack;
 using BaseSource.ApiIntegration.AdminApi.MoTaHinhThucLai;
 using BaseSource.ApiIntegration.WebApi;
 using BaseSource.Shared.Constants;
@@ -69,11 +70,12 @@ namespace BaseSource.AdminApp
                 //options.SlidingExpiration = true;
             });
 
-           
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IUserApiClient, UserApiClient>();
             services.AddTransient<ICauHinhHangHoaAdminApiClient, CauHinhHangHoaAdminApiClient>();
             services.AddTransient<IMoTaHinhThucLaiAdmiApiClient, MoTaHinhThucLaiAdmiApiClient>();
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddTransient<IFeedBackAdminApiClient, FeedBackAdminApiClient>();
+      
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
