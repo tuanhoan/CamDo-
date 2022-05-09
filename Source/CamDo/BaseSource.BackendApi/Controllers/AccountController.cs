@@ -2,6 +2,7 @@
 using BaseSource.Data.EF;
 using BaseSource.Data.Entities;
 using BaseSource.ViewModels.Common;
+using BaseSource.ViewModels.Mail;
 using BaseSource.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -71,7 +72,8 @@ namespace BaseSource.BackendApi.Controllers
             var appUser = new AppUser()
             {
                 Email = model.Email,
-                UserName = model.UserName
+                UserName = model.UserName,
+                EmailConfirmed = true
             };
 
             var result = await _userManager.CreateAsync(appUser, model.Password);
@@ -87,10 +89,10 @@ namespace BaseSource.BackendApi.Controllers
                 _db.UserProfiles.Add(userDetail);
                 _db.SaveChanges();
 
-                var code = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
-                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+                //var code = await _userManager.GenerateEmailConfirmationTokenAsync(appUser);
+                //code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
 
-                var rs = Task.Run(() => _emailService.SendMailConfirmEmail(appUser.UserName, appUser.Email, appUser.Id, code));
+                //var rs = Task.Run(() => _emailService.SendMailConfirmEmail(appUser.UserName, appUser.Email, appUser.Id, code));
 
                 return Ok(new ApiSuccessResult<string>());
             }
@@ -113,16 +115,16 @@ namespace BaseSource.BackendApi.Controllers
                 return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
             }
 
-            if (!existingUser.EmailConfirmed)
-            {
-                var code = await _userManager.GenerateEmailConfirmationTokenAsync(existingUser);
-                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+            //if (!existingUser.EmailConfirmed)
+            //{
+            //    var code = await _userManager.GenerateEmailConfirmationTokenAsync(existingUser);
+            //    code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
 
-                var rs = Task.Run(() => _emailService.SendMailConfirmEmail(existingUser.UserName, existingUser.Email, existingUser.Id, code));
+            //    var rs = Task.Run(() => _emailService.SendMailConfirmEmail(existingUser.UserName, existingUser.Email, existingUser.Id, code));
 
-                ModelState.AddModelError("Email", "Please verify your email before logging in.");
-                return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
-            }
+            //    ModelState.AddModelError("Email", "Please verify your email before logging in.");
+            //    return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
+            //}
 
             var result = await _signInManager.PasswordSignInAsync(existingUser, user.Password, true, false);
             if (!result.Succeeded)
@@ -190,7 +192,14 @@ namespace BaseSource.BackendApi.Controllers
                 byte[] tokenGeneratedBytes = Encoding.UTF8.GetBytes(tokenGenerated);
                 var codeEncoded = WebEncoders.Base64UrlEncode(tokenGeneratedBytes);
 
-                var rs = Task.Run(() => _emailService.SendMailResetPassword(user.UserName, user.Email, codeEncoded));
+                var mailContent = new MailContentVm()
+                {
+                    UserID = user.Id,
+                    Code = codeEncoded,
+                    To = user.Email
+                };
+
+                await _emailService.SendMailResetPassword(mailContent);
                 return Ok(new ApiSuccessResult<string>());
             }
 
@@ -241,6 +250,7 @@ namespace BaseSource.BackendApi.Controllers
                 FullName = profile?.FullName,
                 UserName = user.UserName,
                 JoinedDate = profile?.JoinedDate,
+                PhoneNumber = user.PhoneNumber,
                 Roles = roles.ToList()
             };
 
@@ -254,11 +264,13 @@ namespace BaseSource.BackendApi.Controllers
             {
                 return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
             }
-
-            var user = await _db.UserProfiles.FindAsync(UserId);
-            user.FullName = model.FullName;
+            var user = await _db.Users.Include(x => x.UserProfile).Where(x => x.Id == UserId).FirstOrDefaultAsync();
+            user.PhoneNumber = model.PhoneNumber;
+            user.UserProfile.FullName = model.FullName;
+            user.Email = model.Email;
+            user.NormalizedEmail = model.Email;
             await _db.SaveChangesAsync();
-            return Ok(new ApiSuccessResult<string>());
+            return Ok(new ApiSuccessResult<string>("Cập nhật thông tin thành công"));
 
         }
 
@@ -277,10 +289,10 @@ namespace BaseSource.BackendApi.Controllers
             {
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 await _db.SaveChangesAsync();
-                return Ok(new ApiSuccessResult<string>());
+                return Ok(new ApiSuccessResult<string>("Thay đổi mật khẩu thành công"));
             }
 
-            AddErrors(result, nameof(model.OldPassword));
+            ModelState.AddModelError(nameof(model.OldPassword), "Mật khẩu cũ không đúng");
             return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
 
         }

@@ -32,6 +32,8 @@ namespace BaseSource.Data.EF
             modelBuilder.ApplyConfiguration(new KhachHangConfiguration());
             modelBuilder.ApplyConfiguration(new CauHinhHangHoaConfiguration());
             modelBuilder.ApplyConfiguration(new MoTaHinhThucLaiConfiguration());
+            modelBuilder.ApplyConfiguration(new ReportCustomerConfiguration());
+            modelBuilder.ApplyConfiguration(new FeedBackConfiguration());
 
             //modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("AppUserClaims").HasKey(x => x.Id);
             modelBuilder.Entity<IdentityUserClaim<string>>().Property(x => x.UserId).HasMaxLength(128);
@@ -67,6 +69,8 @@ namespace BaseSource.Data.EF
         public DbSet<KhachHang> KhachHangs { get; set; }
         public DbSet<CauHinhHangHoa> CauHinhHangHoas { get; set; }
         public DbSet<MoTaHinhThucLai> MoTaHinhThucLais { get; set; }
+        public DbSet<FeedBack> FeedBacks { get; set; }
+        public DbSet<ReportCustomer> ReportCustomers { get; set; }
 
     }
 }
