@@ -45,14 +45,14 @@ namespace BaseSource.Data.Extensions
                 UserId = userAdminId
             });
 
-            //modelBuilder.Entity<UserProfile>().HasData(
-            //   new UserProfile
-            //   {
-            //       UserId = userAdminId,
-            //       CustomId = userAdminId,
-            //       FullName = "Nguyễn Giàu",
-            //       JoinedDate = new DateTime(2022, 1, 1)
-            //   });
+            modelBuilder.Entity<UserProfile>().HasData(
+               new UserProfile
+               {
+                   UserId = userAdminId,
+                   CustomId = userAdminId,
+                   FullName = "Nguyễn Giàu",
+                   JoinedDate = new DateTime(2022, 1, 1)
+               });
         }
     }
 }

@@ -23,7 +23,7 @@ namespace BaseSource.Data.Configurations
 
 
             builder.HasOne(x => x.AppUser).WithOne(x => x.UserProfile).HasForeignKey<UserProfile>(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
-            builder.HasOne(x => x.CuaHang).WithMany(x => x.UserProfiles).HasForeignKey(x => x.CuaHangId).OnDelete(DeleteBehavior.Cascade);
+           
         }
     }
 }

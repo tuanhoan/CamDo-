@@ -63,10 +63,10 @@ namespace BaseSource.AdminApp.Controllers
                 IsPublish = result.ResultObj.IsPublish,
                 HinhThucLai = result.ResultObj.HinhThucLai,
                 IsThuLaiTruoc = result.ResultObj.IsThuLaiTruoc,
-                SoTienCam = result.ResultObj.SoTienCam,
-                Lai = result.ResultObj.Lai,
+                TongTien = result.ResultObj.TongTien,
+                LaiSuat = result.ResultObj.LaiSuat,
                 KyLai = result.ResultObj.KyLai,
-                SoNgayVay = result.ResultObj.SoNgayVay,
+                TongThoiGianVay = result.ResultObj.TongThoiGianVay,
                 SoNgayQuaHan = result.ResultObj.SoNgayQuaHan,
                 ListThuocTinh = result.ResultObj.ListThuocTinh,
             };

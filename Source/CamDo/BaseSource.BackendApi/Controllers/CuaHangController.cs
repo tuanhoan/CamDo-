@@ -44,40 +44,42 @@ namespace BaseSource.BackendApi.Controllers
             {
                 return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
             }
-            var cuaHang = new CuaHang()
-            {
-                Ten = model.TenCuaHang,
-                SDT = model.PhoneNumber,
-                DiaChi = model.Address,
-                TenNguoiDaiDien = model.FullName,
-                VonDauTu = model.VonDauTu,
-                IsActive = true,
-                CreatedTime = DateTime.Now
-            };
-            _db.CuaHangs.Add(cuaHang);
-            await _db.SaveChangesAsync();
 
             var newUser = new AppUser()
             {
                 UserName = model.UserName,
                 EmailConfirmed = true,
-                PhoneNumber=model.PhoneNumber
+                PhoneNumber = model.PhoneNumber
             };
 
             var result = await _userManager.CreateAsync(newUser, model.Password);
             if (result.Succeeded)
             {
-                var lstRole = new List<string>(new string[] { "Admin" });
-                await _userManager.AddToRolesAsync(newUser, lstRole);
+                var cuaHang = new CuaHang()
+                {
+                    Ten = model.TenCuaHang,
+                    SDT = model.PhoneNumber,
+                    DiaChi = model.Address,
+                    TenNguoiDaiDien = model.FullName,
+                    VonDauTu = model.VonDauTu,
+                    IsActive = true,
+                    CreatedTime = DateTime.Now,
+                    UserId = newUser.Id
+                };
+                _db.CuaHangs.Add(cuaHang);
+
                 _db.UserProfiles.Add(new UserProfile
                 {
                     CustomId = newUser.Id,
                     FullName = model.FullName,
                     JoinedDate = DateTime.Now,
                     UserId = newUser.Id,
-                    CuaHangId = cuaHang.Id
                 });
                 await _db.SaveChangesAsync();
+
+                var lstRole = new List<string>(new string[] { "Admin" });
+                await _userManager.AddToRolesAsync(newUser, lstRole);
+
                 var rs = Task.Run(() => KhoiTaoHangHoa(cuaHang.Id));
                 return Ok(new ApiSuccessResult<string>());
             }
@@ -169,9 +171,11 @@ namespace BaseSource.BackendApi.Controllers
             cuaHang.VonDauTu = model.VonDauTu;
             cuaHang.CreatedTime = DateTime.Now;
             cuaHang.IsActive = model.IsActive;
+            cuaHang.UserId = UserId;
             _db.CuaHangs.Add(cuaHang);
-
             await _db.SaveChangesAsync();
+
+            var rs = Task.Run(() => KhoiTaoHangHoa(cuaHang.Id));
             return Ok(new ApiSuccessResult<string>(cuaHang.Id.ToString()));
         }
         [HttpPost("Edit")]

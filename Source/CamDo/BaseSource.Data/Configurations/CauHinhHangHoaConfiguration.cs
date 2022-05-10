@@ -23,10 +23,10 @@ namespace BaseSource.Data.Configurations
             builder.Property(x => x.IsPublish).IsRequired().HasDefaultValue(0);
             builder.Property(x => x.HinhThucLai).IsRequired();
             builder.Property(x => x.IsThuLaiTruoc).IsRequired().HasDefaultValue(0);
-            builder.Property(x => x.SoTienCam);
-            builder.Property(x => x.Lai).IsRequired();
+            builder.Property(x => x.TongTien);
+            builder.Property(x => x.LaiSuat).IsRequired();
             builder.Property(x => x.KyLai).IsRequired();
-            builder.Property(x => x.SoNgayVay).IsRequired();
+            builder.Property(x => x.TongThoiGianVay).IsRequired();
             builder.Property(x => x.SoNgayQuaHan).IsRequired();
             builder.Property(x => x.CuaHangId);
             builder.Property(x => x.ListThuocTinh);

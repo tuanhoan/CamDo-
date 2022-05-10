@@ -37,7 +37,7 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
                 Address = x.Address,
                 Reason = x.Reason,
                 UserReport = x.UserReport,
-                TenCuaHang = x.TenCuaHang
+                CreatedTime = x.CreatedTime
             }).OrderByDescending(x => x.Id).ToPagedListAsync(request.Page, request.PageSize);
 
             var pagedResult = new PagedResult<ReportCustomerAdminVm>()
@@ -69,7 +69,7 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
             return Ok(new ApiSuccessResult<ReportCustomerAdminVm>(result));
         }
         [HttpPost("Edit")]
-        public async Task<IActionResult> Edit(EditRportCustomerAdminVm model)
+        public async Task<IActionResult> Edit(EditReportCustomerAdminVm model)
         {
             if (!ModelState.IsValid)
             {
@@ -89,6 +89,18 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
             x.UpdateById = UserId.ToString();
             await _db.SaveChangesAsync();
             return Ok(new ApiSuccessResult<string>(x.Id.ToString()));
+        }
+        [HttpPost("Delete")]
+        public async Task<IActionResult> Delete([FromForm] int id)
+        {
+            var item = await _db.ReportCustomers.FindAsync(id);
+            if (item != null)
+            {
+                _db.ReportCustomers.Remove(item);
+                await _db.SaveChangesAsync();
+                return Ok(new ApiSuccessResult<string>());
+            }
+            return Ok(new ApiErrorResult<string>("Not Found!"));
         }
     }
 }

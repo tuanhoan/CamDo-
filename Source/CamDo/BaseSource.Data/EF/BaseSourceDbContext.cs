@@ -34,6 +34,7 @@ namespace BaseSource.Data.EF
             modelBuilder.ApplyConfiguration(new MoTaHinhThucLaiConfiguration());
             modelBuilder.ApplyConfiguration(new ReportCustomerConfiguration());
             modelBuilder.ApplyConfiguration(new FeedBackConfiguration());
+            modelBuilder.ApplyConfiguration(new HopDongConfiguration());
 
             //modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("AppUserClaims").HasKey(x => x.Id);
             modelBuilder.Entity<IdentityUserClaim<string>>().Property(x => x.UserId).HasMaxLength(128);
@@ -71,6 +72,7 @@ namespace BaseSource.Data.EF
         public DbSet<MoTaHinhThucLai> MoTaHinhThucLais { get; set; }
         public DbSet<FeedBack> FeedBacks { get; set; }
         public DbSet<ReportCustomer> ReportCustomers { get; set; }
+        public DbSet<HopDong> HopDongs { get; set; }
 
     }
 }

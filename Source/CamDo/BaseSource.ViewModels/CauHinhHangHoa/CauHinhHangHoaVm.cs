@@ -24,10 +24,10 @@ namespace BaseSource.ViewModels.CauHinhHangHoa
         public bool IsPublish { get; set; }
         public EHinhThucLai HinhThucLai { get; set; }
         public bool IsThuLaiTruoc { get; set; }
-        public long SoTienCam { get; set; }
-        public int Lai { get; set; }
+        public double? TongTien { get; set; }
+        public double LaiSuat { get; set; }
         public int KyLai { get; set; }
-        public int SoNgayVay { get; set; }
+        public int TongThoiGianVay { get; set; }
         public int SoNgayQuaHan { get; set; }
         public int? CuaHangId { get; set; }
         public string ListThuocTinh { get; set; }
@@ -50,18 +50,18 @@ namespace BaseSource.ViewModels.CauHinhHangHoa
         public EHinhThucLai HinhThucLai { get; set; }
         [Display(Name = "Thu lãi trước")]
         public bool IsThuLaiTruoc { get; set; }
-        [Display(Name = "Số tiền cầm")]
+        [Display(Name = "Tổng tiền")]
         [Required(ErrorMessage = "Vui lòng nhập số tiền cầm")]
-        public long SoTienCam { get; set; }
-        [Display(Name = "Lãi")]
+        public double? TongTien { get; set; }
+        [Display(Name = "Lãi suất")]
 
-        public int Lai { get; set; }
+        public double LaiSuat { get; set; }
         [Display(Name = "Kỳ lãi")]
         [Required(ErrorMessage = "Vui lòng nhập kỳ lãi")]
         public int KyLai { get; set; }
         [Display(Name = "Số ngày vay")]
         [Required(ErrorMessage = "Vui lòng nhập số ngày vay")]
-        public int SoNgayVay { get; set; }
+        public int TongThoiGianVay { get; set; }
         [Display(Name = "Thanh lý sau")]
         [Required(ErrorMessage = "Vui lòng nhập số ngày quá hạn")]
         public int SoNgayQuaHan { get; set; }

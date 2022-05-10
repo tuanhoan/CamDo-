@@ -5,8 +5,24 @@
 <a class="navbar-brand" href="@Url.Action("Index", "Home")">
     Admin Dashboard
 </a>
+
 <!-- Sidenav Toggle Button-->
 <button class="btn btn-icon btn-transparent-dark order-1 order-lg-0 mr-lg-2" id="sidebarToggle"><i data-feather="menu"></i></button>
+<div class="menu-item" id="choose-shop">
+    <a href="#" ><i data-feather="airplay"></i> Chọn cửa hàng</a>
+    <div class="list-shop">
+        <p class="text-center">Danh sách cửa hàng</p>
+        <div class="row">
+            <div class="col-md-3 shop-item active"><a href="https://zingnews.vn/" class="w-100"><i data-feather="map-pin" class="mr-2"></i> Cửa hàng 1</a></div>
+            <div class="col-md-3 shop-item"><a href="#" class="w-100"><i data-feather="map-pin" class="mr-2"></i> Cửa hàng 1</a></div>
+            <div class="col-md-3 shop-item"><a href="#" class="w-100"><i data-feather="map-pin" class="mr-2"></i> Cửa hàng 1</a></div>
+        </div>
+    </div>
+</div>
+<div class="menu-item ">
+    <a href="@Url.Action("Index","FeedBack")"><i data-feather="message-square"></i> Góp ý</a>
+    
+</div>
 
 <ul class="navbar-nav align-items-center ml-auto">
     @await Component.InvokeAsync("UserInfoTopBar")

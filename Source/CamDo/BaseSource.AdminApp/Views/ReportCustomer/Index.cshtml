@@ -1,7 +1,6 @@
-﻿@model PagedResult<CauHinhHangHoaAdminVm>
+﻿@model PagedResult<ReportCustomerAdminVm>
 @{
-    ViewData["Title"] = "Cấu hình hàng hóa";
-    var lstStatus = SystemConstants.TrangThai.ListTrangThai();
+    ViewData["Title"] = "Quản lý báo xấu";
 }
 
 
@@ -9,24 +8,8 @@
     <!-- table  Lastest Tickets -->
     <div class="col-12  ">
         <div class="card shadow h-100 mb-4 ">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h3 class="m-0 font-weight-bold">@ViewData["Title"]</h3>
-                <a class="btn btn-primary btn-sm" asp-action="Create">Thêm mới</a>
-            </div>
             <div class="card-body">
                 <form asp-action="Index" method="get" class="mb-4">
-                    <div class="form-group row">
-                        <label class="col-sm-2 font-weight-bolder text-dark col-form-label">Lĩnh vực</label>
-                        <div class="col-sm-10">
-                            @Html.DropDownList("linhvuc", Html.GetEnumSelectList<ELinhVucHangHoa>(), "--- Tất cả ---", new { @class = "form-control" })
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 font-weight-bolder text-dark col-form-label">Trạng thái</label>
-                        <div class="col-sm-10">
-                            @Html.DropDownList("status", new SelectList(lstStatus, "value", "text"), "--- Tất cả ---", new { @class = "form-control" })
-                        </div>
-                    </div>
                     <div class="form-group row">
                         <label for="username" class="col-sm-2 font-weight-bolder text-dark col-form-label">Tên</label>
                         <div class="col-sm-10">
@@ -53,28 +36,25 @@
                         <thead>
                             <tr>
                                 <th scope="col">
-                                    Lĩnh vực
+                                    Tên khách hàng
                                 </th>
                                 <th scope="col">
-                                    Tên hàng hóa
+                                    Số điện thoại
                                 </th>
                                 <th scope="col">
-                                    Mã
+                                    CMND
                                 </th>
                                 <th scope="col">
-                                    Tiền cầm
+                                    Địa chỉ
                                 </th>
                                 <th scope="col">
-                                    Lãi suất
+                                    Lý do
                                 </th>
                                 <th scope="col">
-                                    Kỳ lãi
+                                    Người báo xấu
                                 </th>
                                 <th scope="col">
-                                    Thanh lý sau
-                                </th>
-                                <th scope="col">
-                                    Tình trạng
+                                    Cửa hàng
                                 </th>
                                 <th></th>
                             </tr>
@@ -86,39 +66,29 @@
                                 {
                                     <tr>
                                         <td>
-                                            @EnumExtensions.GetEnumDisplayName(item.LinhVuc)
+                                            @item.CustomerName
                                         </td>
                                         <td>
-                                            @item.Ten
+                                            @item.PhoneNumber
                                         </td>
                                         <td>
-                                            @item.MaTS
+                                            @item.CMND
                                         </td>
                                         <td>
-                                            @item.TongTien?.ToString("N0")
+                                            @item.Address
                                         </td>
                                         <td>
-                                            @item.LaiSuat
+                                            @item.Reason
                                         </td>
                                         <td>
-                                            @item.KyLai
+                                            @item.UserReport
                                         </td>
                                         <td>
-                                            @item.SoNgayQuaHan
-                                        </td>
-                                        <td>
-                                            @if (item.IsPublish)
-                                            {
-                                                <span class="badge badge-primary">Hoạt động</span>
-                                            }
-                                            else
-                                            {
-                                                <span class="badge badge-danger">Tạm dừng</span>
-                                            }
+                                            @item.CreatedTime.ToString("HH:mm dd/MM/yyyy")
                                         </td>
                                         <td width="175">
                                             <a class="btn btn-secondary btn-sm" href="@Url.Action("Edit", new { id = item.Id })"><i class="fas fa-pencil-alt fa-fw"></i> Edit</a>
-                                            <button class="btn btn-sm btn-danger" data-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn xóa bài viết?" data-href="@Url.Action("Delete", new { id = item.Id })" title="Delete"><i class="fas fa-trash-alt fa-fw"></i> Delete</button>
+                                            <button class="btn btn-sm btn-danger" data-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn xóa?" data-href="@Url.Action("Delete", new { id = item.Id })" title="Delete"><i class="fas fa-trash-alt fa-fw"></i> Delete</button>
                                         </td>
                                     </tr>
                                 }
@@ -126,7 +96,7 @@
                             else
                             {
                                 <tr>
-                                    <td colspan="9" class="text-center">Không có dữ liệu</td>
+                                    <td colspan="8" class="text-center">Không có dữ liệu</td>
                                 </tr>
                             }
 
@@ -152,6 +122,6 @@
 
 @section Scripts{
     <script>
-        $(".cauhinhhanghoa-nav").addClass("active");
+        $(".reportcustomer-nav").addClass("active");
     </script>
 }

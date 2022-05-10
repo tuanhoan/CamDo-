@@ -1,6 +1,7 @@
 using BaseSource.ApiIntegration.AdminApi.CauHinhHangHoa;
 using BaseSource.ApiIntegration.AdminApi.FeedBack;
 using BaseSource.ApiIntegration.AdminApi.MoTaHinhThucLai;
+using BaseSource.ApiIntegration.AdminApi.ReportCustomer;
 using BaseSource.ApiIntegration.WebApi;
 using BaseSource.Shared.Constants;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -75,6 +76,7 @@ namespace BaseSource.AdminApp
             services.AddTransient<ICauHinhHangHoaAdminApiClient, CauHinhHangHoaAdminApiClient>();
             services.AddTransient<IMoTaHinhThucLaiAdmiApiClient, MoTaHinhThucLaiAdmiApiClient>();
             services.AddTransient<IFeedBackAdminApiClient, FeedBackAdminApiClient>();
+            services.AddTransient<IReportCustomerAdminApiClient, ReportCustomerAdminApiClient>();
       
         }
 

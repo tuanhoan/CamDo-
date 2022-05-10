@@ -25,7 +25,6 @@ namespace BaseSource.Data.Configurations
             builder.Property(x => x.UserReport).IsRequired().HasMaxLength(128);
             builder.Property(x => x.UserId).IsRequired().HasMaxLength(128);
             builder.Property(x => x.CuaHangId).IsRequired();
-            builder.Property(x => x.TenCuaHang).IsRequired().HasMaxLength(256);
             builder.Property(x => x.CreatedTime).IsRequired().HasDefaultValueSql("GetDate()");
             builder.Property(x => x.UpdateById).HasMaxLength(128);
             builder.Property(x => x.UpdatedTime).HasMaxLength(128);
