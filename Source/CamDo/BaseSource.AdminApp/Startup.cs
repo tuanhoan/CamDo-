@@ -1,6 +1,9 @@
+using BaseSource.ApiIntegration.AdminApi;
 using BaseSource.ApiIntegration.AdminApi.CauHinhHangHoa;
 using BaseSource.ApiIntegration.AdminApi.FeedBack;
+using BaseSource.ApiIntegration.AdminApi.GoiSanPham;
 using BaseSource.ApiIntegration.AdminApi.MoTaHinhThucLai;
+using BaseSource.ApiIntegration.AdminApi.NotifySystem;
 using BaseSource.ApiIntegration.AdminApi.ReportCustomer;
 using BaseSource.ApiIntegration.WebApi;
 using BaseSource.Shared.Constants;
@@ -77,6 +80,9 @@ namespace BaseSource.AdminApp
             services.AddTransient<IMoTaHinhThucLaiAdmiApiClient, MoTaHinhThucLaiAdmiApiClient>();
             services.AddTransient<IFeedBackAdminApiClient, FeedBackAdminApiClient>();
             services.AddTransient<IReportCustomerAdminApiClient, ReportCustomerAdminApiClient>();
+            services.AddTransient<IGoiSanPhamAdminApiClient, GoiSanPhamAdminApiClient>();
+            services.AddTransient<INotifySystemAdminApiClient, NotifySystemAdminApiClient>();
+            services.AddTransient<IUserAdminApiClient, UserAdminApiClient>();
       
         }
 

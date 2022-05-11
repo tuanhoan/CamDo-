@@ -35,6 +35,8 @@ namespace BaseSource.Data.EF
             modelBuilder.ApplyConfiguration(new ReportCustomerConfiguration());
             modelBuilder.ApplyConfiguration(new FeedBackConfiguration());
             modelBuilder.ApplyConfiguration(new HopDongConfiguration());
+            modelBuilder.ApplyConfiguration(new NotifySystemConfiguration());
+            modelBuilder.ApplyConfiguration(new GoiSanPhamConfiguration());
 
             //modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("AppUserClaims").HasKey(x => x.Id);
             modelBuilder.Entity<IdentityUserClaim<string>>().Property(x => x.UserId).HasMaxLength(128);
@@ -61,7 +63,7 @@ namespace BaseSource.Data.EF
             //Data seeding
             modelBuilder.Seed();
             base.OnModelCreating(modelBuilder);
-           
+
         }
 
         public DbSet<Setting> Settings { get; set; }
@@ -73,6 +75,8 @@ namespace BaseSource.Data.EF
         public DbSet<FeedBack> FeedBacks { get; set; }
         public DbSet<ReportCustomer> ReportCustomers { get; set; }
         public DbSet<HopDong> HopDongs { get; set; }
+        public DbSet<GoiSanPham> GoiSanPhams { get; set; }
+        public DbSet<NotifySystem> NotifySystems { get; set; }
 
     }
 }

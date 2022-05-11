@@ -1,4 +1,4 @@
-﻿using BaseSource.ApiIntegration.AdminApi.MoTaHinhThucLai;
+﻿using BaseSource.ApiIntegration.AdminApi.GoiSanPham;
 using BaseSource.ViewModels.Admin;
 using BaseSource.ViewModels.Common;
 using Microsoft.AspNetCore.Mvc;
@@ -9,20 +9,20 @@ using System.Threading.Tasks;
 
 namespace BaseSource.AdminApp.Controllers
 {
-    public class MoTaHinhThucLaiController : BaseController
+    public class GoiSanPhamController : BaseController
     {
-        public readonly IMoTaHinhThucLaiAdmiApiClient _apiClient;
-        public MoTaHinhThucLaiController(IMoTaHinhThucLaiAdmiApiClient apiClient)
+        private readonly IGoiSanPhamAdminApiClient _apiClient;
+        public GoiSanPhamController(IGoiSanPhamAdminApiClient apiClient)
         {
             _apiClient = apiClient;
         }
-        public async Task<IActionResult> Index(string ten, int hinhthuclai, int page = 1)
+        public async Task<IActionResult> Index(string ten, int page = 1)
         {
-            var request = new GetMoTaHinhThucLaiPagingRequest_Admin()
+            var request = new GetGoiSanPhamPagingRequest_Admin()
             {
                 Page = page,
                 PageSize = 10,
-                HinhThucLai = hinhthuclai
+                Info = ten
             };
             var result = await _apiClient.GetPagings(request);
             return View(result.ResultObj);
@@ -32,7 +32,7 @@ namespace BaseSource.AdminApp.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create(CreateMoTaHinhThucLaiAdminVm model)
+        public async Task<IActionResult> Create(CreateGoiSanPhamVm model)
         {
             if (!ModelState.IsValid)
             {
@@ -52,17 +52,19 @@ namespace BaseSource.AdminApp.Controllers
             {
                 return NotFound();
             }
-            var model = new EditMoTaHinhThucLaiAdminVm()
+            var model = new EditGoiSanPhamVm()
             {
                 Id = result.ResultObj.Id,
-                HinhThucLai = result.ResultObj.HinhThucLai,
-                MoTaKyLai = result.ResultObj.MoTaKyLai,
-                TyLeLai = result.ResultObj.TyLeLai
+                KhuyenMai= result.ResultObj.KhuyenMai,
+                Ten= result.ResultObj.Ten,
+                SoThang= result.ResultObj.SoThang,
+                MoTa= result.ResultObj.MoTa,
+                TongTien= result.ResultObj.TongTien,
             };
             return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(EditMoTaHinhThucLaiAdminVm model)
+        public async Task<IActionResult> Edit(EditGoiSanPhamVm model)
         {
             if (!ModelState.IsValid)
             {

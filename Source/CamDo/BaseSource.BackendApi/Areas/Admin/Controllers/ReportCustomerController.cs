@@ -86,7 +86,7 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
             x.Address = model.Address;
             x.Reason = model.Reason;
             x.UpdatedTime = DateTime.Now;
-            x.UpdateById = UserId.ToString();
+            x.UpdateById = UserId;
             await _db.SaveChangesAsync();
             return Ok(new ApiSuccessResult<string>(x.Id.ToString()));
         }

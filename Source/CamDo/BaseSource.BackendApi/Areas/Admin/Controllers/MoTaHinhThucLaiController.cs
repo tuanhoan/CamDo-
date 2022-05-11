@@ -38,7 +38,8 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
                 Id = x.Id,
                 HinhThucLai = x.HinhThucLai,
                 MoTaKyLai = x.MoTaKyLai,
-                TyLeLai = x.TyLeLai
+                TyLeLai = x.TyLeLai,
+                ThoiGian = x.ThoiGian,
             }).OrderByDescending(x => x.Id).ToPagedListAsync(request.Page, request.PageSize);
 
             var pagedResult = new PagedResult<MoTaHinhThucLaiAdminVm>()
@@ -63,7 +64,8 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
                 Id = x.Id,
                 HinhThucLai = x.HinhThucLai,
                 MoTaKyLai = x.MoTaKyLai,
-                TyLeLai = x.TyLeLai
+                TyLeLai = x.TyLeLai,
+                ThoiGian = x.ThoiGian
             };
             return Ok(new ApiSuccessResult<MoTaHinhThucLaiAdminVm>(result));
         }
@@ -85,7 +87,8 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
             {
                 HinhThucLai = model.HinhThucLai,
                 MoTaKyLai = model.MoTaKyLai,
-                TyLeLai = model.TyLeLai
+                TyLeLai = model.TyLeLai,
+                ThoiGian = model.ThoiGian
             };
 
             _db.MoTaHinhThucLais.Add(mota);
@@ -104,8 +107,16 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
             {
                 return Ok(new ApiErrorResult<string>("Not found"));
             }
+            var old = await _db.MoTaHinhThucLais.FirstOrDefaultAsync(x => x.HinhThucLai == model.HinhThucLai && x.Id != model.Id);
+            if (old != null)
+            {
+                ModelState.AddModelError("HinhThucLai", "Hình thức lãi đã tồn tại trong hệ thống");
+                return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
+            }
+
             mota.MoTaKyLai = model.MoTaKyLai;
             mota.TyLeLai = model.TyLeLai;
+            mota.ThoiGian = model.ThoiGian;
 
             await _db.SaveChangesAsync();
             return Ok(new ApiSuccessResult<string>(mota.Id.ToString()));
@@ -113,10 +124,10 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
         [HttpPost("Delete")]
         public async Task<IActionResult> Delete([FromForm] int id)
         {
-            var mota = await _db.MoTaHinhThucLais.FindAsync(id);
-            if (mota != null)
+            var x = await _db.GoiSanPhams.FindAsync(id);
+            if (x != null)
             {
-                _db.MoTaHinhThucLais.Remove(mota);
+                _db.GoiSanPhams.Remove(x);
                 await _db.SaveChangesAsync();
                 return Ok(new ApiSuccessResult<string>());
             }

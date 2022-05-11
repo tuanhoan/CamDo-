@@ -20,6 +20,7 @@ namespace BaseSource.ViewModels.Admin
         public EHinhThucLai HinhThucLai { get; set; }
         public string TyLeLai { get; set; }
         public string MoTaKyLai { get; set; }
+        public string ThoiGian { get; set; }
     }
     public class CreateMoTaHinhThucLaiAdminVm
     {
@@ -32,6 +33,9 @@ namespace BaseSource.ViewModels.Admin
         [Display(Name = "Mô tả kỳ lãi")]
         [Required(ErrorMessage = "Vui lòng nhập mô tả lãi")]
         public string MoTaKyLai { get; set; }
+        [Display(Name = "Thời gian (Tuần/Tháng)")]
+        [Required(ErrorMessage = "Vui lòng nhập thời gian")]
+        public string ThoiGian { get; set; }
     }
     public class EditMoTaHinhThucLaiAdminVm : CreateMoTaHinhThucLaiAdminVm
     {

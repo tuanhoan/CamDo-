@@ -15,5 +15,8 @@ namespace BaseSource.ApiIntegration.AdminApi
         Task<ApiResult<UserVm>> GetById(string id);
         Task<ApiResult<RoleAssignVm>> GetUserRoles(string id);
         Task<ApiResult<string>> RoleAssign(RoleAssignVm model);
+        Task<ApiResult<string>> Create(CreateUserAdminVm model);
+        Task<ApiResult<string>> Edit(EditUserAdminVm model);
+        Task<ApiResult<string>> LockUnLockUser(string id);
     }
 }

@@ -1,4 +1,4 @@
-﻿using BaseSource.ApiIntegration.AdminApi.MoTaHinhThucLai;
+﻿using BaseSource.ApiIntegration.AdminApi.NotifySystem;
 using BaseSource.ViewModels.Admin;
 using BaseSource.ViewModels.Common;
 using Microsoft.AspNetCore.Mvc;
@@ -9,20 +9,20 @@ using System.Threading.Tasks;
 
 namespace BaseSource.AdminApp.Controllers
 {
-    public class MoTaHinhThucLaiController : BaseController
+    public class NotifySystemController : BaseController
     {
-        public readonly IMoTaHinhThucLaiAdmiApiClient _apiClient;
-        public MoTaHinhThucLaiController(IMoTaHinhThucLaiAdmiApiClient apiClient)
+        private readonly INotifySystemAdminApiClient _apiClient;
+        public NotifySystemController(INotifySystemAdminApiClient apiClient)
         {
             _apiClient = apiClient;
         }
-        public async Task<IActionResult> Index(string ten, int hinhthuclai, int page = 1)
+        public async Task<IActionResult> Index(string ten, int page = 1)
         {
-            var request = new GetMoTaHinhThucLaiPagingRequest_Admin()
+            var request = new GetNotifySystemPagingRequest_Admin()
             {
                 Page = page,
                 PageSize = 10,
-                HinhThucLai = hinhthuclai
+                Info = ten
             };
             var result = await _apiClient.GetPagings(request);
             return View(result.ResultObj);
@@ -32,7 +32,7 @@ namespace BaseSource.AdminApp.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create(CreateMoTaHinhThucLaiAdminVm model)
+        public async Task<IActionResult> Create(CreateNotifySystemVm model)
         {
             if (!ModelState.IsValid)
             {
@@ -52,17 +52,18 @@ namespace BaseSource.AdminApp.Controllers
             {
                 return NotFound();
             }
-            var model = new EditMoTaHinhThucLaiAdminVm()
+            var model = new EditNotifySystemVm()
             {
                 Id = result.ResultObj.Id,
-                HinhThucLai = result.ResultObj.HinhThucLai,
-                MoTaKyLai = result.ResultObj.MoTaKyLai,
-                TyLeLai = result.ResultObj.TyLeLai
+                Title = result.ResultObj.Title,
+                Url = result.ResultObj.Url,
+                StartTime = result.ResultObj.StartTime,
+                EndTime = result.ResultObj.EndTime,
             };
             return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(EditMoTaHinhThucLaiAdminVm model)
+        public async Task<IActionResult> Edit(EditNotifySystemVm model)
         {
             if (!ModelState.IsValid)
             {

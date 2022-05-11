@@ -1,0 +1,63 @@
+﻿@model CreateGoiSanPhamVm
+@{
+    ViewData["Title"] = "Thêm mới gói sản phẩm";
+}
+<div>
+    <div class="card shadow h-100">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="m-0 font-weight-bold">@ViewData["Title"]</h3>
+            <a class="btn btn-sm btn-secondary shadow-sm" asp-action="Index"><i class="fas fa-arrow-left fa-fw fa-sm text-white-50"></i> Back</a>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="Create" data-name="ajaxForm" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group row">
+                    <label asp-for="Ten" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Ten" class="form-control " />
+                        <span asp-validation-for="Ten" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="SoThang" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="SoThang" class="form-control " />
+                        <span asp-validation-for="SoThang" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="TongTien" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="TongTien" class="form-control " />
+                        <span asp-validation-for="TongTien" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="KhuyenMai" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="KhuyenMai" class="form-control " />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="MoTa" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <textarea asp-for="MoTa" rows="5" class="form-control "></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts{
+    <script>
+        $(".goisanpham-nav").addClass("active");
+    </script>
+}   

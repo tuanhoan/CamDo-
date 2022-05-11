@@ -52,5 +52,28 @@ namespace BaseSource.ApiIntegration.AdminApi
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.PostAsync<ApiResult<string>>("/api/admin/User/RoleAssign", model);
         }
+
+        public async Task<ApiResult<string>> Create(CreateUserAdminVm model)
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.PostAsync<ApiResult<string>>("/api/admin/User/Create", model);
+        }
+
+        public async Task<ApiResult<string>> Edit(EditUserAdminVm model)
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.PostAsync<ApiResult<string>>("/api/admin/User/Edit", model);
+        }
+
+        public async Task<ApiResult<string>> LockUnLockUser(string id)
+        {
+            var dic = new Dictionary<string, string>()
+            {
+                { "id", id },
+            };
+
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.PostAsyncFormUrl<ApiResult<string>>("/api/admin/User/LockUnLockUser", dic);
+        }
     }
 }
