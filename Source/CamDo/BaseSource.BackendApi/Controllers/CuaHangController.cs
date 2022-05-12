@@ -220,12 +220,14 @@ namespace BaseSource.BackendApi.Controllers
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var user = await _db.Users.FindAsync(UserId);
             var roles = await _userManager.GetRolesAsync(user);
+            var cuaHang = await _db.CuaHangs.FindAsync(id);
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Email,user.Email ?? ""),
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                  new Claim("CuaHangId", id.ToString())
+                new Claim("CuaHangId", id.ToString()),
+                 new Claim("TenCuaHang", cuaHang?.Ten??"")
              };
 
             foreach (var item in roles)
@@ -245,6 +247,25 @@ namespace BaseSource.BackendApi.Controllers
             var jwtToken = jwtTokenHandler.WriteToken(token);
             return Ok(new ApiSuccessResult<string>(jwtToken));
         }
+        [HttpGet("GetShopByUser")]
+        public async Task<IActionResult> GetShopByUser()
+        {
+            var lstShop = await _db.CuaHangs.Where(x => x.UserId == UserId).ToListAsync();
+            var lstResult = new List<CuaHangVm>();
+            foreach (var item in lstShop)
+            {
+                lstResult.Add(new CuaHangVm()
+                {
+                    Id = item.Id,
+                    Ten = item.Ten
+                });
+            }
+
+            return Ok(new ApiSuccessResult<List<CuaHangVm>>(lstResult));
+        }
+
+
+
         #endregion
 
         #region helper

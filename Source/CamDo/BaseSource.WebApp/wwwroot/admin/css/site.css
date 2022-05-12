@@ -41,6 +41,7 @@ a.btn-icon i {
     .menu-item a {
         display: flex;
         align-items: center;
+        color: #676c7b;
     }
 
         .menu-item a svg {
@@ -61,6 +62,7 @@ a.btn-icon i {
     display: flex;
     align-items: center;
     margin: 10px;
+    border: 1px dotted #dedede;
 }
 
     .shop-item a {
@@ -73,4 +75,8 @@ a.btn-icon i {
 
 .choose-shop {
     position: relative;
+}
+
+select.form-control {
+    padding: 0.575rem 1.125rem !important;
 }

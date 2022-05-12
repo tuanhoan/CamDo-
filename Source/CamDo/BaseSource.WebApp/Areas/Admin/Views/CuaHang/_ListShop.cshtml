@@ -1,0 +1,22 @@
+﻿@model List<CuaHangVm>
+@{
+    var currentShop = User.Claims.FirstOrDefault(x => x.Type == "CuaHangId")?.Value;
+}
+@if (Model.Count > 0)
+{
+    <p class="text-center">Danh sách cửa hàng</p>
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-3 btn-changeShop shop-item @(item.Id.ToString()==currentShop?"active":"")" data-name="@item.Ten" data-href="@Url.Action("ChangeShop")" data-id="@item.Id">
+                <a href="#" class="w-100">
+                    <i data-feather="map-pin" class="mr-2"></i> @item.Ten
+                </a>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p class="text-center">Không có cửa hàng</p>
+}

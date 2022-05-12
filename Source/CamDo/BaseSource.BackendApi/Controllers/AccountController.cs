@@ -135,11 +135,11 @@ namespace BaseSource.BackendApi.Controllers
                 }
                 if (result.IsLockedOut)
                 {
-                    ModelState.AddModelError("UserName", "User account locked out.");
+                    ModelState.AddModelError("UserName", "Tài khoản của bạn đã bị khóa");
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "The username or password is incorrect.");
+                    ModelState.AddModelError(nameof(user.Password), "Mật khẩu không đúng");
                 }
                 return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
             }
@@ -390,7 +390,8 @@ namespace BaseSource.BackendApi.Controllers
                 new Claim(ClaimTypes.Email,user.Email ?? ""),
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim("CuaHangId", cuaHang?.Id.ToString() ?? "")
+                new Claim("CuaHangId", cuaHang?.Id.ToString() ?? ""),
+                 new Claim("TenCuaHang", cuaHang?.Ten ?? "")
              };
 
             foreach (var item in roles)

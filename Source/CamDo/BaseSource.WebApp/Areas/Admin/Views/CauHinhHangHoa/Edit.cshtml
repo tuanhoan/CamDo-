@@ -98,7 +98,12 @@
                 <div class="form-group row">
                     <label asp-for="TongThoiGianVay" class="control-label col-md-2"></label>
                     <div class="col-md-10">
-                        <input asp-for="TongThoiGianVay" class="form-control " />
+                        <div class="input-group">
+                            <input asp-for="TongThoiGianVay" min="0" class="form-control " />
+                            <div class="input-group-append">
+                                <span class="input-group-text thoigianvay" id="basic-addon2"></span>
+                            </div>
+                        </div>
                         <span asp-validation-for="TongThoiGianVay" class="text-danger"></span>
                     </div>
                 </div>
@@ -146,6 +151,7 @@
         $(".cauhinhhanghoa-nav").addClass("active");
         setMoneyTextBox(".money-textbox");
         $(document).ready(function () {
+            getMoTaHinhThucLai();
           var lstThuocTinh = '@Html.Raw(Model.ListThuocTinh)';
             var $repeater = $('.repeatThuocTinh').repeater({
                 initEmpty: true,
@@ -169,8 +175,11 @@
                 url: "/MoTaHinhThucLai/GetMoTaHinhThucLai",
                 data: { hinhThucLai: type },
                 success: function (data) {
-                    $('.tyLeLai').html(data[0].tyLeLai);
-                    $('.motaKyLai').html(data[0].moTaKyLai);
+                    if (data && data.length > 0) {
+                        $('.tyLeLai').html(data[0].tyLeLai);
+                        $('.motaKyLai').html(data[0].moTaKyLai);
+                        $('.thoigianvay').html(data[0].thoiGian);
+                    }
                 }
             })
         }

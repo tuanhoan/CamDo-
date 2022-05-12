@@ -121,6 +121,12 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             return Json(new ApiSuccessResult<string>());
         }
 
+        public async Task<IActionResult> GetShopByUser()
+        {
+            var result = await _cuaHangApiClient.GetShopByUser();
+            return PartialView("_ListShop", result.ResultObj);
+        }
+
         private ClaimsPrincipal ValidateToken(string jwtToken)
         {
             IdentityModelEventSource.ShowPII = true;

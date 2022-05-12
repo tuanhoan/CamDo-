@@ -1,5 +1,19 @@
-﻿
+﻿$(".asyncPartial").each(function (i, item) {
+    var url = $(item).data("url");
+    if (url && url.length > 0) {
+        $(item).load(url, function () {
+            feather.replace();
+        });
+    }
+});
 
+var chooseShop = document.getElementById('choose-shop');
+document.addEventListener('click', function (event) {
+    var isClickInsideElement = chooseShop.contains(event.target);
+    if (!isClickInsideElement) {
+        $('.list-shop').slideToggle();
+    }
+});
 $(function () {
     // toastr ======================================================//
     toastr.options = {

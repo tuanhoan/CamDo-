@@ -34,7 +34,8 @@ namespace BaseSource.BackendApi.Controllers
                 Id = x.Id,
                 HinhThucLai = x.HinhThucLai,
                 MoTaKyLai = x.MoTaKyLai,
-                TyLeLai = x.TyLeLai
+                TyLeLai = x.TyLeLai,
+                ThoiGian = x.ThoiGian
             }).OrderByDescending(x => x.Id).ToPagedListAsync(request.Page, request.PageSize);
 
             var pagedResult = new PagedResult<MoTaHinhThucLaiVm>()

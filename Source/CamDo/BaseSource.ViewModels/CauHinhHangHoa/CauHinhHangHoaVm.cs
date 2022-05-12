@@ -59,7 +59,7 @@ namespace BaseSource.ViewModels.CauHinhHangHoa
         [Display(Name = "Kỳ lãi")]
         [Required(ErrorMessage = "Vui lòng nhập kỳ lãi")]
         public int KyLai { get; set; }
-        [Display(Name = "Số ngày vay")]
+        [Display(Name = "Thời gian vay")]
         [Required(ErrorMessage = "Vui lòng nhập số ngày vay")]
         public int TongThoiGianVay { get; set; }
         [Display(Name = "Thanh lý sau")]
