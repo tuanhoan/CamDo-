@@ -88,6 +88,13 @@ namespace BaseSource.AdminApp.Controllers
             return RedirectToLocal(returnUrl);
 
         }
+        public async Task<IActionResult> Logout()
+        {
+            ClearAuthorizedCookies();
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return RedirectToAction("Login", "Account");
+        }
         #region helper
         private ClaimsPrincipal ValidateToken(string jwtToken)
         {

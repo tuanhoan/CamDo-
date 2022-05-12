@@ -75,5 +75,16 @@ namespace BaseSource.ApiIntegration.AdminApi
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.PostAsyncFormUrl<ApiResult<string>>("/api/admin/User/LockUnLockUser", dic);
         }
+
+        public async Task<ApiResult<string>> ResetPassword(string userId)
+        {
+            var dic = new Dictionary<string, string>()
+            {
+                { "id", userId },
+            };
+
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.PostAsyncFormUrl<ApiResult<string>>("/api/admin/User/ResetPassword", dic);
+        }
     }
 }

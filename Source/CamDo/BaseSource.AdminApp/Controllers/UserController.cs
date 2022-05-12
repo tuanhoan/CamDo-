@@ -122,5 +122,16 @@ namespace BaseSource.AdminApp.Controllers
 
             return Json(new ApiSuccessResult<string>());
         }
+        [HttpPost]
+        public async Task<ActionResult> ResetPassword(string id)
+        {
+            var result = await _apiClient.ResetPassword(id);
+            if (!result.IsSuccessed)
+            {
+                return Json(new ApiErrorResult<string>());
+            }
+
+            return Json(new ApiSuccessResult<string>(result.ResultObj));
+        }
     }
 }

@@ -55,7 +55,7 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
                          where ur.UserId == x.Id
                          select r.Name).ToList(),
                 JoinedDate = x.UserProfile.JoinedDate,
-                LockoutEndDateUtc= x.LockoutEnd != null ? x.LockoutEnd.Value.DateTime : null
+                LockoutEndDateUtc = x.LockoutEnd != null ? x.LockoutEnd.Value.DateTime : null
             }).OrderByDescending(x => x.JoinedDate).ToPagedListAsync(request.Page, request.PageSize);
 
             var pagedResult = new PagedResult<UserVm>()
@@ -192,8 +192,12 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
             user.NormalizedEmail = model.Email;
             user.PhoneNumber = model.Email;
             user.UserProfile.FullName = model.FullName;
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-            await _userManager.ResetPasswordAsync(user, token, model.Password);
+            if (!string.IsNullOrEmpty(model.Password))
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                await _userManager.ResetPasswordAsync(user, token, model.Password);
+            }
+
             await _db.SaveChangesAsync();
             return Ok(new ApiSuccessResult<string>());
         }
@@ -210,8 +214,8 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
             IdentityResult lockDateTask;
             if (user.LockoutEnabled)
             {
-                lockUserTask = await _userManager.SetLockoutEnabledAsync(user, false);
                 lockDateTask = await _userManager.SetLockoutEndDateAsync(user, DateTime.Now - TimeSpan.FromMinutes(1));
+                lockUserTask = await _userManager.SetLockoutEnabledAsync(user, false);
             }
             else
             {
@@ -224,6 +228,24 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
             }
             return Ok(new ApiErrorResult<string>());
 
+
+        }
+        [HttpPost("ResetPassword")]
+        public async Task<IActionResult> ResetPassword([FromForm] string id)
+        {
+            var user = await _db.Users.FindAsync(id);
+            if (user == null)
+            {
+                return Ok(new ApiErrorResult<string>("Not found"));
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await _userManager.ResetPasswordAsync(user, token, "123456");
+            if (result.Succeeded)
+            {
+                return Ok(new ApiSuccessResult<string>());
+            }
+            return Ok(new ApiErrorResult<string>("Có lỗi xảy ra. Vui lòng thử lại"));
 
         }
 
