@@ -55,7 +55,7 @@ namespace BaseSource.Data.Migrations
                         new
                         {
                             Id = "c1105ce5-9dbc-49a9-a7d5-c963b6daa62a",
-                            ConcurrencyStamp = "b311536f-068c-4bca-870a-d15e02c2c763",
+                            ConcurrencyStamp = "0d4f2d13-2c2c-4e1e-bdff-8ab100f49c52",
                             Description = "Administrator role",
                             Name = "Admin",
                             NormalizedName = "Admin"
@@ -133,13 +133,13 @@ namespace BaseSource.Data.Migrations
                         {
                             Id = "ffded6b0-3769-4976-841b-69459049a62d",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "4cbaeb27-cc18-4d97-a6f4-f2698c51ad58",
+                            ConcurrencyStamp = "ee6a41b4-72be-4623-b730-30108d5eae3c",
                             Email = "doangiau2006@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "doangiau2006@gmail.com",
                             NormalizedUserName = "superadmin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEDrxJ4i0gVqXzuoqMbJlqH2VqT9ai4hRzKbrXmrOrQpNQnYfQxUILkn58eXRHiolUQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKbnLWX6LueNWgd/Go4lcrB8+oF4mVLTg1VqFQ8DrP+oICQP9HsK9v/CdWdvQ0WrHA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -173,8 +173,8 @@ namespace BaseSource.Data.Migrations
                     b.Property<int>("KyLai")
                         .HasColumnType("int");
 
-                    b.Property<int>("Lai")
-                        .HasColumnType("int");
+                    b.Property<double>("LaiSuat")
+                        .HasColumnType("float");
 
                     b.Property<byte>("LinhVuc")
                         .HasColumnType("tinyint");
@@ -190,16 +190,16 @@ namespace BaseSource.Data.Migrations
                     b.Property<int>("SoNgayQuaHan")
                         .HasColumnType("int");
 
-                    b.Property<int>("SoNgayVay")
-                        .HasColumnType("int");
-
-                    b.Property<long>("SoTienCam")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("Ten")
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("TongThoiGianVay")
+                        .HasColumnType("int");
+
+                    b.Property<double?>("TongTien")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -244,11 +244,18 @@ namespace BaseSource.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
                     b.Property<long>("VonDauTu")
                         .HasMaxLength(0)
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("CuaHangs");
                 });
@@ -291,6 +298,123 @@ namespace BaseSource.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("FeedBacks");
+                });
+
+            modelBuilder.Entity("BaseSource.Data.Entities.GoiSanPham", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("CreatedTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GetDate()");
+
+                    b.Property<string>("KhuyenMai")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("MoTa")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<int>("SoThang")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Ten")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<double>("TongTien")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime?>("UpdatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserIdCreated")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("UserIdUpdate")
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("GoiSanPhams");
+                });
+
+            modelBuilder.Entity("BaseSource.Data.Entities.HopDong", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("HD_GhiChu")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte>("HD_HinhThucLai")
+                        .HasColumnType("tinyint");
+
+                    b.Property<bool>("HD_IsTraTruoc")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("HD_KyLai")
+                        .HasColumnType("int");
+
+                    b.Property<double>("HD_LaiSuat")
+                        .HasColumnType("float");
+
+                    b.Property<string>("HD_MA")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<DateTime>("HD_NgayVay")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GetDate()");
+
+                    b.Property<int>("HD_TongThoiGianVay")
+                        .HasColumnType("int");
+
+                    b.Property<double>("HD_TongTien")
+                        .HasColumnType("float");
+
+                    b.Property<int>("HangHoaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("HangHoa_ListThuocTinh")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HangHoa_Ten")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<int>("KhachHangId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserIdAssigned")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.Property<string>("UserIdCreated")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("HopDongs");
                 });
 
             modelBuilder.Entity("BaseSource.Data.Entities.KhachHang", b =>
@@ -352,6 +476,11 @@ namespace BaseSource.Data.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<string>("ThoiGian")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
                     b.Property<string>("TyLeLai")
                         .IsRequired()
                         .HasMaxLength(256)
@@ -360,6 +489,43 @@ namespace BaseSource.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MoTaHinhThucLais");
+                });
+
+            modelBuilder.Entity("BaseSource.Data.Entities.NotifySystem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("CreatedTime")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GetDate()");
+
+                    b.Property<DateTime?>("EndTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("StartTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("Url")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<string>("UserIdCreated")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NotifySystems");
                 });
 
             modelBuilder.Entity("BaseSource.Data.Entities.ReportCustomer", b =>
@@ -399,11 +565,6 @@ namespace BaseSource.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
-
-                    b.Property<string>("TenCuaHang")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("UpdateById")
                         .HasMaxLength(128)
@@ -448,9 +609,6 @@ namespace BaseSource.Data.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(128)");
 
-                    b.Property<int>("CuaHangId")
-                        .HasColumnType("int");
-
                     b.Property<string>("CustomId")
                         .IsRequired()
                         .HasMaxLength(128)
@@ -468,12 +626,19 @@ namespace BaseSource.Data.Migrations
 
                     b.HasKey("UserId");
 
-                    b.HasIndex("CuaHangId");
-
                     b.HasIndex("CustomId")
                         .IsUnique();
 
                     b.ToTable("UserProfile");
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "ffded6b0-3769-4976-841b-69459049a62d",
+                            CustomId = "ffded6b0-3769-4976-841b-69459049a62d",
+                            FullName = "Nguyễn Giàu",
+                            JoinedDate = new DateTime(2022, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -603,6 +768,17 @@ namespace BaseSource.Data.Migrations
                     b.Navigation("CuaHang");
                 });
 
+            modelBuilder.Entity("BaseSource.Data.Entities.CuaHang", b =>
+                {
+                    b.HasOne("BaseSource.Data.Entities.UserProfile", "UserProfile")
+                        .WithMany("CuaHangs")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserProfile");
+                });
+
             modelBuilder.Entity("BaseSource.Data.Entities.KhachHang", b =>
                 {
                     b.HasOne("BaseSource.Data.Entities.CuaHang", "CuaHang")
@@ -616,12 +792,6 @@ namespace BaseSource.Data.Migrations
 
             modelBuilder.Entity("BaseSource.Data.Entities.UserProfile", b =>
                 {
-                    b.HasOne("BaseSource.Data.Entities.CuaHang", "CuaHang")
-                        .WithMany("UserProfiles")
-                        .HasForeignKey("CuaHangId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("BaseSource.Data.Entities.AppUser", "AppUser")
                         .WithOne("UserProfile")
                         .HasForeignKey("BaseSource.Data.Entities.UserProfile", "UserId")
@@ -629,8 +799,6 @@ namespace BaseSource.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("AppUser");
-
-                    b.Navigation("CuaHang");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -694,8 +862,11 @@ namespace BaseSource.Data.Migrations
                     b.Navigation("CauHinhHangHoas");
 
                     b.Navigation("KhachHangs");
+                });
 
-                    b.Navigation("UserProfiles");
+            modelBuilder.Entity("BaseSource.Data.Entities.UserProfile", b =>
+                {
+                    b.Navigation("CuaHangs");
                 });
 #pragma warning restore 612, 618
         }

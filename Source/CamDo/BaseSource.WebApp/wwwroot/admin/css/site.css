@@ -33,3 +33,50 @@ a.btn-icon i {
     height: 100%;
     width: 100%;
 }
+
+.menu-item {
+    padding: 10px;
+}
+
+    .menu-item a {
+        display: flex;
+        align-items: center;
+        color: #676c7b;
+    }
+
+        .menu-item a svg {
+            margin-right: 5px;
+        }
+
+.list-shop {
+    position: absolute;
+    width: 70%;
+    background: #fff;
+    padding: 20px;
+    box-shadow: 0px 0px 15px 1px rgb(69 65 78 / 20%);
+    margin-top: 20px;
+    display: none;
+}
+
+.shop-item {
+    display: flex;
+    align-items: center;
+    margin: 10px;
+    border: 1px dotted #dedede;
+}
+
+    .shop-item a {
+        line-height: 50px;
+    }
+
+    .shop-item.active {
+        background: #eceef1;
+    }
+
+.choose-shop {
+    position: relative;
+}
+
+select.form-control {
+    padding: 0.575rem 1.125rem !important;
+}

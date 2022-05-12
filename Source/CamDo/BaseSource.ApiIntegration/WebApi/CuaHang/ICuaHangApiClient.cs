@@ -19,5 +19,8 @@ namespace BaseSource.ApiIntegration.WebApi.CuaHang
         Task<ApiResult<string>> ChangeShop(int id);
 
         Task<ApiResult<string>> RegisterCuaHang(RegisterCuaHangVm model);
+
+        Task<ApiResult<List<CuaHangVm>>> GetShopByUser();
+
     }
 }

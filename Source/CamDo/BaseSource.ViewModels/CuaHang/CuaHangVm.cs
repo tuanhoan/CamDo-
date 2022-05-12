@@ -55,7 +55,7 @@ namespace BaseSource.ViewModels.CuaHang
     {
         [Display(Name = "Tên đăng nhập")]
         [Required(ErrorMessage = "Vui lòng nhập tên đăng nhập")]
-        [RegularExpression("^[A-z0-9]+$", ErrorMessage = "Username không được chưa ký tự đặc biệt")]
+        [RegularExpression("^[A-z0-9]+$", ErrorMessage = "Username không được chứa ký tự đặc biệt")]
         public string UserName { get; set; }
         [Display(Name = "Mật khẩu")]
         [Required(ErrorMessage = "Vui lòng nhập mật khẩu")]

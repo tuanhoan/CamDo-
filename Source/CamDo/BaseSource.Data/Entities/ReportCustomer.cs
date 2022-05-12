@@ -17,7 +17,6 @@ namespace BaseSource.Data.Entities
         public string UserReport { get; set; }
         public string UserId { get; set; }
         public int CuaHangId { get; set; }
-        public string TenCuaHang { get; set; }
         public DateTime CreatedTime { get; set; }
         public string UpdateById { get; set; }
         public DateTime? UpdatedTime { get; set; }

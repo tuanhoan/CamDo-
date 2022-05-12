@@ -29,10 +29,20 @@ namespace BaseSource.ApiIntegration.AdminApi.ReportCustomer
             return await client.PostAsyncFormUrl<ApiResult<string>>("/api/admin/ReportCustomer/Delete", dic);
         }
 
-        public async Task<ApiResult<string>> Edit(EditRportCustomerAdminVm model)
+        public async Task<ApiResult<string>> Edit(EditReportCustomerAdminVm model)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.PostAsync<ApiResult<string>>("/api/admin/ReportCustomer/Edit", model);
+        }
+
+        public async Task<ApiResult<ReportCustomerAdminVm>> GetById(int id)
+        {
+            var obj = new
+            {
+                id = id
+            };
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.GetAsync<ApiResult<ReportCustomerAdminVm>>("/api/admin/ReportCustomer/GetById", obj);
         }
 
         public async Task<ApiResult<PagedResult<ReportCustomerAdminVm>>> GetPagings(GetReportCustomerPagingRequest_Admin model)
@@ -40,5 +50,7 @@ namespace BaseSource.ApiIntegration.AdminApi.ReportCustomer
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.GetAsync<ApiResult<PagedResult<ReportCustomerAdminVm>>>("/api/admin/ReportCustomer/GetPagings", model);
         }
+
+        
     }
 }

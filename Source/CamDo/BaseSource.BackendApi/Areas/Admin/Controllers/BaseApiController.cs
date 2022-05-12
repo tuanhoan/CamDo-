@@ -15,10 +15,10 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
     [Route("api/[area]/[controller]")]
     public class BaseAdminApiController : ControllerBase
     {
-        private Guid? _userId;
-        public Guid? UserId
+        private string _userId;
+        public string UserId
         {
-            get { return _userId ?? (string.IsNullOrEmpty(User.FindFirstValue(ClaimTypes.NameIdentifier)) ? null : new Guid(User.FindFirstValue(ClaimTypes.NameIdentifier))); }
+            get { return _userId ?? User.FindFirstValue(ClaimTypes.NameIdentifier); }
             set { _userId = value; }
         }
     }

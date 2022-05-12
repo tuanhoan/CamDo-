@@ -2,11 +2,23 @@
 <!-- * * Tip * * You can use text or an image for your navbar brand.-->
 <!-- * * * * * * When using an image, we recommend the SVG format.-->
 <!-- * * * * * * Dimensions: Maximum height: 32px, maximum width: 240px-->
+@{
+    var currentShop = User.Claims.FirstOrDefault(x => x.Type == "TenCuaHang")?.Value ?? "Chọn cửa hàng";
+}
 <a class="navbar-brand" href="@Url.Action("Index", "Home")">
     Admin Dashboard
 </a>
+
 <!-- Sidenav Toggle Button-->
 <button class="btn btn-icon btn-transparent-dark order-1 order-lg-0 mr-lg-2" id="sidebarToggle"><i data-feather="menu"></i></button>
+<div class="menu-item" id="choose-shop">
+    <a href="#"><i data-feather="airplay"></i> @currentShop</a>
+    <div class="list-shop asyncPartial" data-url="@Url.Action("GetShopByUser","CuaHang")"></div>
+</div>
+<div class="menu-item ">
+    <a href="@Url.Action("Index","FeedBack")"><i data-feather="message-square"></i> Góp ý</a>
+
+</div>
 
 <ul class="navbar-nav align-items-center ml-auto">
     @await Component.InvokeAsync("UserInfoTopBar")

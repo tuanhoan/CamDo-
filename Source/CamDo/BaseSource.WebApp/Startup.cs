@@ -21,6 +21,7 @@ using BaseSource.ApiIntegration.AdminApi.CauHinhHangHoa;
 using BaseSource.ApiIntegration.WebApi.CuaHang;
 using BaseSource.ApiIntegration.WebApi.CauHinhHangHoa;
 using BaseSource.ApiIntegration.WebApi.MoTaHinhThucLai;
+using BaseSource.ApiIntegration.WebApi.FeedBack;
 
 namespace BaseSource.WebApp
 {
@@ -92,12 +93,9 @@ namespace BaseSource.WebApp
             services.AddTransient<ICuaHangApiClient, CuaHangApiClient>();
             services.AddTransient<ICauHinhHangHoaApiClient, CauHinhHangHoaApiClient>();
             services.AddTransient<IMoTaHinhThucLaiApiClient, MoTaHinhThucLaiApiClient>();
+            services.AddTransient<IFeedBackApiClient, FeedBackApiClient>();
 
-            #region admin
-            services.AddTransient<IUserAdminApiClient, UserAdminApiClient>();
-            services.AddTransient<ISettingAdminApiClient, SettingAdminApiClient>();
-            services.AddTransient<ICauHinhHangHoaAdminApiClient, CauHinhHangHoaAdminApiClient>();
-            #endregion
+            
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }

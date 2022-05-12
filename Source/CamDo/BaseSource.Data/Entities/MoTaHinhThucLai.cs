@@ -13,5 +13,6 @@ namespace BaseSource.Data.Entities
         public EHinhThucLai HinhThucLai { get; set; }
         public string TyLeLai { get; set; }
         public string MoTaKyLai { get; set; }
+        public string ThoiGian { get; set; }
     }
 }

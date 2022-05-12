@@ -44,40 +44,42 @@ namespace BaseSource.BackendApi.Controllers
             {
                 return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
             }
-            var cuaHang = new CuaHang()
-            {
-                Ten = model.TenCuaHang,
-                SDT = model.PhoneNumber,
-                DiaChi = model.Address,
-                TenNguoiDaiDien = model.FullName,
-                VonDauTu = model.VonDauTu,
-                IsActive = true,
-                CreatedTime = DateTime.Now
-            };
-            _db.CuaHangs.Add(cuaHang);
-            await _db.SaveChangesAsync();
 
             var newUser = new AppUser()
             {
                 UserName = model.UserName,
                 EmailConfirmed = true,
-                PhoneNumber=model.PhoneNumber
+                PhoneNumber = model.PhoneNumber
             };
 
             var result = await _userManager.CreateAsync(newUser, model.Password);
             if (result.Succeeded)
             {
-                var lstRole = new List<string>(new string[] { "Admin" });
-                await _userManager.AddToRolesAsync(newUser, lstRole);
+                var cuaHang = new CuaHang()
+                {
+                    Ten = model.TenCuaHang,
+                    SDT = model.PhoneNumber,
+                    DiaChi = model.Address,
+                    TenNguoiDaiDien = model.FullName,
+                    VonDauTu = model.VonDauTu,
+                    IsActive = true,
+                    CreatedTime = DateTime.Now,
+                    UserId = newUser.Id
+                };
+                _db.CuaHangs.Add(cuaHang);
+
                 _db.UserProfiles.Add(new UserProfile
                 {
                     CustomId = newUser.Id,
                     FullName = model.FullName,
                     JoinedDate = DateTime.Now,
                     UserId = newUser.Id,
-                    CuaHangId = cuaHang.Id
                 });
                 await _db.SaveChangesAsync();
+
+                var lstRole = new List<string>(new string[] { "Admin" });
+                await _userManager.AddToRolesAsync(newUser, lstRole);
+
                 var rs = Task.Run(() => KhoiTaoHangHoa(cuaHang.Id));
                 return Ok(new ApiSuccessResult<string>());
             }
@@ -169,9 +171,11 @@ namespace BaseSource.BackendApi.Controllers
             cuaHang.VonDauTu = model.VonDauTu;
             cuaHang.CreatedTime = DateTime.Now;
             cuaHang.IsActive = model.IsActive;
+            cuaHang.UserId = UserId;
             _db.CuaHangs.Add(cuaHang);
-
             await _db.SaveChangesAsync();
+
+            var rs = Task.Run(() => KhoiTaoHangHoa(cuaHang.Id));
             return Ok(new ApiSuccessResult<string>(cuaHang.Id.ToString()));
         }
         [HttpPost("Edit")]
@@ -216,12 +220,14 @@ namespace BaseSource.BackendApi.Controllers
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var user = await _db.Users.FindAsync(UserId);
             var roles = await _userManager.GetRolesAsync(user);
+            var cuaHang = await _db.CuaHangs.FindAsync(id);
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.Email,user.Email ?? ""),
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                  new Claim("CuaHangId", id.ToString())
+                new Claim("CuaHangId", id.ToString()),
+                 new Claim("TenCuaHang", cuaHang?.Ten??"")
              };
 
             foreach (var item in roles)
@@ -241,6 +247,25 @@ namespace BaseSource.BackendApi.Controllers
             var jwtToken = jwtTokenHandler.WriteToken(token);
             return Ok(new ApiSuccessResult<string>(jwtToken));
         }
+        [HttpGet("GetShopByUser")]
+        public async Task<IActionResult> GetShopByUser()
+        {
+            var lstShop = await _db.CuaHangs.Where(x => x.UserId == UserId).ToListAsync();
+            var lstResult = new List<CuaHangVm>();
+            foreach (var item in lstShop)
+            {
+                lstResult.Add(new CuaHangVm()
+                {
+                    Id = item.Id,
+                    Ten = item.Ten
+                });
+            }
+
+            return Ok(new ApiSuccessResult<List<CuaHangVm>>(lstResult));
+        }
+
+
+
         #endregion
 
         #region helper

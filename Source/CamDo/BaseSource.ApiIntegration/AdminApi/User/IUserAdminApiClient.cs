@@ -12,8 +12,12 @@ namespace BaseSource.ApiIntegration.AdminApi
     {
         Task<ApiResult<PagedResult<UserVm>>> GetPagings(GetUserPagingRequest_Admin model);
 
-        Task<ApiResult<UserVm>> GetById(string id);
-        Task<ApiResult<RoleAssignVm>> GetUserRoles(string id);
+        Task<ApiResult<UserVm>> GetById(string userId);
+        Task<ApiResult<RoleAssignVm>> GetUserRoles(string userId);
         Task<ApiResult<string>> RoleAssign(RoleAssignVm model);
+        Task<ApiResult<string>> Create(CreateUserAdminVm model);
+        Task<ApiResult<string>> Edit(EditUserAdminVm model);
+        Task<ApiResult<string>> LockUnLockUser(string userId);
+        Task<ApiResult<string>> ResetPassword(string userId);
     }
 }

@@ -70,6 +70,12 @@ namespace BaseSource.ApiIntegration.WebApi.CuaHang
             return await client.GetAsync<ApiResult<PagedResult<CuaHangVm>>>("/api/CuaHang/GetPagings", model);
         }
 
+        public async Task<ApiResult<List<CuaHangVm>>> GetShopByUser()
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.GetAsync<ApiResult<List<CuaHangVm>>>("/api/CuaHang/GetShopByUser");
+        }
+
         public async Task<ApiResult<string>> RegisterCuaHang(RegisterCuaHangVm model)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);

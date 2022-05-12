@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BaseSource.AdminApp.Controllers
 {
-    public class MoTaHinhThucLaiController : Controller
+    public class MoTaHinhThucLaiController : BaseController
     {
         public readonly IMoTaHinhThucLaiAdmiApiClient _apiClient;
         public MoTaHinhThucLaiController(IMoTaHinhThucLaiAdmiApiClient apiClient)

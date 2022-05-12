@@ -55,6 +55,7 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
                          where ur.UserId == x.Id
                          select r.Name).ToList(),
                 JoinedDate = x.UserProfile.JoinedDate,
+                LockoutEndDateUtc = x.LockoutEnd != null ? x.LockoutEnd.Value.DateTime : null
             }).OrderByDescending(x => x.JoinedDate).ToPagedListAsync(request.Page, request.PageSize);
 
             var pagedResult = new PagedResult<UserVm>()
@@ -66,6 +67,31 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
             };
 
             return Ok(new ApiSuccessResult<PagedResult<UserVm>>(pagedResult));
+        }
+
+        [HttpGet("GetById")]
+        public async Task<IActionResult> GetById(string id)
+        {
+            var user = await _db.Users.FindAsync(id);
+            if (user == null)
+            {
+                return Ok(new ApiErrorResult<string>("Not found"));
+            }
+            var roles = await _userManager.GetRolesAsync(user);
+            var profile = await _db.UserProfiles.FindAsync(UserId);
+
+            var result = new UserVm()
+            {
+                Id = user.Id.ToString(),
+                Email = user.Email,
+                FullName = profile?.FullName,
+                UserName = user.UserName,
+                JoinedDate = profile.JoinedDate,
+                PhoneNumber = user.PhoneNumber,
+                Roles = roles.ToList()
+            };
+
+            return Ok(new ApiSuccessResult<UserVm>(result));
         }
 
         [HttpGet("GetUserRoles")]
@@ -118,30 +144,120 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
             }
             return Ok(new ApiErrorResult<string>());
         }
+        [HttpPost("Create")]
+        public async Task<IActionResult> Create(CreateUserAdminVm model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
+            }
+            var newUser = new AppUser()
+            {
+                UserName = model.UserName,
+                EmailConfirmed = true,
+                LockoutEnabled = false,
+                PhoneNumber = model.PhoneNumber,
+                Email = model.Email,
+                NormalizedEmail = model.Email
+            };
+            var result = await _userManager.CreateAsync(newUser, model.Password);
+            if (result.Succeeded)
+            {
+                _db.UserProfiles.Add(new UserProfile
+                {
+                    CustomId = newUser.Id,
+                    FullName = model.FullName,
+                    JoinedDate = DateTime.Now,
+                    UserId = newUser.Id,
+                });
+                await _db.SaveChangesAsync();
+                return Ok(new ApiSuccessResult<string>());
+            }
+            AddErrors(result, nameof(model.UserName));
+            return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
+        }
+        [HttpPost("Edit")]
+        public async Task<IActionResult> Edit(EditUserAdminVm model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
+            }
+            var user = await _db.Users.Include(x => x.UserProfile).Where(x => x.Id == model.Id).FirstOrDefaultAsync();
+            if (user == null)
+            {
+                return Ok(new ApiErrorResult<string>("Not found"));
+            }
+            user.Email = model.Email;
+            user.NormalizedEmail = model.Email;
+            user.PhoneNumber = model.Email;
+            user.UserProfile.FullName = model.FullName;
+            if (!string.IsNullOrEmpty(model.Password))
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                await _userManager.ResetPasswordAsync(user, token, model.Password);
+            }
+
+            await _db.SaveChangesAsync();
+            return Ok(new ApiSuccessResult<string>());
+        }
+        [HttpPost("LockUnLockUser")]
+        public async Task<IActionResult> LockUnLockUser([FromForm] string id)
+        {
+            var user = await _db.Users.FindAsync(id);
+            if (user == null)
+            {
+                return Ok(new ApiErrorResult<string>("Not Found"));
+            }
+
+            IdentityResult lockUserTask;
+            IdentityResult lockDateTask;
+            if (user.LockoutEnabled)
+            {
+                lockDateTask = await _userManager.SetLockoutEndDateAsync(user, DateTime.Now - TimeSpan.FromMinutes(1));
+                lockUserTask = await _userManager.SetLockoutEnabledAsync(user, false);
+            }
+            else
+            {
+                lockUserTask = await _userManager.SetLockoutEnabledAsync(user, true);
+                lockDateTask = await _userManager.SetLockoutEndDateAsync(user, DateTime.Now.AddYears(100));
+            }
+            if (lockUserTask.Succeeded && lockDateTask.Succeeded)
+            {
+                return Ok(new ApiSuccessResult<string>());
+            }
+            return Ok(new ApiErrorResult<string>());
 
 
-        //[HttpGet("GetById")]
-        //public async Task<IActionResult> GetById(string id)
-        //{
-        //    var model = await _db.Notes.FindAsync(id);
-        //    if (model == null)
-        //    {
-        //        return Ok(new ApiErrorResult<string>("Not found!"));
-        //    }
+        }
+        [HttpPost("ResetPassword")]
+        public async Task<IActionResult> ResetPassword([FromForm] string id)
+        {
+            var user = await _db.Users.FindAsync(id);
+            if (user == null)
+            {
+                return Ok(new ApiErrorResult<string>("Not found"));
+            }
 
-        //    var data = new NoteQueryReponse_Admin()
-        //    {
-        //        Id = model.Id,
-        //        NoteUrl = model.NoteUrl,
-        //        DateUpdate = model.DateUpdate,
-        //        TotalView = model.TotalView,
-        //        Password = model.Password,
-        //        ShareUrl = model.ShareUrl,
-        //        DateCreate = model.DateCreate,
-        //        Content = model.Content
-        //    };
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await _userManager.ResetPasswordAsync(user, token, "123456");
+            if (result.Succeeded)
+            {
+                return Ok(new ApiSuccessResult<string>());
+            }
+            return Ok(new ApiErrorResult<string>("Có lỗi xảy ra. Vui lòng thử lại"));
 
-        //    return Ok(new ApiSuccessResult<NoteQueryReponse_Admin>(data));
-        //}
+        }
+
+        #region Helper
+        private void AddErrors(IdentityResult result, string Property)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(Property, error.Description);
+                break;
+            }
+        }
+        #endregion
     }
 }

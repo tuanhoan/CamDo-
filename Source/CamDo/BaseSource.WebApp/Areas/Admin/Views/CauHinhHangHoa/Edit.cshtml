@@ -58,29 +58,29 @@
                 </div>
                 <div class="form-group row">
 
-                    <label asp-for="SoTienCam" class="control-label col-md-2"></label>
+                    <label asp-for="TongTien" class="control-label col-md-2"></label>
                     <div class="col-md-10">
                         <div class="input-group">
-                            <input type="text" class="form-control money-textbox" value="@Model.SoTienCam">
-                            <input type="hidden" asp-for="SoTienCam" />
+                            <input type="text" class="form-control money-textbox" value="@Model.TongTien">
+                            <input type="hidden" asp-for="TongTien" />
                             <div class="input-group-append">
                                 <span class="input-group-text" id="basic-addon2">VNĐ</span>
                             </div>
                         </div>
-                        <span asp-validation-for="SoTienCam" class="text-danger"></span>
+                        <span asp-validation-for="TongTien" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label asp-for="Lai" class="control-label col-md-2"></label>
+                    <label asp-for="LaiSuat" class="control-label col-md-2"></label>
                     <div class="col-md-10">
                         <div class="input-group">
-                            <input type="text" class="form-control money-textbox" value="@Model.Lai">
-                            <input type="hidden" asp-for="Lai" />
+                            <input type="text" class="form-control money-textbox" value="@Model.LaiSuat">
+                            <input type="hidden" asp-for="LaiSuat" />
                             <div class="input-group-append">
                                 <span class="input-group-text tyLeLai" id="basic-addon2"></span>
                             </div>
                         </div>
-                        <span asp-validation-for="Lai" class="text-danger"></span>
+                        <span asp-validation-for="LaiSuat" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -96,10 +96,15 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label asp-for="SoNgayVay" class="control-label col-md-2"></label>
+                    <label asp-for="TongThoiGianVay" class="control-label col-md-2"></label>
                     <div class="col-md-10">
-                        <input asp-for="SoNgayVay" class="form-control " />
-                        <span asp-validation-for="SoNgayVay" class="text-danger"></span>
+                        <div class="input-group">
+                            <input asp-for="TongThoiGianVay" min="0" class="form-control " />
+                            <div class="input-group-append">
+                                <span class="input-group-text thoigianvay" id="basic-addon2"></span>
+                            </div>
+                        </div>
+                        <span asp-validation-for="TongThoiGianVay" class="text-danger"></span>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -146,6 +151,7 @@
         $(".cauhinhhanghoa-nav").addClass("active");
         setMoneyTextBox(".money-textbox");
         $(document).ready(function () {
+            getMoTaHinhThucLai();
           var lstThuocTinh = '@Html.Raw(Model.ListThuocTinh)';
             var $repeater = $('.repeatThuocTinh').repeater({
                 initEmpty: true,
@@ -169,8 +175,11 @@
                 url: "/MoTaHinhThucLai/GetMoTaHinhThucLai",
                 data: { hinhThucLai: type },
                 success: function (data) {
-                    $('.tyLeLai').html(data[0].tyLeLai);
-                    $('.motaKyLai').html(data[0].moTaKyLai);
+                    if (data && data.length > 0) {
+                        $('.tyLeLai').html(data[0].tyLeLai);
+                        $('.motaKyLai').html(data[0].moTaKyLai);
+                        $('.thoigianvay').html(data[0].thoiGian);
+                    }
                 }
             })
         }

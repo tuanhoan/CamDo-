@@ -16,8 +16,9 @@ namespace BaseSource.Data.Entities
         public long VonDauTu { get; set; }
         public bool IsActive { get; set; }
         public DateTime CreatedTime { get; set; }
+        public string UserId { get; set; }
 
-        public virtual List<UserProfile> UserProfiles { get; set; }
+        public virtual UserProfile UserProfile { get; set; }
         public virtual List<KhachHang> KhachHangs { get; set; }
         public virtual List<CauHinhHangHoa> CauHinhHangHoas { get; set; }
     }

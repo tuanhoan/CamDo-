@@ -111,7 +111,7 @@ namespace BaseSource.BackendApi.Controllers
             var existingUser = await _userManager.FindByNameAsync(user.UserName) ?? await _userManager.FindByEmailAsync(user.UserName);
             if (existingUser == null)
             {
-                ModelState.AddModelError("UserName", "Username or Email is not exists.");
+                ModelState.AddModelError("UserName", "User không tồn tại trong hệ thống");
                 return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
             }
 
@@ -135,11 +135,11 @@ namespace BaseSource.BackendApi.Controllers
                 }
                 if (result.IsLockedOut)
                 {
-                    ModelState.AddModelError("UserName", "User account locked out.");
+                    ModelState.AddModelError("UserName", "Tài khoản của bạn đã bị khóa");
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "The username or password is incorrect.");
+                    ModelState.AddModelError(nameof(user.Password), "Mật khẩu không đúng");
                 }
                 return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
             }
@@ -382,7 +382,7 @@ namespace BaseSource.BackendApi.Controllers
         private async Task<string> GenerateJwtToken(AppUser user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
-            var profile = await _db.UserProfiles.FindAsync(user.Id);
+            var cuaHang = await _db.CuaHangs.OrderByDescending(x => x.CreatedTime).FirstOrDefaultAsync();
 
             var roles = await _userManager.GetRolesAsync(user);
             var claims = new List<Claim>()
@@ -390,7 +390,8 @@ namespace BaseSource.BackendApi.Controllers
                 new Claim(ClaimTypes.Email,user.Email ?? ""),
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                  new Claim("CuaHangId", profile?.CuaHangId.ToString())
+                new Claim("CuaHangId", cuaHang?.Id.ToString() ?? ""),
+                 new Claim("TenCuaHang", cuaHang?.Ten ?? "")
              };
 
             foreach (var item in roles)

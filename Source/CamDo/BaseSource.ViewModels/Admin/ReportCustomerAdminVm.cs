@@ -25,7 +25,7 @@ namespace BaseSource.ViewModels.Admin
         public string TenCuaHang { get; set; }
         public DateTime CreatedTime { get; set; }
     }
-    public class EditRportCustomerAdminVm
+    public class EditReportCustomerAdminVm
     {
         public int Id { get; set; }
         [Display(Name = "Tên khách hàng")]

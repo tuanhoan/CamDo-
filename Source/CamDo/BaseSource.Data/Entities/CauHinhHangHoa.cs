@@ -16,10 +16,10 @@ namespace BaseSource.Data.Entities
         public bool IsPublish { get; set; }
         public EHinhThucLai HinhThucLai { get; set; }
         public bool IsThuLaiTruoc { get; set; }
-        public long SoTienCam { get; set; }
-        public int Lai { get; set; }
+        public double? TongTien { get; set; }
+        public double LaiSuat { get; set; }
         public int KyLai { get; set; }
-        public int SoNgayVay { get; set; }
+        public int TongThoiGianVay { get; set; }
         public int SoNgayQuaHan { get; set; }
         public int? CuaHangId { get; set; }
         public string ListThuocTinh { get; set; }
