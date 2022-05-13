@@ -17,6 +17,7 @@ namespace BaseSource.Data.Entities
         public string DiaChi { get; set; }
         public string SDT { get; set; }
         public int CuaHangId { get; set; }
+        public string ImageList { get; set; }
 
         public virtual CuaHang CuaHang { get; set; }
     }

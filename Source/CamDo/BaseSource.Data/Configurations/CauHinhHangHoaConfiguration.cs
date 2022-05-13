@@ -20,9 +20,9 @@ namespace BaseSource.Data.Configurations
             builder.Property(x => x.LinhVuc).IsRequired();
             builder.Property(x => x.MaTS).IsRequired().HasMaxLength(128);
             builder.Property(x => x.Ten).IsRequired().HasMaxLength(256);
-            builder.Property(x => x.IsPublish).IsRequired().HasDefaultValue(0);
+            builder.Property(x => x.IsPublish).IsRequired().HasDefaultValue(false);
             builder.Property(x => x.HinhThucLai).IsRequired();
-            builder.Property(x => x.IsThuLaiTruoc).IsRequired().HasDefaultValue(0);
+            builder.Property(x => x.IsThuLaiTruoc).IsRequired().HasDefaultValue(false);
             builder.Property(x => x.TongTien);
             builder.Property(x => x.LaiSuat).IsRequired();
             builder.Property(x => x.KyLai).IsRequired();

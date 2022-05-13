@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -22,6 +23,7 @@ using System.Threading.Tasks;
 
 namespace BaseSource.WebApp.Areas.Admin.Controllers
 {
+    
     public class CuaHangController : BaseAdminController
     {
         private readonly ICuaHangApiClient _cuaHangApiClient;

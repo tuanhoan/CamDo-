@@ -382,7 +382,7 @@ namespace BaseSource.BackendApi.Controllers
         private async Task<string> GenerateJwtToken(AppUser user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
-            var cuaHang = await _db.CuaHangs.OrderByDescending(x => x.CreatedTime).FirstOrDefaultAsync();
+            var cuaHang = await _db.CuaHangs.OrderByDescending(x => x.CreatedDate).FirstOrDefaultAsync();
 
             var roles = await _userManager.GetRolesAsync(user);
             var claims = new List<Claim>()

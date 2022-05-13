@@ -63,7 +63,7 @@ namespace BaseSource.BackendApi.Controllers
                     TenNguoiDaiDien = model.FullName,
                     VonDauTu = model.VonDauTu,
                     IsActive = true,
-                    CreatedTime = DateTime.Now,
+                    CreatedDate = DateTime.Now,
                     UserId = newUser.Id
                 };
                 _db.CuaHangs.Add(cuaHang);
@@ -122,8 +122,8 @@ namespace BaseSource.BackendApi.Controllers
                 TenNguoiDaiDien = x.TenNguoiDaiDien,
                 VonDauTu = x.VonDauTu,
                 IsActive = x.IsActive,
-                CreatedTime = x.CreatedTime,
-            }).OrderByDescending(x => x.CreatedTime).ToPagedListAsync(request.Page, request.PageSize);
+                CreatedDate = x.CreatedDate,
+            }).OrderByDescending(x => x.CreatedDate).ToPagedListAsync(request.Page, request.PageSize);
 
             var pagedResult = new PagedResult<CuaHangVm>()
             {
@@ -169,7 +169,7 @@ namespace BaseSource.BackendApi.Controllers
             cuaHang.DiaChi = model.DiaChi;
             cuaHang.TenNguoiDaiDien = model.TenNguoiDaiDien;
             cuaHang.VonDauTu = model.VonDauTu;
-            cuaHang.CreatedTime = DateTime.Now;
+            cuaHang.CreatedDate = DateTime.Now;
             cuaHang.IsActive = model.IsActive;
             cuaHang.UserId = UserId;
             _db.CuaHangs.Add(cuaHang);
@@ -196,7 +196,7 @@ namespace BaseSource.BackendApi.Controllers
             cuaHang.DiaChi = model.DiaChi;
             cuaHang.TenNguoiDaiDien = model.TenNguoiDaiDien;
             cuaHang.VonDauTu = model.VonDauTu;
-            cuaHang.CreatedTime = DateTime.Now;
+            cuaHang.CreatedDate = DateTime.Now;
             cuaHang.IsActive = model.IsActive;
 
             await _db.SaveChangesAsync();

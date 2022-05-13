@@ -80,3 +80,8 @@ a.btn-icon i {
 select.form-control {
     padding: 0.575rem 1.125rem !important;
 }
+
+.modal-lager {
+    width: 90% !important;
+    max-width: 90% !important;
+}

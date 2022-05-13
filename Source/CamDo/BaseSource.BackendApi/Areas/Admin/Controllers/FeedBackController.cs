@@ -22,7 +22,6 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
         public async Task<IActionResult> GetPagings([FromQuery] GetFeedBackPagingRequest_Admin request)
         {
             var model = _db.FeedBacks.AsQueryable();
-
             var data = await model.Select(x => new FeedBackAdminVm()
             {
                 Id = x.Id,

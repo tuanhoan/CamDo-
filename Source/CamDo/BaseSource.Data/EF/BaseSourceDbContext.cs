@@ -37,6 +37,13 @@ namespace BaseSource.Data.EF
             modelBuilder.ApplyConfiguration(new HopDongConfiguration());
             modelBuilder.ApplyConfiguration(new NotifySystemConfiguration());
             modelBuilder.ApplyConfiguration(new GoiSanPhamConfiguration());
+            modelBuilder.ApplyConfiguration(new HopDong_AlarmLogConfiguration());
+            modelBuilder.ApplyConfiguration(new HopDong_VayRutGocConfiguration());
+            modelBuilder.ApplyConfiguration(new HopDong_GiaHanConfiguration());
+            modelBuilder.ApplyConfiguration(new HopDong_PaymentLogConfiguration());
+            modelBuilder.ApplyConfiguration(new HopDong_PaymentLogNoteConfiguration());
+            modelBuilder.ApplyConfiguration(new CuaHang_TransactionLogConfiguration());
+            modelBuilder.ApplyConfiguration(new CuaHang_QuyTienLogConfiguration());
 
             //modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("AppUserClaims").HasKey(x => x.Id);
             modelBuilder.Entity<IdentityUserClaim<string>>().Property(x => x.UserId).HasMaxLength(128);
@@ -77,6 +84,15 @@ namespace BaseSource.Data.EF
         public DbSet<HopDong> HopDongs { get; set; }
         public DbSet<GoiSanPham> GoiSanPhams { get; set; }
         public DbSet<NotifySystem> NotifySystems { get; set; }
+        public DbSet<HopDong_AlarmLog> HopDong_AlarmLogs { get; set; }
+        public DbSet<HopDong_VayRutGoc> HopDong_VayRutGocs { get; set; }
+        public DbSet<HopDong_GiaHan> HopDong_GiaHans { get; set; }
+        public DbSet<HopDong_PaymentLog> HopDong_PaymentLogs { get; set; }
+        public DbSet<HopDong_PaymentLogNote> HopDong_PaymentLogNotes { get; set; }
+        public DbSet<CuaHang_TransactionLog> CuaHang_TransactionLogs { get; set; }
+        public DbSet<HopDong_DebtNote> HopDong_DebtNotes { get; set; }
+        public DbSet<CuaHang_QuyTienLog> CuaHang_QuyTienLogs { get; set; }
 
     }
 }
+

@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BaseSource.Data.Migrations
 {
     [DbContext(typeof(BaseSourceDbContext))]
-    [Migration("20220511075846_addEntities_1105")]
-    partial class addEntities_1105
+    [Migration("20220513111735_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -57,7 +57,7 @@ namespace BaseSource.Data.Migrations
                         new
                         {
                             Id = "c1105ce5-9dbc-49a9-a7d5-c963b6daa62a",
-                            ConcurrencyStamp = "0d4f2d13-2c2c-4e1e-bdff-8ab100f49c52",
+                            ConcurrencyStamp = "f49dedc8-929d-47aa-867e-e80e6fb57674",
                             Description = "Administrator role",
                             Name = "Admin",
                             NormalizedName = "Admin"
@@ -135,13 +135,13 @@ namespace BaseSource.Data.Migrations
                         {
                             Id = "ffded6b0-3769-4976-841b-69459049a62d",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "ee6a41b4-72be-4623-b730-30108d5eae3c",
+                            ConcurrencyStamp = "f53027dc-9b5d-42f2-97e0-55108d7bdea7",
                             Email = "doangiau2006@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "doangiau2006@gmail.com",
                             NormalizedUserName = "superadmin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKbnLWX6LueNWgd/Go4lcrB8+oF4mVLTg1VqFQ8DrP+oICQP9HsK9v/CdWdvQ0WrHA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEK10Wswp7tXsQkIDBoO+Tq6QbmR9fk0bvWRuIXBwvwIgh2FmenZfnCbxhJrHA1We6w==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -217,7 +217,10 @@ namespace BaseSource.Data.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<DateTime>("CreatedTime")
+                    b.Property<byte>("CamDo_HopDongPrintTemplate")
+                        .HasColumnType("tinyint");
+
+                    b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GetDate()");
@@ -251,6 +254,9 @@ namespace BaseSource.Data.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
+                    b.Property<byte>("VayLai_HopDongPrintTemplate")
+                        .HasColumnType("tinyint");
+
                     b.Property<long>("VonDauTu")
                         .HasMaxLength(0)
                         .HasColumnType("bigint");
@@ -260,6 +266,123 @@ namespace BaseSource.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("CuaHangs");
+                });
+
+            modelBuilder.Entity("BaseSource.Data.Entities.CuaHang_QuyTienLog", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityColumn();
+
+                    b.Property<byte>("ActionType")
+                        .HasColumnType("tinyint");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GetDate()");
+
+                    b.Property<int>("CuaHangId")
+                        .HasColumnType("int");
+
+                    b.Property<byte>("LogType")
+                        .HasColumnType("tinyint");
+
+                    b.Property<double>("Money")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CuaHangId");
+
+                    b.ToTable("CuaHang_QuyTienLogs");
+                });
+
+            modelBuilder.Entity("BaseSource.Data.Entities.CuaHang_TransactionLog", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityColumn();
+
+                    b.Property<byte>("ActionType")
+                        .HasColumnType("tinyint");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GetDate()");
+
+                    b.Property<int>("CuaHangId")
+                        .HasColumnType("int");
+
+                    b.Property<byte>("FeatureType")
+                        .HasColumnType("tinyint");
+
+                    b.Property<DateTime?>("FromDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("HopDongId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("MoneyAdd")
+                        .HasColumnType("float");
+
+                    b.Property<double>("MoneyDebit")
+                        .HasColumnType("float");
+
+                    b.Property<double>("MoneyInterest")
+                        .HasColumnType("float");
+
+                    b.Property<double>("MoneyOther")
+                        .HasColumnType("float");
+
+                    b.Property<double>("MoneyPay")
+                        .HasColumnType("float");
+
+                    b.Property<double>("MoneyPayNeed")
+                        .HasColumnType("float");
+
+                    b.Property<double>("MoneySub")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("ReferId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("TenKhachHang")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<DateTime?>("ToDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("TotalMoneyLoan")
+                        .HasColumnType("float");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CuaHangId");
+
+                    b.HasIndex("HopDongId");
+
+                    b.ToTable("CuaHang_TransactionLogs");
                 });
 
             modelBuilder.Entity("BaseSource.Data.Entities.FeedBack", b =>
@@ -357,13 +480,24 @@ namespace BaseSource.Data.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GetDate()");
+
+                    b.Property<int>("CuaHangId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DeletedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("HD_GhiChu")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte>("HD_HinhThucLai")
                         .HasColumnType("tinyint");
 
-                    b.Property<bool>("HD_IsTraTruoc")
+                    b.Property<bool>("HD_IsThuLaiTruoc")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false);
@@ -374,35 +508,80 @@ namespace BaseSource.Data.Migrations
                     b.Property<double>("HD_LaiSuat")
                         .HasColumnType("float");
 
-                    b.Property<string>("HD_MA")
+                    b.Property<byte>("HD_Loai")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("HD_Ma")
                         .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
+                    b.Property<DateTime>("HD_NgayDaoHan")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("HD_NgayVay")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GetDate()");
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("HD_TongThoiGianVay")
                         .HasColumnType("int");
 
-                    b.Property<double>("HD_TongTien")
+                    b.Property<double>("HD_TongTienVayBanDau")
                         .HasColumnType("float");
 
                     b.Property<int>("HangHoaId")
                         .HasColumnType("int");
 
-                    b.Property<string>("HangHoa_ListThuocTinh")
+                    b.Property<string>("ImageList")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("HangHoa_Ten")
+                    b.Property<bool>("IsNoXau_ChoThanhLy")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<int>("KhachHangId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ListThuocTinhHangHoa")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("NgayDongLaiGanNhat")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("NgayDongLaiTiepTheo")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("NgayTatToan")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("NgayThanhLy")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TenTaiSan")
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
-                    b.Property<int>("KhachHangId")
-                        .HasColumnType("int");
+                    b.Property<double>("TongTienDaThanhToan")
+                        .HasColumnType("float");
+
+                    b.Property<double>("TongTienGhiNo")
+                        .HasColumnType("float");
+
+                    b.Property<double>("TongTienLai")
+                        .HasColumnType("float");
+
+                    b.Property<double>("TongTienLaiDaThanhToan")
+                        .HasColumnType("float");
+
+                    b.Property<double>("TongTienThanhLy")
+                        .HasColumnType("float");
+
+                    b.Property<double>("TongTienVayHienTai")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserIdAssigned")
                         .IsRequired()
@@ -416,7 +595,225 @@ namespace BaseSource.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CuaHangId");
+
                     b.ToTable("HopDongs");
+                });
+
+            modelBuilder.Entity("BaseSource.Data.Entities.HopDong_AlarmLog", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime?>("AlarmDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GetDate()");
+
+                    b.Property<int>("HopDongId")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDisable")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HopDongId");
+
+                    b.ToTable("HopDong_AlarmLogs");
+                });
+
+            modelBuilder.Entity("BaseSource.Data.Entities.HopDong_DebtNote", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("HopDongId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HopDongId");
+
+                    b.ToTable("HopDong_DebtNotes");
+                });
+
+            modelBuilder.Entity("BaseSource.Data.Entities.HopDong_GiaHan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("CountDate")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GetDate()");
+
+                    b.Property<int>("HopDongId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("NewDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("OldDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HopDongId");
+
+                    b.ToTable("HopDong_GiaHans");
+                });
+
+            modelBuilder.Entity("BaseSource.Data.Entities.HopDong_PaymentLog", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("CountDay")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GetDate()");
+
+                    b.Property<DateTime>("FromDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("HopDongId")
+                        .HasColumnType("int");
+
+                    b.Property<double>("MoneyInterest")
+                        .HasColumnType("float");
+
+                    b.Property<double>("MoneyOther")
+                        .HasColumnType("float");
+
+                    b.Property<double>("MoneyPay")
+                        .HasColumnType("float");
+
+                    b.Property<double>("MoneyPayNeed")
+                        .HasColumnType("float");
+
+                    b.Property<DateTime?>("PaidDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ToDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HopDongId");
+
+                    b.ToTable("HopDong_PaymentLogs");
+                });
+
+            modelBuilder.Entity("BaseSource.Data.Entities.HopDong_PaymentLogNote", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GetDate()");
+
+                    b.Property<string>("Note")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("PaymentId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PaymentId");
+
+                    b.ToTable("HopDong_PaymentLogNotes");
+                });
+
+            modelBuilder.Entity("BaseSource.Data.Entities.HopDong_VayRutGoc", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GetDate()");
+
+                    b.Property<DateTime>("ExtraDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("HopDongId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Note")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("TotalMoney")
+                        .HasColumnType("float");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HopDongId");
+
+                    b.ToTable("HopDong_VayRutGocs");
                 });
 
             modelBuilder.Entity("BaseSource.Data.Entities.KhachHang", b =>
@@ -443,6 +840,9 @@ namespace BaseSource.Data.Migrations
                     b.Property<string>("DiaChi")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("ImageList")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("NgaySinh")
                         .HasColumnType("datetime2");
@@ -781,6 +1181,112 @@ namespace BaseSource.Data.Migrations
                     b.Navigation("UserProfile");
                 });
 
+            modelBuilder.Entity("BaseSource.Data.Entities.CuaHang_QuyTienLog", b =>
+                {
+                    b.HasOne("BaseSource.Data.Entities.CuaHang", "CuaHang")
+                        .WithMany("CuaHang_QuyTienLogs")
+                        .HasForeignKey("CuaHangId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CuaHang");
+                });
+
+            modelBuilder.Entity("BaseSource.Data.Entities.CuaHang_TransactionLog", b =>
+                {
+                    b.HasOne("BaseSource.Data.Entities.CuaHang", "CuaHang")
+                        .WithMany("CuaHang_TransactionLogs")
+                        .HasForeignKey("CuaHangId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("BaseSource.Data.Entities.HopDong", "HopDong")
+                        .WithMany("CuaHang_TransactionLogs")
+                        .HasForeignKey("HopDongId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("CuaHang");
+
+                    b.Navigation("HopDong");
+                });
+
+            modelBuilder.Entity("BaseSource.Data.Entities.HopDong", b =>
+                {
+                    b.HasOne("BaseSource.Data.Entities.CuaHang", "CuaHang")
+                        .WithMany("HopDongs")
+                        .HasForeignKey("CuaHangId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CuaHang");
+                });
+
+            modelBuilder.Entity("BaseSource.Data.Entities.HopDong_AlarmLog", b =>
+                {
+                    b.HasOne("BaseSource.Data.Entities.HopDong", "HopDong")
+                        .WithMany("HopDong_AlarmLogs")
+                        .HasForeignKey("HopDongId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("HopDong");
+                });
+
+            modelBuilder.Entity("BaseSource.Data.Entities.HopDong_DebtNote", b =>
+                {
+                    b.HasOne("BaseSource.Data.Entities.HopDong", "HopDong")
+                        .WithMany("HopDong_DebtNotes")
+                        .HasForeignKey("HopDongId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("HopDong");
+                });
+
+            modelBuilder.Entity("BaseSource.Data.Entities.HopDong_GiaHan", b =>
+                {
+                    b.HasOne("BaseSource.Data.Entities.HopDong", "HopDong")
+                        .WithMany("HopDong_GiaHans")
+                        .HasForeignKey("HopDongId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("HopDong");
+                });
+
+            modelBuilder.Entity("BaseSource.Data.Entities.HopDong_PaymentLog", b =>
+                {
+                    b.HasOne("BaseSource.Data.Entities.HopDong", "HopDong")
+                        .WithMany("HopDong_PaymentLogs")
+                        .HasForeignKey("HopDongId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("HopDong");
+                });
+
+            modelBuilder.Entity("BaseSource.Data.Entities.HopDong_PaymentLogNote", b =>
+                {
+                    b.HasOne("BaseSource.Data.Entities.HopDong_PaymentLog", "HopDong_PaymentLog")
+                        .WithMany("HopDong_PaymentLogNotes")
+                        .HasForeignKey("PaymentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("HopDong_PaymentLog");
+                });
+
+            modelBuilder.Entity("BaseSource.Data.Entities.HopDong_VayRutGoc", b =>
+                {
+                    b.HasOne("BaseSource.Data.Entities.HopDong", "HopDong")
+                        .WithMany("HopDong_VayRutGocs")
+                        .HasForeignKey("HopDongId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("HopDong");
+                });
+
             modelBuilder.Entity("BaseSource.Data.Entities.KhachHang", b =>
                 {
                     b.HasOne("BaseSource.Data.Entities.CuaHang", "CuaHang")
@@ -863,7 +1369,33 @@ namespace BaseSource.Data.Migrations
                 {
                     b.Navigation("CauHinhHangHoas");
 
+                    b.Navigation("CuaHang_QuyTienLogs");
+
+                    b.Navigation("CuaHang_TransactionLogs");
+
+                    b.Navigation("HopDongs");
+
                     b.Navigation("KhachHangs");
+                });
+
+            modelBuilder.Entity("BaseSource.Data.Entities.HopDong", b =>
+                {
+                    b.Navigation("CuaHang_TransactionLogs");
+
+                    b.Navigation("HopDong_AlarmLogs");
+
+                    b.Navigation("HopDong_DebtNotes");
+
+                    b.Navigation("HopDong_GiaHans");
+
+                    b.Navigation("HopDong_PaymentLogs");
+
+                    b.Navigation("HopDong_VayRutGocs");
+                });
+
+            modelBuilder.Entity("BaseSource.Data.Entities.HopDong_PaymentLog", b =>
+                {
+                    b.Navigation("HopDong_PaymentLogNotes");
                 });
 
             modelBuilder.Entity("BaseSource.Data.Entities.UserProfile", b =>

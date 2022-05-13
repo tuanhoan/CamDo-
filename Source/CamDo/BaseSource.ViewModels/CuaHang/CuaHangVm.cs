@@ -22,7 +22,7 @@ namespace BaseSource.ViewModels.CuaHang
         public string TenNguoiDaiDien { get; set; }
         public long VonDauTu { get; set; }
         public bool IsActive { get; set; }
-        public DateTime CreatedTime { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
     public class CreateCuaHangVm
     {

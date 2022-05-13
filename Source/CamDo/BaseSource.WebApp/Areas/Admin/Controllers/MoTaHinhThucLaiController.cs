@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BaseSource.WebApp.Areas.Admin.Controllers
 {
-    public class MoTaHinhThucLaiController : Controller
+    public class MoTaHinhThucLaiController : BaseAdminController
     {
         private readonly IMoTaHinhThucLaiApiClient _apiClient;
         public MoTaHinhThucLaiController(IMoTaHinhThucLaiApiClient apiClient)

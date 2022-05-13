@@ -24,7 +24,9 @@ namespace BaseSource.Data.Configurations
             builder.Property(x => x.VonDauTu).IsRequired().HasMaxLength(0);
             builder.Property(x => x.IsActive).IsRequired().HasDefaultValue(0);
             builder.Property(x => x.UserId).IsRequired().HasMaxLength(128);
-            builder.Property(x => x.CreatedTime).IsRequired().HasDefaultValueSql("GetDate()");
+            builder.Property(x => x.CreatedDate).IsRequired().HasDefaultValueSql("GetDate()");
+            builder.Property(x => x.CamDo_HopDongPrintTemplate).IsRequired();
+            builder.Property(x => x.VayLai_HopDongPrintTemplate).IsRequired();
 
             builder.HasOne(x => x.UserProfile).WithMany(x => x.CuaHangs).HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
         }

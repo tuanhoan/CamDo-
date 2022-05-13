@@ -7,11 +7,19 @@
     }
 });
 
+$("#choose-shop").on("click", function (e) {
+    e.preventDefault();
+    $('.list-shop').slideToggle();
+});
+
 var chooseShop = document.getElementById('choose-shop');
 document.addEventListener('click', function (event) {
     var isClickInsideElement = chooseShop.contains(event.target);
     if (!isClickInsideElement) {
-        $('.list-shop').slideToggle();
+        if($('.list-shop').css("display") == "block"){
+            $('.list-shop').slideToggle();
+        }
+       
     }
 });
 $(function () {
@@ -347,7 +355,3 @@ $('form[data-name="ajaxFormFeedBack"]').submit(function (e) {
     });
 });
 /*=======END Feedback========*/
-$("body").on("click", '#choose-shop', function (e) {
-    e.preventDefault();
-    $('.list-shop').slideToggle();
-});
