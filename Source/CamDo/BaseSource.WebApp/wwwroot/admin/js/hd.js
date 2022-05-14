@@ -1,12 +1,12 @@
 ﻿function addContractPawn(thiz, id) {
-    $("#pawn-modal .modal-body").html('<i class="fas fa-fw fa-spin fa-spinner"></i>');
-    $("#pawn-modal").modal('show');
+    $("#hd-modal .modal-body").html('<i class="fas fa-fw fa-spin fa-spinner"></i>');
+    $("#hd-modal").modal('show');
     $.ajax({
         method: "GET",
         url: $(thiz).data("url"),
         data: { id: id },
         success: function (res) {
-            $("#pawn-modal .modal-body").html(res);
+            $("#hd-modal .modal-body").html(res);
 
             //$('#form-edit-role').submit(function (e) {
             //    e.preventDefault();

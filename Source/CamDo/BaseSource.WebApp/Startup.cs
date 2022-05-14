@@ -22,6 +22,7 @@ using BaseSource.ApiIntegration.WebApi.CuaHang;
 using BaseSource.ApiIntegration.WebApi.CauHinhHangHoa;
 using BaseSource.ApiIntegration.WebApi.MoTaHinhThucLai;
 using BaseSource.ApiIntegration.WebApi.FeedBack;
+using BaseSource.ApiIntegration.WebApi.HopDong;
 
 namespace BaseSource.WebApp
 {
@@ -94,8 +95,9 @@ namespace BaseSource.WebApp
             services.AddTransient<ICauHinhHangHoaApiClient, CauHinhHangHoaApiClient>();
             services.AddTransient<IMoTaHinhThucLaiApiClient, MoTaHinhThucLaiApiClient>();
             services.AddTransient<IFeedBackApiClient, FeedBackApiClient>();
+            services.AddTransient<IHopDongApiClient, HopDongApiClient>();
 
-            
+
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }

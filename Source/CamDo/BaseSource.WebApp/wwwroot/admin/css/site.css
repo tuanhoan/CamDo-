@@ -85,3 +85,21 @@ select.form-control {
     width: 90% !important;
     max-width: 90% !important;
 }
+
+.info-hd-header {
+    margin-bottom: 15px;
+    border-bottom: 1px dashed #ebedf2;
+    padding-bottom: 5px;
+}
+
+.frmHD .form-group label {
+    text-align: right;
+}
+
+.frmHD .form-group {
+    align-items: center;
+}
+
+#hd-modal .modal-body {
+    padding: 2rem !important;
+}

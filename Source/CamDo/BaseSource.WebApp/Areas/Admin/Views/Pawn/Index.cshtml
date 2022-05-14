@@ -1,11 +1,14 @@
-﻿
+﻿@model PagedResult<HopDongVm>
+@{
+    ViewData["Title"] = "Quản lý hợp đồng cầm đồ";
+}
 <div class="row">
     <!-- table  Lastest Tickets -->
     <div class="col-12  ">
         <div class="card shadow h-100 mb-4 ">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h3 class="m-0 font-weight-bold">@ViewData["Title"]</h3>
-                <button type="button" class="btn btn-primary btn-sm" data-url="@Url.Action("Create")" onclick="addContractPawn(this,0)">Thêm mới</button>
+                <button type="button" class="btn btn-primary btn-sm" data-url="@Url.Action("Create","HopDong")" onclick="addContractPawn(this,0)">Thêm mới</button>
             </div>
             <div class="card-body">
                 <form asp-action="Index" method="get" class="mb-4">
@@ -36,33 +39,64 @@
                         <thead>
                             <tr>
                                 <th scope="col">
-                                    Lĩnh vực
+                                    #
                                 </th>
                                 <th scope="col">
-                                    Tên hàng hóa
+                                    Mã HĐ
                                 </th>
                                 <th scope="col">
-                                    Mã
+                                    Khách Hàng
+                                </th>
+                                <th scope="col">
+                                    Mã TS
+                                </th>
+                                <th scope="col">
+                                    Tài sản
                                 </th>
                                 <th scope="col">
                                     Tiền cầm
                                 </th>
                                 <th scope="col">
-                                    Lãi suất
+                                    Ngày cầm
                                 </th>
                                 <th scope="col">
-                                    Kỳ lãi
+                                    Lãi đã đóng
                                 </th>
                                 <th scope="col">
-                                    Thanh lý sau
+                                    Tiền nợ
+                                </th>
+                                <th scope="col">
+                                    Lãi đến hôm nay
+                                </th>
+                                <th scope="col">
+                                    Ngày phải đóng lãi
                                 </th>
                                 <th scope="col">
                                     Tình trạng
                                 </th>
-                                <th></th>
+                                <th>Chức năng</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @if (Model.Items.Count > 0)
+                            {
+                                int idx = 1;
+                                foreach (var item in Model.Items)
+                                {
+                                    <tr>
+                                        <td>@idx</td>
+                                        <td>@item.TenKhachHang</td>
+                                    </tr>
+                                    idx++;
+                                }
+
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="13" class="text-center">Không có dữ liệu</td>
+                                </tr>
+                            }
                         </tbody>
                     </table>
                 </div>
@@ -71,7 +105,7 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="pawn-modal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="hd-modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lager" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -87,7 +121,7 @@
 </div>
 
 @section Scripts{
-    <script src="~/admin/js/contract-pawn.js"></script>
+    <script src="~/admin/js/hd.js"></script>
     <script>
         $(".cauhinhhanghoa-nav").addClass("active");
     </script>

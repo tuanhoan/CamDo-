@@ -167,9 +167,16 @@ $('form[data-name="ajaxFormHangHoa"]').submit(function (e) {
     e.preventDefault();
     var $form = $(this);
     if ($('.group-thuoctinh-item').length > 0) {
-        var lstThuocTinh = $('.repeatThuocTinh').repeaterVal();
-        var thuoctinh = JSON.stringify(lstThuocTinh.groupthuoctinh);
-        $form.find("input[id='ListThuocTinh']").val(JSON.stringify(thuoctinh));
+        var lstTempThuocTinh = $('.repeatThuocTinh').repeaterVal();
+        var lstThuocTinh = [];
+        for (var i = 0; i < lstTempThuocTinh.groupthuoctinh.length; i++) {
+            if (lstTempThuocTinh.groupthuoctinh[i].thuoctinh != "") {
+                lstThuocTinh.push(lstTempThuocTinh.groupthuoctinh[i].thuoctinh)
+            }
+        }
+        if (lstThuocTinh.length > 0) {
+            $form.find("input[id='ListThuocTinh']").val(JSON.stringify(lstThuocTinh));
+        }
     }
 
     var $btnSubmit = $form.find("button[type='submit']");

@@ -162,10 +162,9 @@
                     $(this).slideUp(deleteElement);
                 },
             });
-
-        if (lstThuocTinh != '') {
-          $repeater.setList(JSON.parse(@Html.Raw(Model.ListThuocTinh)));
-        }
+            if (lstThuocTinh != '') {
+                $repeater.setList(JSON.parse(@Html.Raw(Model.ListThuocTinh)));
+            }
         });
 
         function getMoTaHinhThucLai() {
@@ -180,11 +179,9 @@
                         $('.motaKyLai').html(data[0].moTaKyLai);
                         $('.thoigianvay').html(data[0].thoiGian);
                     }
-
                 }
             })
         }
-
 
     </script>
 }   

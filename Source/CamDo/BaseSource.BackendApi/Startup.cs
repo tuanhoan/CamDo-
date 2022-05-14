@@ -20,6 +20,8 @@ using BaseSource.Shared.Constants;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using BaseSource.BackendApi.Services.Email;
+using BaseSource.BackendApi.Services.AutoMapper;
+using AutoMapper;
 
 namespace BaseSource.BackendApi
 {
@@ -133,7 +135,15 @@ namespace BaseSource.BackendApi
             services.Configure<DataProtectionTokenProviderOptions>(opt => opt.TokenLifespan = TimeSpan.FromDays(15));
 
             services.AddTransient<ISendEmailService, SendEmailService>();
+            // Auto Mapper Configurations
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new AutoMapperHopDong());
+                mc.AddProfile(new KhachHangAutoMapper());
+            });
 
+            IMapper mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -11,6 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\BaseSource.Data\BaseSource.Data.csproj" />
     <ProjectReference Include="..\BaseSource.ViewModels\BaseSource.ViewModels.csproj" />
   </ItemGroup>

@@ -163,8 +163,11 @@
                 },
             });
 
-        if (lstThuocTinh != '') {
-          $repeater.setList(JSON.parse(@Html.Raw(Model.ListThuocTinh)));
+            if (lstThuocTinh != '') {
+                var newArr = JSON.parse(lstThuocTinh).map(function (value) {
+                    return { "thuoctinh": value };
+                });
+          $repeater.setList(newArr);
         }
         });
 

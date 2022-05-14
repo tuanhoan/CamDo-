@@ -74,4 +74,10 @@ namespace BaseSource.ViewModels.CauHinhHangHoa
     {
         public int Id { get; set; }
     }
+
+    public class ThuocTinhHangHoaVm
+    {
+        public string Name { get; set; }
+        public string Value { get; set; }
+    }
 }

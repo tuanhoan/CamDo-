@@ -113,6 +113,9 @@
 
 @section Scripts{
     <script>
+        $(".cauhinhhanghoa-nav").addClass("active");
+
+         $(document).ready(function () {
           var lstThuocTinh = '@Html.Raw(Model.ListThuocTinh)';
             var $repeater = $('.repeatThuocTinh').repeater({
                 initEmpty: true,
@@ -124,9 +127,12 @@
                 },
             });
 
-        if (lstThuocTinh != '') {
-          $repeater.setList(JSON.parse(@Html.Raw(Model.ListThuocTinh)));
-        }
-        $(".cauhinhhanghoa-nav").addClass("active");
+            if (lstThuocTinh != '') {
+                var newArr = JSON.parse(lstThuocTinh).map(function (value) {
+                    return { "thuoctinh": value };
+                });
+                 $repeater.setList(newArr);
+             }
+        });
     </script>
 }   
