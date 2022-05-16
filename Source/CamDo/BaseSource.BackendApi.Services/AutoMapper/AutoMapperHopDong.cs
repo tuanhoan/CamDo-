@@ -14,6 +14,11 @@ namespace BaseSource.BackendApi.Services.AutoMapper
         public AutoMapperHopDong()
         {
             CreateMap<CreateHopDongVm, HopDong>();
+            CreateMap<HopDong, HopDongVm>();
+            CreateMap<EditHopDongVm, HopDong>()
+             .ForMember(dest => dest.UpdatedDate, options => options.MapFrom(source => DateTime.Now));
+
+            CreateMap<HopDongVm, KhachHang>().ForMember(des => des.Ten, act => act.MapFrom(src => src.TenKhachHang));
         }
     }
 }

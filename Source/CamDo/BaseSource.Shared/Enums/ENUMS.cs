@@ -55,7 +55,7 @@ namespace BaseSource.Shared.Enums
         LaiTuanVND = 6
     }
 
-    public enum ECamDo_HopDongPrintTemplate: byte
+    public enum ECamDo_HopDongPrintTemplate : byte
     {
         [Display(Name = "Lãi suất")]
         LaiSuat = 1,
@@ -73,7 +73,7 @@ namespace BaseSource.Shared.Enums
 
     public enum EHopDong_ActionType : byte
     {
-        [Display(Name = "Tạo mới hợp đồng")] 
+        [Display(Name = "Tạo mới hợp đồng")]
         TaoMoiHD = 1,
         [Display(Name = "Update hợp đồng")]
         UpdateHD = 2,
@@ -150,7 +150,7 @@ namespace BaseSource.Shared.Enums
         [Display(Name = "Quỹ tiền mặt")]
         QuyTienMat = 2
     }
-    
+
     public enum ETienDauNgay_ActionType : byte
     {
         [Display(Name = "Cập nhật tiền đầu ngày")]
@@ -165,6 +165,16 @@ namespace BaseSource.Shared.Enums
     {
         [Display(Name = "Nhập lại quỹ tiền mặt")]
         NhapLaiQuy = 1
+    }
+
+    public enum EThoiGianVay : byte
+    {
+        [Display(Name = "Ngày")]
+        Ngay = 1,
+        [Display(Name = "Tuần")]
+        Tuan,
+        [Display(Name = "Tháng")]
+        Thang
     }
 
     #region not in database

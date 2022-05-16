@@ -67,6 +67,7 @@ namespace BaseSource.BackendApi.Controllers
                     UserId = newUser.Id
                 };
                 _db.CuaHangs.Add(cuaHang);
+                await _db.SaveChangesAsync();
 
                 _db.UserProfiles.Add(new UserProfile
                 {
@@ -74,9 +75,10 @@ namespace BaseSource.BackendApi.Controllers
                     FullName = model.FullName,
                     JoinedDate = DateTime.Now,
                     UserId = newUser.Id,
+                    CuaHangId = cuaHang.Id
                 });
-                await _db.SaveChangesAsync();
 
+                await _db.SaveChangesAsync();
                 var lstRole = new List<string>(new string[] { "Admin" });
                 await _userManager.AddToRolesAsync(newUser, lstRole);
 

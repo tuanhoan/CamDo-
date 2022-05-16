@@ -93,5 +93,11 @@ namespace BaseSource.ApiIntegration.WebApi
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.PostAsync<ApiResult<string>>("/api/Account/authenticateExternal", model);
         }
+
+        public async Task<ApiResult<List<UserInfoResponse>>> GetUserByCuaHang()
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.GetAsync<ApiResult<List<UserInfoResponse>>>("/api/Account/GetUserByCuaHang");
+        }
     }
 }

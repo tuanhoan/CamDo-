@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 namespace BaseSource.BackendApi.Services.AutoMapper
 {
-    public class KhachHangAutoMapper : Profile
+    public class AutoMapperKhachHang : Profile
     {
-        public KhachHangAutoMapper()
+        public AutoMapperKhachHang()
         {
             CreateMap<CreateHopDongVm, KhachHang>();
         }

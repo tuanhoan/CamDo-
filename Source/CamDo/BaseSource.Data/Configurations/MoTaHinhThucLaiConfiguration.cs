@@ -19,7 +19,7 @@ namespace BaseSource.Data.Configurations
             builder.Property(x => x.Id).UseIdentityColumn();
             builder.Property(x => x.HinhThucLai).IsRequired();
             builder.Property(x => x.TyLeLai).IsRequired().HasMaxLength(256);
-            builder.Property(x => x.ThoiGian).IsRequired().HasMaxLength(128);
+            builder.Property(x => x.ThoiGian).IsRequired();
             builder.Property(x => x.MoTaKyLai).IsRequired().HasMaxLength(256);
 
         }

@@ -1,5 +1,6 @@
 ﻿using BaseSource.Data.EF;
 using BaseSource.Shared.Enums;
+using BaseSource.Utilities.Extensions;
 using BaseSource.ViewModels.Common;
 using BaseSource.ViewModels.MoTaHinhThucLai;
 using Microsoft.AspNetCore.Mvc;
@@ -35,7 +36,8 @@ namespace BaseSource.BackendApi.Controllers
                 HinhThucLai = x.HinhThucLai,
                 MoTaKyLai = x.MoTaKyLai,
                 TyLeLai = x.TyLeLai,
-                ThoiGian = x.ThoiGian
+                ThoiGian = x.ThoiGian,
+                ThoiGianDisplay = EnumExtensions.GetEnumDisplayName(x.ThoiGian)
             }).OrderByDescending(x => x.Id).ToPagedListAsync(request.Page, request.PageSize);
 
             var pagedResult = new PagedResult<MoTaHinhThucLaiVm>()

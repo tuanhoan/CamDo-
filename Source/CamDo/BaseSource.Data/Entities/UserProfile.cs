@@ -16,6 +16,7 @@ namespace BaseSource.Data.Entities
         public string FullName { get; set; }
 
         public DateTime JoinedDate { get; set; }
+        public int CuaHangId { get; set; }
 
         // object
         public virtual AppUser AppUser { get; set; }

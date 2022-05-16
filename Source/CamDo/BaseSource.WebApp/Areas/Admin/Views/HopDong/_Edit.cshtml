@@ -1,12 +1,13 @@
-﻿@model CreateHopDongVm
+﻿@model EditHopDongVm
 @{
     Layout = null;
     var listHangHoa = ViewData["ListHangHoa"] as SelectList;
     var lstUser = ViewData["ListUser"] as SelectList;
 }
 <div>
-    <form asp-action="Create" asp-controller="HopDong" class="frmHD" data-name="ajaxFormHopDong">
+    <form asp-action="Edit" asp-controller="HopDong" class="frmHD" data-name="ajaxFormHopDong">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        @Html.HiddenFor(x => x.Id)
         <div class="info-hd-header">
             <i class="fa fa-user"></i> Thông tin khách hàng
         </div>
@@ -152,9 +153,6 @@
         </div>
         <div class="collapse" id="collapseTaiSan">
         </div>
-
-        <input type="hidden" name="ListThuocTinhHangHoa" id="ListThuocTinhHangHoa" />
-
         <div class="form-group row">
             <label class="control-label col-md-2">&nbsp;</label>
             <div class="col-md-5">
@@ -165,3 +163,7 @@
     </form>
 
 </div>
+
+<script>
+    lstThuocTinh = JSON.parse(@Model.ListThuocTinhHangHoa)
+</script>

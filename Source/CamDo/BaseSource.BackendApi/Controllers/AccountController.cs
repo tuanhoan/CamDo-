@@ -369,6 +369,26 @@ namespace BaseSource.BackendApi.Controllers
             }
 
         }
+
+        [HttpGet("GetUserByCuaHang")]
+        public async Task<IActionResult> GetUserByCuaHang()
+        {
+            var lst = await _db.Users.Include(x => x.UserProfile).Where(i => i.UserProfile.CuaHangId == CuaHangId).ToListAsync();
+            var result = new List<UserInfoResponse>();
+            foreach (var item in lst)
+            {
+                result.Add(new UserInfoResponse
+                {
+                    Id = item.Id,
+                    Email = item.Email,
+                    FullName = item.UserProfile.FullName + " (" + item.UserName + ")",
+                    UserName = item.UserName,
+                });
+            }
+            return Ok(new ApiSuccessResult<List<UserInfoResponse>>(result));
+        }
+
+
         #region helper
         private void AddErrors(IdentityResult result, string Property)
         {

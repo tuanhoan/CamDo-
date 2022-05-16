@@ -17,22 +17,49 @@ namespace BaseSource.ViewModels.HopDong
     public class HopDongVm
     {
         public int Id { get; set; }
-        public string TenKhachHang { get; set; }
-        public string MaTaiSan { get; set; }
+        public int KhachHangId { get; set; }
+        public int HangHoaId { get; set; }
         public string TenTaiSan { get; set; }
+        public ELoaiHopDong HD_Loai { get; set; }
+        public string HD_Ma { get; set; }
         public double HD_TongTienVayBanDau { get; set; }
-        public DateTime HD_NgayVay { get; set; }
-        public double HD_LaiSuat { get; set; }
+        public EHinhThucLai HD_HinhThucLai { get; set; }
+        public bool HD_IsThuLaiTruoc { get; set; }
         public int HD_TongThoiGianVay { get; set; }
+        public int HD_KyLai { get; set; }
+        public double HD_LaiSuat { get; set; }
+        public DateTime HD_NgayVay { get; set; }
+        public DateTime HD_NgayDaoHan { get; set; }
+        public string HD_GhiChu { get; set; }
+        public string ListThuocTinhHangHoa { get; set; }
+        public string ImageList { get; set; }
+        public double TongTienLai { get; set; }
+        public double TongTienLaiDaThanhToan { get; set; }
+        public double TongTienVayHienTai { get; set; }
+        public double TongTienGhiNo { get; set; }
+        public double TongTienThanhLy { get; set; }
         public double TongTienDaThanhToan { get; set; }
+        public string UserIdAssigned { get; set; }
+        public EThoiGianVay ThoiGian { get; set; }
+
+        public string MaTaiSan { get; set; }
+        public string TyLeLai { get; set; }
+        public int TongSoNgayVay { get; set; }
         public double TienNo { get; set; }
+
+        public string TenKhachHang { get; set; }
+        public string CMND { get; set; }
+        public DateTime? CMND_NgayCap { get; set; }
+        public string CMND_NoiCap { get; set; }
+        public string DiaChi { get; set; }
+        public string SDT { get; set; }
 
     }
     public class CreateHopDongVm : IValidatableObject
     {
         [Display(Name = "Mã hợp đồng")]
         [Required(ErrorMessage = "Vui lòng nhập mã hợp đồng")]
-        public string HD_MA { get; set; }
+        public string HD_Ma { get; set; }
         [Display(Name = "Loại tài sản")]
         public int HangHoaId { get; set; }
         [Display(Name = "Tên tài sản")]
@@ -53,12 +80,13 @@ namespace BaseSource.ViewModels.HopDong
         public int HD_KyLai { get; set; }
         [Display(Name = "Lãi")]
         [Required(ErrorMessage = "Vui lòng nhập tiền lãi")]
-        public int HD_LaiSuat { get; set; }
+        public double HD_LaiSuat { get; set; }
         [Display(Name = "Ngày vay")]
         public DateTime HD_NgayVay { get; set; }
         [Display(Name = "Ghi chú")]
         public string HD_GhiChu { get; set; }
         [Display(Name = "NV thu tiền")]
+        [Required(ErrorMessage = "Vui lòng chọn nhân viên")]
         public string UserIdAssigned { get; set; }
         public int KhachHangId { get; set; }
         [Display(Name = "Tên khách hàng")]
@@ -69,11 +97,13 @@ namespace BaseSource.ViewModels.HopDong
         [Display(Name = "Số điện thoại")]
         public string SDT { get; set; }
         [Display(Name = "Ngày cấp")]
-        public DateTime? NgayCap { get; set; }
+        public DateTime? CMND_NgayCap { get; set; }
         [Display(Name = "Nơi cấp")]
-        public string NoiCap { get; set; }
+        public string CMND_NoiCap { get; set; }
         [Display(Name = "Địa chỉ")]
         public string DiaChi { get; set; }
+
+        public string ListThuocTinhHangHoa { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

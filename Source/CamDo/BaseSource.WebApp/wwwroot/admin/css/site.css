@@ -103,3 +103,25 @@ select.form-control {
 #hd-modal .modal-body {
     padding: 2rem !important;
 }
+
+.font-12 {
+    font-size: 12px;
+}
+
+.hd_laisuat {
+    font-size: 12px;
+    color: brown;
+}
+
+.hd_tenkhachang {
+    color: #27408B;
+    cursor: pointer;
+}
+
+    .hd_tenkhachang:hover {
+        border-bottom: 1px solid #5f57c3;
+        transition: width 0.3s ease;
+    }
+.ui-autocomplete {
+    z-index: 2147483647;
+}

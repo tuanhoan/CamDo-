@@ -139,7 +139,7 @@ namespace BaseSource.BackendApi
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new AutoMapperHopDong());
-                mc.AddProfile(new KhachHangAutoMapper());
+                mc.AddProfile(new AutoMapperKhachHang());
             });
 
             IMapper mapper = mapperConfig.CreateMapper();

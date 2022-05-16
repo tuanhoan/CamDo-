@@ -1,6 +1,7 @@
 ﻿using BaseSource.Data.EF;
 using BaseSource.Data.Entities;
 using BaseSource.Shared.Enums;
+using BaseSource.Utilities.Extensions;
 using BaseSource.ViewModels.Admin;
 using BaseSource.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
@@ -39,7 +40,7 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
                 HinhThucLai = x.HinhThucLai,
                 MoTaKyLai = x.MoTaKyLai,
                 TyLeLai = x.TyLeLai,
-                ThoiGian = x.ThoiGian,
+                ThoiGian = x.ThoiGian
             }).OrderByDescending(x => x.Id).ToPagedListAsync(request.Page, request.PageSize);
 
             var pagedResult = new PagedResult<MoTaHinhThucLaiAdminVm>()
