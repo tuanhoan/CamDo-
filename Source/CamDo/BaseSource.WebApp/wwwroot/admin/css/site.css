@@ -122,6 +122,23 @@ select.form-control {
         border-bottom: 1px solid #5f57c3;
         transition: width 0.3s ease;
     }
+
 .ui-autocomplete {
     z-index: 2147483647;
 }
+
+.row-tenkhachang {
+    position: relative;
+}
+
+.clear-info-customer {
+    position: absolute;
+    cursor: pointer;
+    top: 25%;
+    right: 7%;
+    display:none;
+}
+
+    .clear-info-customer i {
+        color: red;
+    }

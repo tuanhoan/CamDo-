@@ -1,4 +1,5 @@
 ﻿var lstThuocTinh = [];
+ 
 
 function initGetKhachHangByName() {
     $("#TenKhachHang").autocomplete({
@@ -38,9 +39,11 @@ function initGetKhachHangByName() {
                 //Clear the AutoComplete TextBox.
                 $("#TenKhachHang").val("");
                 $("#KhacHangId").val(0);
+                $('.clear-info-customer').css("display", "none");
                 return false;
             }
             else {
+                $('.clear-info-customer').css("display", "block");
                 $('.frmHD #CMND').val(i.item.cmnd);
                 $('.frmHD #DiaChi').val(i.item.diaChi);
                 $('.frmHD #SDT').val(i.item.sdt);
@@ -51,6 +54,16 @@ function initGetKhachHangByName() {
         minLength: 3
     })
 }
+$("body").on("click", '.clear-info-customer', function (e) {
+    $(this).css("display", "none");
+    $('.frmHD #TenKhachHang').val("");
+    $('.frmHD #CMND').val("");
+    $('.frmHD #DiaChi').val("");
+    $('.frmHD #SDT').val("");
+    $("#KhacHangId").val(0);
+});
+
+
 
 function getThuocTinhByTaiSan() {
     var id = $('#HangHoaId').val();
@@ -60,6 +73,8 @@ function getThuocTinhByTaiSan() {
         data: { id: id },
         success: function (data) {
             if (data.length > 0) {
+                var a = lstThuocTinhTemp;
+                console.log(a);
                 lstThuocTinh = data;
                 loadListThuocTinh();
             }
@@ -76,13 +91,12 @@ function setValueThuocTinh(thiz) {
 }
 function loadListThuocTinh() {
     var html = "";
-    debugger;
     if (lstThuocTinh.length > 0) {
         for (var i = 0; i < lstThuocTinh.length; i++) {
             html += '<div class="form-group row">' +
                 '<label class="control-label col-md-2">' + lstThuocTinh[i].name + '</label>' +
                 '<div class="col-md-3">' +
-                '<input type="text" class="form-control" onchange="setValueThuocTinh(this)" data-idx="' + i + '" value="' + lstThuocTinh[i].value+'" placeholder="Nhập ' + lstThuocTinh[i].name + '"/>' +
+                '<input type="text" class="form-control" onchange="setValueThuocTinh(this)" data-idx="' + i + '" value="' + lstThuocTinh[i].value + '" placeholder="Nhập ' + lstThuocTinh[i].name + '"/>' +
                 '</div></div>';
         };
     }
@@ -122,9 +136,9 @@ $("body").on("click", '.addEditHD', function (e) {
             $("#hd-modal .modal-body").html(res);
             setMoneyTextBox(".money-textbox");
             getMoTaHinhThucLai();
-            getThuocTinhByTaiSan();
             initGetKhachHangByName();
             loadListThuocTinh();
+            getThuocTinhByTaiSan();
             $("body").on("submit", 'form[data-name="ajaxFormHopDong"]', function (e) {
                 e.preventDefault();
                 var $form = $(this);
