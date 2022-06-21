@@ -1,11 +1,17 @@
 ﻿using AutoMapper;
+using BaseSource.BackendApi.Services.Helper;
+using BaseSource.BackendApi.Services.Serivce;
 using BaseSource.Data.EF;
 using BaseSource.Data.Entities;
 using BaseSource.Shared.Enums;
 using BaseSource.ViewModels.Common;
+using BaseSource.ViewModels.HD_PaymentLog;
 using BaseSource.ViewModels.HopDong;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,10 +24,15 @@ namespace BaseSource.BackendApi.Controllers
     {
         private readonly BaseSourceDbContext _db;
         private readonly IMapper _mapper;
-        public HopDongController(BaseSourceDbContext db, IMapper mapper)
+        private readonly IServiceScopeFactory _serviceScopeFactory;
+        private readonly IHopDongService _hopDongService;
+        public HopDongController(BaseSourceDbContext db, IMapper mapper,
+            IServiceScopeFactory serviceScopeFactory, IHopDongService hopDongService)
         {
             _db = db;
             _mapper = mapper;
+            _serviceScopeFactory = serviceScopeFactory;
+            _hopDongService = hopDongService;
         }
         [HttpGet("GetPagings")]
         public async Task<IActionResult> GetPagings([FromQuery] GetHopDongPagingRequest request)
@@ -41,6 +52,9 @@ namespace BaseSource.BackendApi.Controllers
                                   HD_NgayVay = hd.HD_NgayVay,
                                   HD_TongThoiGianVay = hd.HD_TongThoiGianVay,
                                   HD_TongTienVayBanDau = hd.HD_TongTienVayBanDau,
+                                  HD_HinhThucLai = hd.HD_HinhThucLai,
+                                  HD_KyLai = hd.HD_KyLai,
+                                  TongTienLaiDaThanhToan = hd.TongTienLaiDaThanhToan,
                                   MaTaiSan = hh.MaTS,
                                   TenKhachHang = kh.Ten,
                                   SDT = kh.SDT,
@@ -50,11 +64,12 @@ namespace BaseSource.BackendApi.Controllers
                                   TyLeLai = hd.HD_LaiSuat + htl.TyLeLai,
                                   ThoiGian = htl.ThoiGian
 
-                              }).ToPagedListAsync(request.Page, request.PageSize);
+                              }).OrderByDescending(x => x.Id).ToPagedListAsync(request.Page, request.PageSize);
 
             foreach (var item in data)
             {
-                item.TongSoNgayVay = TinhTongSoNgayVay(item.ThoiGian, item.HD_NgayVay, item.HD_TongThoiGianVay);
+                item.TongSoNgayVay = await _hopDongService.TinhTongSoNgayVay(item.HD_HinhThucLai, item.HD_KyLai, item.HD_TongThoiGianVay);
+
             }
 
             var pagedResult = new PagedResult<HopDongVm>()
@@ -92,8 +107,12 @@ namespace BaseSource.BackendApi.Controllers
             hd.UserIdAssigned = UserId;
             //gán tạm
             hd.HD_Loai = ELoaiHopDong.Camdo;
+            hd.HD_NgayDaoHan = await _hopDongService.TinhNgayDaoHan(hd.HD_HinhThucLai, hd.HD_NgayVay, hd.HD_TongThoiGianVay, hd.HD_KyLai);
+            hd.TongTienLai = await _hopDongService.TinhLaiHD(hd.HD_HinhThucLai, hd.HD_TongThoiGianVay, hd.HD_LaiSuat, hd.HD_TongTienVayBanDau);
             _db.HopDongs.Add(hd);
             await _db.SaveChangesAsync();
+
+            var rs = Task.Run(() => TaoKyDongLai(hd.Id));
             return Ok(new ApiSuccessResult<string>("Tạo mới hợp đồng thành công"));
         }
 
@@ -105,6 +124,7 @@ namespace BaseSource.BackendApi.Controllers
             {
                 return Ok(new ApiErrorResult<string>("Not found"));
             }
+            var htl = await _db.MoTaHinhThucLais.FirstOrDefaultAsync(x => x.HinhThucLai == hd.HD_HinhThucLai);
             var result = _mapper.Map<HopDongVm>(hd);
             var kh = await _db.KhachHangs.FindAsync(hd.KhachHangId);
             result.TenKhachHang = kh.Ten;
@@ -113,6 +133,7 @@ namespace BaseSource.BackendApi.Controllers
             result.CMND = kh.CMND;
             result.CMND_NgayCap = kh.CMND_NgayCap;
             result.CMND_NoiCap = kh.CMND_NoiCap;
+            result.TyLeLai = hd.HD_LaiSuat + htl.TyLeLai;
             return Ok(new ApiSuccessResult<HopDongVm>(result));
         }
         [HttpPost("Edit")]
@@ -128,6 +149,14 @@ namespace BaseSource.BackendApi.Controllers
             {
                 return Ok(new ApiErrorResult<string>("Not found"));
             }
+            bool isChangeKyLai = false;
+            if (hd.HD_HinhThucLai != model.HD_HinhThucLai || hd.HD_KyLai != model.HD_KyLai || hd.HD_LaiSuat != model.HD_LaiSuat)
+            {
+                isChangeKyLai = true;
+                var lstOld = await _db.HopDong_PaymentLogs.Where(x => x.HopDongId == hd.Id).ToListAsync();
+                _db.HopDong_PaymentLogs.RemoveRange(lstOld);
+                await _db.SaveChangesAsync();
+            }
 
             var kh = new KhachHang()
             {
@@ -141,29 +170,21 @@ namespace BaseSource.BackendApi.Controllers
             await AddOrUpDateCustomer(kh);
             model.KhachHangId = kh.Id;
             _mapper.Map(model, hd);
+            hd.HD_NgayDaoHan = await _hopDongService.TinhNgayDaoHan(hd.HD_HinhThucLai, hd.HD_NgayVay, hd.HD_TongThoiGianVay, hd.HD_KyLai);
+            hd.TongTienLai = await _hopDongService.TinhLaiHD(hd.HD_HinhThucLai, hd.HD_TongThoiGianVay, hd.HD_LaiSuat, hd.HD_TongTienVayBanDau);
             await _db.SaveChangesAsync();
+
+            if (isChangeKyLai)
+            {
+                var rs = Task.Run(() => TaoKyDongLai(hd.Id));
+            }
+
             return Ok(new ApiSuccessResult<string>("Cập nhật hợp đồng thành công"));
         }
 
-        private int TinhTongSoNgayVay(EThoiGianVay type, DateTime hd_NgayVay, int hd_TongThoiGianVay)
-        {
-            int totalDay = 0;
-            switch (type)
-            {
-                case EThoiGianVay.Ngay:
-                    totalDay = (hd_NgayVay.AddDays(hd_TongThoiGianVay) - hd_NgayVay).Days;
-                    break;
-                case EThoiGianVay.Tuan:
-                    totalDay = (hd_NgayVay.AddDays(hd_TongThoiGianVay * 7) - hd_NgayVay).Days;
-                    break;
-                case EThoiGianVay.Thang:
-                    totalDay = (hd_NgayVay.AddMonths(hd_TongThoiGianVay) - hd_NgayVay).Days;
-                    break;
-                default:
-                    return 0;
-            }
-            return totalDay;
-        }
+
+        #region helper
+
         private async Task<int> AddOrUpDateCustomer(KhachHang model)
         {
             int khachHangId = 0;
@@ -186,5 +207,12 @@ namespace BaseSource.BackendApi.Controllers
 
             return khachHangId;
         }
+        [AllowAnonymous]
+        [HttpPost("TaoKyDongLai")]
+        public async Task TaoKyDongLai(int hopdongId)
+        {
+            await _hopDongService.TaoKyDongLai(hopdongId);
+        }
+        #endregion
     }
 }

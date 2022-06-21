@@ -25,6 +25,8 @@ using BaseSource.ApiIntegration.WebApi.FeedBack;
 using BaseSource.ApiIntegration.WebApi.HopDong;
 using AutoMapper;
 using BaseSource.ApiIntegration.WebApi.KhachHang;
+using BaseSource.ApiIntegration.WebApi.HD_PaymentLog;
+using BaseSource.ApiIntegration.WebApi.HD_PaymentLogNote;
 
 namespace BaseSource.WebApp
 {
@@ -99,6 +101,9 @@ namespace BaseSource.WebApp
             services.AddTransient<IFeedBackApiClient, FeedBackApiClient>();
             services.AddTransient<IHopDongApiClient, HopDongApiClient>();
             services.AddTransient<IKhachHangApiClient, KhachHangApiClient>();
+            services.AddTransient<IHD_PaymentLogApiClient, HD_PaymentLogApiClient>();
+            services.AddTransient<IHD_PaymentLogNote, HD_PaymentLogNote>();
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 

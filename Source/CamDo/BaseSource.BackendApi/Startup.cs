@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Http;
 using BaseSource.BackendApi.Services.Email;
 using BaseSource.BackendApi.Services.AutoMapper;
 using AutoMapper;
+using BaseSource.BackendApi.Services.Serivce;
 
 namespace BaseSource.BackendApi
 {
@@ -50,8 +51,9 @@ namespace BaseSource.BackendApi
             services.AddTransient<UserManager<AppUser>, UserManager<AppUser>>();
             services.AddTransient<SignInManager<AppUser>, SignInManager<AppUser>>();
             services.AddTransient<RoleManager<AppRole>, RoleManager<AppRole>>();
-
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddTransient<IHopDongService, HopDongService>();
 
             services.AddControllers();
 

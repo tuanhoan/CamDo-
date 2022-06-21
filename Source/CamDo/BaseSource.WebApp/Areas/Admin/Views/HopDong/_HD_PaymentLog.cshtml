@@ -1,0 +1,117 @@
+﻿@model HD_PaymentLogVm
+@{
+    int idx = 1;
+}
+<a style="cursor:pointer" data-toggle="collapse" href="#collapseDongLai" aria-expanded="true" aria-controls="collapseTaiSan">
+    >> Chức năng đóng lãi tùy biến theo ngày
+</a>
+<div class="collapse" id="collapseDongLai">
+    <div id="dvInfoDongLaiTheoNgay" class="asyncPartial" data-url="@Url.Action("GetInfoPaymentByDate",new { hdId=Model.HdId})">
+
+
+    </div>
+</div>
+<div class="info-hd-header">
+    <i class="fa fa-list"></i> Lịch sử đóng tiền lãi
+</div>
+<div class="list-payment">
+    <table class="table table-bordered head-bg-gray table-hover">
+        <thead>
+            <tr>
+                <th class="text-center">STT</th>
+                <th colspan="3" class="text-center">Ngày</th>
+                <th class="text-center">Số ngày</th>
+                <th class="text-center">Tiền lãi</th>
+                <th class="text-center">Tiền khác</th>
+                <th class="text-center">Tổng lãi</th>
+                <th class="text-center">Tiền khách trả</th>
+                <th class="text-center">In</th>
+                <th class="text-center"></th>
+                <th class="text-center">Ghi chú</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ListPaymentLog)
+            {
+                <tr>
+                    <td>@idx</td>
+                    <td>@item.FromDate.ToString("dd/MM/yyyy")</td>
+                    <td><i class="fas fa-arrow-right"></i></td>
+                    <td>@item.ToDate.ToString("dd/MM/yyyy")</td>
+                    <td class="text-center">@item.CountDay</td>
+                    <td class="text-right">@item.MoneyInterest.ToString("N0")</td>
+                    <td class="text-right">@item.MoneyOther.ToString("N0")</td>
+                    <td class="text-right">@((item.MoneyInterest + item.MoneyOther).ToString("N0"))</td>
+                    @if (item.PaidDate != null)
+                    {
+                        <td class="text-right">@item.MoneyPayNeed</td>
+                    }
+                    else
+                    {
+                        <td class="text-right"><input type="text" class="form-control money-textbox text-right" id="input-customer-pay-@item.Id" value="@item.MoneyPayNeed"></td>
+                    }
+                    <td>
+                        @if (item.PaidDate != null)
+                        {
+                            <a href="#" class="icon-print"><i class="fas fa-print"></i></a>
+                        }
+                    </td>
+                    <td class="text-center">
+                        @if (item.PaidDate != null)
+                        {
+                            <input type="checkbox" checked id="chkDeletePayment-@item.Id" onclick="deletePayment(@item.Id,@item.HopDongId)" />
+                        }
+                        else
+                        {
+                            <input type="checkbox" onclick="createPayment(@item.Id,@item.HopDongId)" />
+                        }
+
+                    </td>
+                    <td class="text-center"><button type="button" class="btn btn-xs btn-outline-purple" onclick="getNotePayment(@item.Id)"><i class="fas fa-pen"></i></button></td>
+                </tr>
+                <tr class="note-payment-@item.Id" style="display:none">
+                    <td colspan="6" style="border:none !important">
+                        <div class="form-group row">
+                            <label class="control-label col-md-2">Ghi chú </label>
+                            <div class="col-md-10">
+                                <form id="frmPaymentNote-@item.Id">
+                                    <input type="hidden" name="PaymentId" value="@item.Id" />
+                                    <textarea class="form-control" name="Note" rows="5"></textarea>
+                                </form>
+
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-10 offset-md-2">
+                                <button class="btn btn-primary btn-sm" type="button" onclick="createPaymentNote(@item.Id)">Lưu ghi chú</button>
+                            </div>
+                        </div>
+                    </td>
+                    <td colspan="6" style="border:none !important">
+                        <div id="note-result-@item.Id"></div>
+                    </td>
+                </tr>
+                idx++;
+            }
+
+        </tbody>
+    </table>
+
+</div>
+<script>
+    $(document).ready(function () {
+        $(document).on("wheel", "input[type=number]", function (e) {
+            $(this).blur();
+        });
+        setMoneyTextBox(".money-textbox");
+
+        $(".asyncPartial").each(function (i, item) {
+            var url = $(item).data("url");
+            if (url && url.length > 0) {
+                $(item).load(url, function () {
+                    feather.replace();
+                });
+            }
+        });
+    })
+</script>

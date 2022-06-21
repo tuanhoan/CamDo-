@@ -1,0 +1,26 @@
+﻿@model List<HD_PaymentLogNoteVm>
+
+<div class="list-note-payment">
+    @if (Model.Count > 0)
+    {
+        foreach (var item in Model)
+        {
+            <div class="note-payment-item">
+                <div class="note-time mr-5">
+                    @item.CreatedDate.ToString("dd/MM/yyyy HH:mm")
+                </div>
+                <div class="row note-content">
+                    <span>@item.Note</span>
+                    <span>Bởi: @item.UserCreate</span>
+                </div>
+            </div>
+        }
+
+    }
+    else
+    {
+        <p class="text-center">Chưa có ghi chú nào được lưu</p>
+    }
+
+
+</div>

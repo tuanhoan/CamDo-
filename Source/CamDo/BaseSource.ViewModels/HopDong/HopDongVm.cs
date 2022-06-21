@@ -30,6 +30,7 @@ namespace BaseSource.ViewModels.HopDong
         public double HD_LaiSuat { get; set; }
         public DateTime HD_NgayVay { get; set; }
         public DateTime HD_NgayDaoHan { get; set; }
+        public DateTime? NgayDongLaiGanNhat { get; set; }
         public string HD_GhiChu { get; set; }
         public string ListThuocTinhHangHoa { get; set; }
         public string ImageList { get; set; }
@@ -126,5 +127,13 @@ namespace BaseSource.ViewModels.HopDong
     public class EditHopDongVm : CreateHopDongVm
     {
         public int Id { get; set; }
+    }
+
+    public class TinhLaiHDVm
+    {
+        public double TongTienVay { get; set; }
+        public double KyLai { get; set; }
+        public double LaiSuat { get; set; }
+        public EHinhThucLai HinhThucLai { get; set; }
     }
 }

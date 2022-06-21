@@ -12,7 +12,7 @@ namespace BaseSource.ApiIntegration.WebApi.CauHinhHangHoa
     {
         Task<ApiResult<PagedResult<CauHinhHangHoaVm>>> GetPagings(GetCauHinhHangHoaPagingRequest model);
         Task<ApiResult<string>> Create(CreateCauHinhHangHoaVm model);
-        Task<ApiResult<CauHinhHangHoaVm>> GetById(int id);
+        Task<ApiResult<CauHinhHangHoaVm>> GetById(int id, int hdId = 0);
         Task<ApiResult<string>> Edit(EditCauHinhHangHoaVm model);
         Task<ApiResult<string>> Delete(int id);
     }

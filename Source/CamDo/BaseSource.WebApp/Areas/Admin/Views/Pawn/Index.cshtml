@@ -100,13 +100,13 @@
                                             @item.HD_NgayVay.ToString("dd/MM/yyyy")
                                             <p>(@item.TongSoNgayVay ngày)</p>
                                         </td>
-                                        <td>0</td>
+                                        <td>@item.TongTienLaiDaThanhToan.ToString("N0")</td>
                                         <td>0</td>
                                         <td>0</td>
                                         <td>@item.HD_NgayVay.ToString("dd/MM/yyyy")</td>
                                         <td>Tình trạng</td>
                                         <td>
-                                            <button class="btn btn-sm btn-purple addEditHD" type="button" data-id="@item.Id" data-url="@Url.Action("Edit","HopDong")" title="Cập nhật">
+                                            <button class="btn btn-sm btn-purple detaileHD" type="button" data-id="@item.Id" data-url="@Url.Action("Detail","HopDong")" title="Cập nhật">
                                                 <i class="fas fa-coins"></i>
                                             </button>
                                         </td>
@@ -135,11 +135,11 @@
         $(".cauhinhhanghoa-nav").addClass("active");
     </script>
 }
-<div class="modal fade" id="hd-modal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="hd-modal" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lager" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Thêm mới hợp đồng</h5>
+                <h5 class="modal-title"></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

@@ -6,7 +6,10 @@
         });
     }
 });
-
+function format(data) {
+    data = parseFloat(data);
+    return data.toLocaleString('en');
+}
 $("#choose-shop").on("click", function (e) {
     e.preventDefault();
     $('.list-shop').slideToggle();
@@ -29,7 +32,7 @@ $(function () {
         "debug": false,
         "newestOnTop": false,
         "progressBar": false,
-        "positionClass": "toast-bottom-left",
+        "positionClass": "toast-top-right",
         "preventDuplicates": false,
         "onclick": null,
         "showDuration": "300",
@@ -52,6 +55,7 @@ $(function () {
         }
         localStorage.clear();
     }
+  
 });
 
 $("#page-top").on("click", 'button[data-toggle="btn-confirm"]', function (e) {

@@ -1,4 +1,5 @@
 ﻿using BaseSource.ViewModels.Common;
+using BaseSource.ViewModels.HD_PaymentLog;
 using BaseSource.ViewModels.HopDong;
 using System;
 using System.Collections.Generic;
@@ -14,5 +15,7 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
         Task<ApiResult<string>> Create(CreateHopDongVm model);
         Task<ApiResult<HopDongVm>> GetById(int id);
         Task<ApiResult<string>> Edit(EditHopDongVm model);
+      
+        
     }
 }

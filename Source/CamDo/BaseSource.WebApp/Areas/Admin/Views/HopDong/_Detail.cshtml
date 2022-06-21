@@ -1,0 +1,181 @@
+﻿@model HopDongVm
+@{
+    Layout = null;
+}
+<style>
+    fieldset {
+        display: none;
+    }
+
+        fieldset.show {
+            display: block;
+        }
+
+
+    .tabs {
+        margin: 2px 5px 0px 5px;
+        padding-bottom: 10px;
+        cursor: pointer;
+    }
+
+        .tabs:hover, .tabs.active {
+            border-bottom: 1px solid #2196F3;
+        }
+
+    a:hover {
+        text-decoration: none;
+        color: #1565C0;
+    }
+
+
+    .line {
+        background-color: #CFD8DC;
+        height: 1px;
+        width: 100%;
+    }
+</style>
+<div class="row">
+    <div class="col-md-6">
+        <table class="table table-hover table-bordered table-detail-hd">
+            <tbody>
+                <tr id="trCusName">
+                    <td colspan="3">
+                        <span class="text-danger font-weight-bold" id="lblCusName">@Model.TenKhachHang</span>
+                        <label id="lblCusPhone"> - <i class="fas fa-phone-alt" style="font-size:10px"></i><small> <i> @Model.SDT </i></small></label>
+                        <span><i class="fas fas fa-map-marker-alt" style="font-size:10px"></i> @Model.DiaChi</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="font-weight-bold">Tiền cầm</span></td>
+                    <td colspan="2" align="right"><span id="lblTotalMoney">@Model.HD_TongTienVayBanDau.ToString("N0")</span> VNĐ</td>
+                </tr>
+                <tr>
+                    <td><span class="font-weight-bold">Vay từ ngày</span></td>
+                    <td align="right"><span id="lblFromDate">@Model.HD_NgayVay.ToString("dd/MM/yyyy")</span> </td>
+                    <td align="right"><span id="lblToDate">@Model.HD_NgayDaoHan.ToString("dd/MM/yyyy")</span></td>
+                </tr>
+                <tr>
+                    <td><span class="font-weight-bold">Ngày trả lãi gần nhất</span></td>
+                    <td colspan="2" align="center"><span id="lblLastDateOfPay">@Model.NgayDongLaiGanNhat?.ToString("dd/MM/yyyy")</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <table class="table table-hover table-bordered table-detail-hd">
+            <tbody>
+                <tr>
+                    <td><span class="font-weight-bold">Lãi suất</span></td>
+                    <td colspan="2" align="right"><span id="lblStrRate">@Model.TyLeLai</span></td>
+                </tr>
+                <tr>
+                    <td><span class="font-weight-bold">Tiền lãi đã đóng</span></td>
+                    <td colspan="2" align="right">
+                        <span id="lblPaymentMoney">@Model.TongTienDaThanhToan.ToString("N0")</span> VNĐ
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span class="font-weight-bold" id="lblDisplayDebitOrOverMoney">Nợ cũ KH: </span>
+                        <span class="text-danger font-weight-bold" id="lblCustomerDebitMoney">
+                            <span class="text-danger font-weight-bold">@Model.TienNo.ToString("N0") VNĐ</span>
+                        </span>
+                    </td>
+                    <td align="right">
+                        <span class="font-weight-bold" id="lblDisplayLoanDebit">Nợ cũ HĐ: </span>
+                        <span class="text-danger font-weight-bold" id="lblLoanDebitMoney"><span class="text-danger font-weight-bold">0 VNĐ</span></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="font-weight-bold">Trạng thái</span></td>
+                    <td colspan="2" align="right" class=""><span id="lblStatus"><span class="m-badge m-badge--info m-badge--wide" style="font-size:12px">Hôm nay đóng tiền</span></span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row d-flex justify-content-between">
+    <div class="tabs active" id="tab01">
+        <h6><i class="fas fa-money-bill"></i> Đóng tiền lãi</h6>
+    </div>
+    <div class="tabs" id="tab02">
+        <h6 class="font-weight-bold"><i class="fas fa-money-bill"></i> Trả bớt gốc</h6>
+    </div>
+    <div class="tabs" id="tab03">
+        <h6><i class="fas fa-money-check-edit"></i> Vay thêm</h6>
+    </div>
+    <div class="tabs" id="tab04">
+        <h6>Gia hạn</h6>
+    </div>
+    <div class="tabs" id="tab04">
+        <h6>Chuộc đồ</h6>
+    </div>
+    <div class="tabs" id="tab04">
+        <h6>Nợ</h6>
+    </div>
+    <div class="tabs" id="tab04">
+        <h6>Chứng từ</h6>
+    </div>
+    <div class="tabs" id="tab04">
+        <h6>Lịch sử</h6>
+    </div>
+    <div class="tabs" id="tab04">
+        <h6>Lịch sử trả chậm</h6>
+    </div>
+    <div class="tabs" id="tab04">
+        <h6>Hẹn giờ</h6>
+    </div>
+</div>
+<div class="line"></div>
+<div class="mt-3">
+    <fieldset class="show" id="tab011">
+        Đóng lãi
+    </fieldset>
+    <fieldset id="tab021">
+        Trả bớt gốc
+    </fieldset>
+    <fieldset id="tab031">
+        Vay thêm
+    </fieldset>
+    <fieldset id="tab041">
+        Gia hạn
+    </fieldset>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        getListPaymentLog(@Model.Id);
+
+    })
+    $(".tabs").click(function () {
+
+        $(".tabs").removeClass("active");
+
+
+        $(this).children("h6").addClass("font-weight-bold");
+        $(this).addClass("active");
+
+        current_fs = $(".active");
+
+        next_fs = $(this).attr('id');
+        next_fs = "#" + next_fs + "1";
+
+        $("fieldset").removeClass("show");
+        $(next_fs).addClass("show");
+
+        current_fs.animate({}, {
+            step: function () {
+                current_fs.css({
+                    'display': 'none',
+                    'position': 'relative'
+                });
+                next_fs.css({
+                    'display': 'block'
+                });
+            }
+        });
+    });
+
+</script>

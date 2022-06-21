@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using BaseSource.Utilities.Helper;
+using BaseSource.ViewModels.HD_PaymentLog;
 
 namespace BaseSource.ApiIntegration.WebApi.HopDong
 {
@@ -23,7 +24,6 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.PostAsync<ApiResult<string>>("/api/HopDong/Create", model);
         }
-
         public async Task<ApiResult<string>> Edit(EditHopDongVm model)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);

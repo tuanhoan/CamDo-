@@ -136,9 +136,55 @@ select.form-control {
     cursor: pointer;
     top: 25%;
     right: 7%;
-    display:none;
+    display: none;
 }
 
     .clear-info-customer i {
         color: red;
+    }
+
+.table-detail-hd td {
+    padding: 0.35rem !important;
+}
+
+.custom-control {
+    position: relative;
+    z-index: 1;
+    display: block;
+    min-height: 1.5rem;
+    padding-left: 1.5rem;
+    -webkit-print-color-adjust: exact;
+}
+
+.head-bg-gray thead {
+    background: #f2f0f7;
+    font-weight: 600;
+}
+
+.list-payment table td {
+    vertical-align: middle;
+}
+
+.icon-print i {
+    color: #716aca;
+}
+
+#dvInfoDongLaiTheoNgay {
+    margin: 20px 0px;
+}
+
+    #dvInfoDongLaiTheoNgay .form-group label {
+        text-align: right;
+        align-items: center;
+        font-weight: bold;
+    }
+
+    #dvInfoDongLaiTheoNgay .tienlai {
+        color: darkcyan;
+        font-weight: bold;
+    }
+
+    #dvInfoDongLaiTheoNgay .tongtienlai {
+        color: #f4516c;
+        font-weight: bold;
     }

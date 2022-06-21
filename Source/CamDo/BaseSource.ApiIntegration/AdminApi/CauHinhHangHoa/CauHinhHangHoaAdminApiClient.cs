@@ -45,7 +45,7 @@ namespace BaseSource.ApiIntegration.AdminApi.CauHinhHangHoa
         {
             var obj = new
             {
-                id = id
+                id = id,
             };
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.GetAsync<ApiResult<CauHinhHangHoaAdminVm>>("/api/admin/CauHinhHangHoa/GetById", obj);

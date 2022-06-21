@@ -5,6 +5,7 @@ using BaseSource.ViewModels.CauHinhHangHoa;
 using BaseSource.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,13 +70,20 @@ namespace BaseSource.BackendApi.Controllers
             return Ok(new ApiSuccessResult<PagedResult<CauHinhHangHoaVm>>(pagedResult));
         }
         [HttpGet("GetById")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(int id, int hdId = 0)
         {
             var x = await _db.CauHinhHangHoas.FindAsync(id);
             if (x == null)
             {
                 return Ok(new ApiErrorResult<string>("Not found"));
             }
+            string lstThuocTinh = "";
+            if (hdId != 0)
+            {
+                var hd = await _db.HopDongs.FirstOrDefaultAsync(x => x.Id == hdId && x.HangHoaId == id);
+                lstThuocTinh = hd.ListThuocTinhHangHoa;
+            }
+
             var result = new CauHinhHangHoaVm()
             {
                 Id = x.Id,
@@ -90,7 +98,7 @@ namespace BaseSource.BackendApi.Controllers
                 TongThoiGianVay = x.TongThoiGianVay,
                 SoNgayQuaHan = x.SoNgayQuaHan,
                 IsThuLaiTruoc = x.IsThuLaiTruoc,
-                ListThuocTinh = x.ListThuocTinh
+                ListThuocTinh = !string.IsNullOrEmpty(lstThuocTinh) ? lstThuocTinh : x.ListThuocTinh
             };
             return Ok(new ApiSuccessResult<CauHinhHangHoaVm>(result));
         }
