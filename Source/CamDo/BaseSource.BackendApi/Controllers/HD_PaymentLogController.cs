@@ -77,7 +77,12 @@ namespace BaseSource.BackendApi.Controllers
             hd.NgayDongLaiGanNhat = payment.ToDate;
             hd.NgayDongLaiTiepTheo = payNext?.FromDate;
             await _db.SaveChangesAsync();
-            return Ok(new ApiSuccessResult<string>("Đóng lãi nhanh thành công"));
+            var response = new CreateHD_PaymentLogReponse()
+            {
+                NgayDongLaiGanNhat = hd.NgayDongLaiGanNhat,
+                TongTienLaiDaDong = hd.TongTienLaiDaThanhToan
+            };
+            return Ok(new ApiSuccessResult<CreateHD_PaymentLogReponse>(response, "Đóng lãi nhanh thành công"));
         }
         [HttpPost("Delete")]
         public async Task<IActionResult> Delete([FromForm] long id)
@@ -93,7 +98,7 @@ namespace BaseSource.BackendApi.Controllers
                 }
                 payment.PaidDate = null;
                 var prePayment = await _db.HopDong_PaymentLogs.Where(x => x.HopDongId == hd.Id && x.Id < payment.Id).OrderBy(x => x.FromDate).FirstOrDefaultAsync();
-                hd.TongTienLaiDaThanhToan = hd.TongTienLaiDaThanhToan - payment.MoneyPayNeed;
+                hd.TongTienLaiDaThanhToan -= payment.MoneyPayNeed;
                 if (prePayment != null)
                 {
                     hd.NgayDongLaiGanNhat = prePayment.ToDate;
@@ -268,6 +273,7 @@ namespace BaseSource.BackendApi.Controllers
         {
             await _hopDongService.TaoKyDongLai(hopdongId);
         }
-       
+
+
     }
 }

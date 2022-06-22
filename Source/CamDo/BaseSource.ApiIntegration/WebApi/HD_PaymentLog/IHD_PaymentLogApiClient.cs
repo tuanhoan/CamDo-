@@ -11,7 +11,7 @@ namespace BaseSource.ApiIntegration.WebApi.HD_PaymentLog
     public interface IHD_PaymentLogApiClient
     {
         Task<ApiResult<HD_PaymentLogVm>> GetPaymentLogByHD(int hdId);
-        Task<ApiResult<string>> Create(CreateHDPaymentLogVm model);
+        Task<ApiResult<CreateHD_PaymentLogReponse>> Create(CreateHDPaymentLogVm model);
         Task<ApiResult<string>> Delete(long id);
         Task<ApiResult<ChangePaymentDateResponseVm>> ChangePaymentDate(ChangePaymentDateRequestVm model);
         Task<ApiResult<string>> CreatePaymentByDate(HDPaymentByDateVm model);

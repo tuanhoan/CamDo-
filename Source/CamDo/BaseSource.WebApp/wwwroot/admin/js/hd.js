@@ -231,9 +231,17 @@ function createPayment(id, hdId) {
         url: "/Admin/HopDong/CreatePayment",
         data: { paymentId: id, hdId: hdId, customerPay: customerPay },
         success: function (res) {
+            console.log(res);
             if (res.isSuccessed == true) {
                 toastr.info(res.resultObj);
                 getListPaymentLog(hdId);
+                //var url = $('#dvInfoDongLaiTheoNgay').data("url");
+                //if (url && url.length > 0) {
+                //    $('#dvInfoDongLaiTheoNgay').load(url, function () {
+                //        feather.replace();
+                //    });
+                //}
+
             } else if (res.message != null) {
                 toastr.error(res.message);
             }

@@ -78,4 +78,9 @@ namespace BaseSource.ViewModels.HD_PaymentLog
         public double CustomerPay { get; set; }
 
     }
+    public class CreateHD_PaymentLogReponse
+    {
+        public DateTime? NgayDongLaiGanNhat { get; set; }
+        public double TongTienLaiDaDong { get; set; }
+    }
 }

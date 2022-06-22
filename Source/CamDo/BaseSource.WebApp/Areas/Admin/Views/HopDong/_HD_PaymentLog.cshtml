@@ -44,7 +44,7 @@
                     <td class="text-right">@((item.MoneyInterest + item.MoneyOther).ToString("N0"))</td>
                     @if (item.PaidDate != null)
                     {
-                        <td class="text-right">@item.MoneyPayNeed</td>
+                        <td class="text-right">@item.MoneyPayNeed.ToString("N0")</td>
                     }
                     else
                     {

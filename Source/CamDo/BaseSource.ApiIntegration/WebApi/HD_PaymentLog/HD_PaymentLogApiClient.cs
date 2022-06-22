@@ -27,10 +27,10 @@ namespace BaseSource.ApiIntegration.WebApi.HD_PaymentLog
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.GetAsync<ApiResult<HD_PaymentLogVm>>("/api/HD_PaymentLog/GetPaymentLogByHD", obj);
         }
-        public async Task<ApiResult<string>> Create(CreateHDPaymentLogVm model)
+        public async Task<ApiResult<CreateHD_PaymentLogReponse>> Create(CreateHDPaymentLogVm model)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
-            return await client.PostAsync<ApiResult<string>>("/api/HD_PaymentLog/Create", model);
+            return await client.PostAsync<ApiResult<CreateHD_PaymentLogReponse>>("/api/HD_PaymentLog/Create", model);
         }
         public async Task<ApiResult<string>> Delete(long id)
         {

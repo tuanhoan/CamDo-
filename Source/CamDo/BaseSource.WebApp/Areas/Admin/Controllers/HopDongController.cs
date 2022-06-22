@@ -174,6 +174,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             var result = await _hdPaymentLogApiClient.GetPaymentByDate(hdId);
             return PartialView("_DongLaiTheoNgay", result.ResultObj);
         }
+        [HttpPost]
         public async Task<IActionResult> CreatePayment(int paymentId, int hdId, double customerPay)
         {
             var model = new CreateHDPaymentLogVm()
@@ -187,7 +188,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             {
                 return Json(new ApiErrorResult<string>(result.ValidationErrors));
             }
-            return Json(new ApiSuccessResult<string>(result.ResultObj));
+            return Json(new ApiSuccessResult<CreateHD_PaymentLogReponse>(result.ResultObj));
         }
         public async Task<IActionResult> DeletePayment(long paymentId)
         {
@@ -223,6 +224,6 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         }
         #endregion
 
-        
+
     }
 }

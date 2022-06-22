@@ -153,9 +153,6 @@ namespace BaseSource.BackendApi.Controllers
             if (hd.HD_HinhThucLai != model.HD_HinhThucLai || hd.HD_KyLai != model.HD_KyLai || hd.HD_LaiSuat != model.HD_LaiSuat)
             {
                 isChangeKyLai = true;
-                var lstOld = await _db.HopDong_PaymentLogs.Where(x => x.HopDongId == hd.Id).ToListAsync();
-                _db.HopDong_PaymentLogs.RemoveRange(lstOld);
-                await _db.SaveChangesAsync();
             }
 
             var kh = new KhachHang()

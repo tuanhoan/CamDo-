@@ -129,11 +129,11 @@ namespace BaseSource.ViewModels.HopDong
         public int Id { get; set; }
     }
 
-    public class TinhLaiHDVm
+    public class HopDongPaymentResponseVm
     {
-        public double TongTienVay { get; set; }
-        public double KyLai { get; set; }
-        public double LaiSuat { get; set; }
-        public EHinhThucLai HinhThucLai { get; set; }
+        public DateTime NgayDongLaiGanNhat { get; set; }
+        public double TongTienDaThanhToan { get; set; }
+        public DateTime NgayDongLaiTiepTheo { get; set; }
     }
+
 }
