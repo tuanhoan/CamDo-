@@ -11,10 +11,10 @@ namespace BaseSource.ApiIntegration.WebApi.HD_PaymentLog
     public interface IHD_PaymentLogApiClient
     {
         Task<ApiResult<HD_PaymentLogVm>> GetPaymentLogByHD(int hdId);
-        Task<ApiResult<CreateHD_PaymentLogReponse>> Create(CreateHDPaymentLogVm model);
-        Task<ApiResult<string>> Delete(long id);
+        Task<ApiResult<HD_PaymentLogReponse>> Create(CreateHDPaymentLogVm model);
+        Task<ApiResult<HD_PaymentLogReponse>> Delete(long id);
         Task<ApiResult<ChangePaymentDateResponseVm>> ChangePaymentDate(ChangePaymentDateRequestVm model);
-        Task<ApiResult<string>> CreatePaymentByDate(HDPaymentByDateVm model);
+        Task<ApiResult<HD_PaymentLogReponse>> CreatePaymentByDate(HDPaymentByDateVm model);
         Task<ApiResult<HDPaymentByDateVm>> GetPaymentByDate(int hdId);
     }
 }

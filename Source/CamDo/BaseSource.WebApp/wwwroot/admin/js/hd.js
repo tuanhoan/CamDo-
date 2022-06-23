@@ -123,6 +123,7 @@ function getMoTaHinhThucLai() {
 
 
 $("body").on("click", '.addEditHD', function (e) {
+    $("#hd-modal .modal-title").html('Thêm mới hợp đồng');
     $("#hd-modal .modal-body").html('<i class="fas fa-fw fa-spin fa-spinner"></i>');
     $("#hd-modal").modal('show');
     var idHd = $(this).data("id");
@@ -220,10 +221,21 @@ function getListPaymentLog(hdId) {
         url: "/Admin/HopDong/GetListPaymentLog",
         data: { hdId: hdId },
         success: function (data) {
-            $('#tab011').html(data);
+            $('#divContent-ListPayment').html(data);
         }
     })
 }
+function getInfoPaymentByDate(hdId) {
+    $.ajax({
+        type: "GET",
+        url: "/Admin/HopDong/GetInfoPaymentByDate",
+        data: { hdId: hdId },
+        success: function (data) {
+            $('#divContent-Tralaitheongay').html(data);
+        }
+    })
+}
+
 function createPayment(id, hdId) {
     var customerPay = $('#input-customer-pay-' + id).val();
     $.ajax({
@@ -233,14 +245,8 @@ function createPayment(id, hdId) {
         success: function (res) {
             console.log(res);
             if (res.isSuccessed == true) {
-                toastr.info(res.resultObj);
-                getListPaymentLog(hdId);
-                //var url = $('#dvInfoDongLaiTheoNgay').data("url");
-                //if (url && url.length > 0) {
-                //    $('#dvInfoDongLaiTheoNgay').load(url, function () {
-                //        feather.replace();
-                //    });
-                //}
+                toastr.info(res.message);
+                loadInfoWhenChangePayment(res.resultObj, hdId);
 
             } else if (res.message != null) {
                 toastr.error(res.message);
@@ -249,6 +255,19 @@ function createPayment(id, hdId) {
 
     })
 }
+
+function loadInfoWhenChangePayment(result, hdId) {
+    setTimeout(function () {
+        getListPaymentLog(hdId);
+        getInfoPaymentByDate(hdId);
+    }, 500);
+
+    $('#lblLastDateOfPay').text(result.ngayDongLaiGanNhat);
+    $('#lblPaymentMoney').text(format(result.tongTienLaiDaDong));
+
+}
+
+
 function deletePayment(id, hdId) {
     $.ajax({
         type: "POST",
@@ -256,8 +275,8 @@ function deletePayment(id, hdId) {
         data: { paymentId: id },
         success: function (res) {
             if (res.isSuccessed == true) {
-                toastr.info(res.resultObj);
-                getListPaymentLog(hdId);
+                toastr.info(res.message);
+                loadInfoWhenChangePayment(res.resultObj, hdId);
             } else if (res.message != null) {
                 $('#chkDeletePayment-' + id).prop('checked', true);
                 toastr.error(res.message);
@@ -306,8 +325,8 @@ $("body").on("submit", 'form[data-name="frmDongLaiTheoNgay"]', function (e) {
             $btnSubmit.removeAttr("disabled");
             $form.find(".field-validation-valid").empty();
             if (res.isSuccessed == true) {
-                getListPaymentLog(hdId);
-                toastr.info(res.resultObj);
+                toastr.info(res.message);
+                loadInfoWhenChangePayment(res.resultObj, hdId);
             } else if (res.validationErrors != null && res.validationErrors.length) {
                 $.each(res.validationErrors, function (i, v) {
                     $form.find("span[data-valmsg-for='" + v.pos + "']").html(v.error);

@@ -43,13 +43,14 @@ namespace BaseSource.BackendApi.Services.Serivce
             double tongLaiTheoKy = 0;
             var lstKyDongLai = new List<HopDong_PaymentLog>();
             var nextDate = new DateTime();
+            var firstTime = hd.NgayDongLaiGanNhat != null ? hd.NgayDongLaiGanNhat.Value.AddDays(1) : hd.HD_NgayVay;
 
             for (int i = 1; i <= tongKyDong; i++)
             {
                 double moneyInterest = 0;
                 var item = new HopDong_PaymentLog();
                 item.HopDongId = hd.Id;
-                item.FromDate = i == 1 ? hd.HD_NgayVay : nextDate;
+                item.FromDate = i == 1 ? firstTime : nextDate;
                 switch (hd.HD_HinhThucLai)
                 {
                     case EHinhThucLai.LaiNgayKTrieu:
@@ -57,6 +58,7 @@ namespace BaseSource.BackendApi.Services.Serivce
                         {
                             item.ToDate = hd.HD_NgayDaoHan;
                             moneyInterest = hd.TongTienLai - (hd.TongTienLaiDaThanhToan + tongLaiTheoKy);
+                            item.CountDay = (hd.HD_NgayDaoHan - item.FromDate).Days + 1;
                         }
                         else
                         {
@@ -64,9 +66,10 @@ namespace BaseSource.BackendApi.Services.Serivce
                             var moneyInterestOneDay = (hd.HD_LaiSuat * 1000 * hd.HD_TongTienVayBanDau) / 1000000;
                             var totalDay = (item.ToDate - item.FromDate).Days + 1;
                             moneyInterest = moneyInterestOneDay * totalDay;
+                            item.CountDay = (item.ToDate - item.FromDate).Days + 1;
 
                         }
-                        item.CountDay = (item.ToDate - item.FromDate).Days + 1;
+
 
                         break;
                     case EHinhThucLai.LaiNgayKNgay:
@@ -74,22 +77,24 @@ namespace BaseSource.BackendApi.Services.Serivce
                         {
                             item.ToDate = hd.HD_NgayDaoHan;
                             moneyInterest = hd.TongTienLai - (hd.TongTienLaiDaThanhToan + tongLaiTheoKy);
+                            item.CountDay = (hd.HD_NgayDaoHan - item.FromDate).Days + 1;
                         }
                         else
                         {
                             item.ToDate = item.FromDate.AddDays(hd.HD_KyLai - 1);
                             moneyInterest = hd.HD_LaiSuat * 1000 * hd.HD_KyLai;
+                            item.CountDay = hd.HD_KyLai;
 
                         }
-                        item.CountDay = hd.HD_KyLai;
+
 
                         break;
                     case EHinhThucLai.LaiThangPhanTram:
                         if (i == tongKyDong)
                         {
                             item.ToDate = hd.HD_NgayDaoHan;
-                            item.CountDay = (item.ToDate - item.FromDate).Days + 1;
                             moneyInterest = hd.TongTienLai - (hd.TongTienLaiDaThanhToan + tongLaiTheoKy);
+                            item.CountDay = (hd.HD_NgayDaoHan - item.FromDate).Days + 1;
 
                         }
                         else
@@ -106,7 +111,7 @@ namespace BaseSource.BackendApi.Services.Serivce
                         if (i == tongKyDong)
                         {
                             item.ToDate = hd.HD_NgayDaoHan;
-                            item.CountDay = (item.ToDate - item.FromDate).Days + 1;
+                            item.CountDay = (hd.HD_NgayDaoHan - item.FromDate).Days + 1;
                             moneyInterest = hd.TongTienLai - (hd.TongTienLaiDaThanhToan + tongLaiTheoKy);
                         }
                         else
@@ -154,117 +159,6 @@ namespace BaseSource.BackendApi.Services.Serivce
             }
             _db.HopDong_PaymentLogs.AddRange(lstKyDongLai);
             await _db.SaveChangesAsync();
-            //using var _db = _serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<BaseSourceDbContext>();
-            //var hd = await _db.HopDongs.FindAsync(hopdongId);
-            //var tongKyDong = Math.Ceiling(hd.HD_TongThoiGianVay * 1.0 / hd.HD_KyLai * 1.0);
-
-            //var tongSoNgayVay = (hd.HD_NgayDaoHan - hd.HD_NgayVay).TotalDays + 1;
-            //double tongLaiTheoKy = 0;
-
-            //var lstKyDongLai = new List<HopDong_PaymentLog>();
-            //var nextDate = new DateTime();
-
-            //for (int i = 1; i <= tongKyDong; i++)
-            //{
-            //    double moneyInterest = 0;
-            //    var item = new HopDong_PaymentLog();
-            //    item.HopDongId = hd.Id;
-            //    item.FromDate = i == 1 ? hd.HD_NgayVay : nextDate;
-            //    switch (hd.HD_HinhThucLai)
-            //    {
-            //        case EHinhThucLai.LaiNgayKTrieu:
-            //            if (i == tongKyDong)
-            //            {
-            //                item.ToDate = hd.HD_NgayDaoHan;
-            //            }
-            //            else
-            //            {
-            //                item.ToDate = item.FromDate.AddDays(hd.HD_KyLai - 1);
-
-            //            }
-            //            item.CountDay = (item.ToDate - item.FromDate).Days + 1;
-            //            var moneyInterestOneDay = (hd.HD_LaiSuat * 1000 * hd.HD_TongTienVayBanDau) / 1000000;
-            //            var totalDay = (item.ToDate - item.FromDate).Days + 1;
-            //            moneyInterest = moneyInterestOneDay * totalDay;
-            //            break;
-            //        case EHinhThucLai.LaiNgayKNgay:
-            //            if (i == tongKyDong)
-            //            {
-            //                item.ToDate = hd.HD_NgayDaoHan;
-            //            }
-            //            else
-            //            {
-            //                item.ToDate = item.FromDate.AddDays(hd.HD_KyLai - 1);
-
-            //            }
-            //            item.CountDay = hd.HD_KyLai;
-            //            moneyInterest = hd.HD_LaiSuat * 1000 * hd.HD_KyLai;
-            //            break;
-            //        case EHinhThucLai.LaiThangPhanTram:
-            //            if (i == tongKyDong)
-            //            {
-            //                item.ToDate = hd.HD_NgayDaoHan;
-            //                item.CountDay = (item.ToDate - item.FromDate).Days + 1;
-
-            //            }
-            //            else
-            //            {
-            //                item.ToDate = item.FromDate.AddDays(hd.HD_KyLai * 30).AddDays(-1);
-            //                item.CountDay = (item.ToDate - item.FromDate).Days + 1;
-            //            }
-            //            var moneyInterestOneMonth = (hd.HD_LaiSuat * hd.HD_TongTienVayBanDau) / 100;
-            //            int months = (item.ToDate.Year - item.FromDate.Year) * 12 + item.ToDate.Month - item.FromDate.Month;
-            //            moneyInterest = months * moneyInterestOneMonth;
-            //            break;
-            //        case EHinhThucLai.LaiThangDinhKi:
-            //            if (i == tongKyDong)
-            //            {
-            //                item.ToDate = hd.HD_NgayDaoHan;
-            //                item.CountDay = (item.ToDate - item.FromDate).Days + 1;
-            //            }
-            //            else
-            //            {
-            //                item.ToDate = item.FromDate.AddMonths(hd.HD_KyLai);
-            //                item.CountDay = (item.ToDate - item.FromDate).Days + 1;
-            //            }
-            //            var moneyInterestOneMonthDinhKy = (hd.HD_LaiSuat * hd.HD_TongTienVayBanDau) / 100;
-            //            int totalMonth = (item.ToDate.Year - item.FromDate.Year) * 12 + item.ToDate.Month - item.FromDate.Month;
-            //            moneyInterest = totalMonth * moneyInterestOneMonthDinhKy;
-            //            break;
-            //        case EHinhThucLai.LaiTuanPhanTram:
-            //        case EHinhThucLai.LaiTuanVND:
-            //            if (i == tongKyDong)
-            //            {
-            //                item.ToDate = hd.HD_NgayDaoHan;
-            //                item.CountDay = (hd.HD_NgayDaoHan - item.FromDate).Days + 1;
-            //            }
-            //            else
-            //            {
-            //                item.ToDate = item.FromDate.AddDays(7 * hd.HD_KyLai).AddDays(-1);
-            //                item.CountDay = 7 * hd.HD_KyLai;
-            //            }
-            //            var moneyInterestOneWeek = (hd.HD_LaiSuat * hd.HD_TongTienVayBanDau) / 100;
-            //            double weeks = Math.Ceiling((item.ToDate - item.FromDate).TotalDays / 7);
-            //            moneyInterest = weeks * moneyInterestOneWeek;
-
-            //            break;
-            //        default:
-            //            break;
-            //    }
-
-            //    item.MoneyInterest = moneyInterest;
-            //    item.MoneyOther = 0;
-            //    item.MoneyPay = moneyInterest;
-            //    item.MoneyPayNeed = moneyInterest;
-            //    item.CreatedDate = DateTime.Now;
-
-            //    lstKyDongLai.Add(item);
-            //    nextDate = hd.HD_HinhThucLai == EHinhThucLai.LaiThangDinhKi ? item.ToDate : item.ToDate.AddDays(1);
-            //    tongLaiTheoKy += moneyInterest;
-            //}
-            //_db.HopDong_PaymentLogs.AddRange(lstKyDongLai);
-            //hd.TongTienLai = lstKyDongLai.Sum(x => x.MoneyInterest);
-            //await _db.SaveChangesAsync();
         }
         /// <summary>
         /// Tính tổng tiền lãi của hợp đồng
@@ -313,7 +207,7 @@ namespace BaseSource.BackendApi.Services.Serivce
             {
                 case EHinhThucLai.LaiNgayKTrieu:
                 case EHinhThucLai.LaiNgayKNgay:
-                    var totalDay = (hd.HD_NgayDaoHan - ngayTinhKyLai).TotalDays + 1;
+                    var totalDay = (hd.HD_NgayDaoHan - ngayTinhKyLai).TotalDays;
                     tongKyLai = Math.Ceiling(totalDay / hd.HD_KyLai * 1.0);
                     break;
                 case EHinhThucLai.LaiThangPhanTram:

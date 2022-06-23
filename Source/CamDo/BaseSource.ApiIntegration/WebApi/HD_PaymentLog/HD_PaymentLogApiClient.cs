@@ -27,12 +27,12 @@ namespace BaseSource.ApiIntegration.WebApi.HD_PaymentLog
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.GetAsync<ApiResult<HD_PaymentLogVm>>("/api/HD_PaymentLog/GetPaymentLogByHD", obj);
         }
-        public async Task<ApiResult<CreateHD_PaymentLogReponse>> Create(CreateHDPaymentLogVm model)
+        public async Task<ApiResult<HD_PaymentLogReponse>> Create(CreateHDPaymentLogVm model)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
-            return await client.PostAsync<ApiResult<CreateHD_PaymentLogReponse>>("/api/HD_PaymentLog/Create", model);
+            return await client.PostAsync<ApiResult<HD_PaymentLogReponse>>("/api/HD_PaymentLog/Create", model);
         }
-        public async Task<ApiResult<string>> Delete(long id)
+        public async Task<ApiResult<HD_PaymentLogReponse>> Delete(long id)
         {
             var dic = new Dictionary<string, string>()
             {
@@ -40,7 +40,7 @@ namespace BaseSource.ApiIntegration.WebApi.HD_PaymentLog
             };
 
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
-            return await client.PostAsyncFormUrl<ApiResult<string>>("/api/HD_PaymentLog/Delete", dic);
+            return await client.PostAsyncFormUrl<ApiResult<HD_PaymentLogReponse>>("/api/HD_PaymentLog/Delete", dic);
         }
 
         public async Task<ApiResult<ChangePaymentDateResponseVm>> ChangePaymentDate(ChangePaymentDateRequestVm model)
@@ -49,10 +49,10 @@ namespace BaseSource.ApiIntegration.WebApi.HD_PaymentLog
             return await client.PostAsync<ApiResult<ChangePaymentDateResponseVm>>("/api/HD_PaymentLog/ChangePaymentDate", model);
         }
 
-        public async Task<ApiResult<string>> CreatePaymentByDate(HDPaymentByDateVm model)
+        public async Task<ApiResult<HD_PaymentLogReponse>> CreatePaymentByDate(HDPaymentByDateVm model)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
-            return await client.PostAsync<ApiResult<string>>("/api/HD_PaymentLog/CreatePaymentByDate", model);
+            return await client.PostAsync<ApiResult<HD_PaymentLogReponse>>("/api/HD_PaymentLog/CreatePaymentByDate", model);
         }
 
         public async Task<ApiResult<HDPaymentByDateVm>> GetPaymentByDate(int hdId)

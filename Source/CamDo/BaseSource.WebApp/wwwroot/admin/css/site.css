@@ -188,3 +188,7 @@ select.form-control {
         color: #f4516c;
         font-weight: bold;
     }
+
+.lbl-right {
+    text-align: right;
+}

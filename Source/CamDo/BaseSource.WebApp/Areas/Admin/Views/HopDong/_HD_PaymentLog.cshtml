@@ -2,15 +2,7 @@
 @{
     int idx = 1;
 }
-<a style="cursor:pointer" data-toggle="collapse" href="#collapseDongLai" aria-expanded="true" aria-controls="collapseTaiSan">
-    >> Chức năng đóng lãi tùy biến theo ngày
-</a>
-<div class="collapse" id="collapseDongLai">
-    <div id="dvInfoDongLaiTheoNgay" class="asyncPartial" data-url="@Url.Action("GetInfoPaymentByDate",new { hdId=Model.HdId})">
 
-
-    </div>
-</div>
 <div class="info-hd-header">
     <i class="fa fa-list"></i> Lịch sử đóng tiền lãi
 </div>
@@ -105,13 +97,6 @@
         });
         setMoneyTextBox(".money-textbox");
 
-        $(".asyncPartial").each(function (i, item) {
-            var url = $(item).data("url");
-            if (url && url.length > 0) {
-                $(item).load(url, function () {
-                    feather.replace();
-                });
-            }
-        });
+       
     })
 </script>

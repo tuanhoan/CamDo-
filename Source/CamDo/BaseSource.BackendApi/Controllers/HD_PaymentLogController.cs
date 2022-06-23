@@ -77,12 +77,12 @@ namespace BaseSource.BackendApi.Controllers
             hd.NgayDongLaiGanNhat = payment.ToDate;
             hd.NgayDongLaiTiepTheo = payNext?.FromDate;
             await _db.SaveChangesAsync();
-            var response = new CreateHD_PaymentLogReponse()
+            var response = new HD_PaymentLogReponse()
             {
-                NgayDongLaiGanNhat = hd.NgayDongLaiGanNhat,
+                NgayDongLaiGanNhat = hd.NgayDongLaiGanNhat?.ToString("dd/MM/yyyy"),
                 TongTienLaiDaDong = hd.TongTienLaiDaThanhToan
             };
-            return Ok(new ApiSuccessResult<CreateHD_PaymentLogReponse>(response, "Đóng lãi nhanh thành công"));
+            return Ok(new ApiSuccessResult<HD_PaymentLogReponse>(response, "Đóng lãi nhanh thành công"));
         }
         [HttpPost("Delete")]
         public async Task<IActionResult> Delete([FromForm] long id)
@@ -111,9 +111,14 @@ namespace BaseSource.BackendApi.Controllers
                 }
                 await _db.SaveChangesAsync();
                 var rs = Task.Run(() => TaoKyDongLai(hd.Id));
-                return Ok(new ApiSuccessResult<string>("Hủy đóng lãi thành công"));
+                var response = new HD_PaymentLogReponse()
+                {
+                    NgayDongLaiGanNhat = hd.NgayDongLaiGanNhat?.ToString("dd/MM/yyyy"),
+                    TongTienLaiDaDong = hd.TongTienLaiDaThanhToan
+                };
+                return Ok(new ApiSuccessResult<HD_PaymentLogReponse>(response, "Hủy đóng lãi thành công"));
             }
-            return Ok(new ApiErrorResult<string>("Not Found!"));
+            return Ok(new ApiErrorResult<HD_PaymentLogReponse>("Not Found!"));
         }
         [HttpPost("ChangePaymentDate")]
         public async Task<IActionResult> ChangePaymentDate(ChangePaymentDateRequestVm model)
@@ -142,12 +147,17 @@ namespace BaseSource.BackendApi.Controllers
             var hd = await _db.HopDongs.FindAsync(model.HdId);
             var lstPaymentOld = await _db.HopDong_PaymentLogs.Where(x => x.HopDongId == model.HdId).ToListAsync();
 
-            var lstNoPay = lstPaymentOld.Where(x => x.PaidDate == null).ToList();
-            var lstIsPay = lstPaymentOld.Where(x => x.PaidDate != null).ToList();
-
-            var laiTheoKy = lstNoPay.FirstOrDefault().MoneyInterest;
-            _db.HopDong_PaymentLogs.RemoveRange(lstNoPay);
+            if (hd.NgayDongLaiGanNhat == null)
+            {
+                _db.HopDong_PaymentLogs.RemoveRange(lstPaymentOld);
+            }
+            else
+            {
+                var lstNoPay = lstPaymentOld.Where(x => x.PaidDate == null).ToList();
+                _db.HopDong_PaymentLogs.RemoveRange(lstNoPay);
+            }
             await _db.SaveChangesAsync();
+
             var lstPayment = new List<HopDong_PaymentLog>();
 
             var payment = new HopDong_PaymentLog();
@@ -163,108 +173,63 @@ namespace BaseSource.BackendApi.Controllers
             payment.MoneyPayNeed = model.MoneyPay + model.MoneyOther;
             payment.CreatedDate = DateTime.Now;
 
-            lstPayment.Add(payment);
-
-            var totalDay = (hd.HD_NgayDaoHan - hd.HD_NgayVay).Days - model.CountDay;
-            if (lstIsPay.Count > 0)
-            {
-                totalDay = totalDay - lstIsPay.Sum(x => x.CountDay);
-            }
-            var tongkyDongLai = Math.Ceiling(totalDay * 1.0 / 30 * 1.0);
-
-            var lastDatePayment = payment.ToDate;
-
-            for (int i = 1; i <= tongkyDongLai; i++)
-            {
-                double tienLai = 0;
-                var item = new HopDong_PaymentLog();
-                item.HopDongId = model.HdId;
-                item.FromDate = lastDatePayment.AddDays(1);
-
-                switch (hd.HD_HinhThucLai)
-                {
-                    case EHinhThucLai.LaiNgayKTrieu:
-                    case EHinhThucLai.LaiNgayKNgay:
-                        item.ToDate = item.FromDate.AddDays(hd.HD_KyLai - 1);
-                        item.CountDay = hd.HD_KyLai;
-                        break;
-                    case EHinhThucLai.LaiThangPhanTram:
-                        if (i == tongkyDongLai)
-                        {
-                            item.ToDate = hd.HD_NgayDaoHan;
-                            item.CountDay = (item.ToDate - item.FromDate).Days - 1;
-                            tienLai = Math.Round(hd.TongTienLai - (hd.TongTienLaiDaThanhToan + lstPayment.Sum(x => x.MoneyInterest)), 3);
-                        }
-                        else
-                        {
-                            item.ToDate = item.FromDate.AddDays(29);
-                            item.CountDay = 30;
-                            tienLai = laiTheoKy;
-                        }
-                        break;
-                    case EHinhThucLai.LaiThangDinhKi:
-                        item.ToDate = item.FromDate.AddMonths(hd.HD_KyLai);
-                        item.CountDay = (item.ToDate - item.FromDate).Days;
-                        break;
-                    case EHinhThucLai.LaiTuanPhanTram:
-                    case EHinhThucLai.LaiTuanVND:
-                        item.ToDate = item.FromDate.AddDays(6);
-                        item.CountDay = 7;
-                        break;
-                    default:
-                        break;
-                }
-
-                item.MoneyInterest = tienLai;
-                item.MoneyOther = 0;
-                item.MoneyPay = tienLai;
-                item.MoneyPayNeed = tienLai;
-                item.CreatedDate = DateTime.Now;
-                lstPayment.Add(item);
-                lastDatePayment = item.ToDate;
-
-            }
-            hd.TongTienLaiDaThanhToan += model.CustomerPay;
-            _db.HopDong_PaymentLogs.AddRange(lstPayment);
+            _db.HopDong_PaymentLogs.Add(payment);
+            hd.TongTienLaiDaThanhToan += payment.MoneyPayNeed;
+            hd.NgayDongLaiGanNhat = model.ToDate;
             await _db.SaveChangesAsync();
-            return Ok(new ApiSuccessResult<string>("Đóng lãi thành công"));
+
+            var rs = Task.Run(() => TaoKyDongLai(hd.Id));
+            var response = new HD_PaymentLogReponse()
+            {
+                NgayDongLaiGanNhat = hd.NgayDongLaiGanNhat?.ToString("dd/MM/yyyy"),
+                TongTienLaiDaDong = hd.TongTienLaiDaThanhToan
+            };
+            return Ok(new ApiSuccessResult<HD_PaymentLogReponse>(response, "Đóng lãi thành công"));
 
         }
         [HttpGet("GetPaymentByDate")]
         public async Task<IActionResult> GetPaymentByDate(int hdId)
         {
             var paymentByDate = new HDPaymentByDateVm();
-            var firstPayment = await _db.HopDong_PaymentLogs.OrderBy(x => x.Id).FirstOrDefaultAsync(x => x.PaidDate == null);
-            if (firstPayment != null)
+            var lstPayment = await _db.HopDong_PaymentLogs.Where(x => x.HopDongId == hdId).ToListAsync();
+            var lstNoPayment = lstPayment.Where(x => x.PaidDate == null).OrderBy(x => x.Id).ToList();
+            var itemPayment = new HopDong_PaymentLog();
+            if (lstNoPayment.Count > 0)
             {
-                var moneyInterest = Math.Round(firstPayment.MoneyInterest / firstPayment.CountDay, 3);
-
-                paymentByDate.FromDate = firstPayment.FromDate;
-                paymentByDate.ToDate = firstPayment.FromDate;
-                paymentByDate.CountDay = 1;
-                paymentByDate.HdId = hdId;
-                paymentByDate.MoneyInterest = moneyInterest;
-                paymentByDate.MoneyPay = moneyInterest;
-                paymentByDate.MoneyOther = 0;
-                paymentByDate.MoneyPayNeed = moneyInterest;
-                paymentByDate.NgayDongLaiTiepTheo = firstPayment.ToDate;
-                paymentByDate.CustomerPay = moneyInterest;
-
+                itemPayment = lstNoPayment.FirstOrDefault();
+                if (itemPayment.ToDate > DateTime.Now)
+                {
+                    paymentByDate.FromDate = itemPayment.FromDate;
+                    paymentByDate.ToDate = itemPayment.FromDate;
+                  
+                }
+                else
+                {
+                    paymentByDate.FromDate = itemPayment.FromDate;
+                    paymentByDate.ToDate = DateTime.Now;
+                }
             }
             else
             {
-                double moneyInterest = firstPayment.MoneyInterest / firstPayment.CountDay;
-                paymentByDate.FromDate = firstPayment.FromDate;
-                paymentByDate.ToDate = firstPayment.FromDate;
-                paymentByDate.CountDay = 1;
-                paymentByDate.HdId = hdId;
-                paymentByDate.MoneyInterest = moneyInterest;
-                paymentByDate.MoneyPay = moneyInterest;
-                paymentByDate.MoneyOther = 0;
-                paymentByDate.MoneyPayNeed = moneyInterest;
-                paymentByDate.NgayDongLaiTiepTheo = firstPayment.ToDate;
-                paymentByDate.CustomerPay = moneyInterest;
+                itemPayment = lstPayment.Where(x => x.PaidDate != null).OrderByDescending(x => x.PaidDate).FirstOrDefault();
+
+                paymentByDate.FromDate = itemPayment.ToDate;
+                paymentByDate.ToDate = itemPayment.ToDate;
             }
+
+
+            paymentByDate.CountDay = (paymentByDate.ToDate - paymentByDate.FromDate).Days + 1;
+
+            var moneyInterest = Math.Round(itemPayment.MoneyInterest / itemPayment.CountDay, 3) * paymentByDate.CountDay;
+
+            paymentByDate.HdId = hdId;
+            paymentByDate.MoneyInterest = moneyInterest;
+            paymentByDate.MoneyPay = moneyInterest;
+            paymentByDate.MoneyOther = 0;
+            paymentByDate.MoneyPayNeed = moneyInterest;
+            paymentByDate.NgayDongLaiTiepTheo = itemPayment.ToDate;
+            paymentByDate.CustomerPay = moneyInterest;
+
             return Ok(new ApiSuccessResult<HDPaymentByDateVm>(paymentByDate));
         }
 

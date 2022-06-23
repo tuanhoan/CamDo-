@@ -188,7 +188,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             {
                 return Json(new ApiErrorResult<string>(result.ValidationErrors));
             }
-            return Json(new ApiSuccessResult<CreateHD_PaymentLogReponse>(result.ResultObj));
+            return Json(new ApiSuccessResult<HD_PaymentLogReponse>(result.ResultObj, result.Message));
         }
         public async Task<IActionResult> DeletePayment(long paymentId)
         {
@@ -197,7 +197,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             {
                 return Json(new ApiErrorResult<string>(result.Message));
             }
-            return Json(new ApiSuccessResult<string>(result.ResultObj));
+            return Json(new ApiSuccessResult<HD_PaymentLogReponse>(result.ResultObj, result.Message));
         }
         public async Task<IActionResult> ChangePaymentDate(int hdId, string dateChange)
         {
@@ -220,7 +220,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             {
                 return Json(new ApiErrorResult<string>(result.Message));
             }
-            return Json(new ApiSuccessResult<string>(result.ResultObj));
+            return Json(new ApiSuccessResult<HD_PaymentLogReponse>(result.ResultObj, result.Message));
         }
         #endregion
 
