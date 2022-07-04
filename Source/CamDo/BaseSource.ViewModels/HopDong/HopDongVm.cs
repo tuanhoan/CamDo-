@@ -54,6 +54,8 @@ namespace BaseSource.ViewModels.HopDong
         public string CMND_NoiCap { get; set; }
         public string DiaChi { get; set; }
         public string SDT { get; set; }
+        //nợ khách hàng
+        public bool IsDebit { get; set; }
 
     }
     public class CreateHopDongVm : IValidatableObject

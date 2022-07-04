@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BaseSource.BackendApi.Services.Serivce
+namespace BaseSource.BackendApi.Services.Serivce.HopDong
 {
     public interface IHopDongService
     {

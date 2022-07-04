@@ -192,3 +192,32 @@ select.form-control {
 .lbl-right {
     text-align: right;
 }
+
+.note-payment-item {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.list-note-payment {
+    margin-left: 3rem;
+}
+
+.note-time {
+    width: 5rem;
+    text-align: center;
+}
+
+    .note-time::after {
+        background: #36a3f7;
+        width: 0.28rem;
+        border-radius: 0.3rem;
+        height: 70%;
+        left: 5.5rem;
+        top: 0.36rem;
+        content: "";
+        position: absolute;
+    }
+
+.ky-tranlog {
+    font-size: 13px;
+}

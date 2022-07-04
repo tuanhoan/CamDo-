@@ -5,12 +5,14 @@
     {
         foreach (var item in Model)
         {
-            <div class="note-payment-item">
+            <div class="note-payment-item d-flex">
                 <div class="note-time mr-5">
                     @item.CreatedDate.ToString("dd/MM/yyyy HH:mm")
                 </div>
-                <div class="row note-content">
-                    <span>@item.Note</span>
+                <div class="note-paymentlog-content">
+                    <div>
+                        Nội dung: @item.Note
+                    </div>
                     <span>Bởi: @item.UserCreate</span>
                 </div>
             </div>

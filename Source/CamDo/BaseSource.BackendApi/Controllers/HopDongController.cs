@@ -1,18 +1,14 @@
 ﻿using AutoMapper;
-using BaseSource.BackendApi.Services.Helper;
-using BaseSource.BackendApi.Services.Serivce;
+using BaseSource.BackendApi.Services.Serivce.HopDong;
 using BaseSource.Data.EF;
 using BaseSource.Data.Entities;
 using BaseSource.Shared.Enums;
 using BaseSource.ViewModels.Common;
-using BaseSource.ViewModels.HD_PaymentLog;
 using BaseSource.ViewModels.HopDong;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -101,6 +97,7 @@ namespace BaseSource.BackendApi.Controllers
             int khachHangId = await AddOrUpDateCustomer(kh);
 
             var hd = _mapper.Map<HopDong>(model);
+            hd.TongTienVayHienTai = hd.HD_TongTienVayBanDau;
             hd.KhachHangId = khachHangId;
             hd.CuaHangId = CuaHangId;
             hd.UserIdCreated = UserId;
@@ -134,6 +131,8 @@ namespace BaseSource.BackendApi.Controllers
             result.CMND_NgayCap = kh.CMND_NgayCap;
             result.CMND_NoiCap = kh.CMND_NoiCap;
             result.TyLeLai = hd.HD_LaiSuat + htl.TyLeLai;
+
+            
             return Ok(new ApiSuccessResult<HopDongVm>(result));
         }
         [HttpPost("Edit")]

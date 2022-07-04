@@ -1,6 +1,8 @@
 ﻿@model HopDongVm
 @{
     Layout = null;
+    string lblDisplayDebitOrOverMoney = "";
+    string lblDisplayLoanDebit = "";
 }
 <style>
     fieldset {
@@ -75,15 +77,27 @@
                     </td>
                 </tr>
                 <tr>
+                    @if (Model.TongTienGhiNo <= 0)
+                    {
+                        lblDisplayDebitOrOverMoney = "Nợ cũ KH";
+                        lblDisplayLoanDebit = "Nợ cũ HĐ";
+                    }
+                    else
+                    {
+                        lblDisplayDebitOrOverMoney = "Tiền thừa KH";
+                        lblDisplayLoanDebit = "Tiền thừa HĐ";
+                    }
                     <td>
-                        <span class="font-weight-bold" id="lblDisplayDebitOrOverMoney">Nợ cũ KH: </span>
-                        <span class="text-danger font-weight-bold" id="lblCustomerDebitMoney">
-                            <span class="text-danger font-weight-bold">@Model.TienNo.ToString("N0") VNĐ</span>
+                        <span class="font-weight-bold" id="lblDisplayDebitOrOverMoney">@lblDisplayDebitOrOverMoney: </span>
+                        <span class="@(Model.TongTienGhiNo <= 0?"text-danger":"text-success") font-weight-bold" id="lblCustomerDebitMoney">
+                            @((Model.TongTienGhiNo*-1).ToString("N0")) VNĐ
                         </span>
                     </td>
                     <td align="right">
-                        <span class="font-weight-bold" id="lblDisplayLoanDebit">Nợ cũ HĐ: </span>
-                        <span class="text-danger font-weight-bold" id="lblLoanDebitMoney"><span class="text-danger font-weight-bold">0 VNĐ</span></span>
+                        <span class="font-weight-bold" id="lblDisplayLoanDebit">@lblDisplayLoanDebit: </span>
+                        <span class="@(Model.TongTienGhiNo <= 0?"text-danger":"text-success") font-weight-bold" id="lblLoanDebitMoney">
+                            @((Model.TongTienGhiNo*-1).ToString("N0")) VNĐ
+                        </span>
                     </td>
                 </tr>
                 <tr>
@@ -96,7 +110,7 @@
 </div>
 
 <div class="row d-flex justify-content-between">
-    <div class="tabs active" id="tab01">
+    <div class="tabs active" data-type="tab-dongtienlai" id="tab01">
         <h6><i class="fas fa-money-bill"></i> Đóng tiền lãi</h6>
     </div>
     <div class="tabs" id="tab02">
@@ -117,8 +131,8 @@
     <div class="tabs" id="tab04">
         <h6>Chứng từ</h6>
     </div>
-    <div class="tabs" id="tab04">
-        <h6>Lịch sử</h6>
+    <div class="tabs" id="tab04" data-type="tab-history">
+        <h6 class="font-weight-bold"><i class="fas fa-clipboard-list"></i> Lịch sử</h6>
     </div>
     <div class="tabs" id="tab04">
         <h6>Lịch sử trả chậm</h6>
@@ -144,7 +158,23 @@
         Vay thêm
     </fieldset>
     <fieldset id="tab041">
-        Gia hạn
+        <div>
+            <div class="form-group row">
+                <div class="col-md-6">
+                    <form>
+                        <input type="hidden" name="HopDongid" value="@Model.Id" />
+                        <textarea class="form-control" name="Note" rows="5"></textarea>
+                    </form>
+                </div>
+            </div>
+            <div id="divContent-CommentDebt">
+
+            </div>
+        </div>
+
+        <div id="divContent-CuaHang_TransactionLog">
+
+        </div>
     </fieldset>
 
 </div>
@@ -153,14 +183,13 @@
     $(document).ready(function () {
         getListPaymentLog(@Model.Id);
         getInfoPaymentByDate(@Model.Id);
-
     })
 
+
     $(".tabs").click(function () {
-
+        var tabType = $(this).data("type");
+        loadDataTab(tabType);
         $(".tabs").removeClass("active");
-
-
         $(this).children("h6").addClass("font-weight-bold");
         $(this).addClass("active");
 
@@ -183,6 +212,21 @@
                 });
             }
         });
+
+
     });
+    function loadDataTab(type) {
+        switch (type) {
+            case "tab-history":
+                getCuahang_TransactionLog(@Model.Id);
+                break;
+            case "tab-dongtienlai":
+               getListPaymentLog(@Model.Id);
+                getInfoPaymentByDate(@Model.Id);
+                break;
+            default:
+            // code block
+        }
+    }
 
 </script>

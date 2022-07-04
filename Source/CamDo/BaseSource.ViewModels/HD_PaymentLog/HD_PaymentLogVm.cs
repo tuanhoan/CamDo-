@@ -82,5 +82,6 @@ namespace BaseSource.ViewModels.HD_PaymentLog
     {
         public string NgayDongLaiGanNhat { get; set; }
         public double TongTienLaiDaDong { get; set; }
+        public double TongTienGhiNo { get; set; }
     }
 }

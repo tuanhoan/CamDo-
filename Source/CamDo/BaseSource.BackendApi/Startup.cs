@@ -23,6 +23,8 @@ using BaseSource.BackendApi.Services.Email;
 using BaseSource.BackendApi.Services.AutoMapper;
 using AutoMapper;
 using BaseSource.BackendApi.Services.Serivce;
+using BaseSource.BackendApi.Services.Serivce.HopDong;
+using BaseSource.BackendApi.Services.Serivce.CuaHang_TransactionLog;
 
 namespace BaseSource.BackendApi
 {
@@ -54,6 +56,7 @@ namespace BaseSource.BackendApi
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddTransient<IHopDongService, HopDongService>();
+            services.AddTransient<ICuaHang_TransactionLogService, CuaHang_TransactionLogService>();
 
             services.AddControllers();
 

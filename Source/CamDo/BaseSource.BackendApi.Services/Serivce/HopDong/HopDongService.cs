@@ -10,7 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BaseSource.BackendApi.Services.Serivce
+namespace BaseSource.BackendApi.Services.Serivce.HopDong
 {
     public class HopDongService : IHopDongService
     {
@@ -198,7 +198,7 @@ namespace BaseSource.BackendApi.Services.Serivce
         /// <param name="startDate"></param>
         /// <param name="endDate"></param>
         /// <returns></returns>
-        public Task<double> TinhTongKyDong(HopDong hd, int totalTimePayment)
+        public Task<double> TinhTongKyDong(Data.Entities.HopDong hd, int totalTimePayment)
         {
             var ngayTinhKyLai = hd.NgayDongLaiGanNhat != null ? hd.NgayDongLaiGanNhat.Value : hd.HD_NgayVay;
 

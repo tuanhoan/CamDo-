@@ -27,6 +27,7 @@ using AutoMapper;
 using BaseSource.ApiIntegration.WebApi.KhachHang;
 using BaseSource.ApiIntegration.WebApi.HD_PaymentLog;
 using BaseSource.ApiIntegration.WebApi.HD_PaymentLogNote;
+using BaseSource.ApiIntegration.WebApi.CuaHang_TransactionLog;
 
 namespace BaseSource.WebApp
 {
@@ -103,6 +104,7 @@ namespace BaseSource.WebApp
             services.AddTransient<IKhachHangApiClient, KhachHangApiClient>();
             services.AddTransient<IHD_PaymentLogApiClient, HD_PaymentLogApiClient>();
             services.AddTransient<IHD_PaymentLogNote, HD_PaymentLogNote>();
+            services.AddTransient<ICuaHang_TransactionLogApiClient, CuaHang_TransactionLogApiClient>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }

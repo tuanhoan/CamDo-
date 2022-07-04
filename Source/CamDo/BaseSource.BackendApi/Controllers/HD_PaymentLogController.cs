@@ -1,12 +1,10 @@
-﻿using BaseSource.BackendApi.Services.Helper;
-using BaseSource.BackendApi.Services.Serivce;
+﻿using BaseSource.BackendApi.Services.Serivce.CuaHang_TransactionLog;
+using BaseSource.BackendApi.Services.Serivce.HopDong;
 using BaseSource.Data.EF;
 using BaseSource.Data.Entities;
 using BaseSource.Shared.Enums;
 using BaseSource.ViewModels.Common;
 using BaseSource.ViewModels.HD_PaymentLog;
-using BaseSource.ViewModels.HopDong;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -20,10 +18,13 @@ namespace BaseSource.BackendApi.Controllers
     {
         private readonly BaseSourceDbContext _db;
         private readonly IHopDongService _hopDongService;
-        public HD_PaymentLogController(BaseSourceDbContext db, IHopDongService hopDongService)
+        private readonly ICuaHang_TransactionLogService _cuaHang_TransactionLogService;
+        public HD_PaymentLogController(BaseSourceDbContext db, IHopDongService hopDongService,
+            ICuaHang_TransactionLogService cuaHang_TransactionLogService)
         {
             _db = db;
             _hopDongService = hopDongService;
+            _cuaHang_TransactionLogService = cuaHang_TransactionLogService;
         }
         [HttpGet("GetPaymentLogByHD")]
         public async Task<IActionResult> GetPaymentLogByHD(int hdId)
@@ -49,9 +50,6 @@ namespace BaseSource.BackendApi.Controllers
             }
             result.ListPaymentLog = lsPaymentResult;
             result.HdId = hdId;
-
-
-
             return Ok(new ApiSuccessResult<HD_PaymentLogVm>(result));
         }
         [HttpPost("Create")]
@@ -72,16 +70,25 @@ namespace BaseSource.BackendApi.Controllers
                 return Ok(new ApiErrorResult<string>("Not found"));
             }
             var payNext = await _db.HopDong_PaymentLogs.Where(x => x.HopDongId == model.HDId && x.Id != payment.Id).OrderBy(x => x.Id).FirstOrDefaultAsync();
+
             payment.PaidDate = DateTime.Now;
+            payment.MoneyPay = model.CustomerPay;
+
             hd.TongTienLaiDaThanhToan += model.CustomerPay;
             hd.NgayDongLaiGanNhat = payment.ToDate;
             hd.NgayDongLaiTiepTheo = payNext?.FromDate;
+            hd.TongTienGhiNo += model.CustomerPay - payment.MoneyInterest;
+
             await _db.SaveChangesAsync();
             var response = new HD_PaymentLogReponse()
             {
                 NgayDongLaiGanNhat = hd.NgayDongLaiGanNhat?.ToString("dd/MM/yyyy"),
-                TongTienLaiDaDong = hd.TongTienLaiDaThanhToan
+                TongTienLaiDaDong = hd.TongTienLaiDaThanhToan,
+                TongTienGhiNo = hd.TongTienGhiNo
+
             };
+            var rs = Task.Run(() => CreateCuaHang_TransactionLog(payment.Id, EHopDong_ActionType.DongTienLai, EFeatureType.Camdo, UserId));
+
             return Ok(new ApiSuccessResult<HD_PaymentLogReponse>(response, "Đóng lãi nhanh thành công"));
         }
         [HttpPost("Delete")]
@@ -109,13 +116,16 @@ namespace BaseSource.BackendApi.Controllers
                     hd.NgayDongLaiGanNhat = null;
                     hd.NgayDongLaiTiepTheo = payment.ToDate;
                 }
+                hd.TongTienGhiNo -= payment.MoneyPay - payment.MoneyInterest;
                 await _db.SaveChangesAsync();
                 var rs = Task.Run(() => TaoKyDongLai(hd.Id));
                 var response = new HD_PaymentLogReponse()
                 {
                     NgayDongLaiGanNhat = hd.NgayDongLaiGanNhat?.ToString("dd/MM/yyyy"),
-                    TongTienLaiDaDong = hd.TongTienLaiDaThanhToan
+                    TongTienLaiDaDong = hd.TongTienLaiDaThanhToan,
+                    TongTienGhiNo = hd.TongTienGhiNo
                 };
+                var result = Task.Run(() => CreateCuaHang_TransactionLog(payment.Id, EHopDong_ActionType.HuyDongTienLai, EFeatureType.Camdo, UserId));
                 return Ok(new ApiSuccessResult<HD_PaymentLogReponse>(response, "Hủy đóng lãi thành công"));
             }
             return Ok(new ApiErrorResult<HD_PaymentLogReponse>("Not Found!"));
@@ -197,11 +207,10 @@ namespace BaseSource.BackendApi.Controllers
             if (lstNoPayment.Count > 0)
             {
                 itemPayment = lstNoPayment.FirstOrDefault();
-                if (itemPayment.ToDate > DateTime.Now)
+                if (itemPayment.FromDate > DateTime.Now)
                 {
                     paymentByDate.FromDate = itemPayment.FromDate;
                     paymentByDate.ToDate = itemPayment.FromDate;
-                  
                 }
                 else
                 {
@@ -233,11 +242,17 @@ namespace BaseSource.BackendApi.Controllers
             return Ok(new ApiSuccessResult<HDPaymentByDateVm>(paymentByDate));
         }
 
-        [HttpPost("TaoKyDongLai")]
-        public async Task TaoKyDongLai(int hopdongId)
+        #region helper
+        private async Task TaoKyDongLai(int hopdongId)
         {
             await _hopDongService.TaoKyDongLai(hopdongId);
         }
+        private async Task CreateCuaHang_TransactionLog(long paymentId, EHopDong_ActionType actionType, EFeatureType featureType, string userId)
+        {
+            await _cuaHang_TransactionLogService.CreateTransactionLog(paymentId, actionType, featureType, userId);
+        }
+
+        #endregion
 
 
     }
