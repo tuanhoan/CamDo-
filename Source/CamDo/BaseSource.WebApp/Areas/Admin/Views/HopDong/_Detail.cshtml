@@ -49,7 +49,7 @@
                 </tr>
                 <tr>
                     <td><span class="font-weight-bold">Tiền cầm</span></td>
-                    <td colspan="2" align="right"><span id="lblTotalMoney">@Model.HD_TongTienVayBanDau.ToString("N0")</span> VNĐ</td>
+                    <td colspan="2" align="right"><span id="lblTotalMoney" class="lblTongTienVayHienTai">@Model.HD_TongTienVayBanDau.ToString("N0")</span> VND</td>
                 </tr>
                 <tr>
                     <td><span class="font-weight-bold">Vay từ ngày</span></td>
@@ -113,7 +113,7 @@
     <div class="tabs active" data-type="tab-dongtienlai" id="tab01">
         <h6><i class="fas fa-money-bill"></i> Đóng tiền lãi</h6>
     </div>
-    <div class="tabs" id="tab02">
+    <div class="tabs" id="tab02" data-type="tab-trabotgoc">
         <h6 class="font-weight-bold"><i class="fas fa-money-bill"></i> Trả bớt gốc</h6>
     </div>
     <div class="tabs" id="tab03">
@@ -152,18 +152,69 @@
         </div>
     </fieldset>
     <fieldset id="tab021">
-        Trả bớt gốc
+        <div class="d-flex justify-content-center">
+            <div class="col-md-6">
+                <form id="frmTraBotGoc" asp-action="TraBotGoc" method="post">
+                    <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.Id" />
+                    <div class="form-group row">
+                        <label class="col-4">Ngày trả trước gốc</label>
+                        <div class="col-8">
+                            <input type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" name="NgayTraGoc" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4">Số tiền gốc trả trước</label>
+                        <div class="col-8">
+                            <input type="text" class="form-control" id="SoTienTraTruocDisplay" />
+                            <input type="hidden" name="SoTienTraTruoc" />
+                            <span class="text-danger field-validation-valid" data-valmsg-for="SoTienTraTruoc" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4">Ghi chú</label>
+                        <div class="col-8">
+                            <textarea class="form-control" name="Note" rows="4"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4"></label>
+                        <div class="col-8">
+                            <button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-thumbs-up"></i> Đồng ý</button>
+                        </div>
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+        <div id="divContent-ListTraGoc">
+
+        </div>
     </fieldset>
     <fieldset id="tab031">
         Vay thêm
     </fieldset>
     <fieldset id="tab041">
         <div>
-            <div class="form-group row">
+            <div class="d-flex justify-content-center">
                 <div class="col-md-6">
-                    <form>
-                        <input type="hidden" name="HopDongid" value="@Model.Id" />
-                        <textarea class="form-control" name="Note" rows="5"></textarea>
+                    <form id="frmNhacNo" method="post" asp-action="Create" asp-controller="HopDong_DebtNote">
+                        <input type="hidden" name="HopDongId" value="@Model.Id" />
+                        <div class="form-group row">
+                            <label class="col-2">Ghi chú</label>
+                            <div class="col-10">
+                                <textarea class="form-control" name="Note" rows="5"></textarea>
+                                <span class="text-danger field-validation-valid" data-valmsg-for="Note" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-2"></label>
+                            <div class="col-10">
+                                <button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-save"></i> Lưu lại</button>
+                            </div>
+                        </div>
+
+
                     </form>
                 </div>
             </div>
@@ -181,6 +232,7 @@
 
 <script>
     $(document).ready(function () {
+        setMoneyTextBox("#SoTienTraTruocDisplay");
         getListPaymentLog(@Model.Id);
         getInfoPaymentByDate(@Model.Id);
     })
@@ -219,11 +271,16 @@
         switch (type) {
             case "tab-history":
                 getCuahang_TransactionLog(@Model.Id);
+                 geHopDong_DebtNote(@Model.Id);
                 break;
             case "tab-dongtienlai":
-               getListPaymentLog(@Model.Id);
+                getListPaymentLog(@Model.Id);
                 getInfoPaymentByDate(@Model.Id);
                 break;
+            case "tab-trabotgoc":
+                getHistoryLoanExtra(@Model.Id);
+
+
             default:
             // code block
         }

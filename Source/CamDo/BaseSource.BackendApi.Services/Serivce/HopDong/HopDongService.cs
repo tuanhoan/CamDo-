@@ -63,10 +63,8 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
                         else
                         {
                             item.ToDate = item.FromDate.AddDays(hd.HD_KyLai - 1);
-                            var moneyInterestOneDay = (hd.HD_LaiSuat * 1000 * hd.HD_TongTienVayBanDau) / 1000000;
-                            var totalDay = (item.ToDate - item.FromDate).Days + 1;
-                            moneyInterest = moneyInterestOneDay * totalDay;
-                            item.CountDay = (item.ToDate - item.FromDate).Days + 1;
+                            moneyInterest = (hd.TongTienVayHienTai / 1000000) * hd.HD_LaiSuat * hd.HD_KyLai * 1000;
+                            item.CountDay = hd.HD_KyLai;
 
                         }
 
@@ -82,7 +80,7 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
                         else
                         {
                             item.ToDate = item.FromDate.AddDays(hd.HD_KyLai - 1);
-                            moneyInterest = hd.HD_LaiSuat * 1000 * hd.HD_KyLai;
+                            moneyInterest = hd.HD_LaiSuat * hd.HD_KyLai * 1000;
                             item.CountDay = hd.HD_KyLai;
 
                         }
@@ -160,35 +158,7 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
             _db.HopDong_PaymentLogs.AddRange(lstKyDongLai);
             await _db.SaveChangesAsync();
         }
-        /// <summary>
-        /// Tính tổng tiền lãi của hợp đồng
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        //public Task<double> TinhLaiHD(EHinhThucLai hinhThucLai, int kyLai, double laiSuat, double tongTienVayBanDau)
-        //{
-        //    double laiSuatResult = 0;
-        //    switch (hinhThucLai)
-        //    {
-        //        case EHinhThucLai.LaiNgayKTrieu:
-        //            laiSuatResult = ((tongTienVayBanDau * laiSuat * 1000) / 1000000) * kyLai;
-        //            break;
-        //        case EHinhThucLai.LaiNgayKNgay:
-        //            laiSuatResult = laiSuat * 1000 * kyLai;
-        //            break;
-        //        case EHinhThucLai.LaiThangPhanTram:
-        //        case EHinhThucLai.LaiThangDinhKi:
-        //        case EHinhThucLai.LaiTuanPhanTram:
-        //            laiSuatResult = ((tongTienVayBanDau * laiSuat) / 100) * kyLai;
-        //            break;
-        //        case EHinhThucLai.LaiTuanVND:
-        //            laiSuatResult = laiSuat * 1000;
-        //            break;
-        //        default:
-        //            break;
-        //    }
-        //    return Task.FromResult(laiSuatResult);
-        //}
+        
         /// <summary>
         /// Tạo các kỳ đóng lãi của hợp đồng
         /// </summary>
@@ -299,13 +269,14 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
         /// <param name="laiSuat"></param>
         /// <param name="tongTienVayBanDau"></param>
         /// <returns></returns>
-        public Task<double> TinhLaiHD(EHinhThucLai hinhThucLai, int tongThoiGianVay, double laiSuat, double tongTienVayBanDau)
+        public Task<double> TinhLaiHD(EHinhThucLai hinhThucLai, int tongThoiGianVay, double laiSuat, double tongTienVayHienTai, double tongTienDaThanhToan)
         {
             double laiSuatResult = 0;
+            double tongTienConLai = tongTienVayHienTai - tongTienDaThanhToan;
             switch (hinhThucLai)
             {
                 case EHinhThucLai.LaiNgayKTrieu:
-                    laiSuatResult = ((tongTienVayBanDau * laiSuat * 1000) / 1000000) * tongThoiGianVay;
+                    laiSuatResult = (tongTienConLai / 1000000) * laiSuat * tongThoiGianVay * 1000;
                     break;
                 case EHinhThucLai.LaiNgayKNgay:
                     laiSuatResult = laiSuat * 1000 * tongThoiGianVay;
@@ -313,7 +284,7 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
                 case EHinhThucLai.LaiThangPhanTram:
                 case EHinhThucLai.LaiThangDinhKi:
                 case EHinhThucLai.LaiTuanPhanTram:
-                    laiSuatResult = ((tongTienVayBanDau * laiSuat) / 100) * tongThoiGianVay;
+                    laiSuatResult = ((tongTienConLai * laiSuat) / 100) * tongThoiGianVay;
                     break;
                 case EHinhThucLai.LaiTuanVND:
                     laiSuatResult = laiSuat * 1000;

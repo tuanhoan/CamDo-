@@ -20,11 +20,12 @@ namespace BaseSource.ApiIntegration.WebApi.CuaHang_TransactionLog
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<ApiResult<List<CuaHang_TransactionLogVm>>> GetCuaHang_TransactionLogHistory(int hopDongId)
+        public async Task<ApiResult<List<CuaHang_TransactionLogVm>>> GetCuaHang_TransactionLogHistory(int hopDongId, EHopDong_ActionType actionType = 0)
         {
             var obj = new
             {
-                hopDongId = hopDongId
+                hopDongId = hopDongId,
+                actionType = actionType
             };
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.GetAsync<ApiResult<List<CuaHang_TransactionLogVm>>>("/api/CuaHang_TransactionLog/GetCuaHang_TransactionLogHistory", obj);

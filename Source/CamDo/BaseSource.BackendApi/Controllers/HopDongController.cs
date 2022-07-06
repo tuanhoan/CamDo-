@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BaseSource.BackendApi.Services.Serivce.CuaHang_TransactionLog;
 using BaseSource.BackendApi.Services.Serivce.HopDong;
 using BaseSource.Data.EF;
 using BaseSource.Data.Entities;
@@ -22,13 +23,16 @@ namespace BaseSource.BackendApi.Controllers
         private readonly IMapper _mapper;
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IHopDongService _hopDongService;
+        private readonly ICuaHang_TransactionLogService _cuaHang_TransactionLogService;
         public HopDongController(BaseSourceDbContext db, IMapper mapper,
-            IServiceScopeFactory serviceScopeFactory, IHopDongService hopDongService)
+            IServiceScopeFactory serviceScopeFactory, IHopDongService hopDongService,
+            ICuaHang_TransactionLogService cuaHang_TransactionLogService)
         {
             _db = db;
             _mapper = mapper;
             _serviceScopeFactory = serviceScopeFactory;
             _hopDongService = hopDongService;
+            _cuaHang_TransactionLogService = cuaHang_TransactionLogService;
         }
         [HttpGet("GetPagings")]
         public async Task<IActionResult> GetPagings([FromQuery] GetHopDongPagingRequest request)
@@ -102,10 +106,11 @@ namespace BaseSource.BackendApi.Controllers
             hd.CuaHangId = CuaHangId;
             hd.UserIdCreated = UserId;
             hd.UserIdAssigned = UserId;
+            hd.TongTienVayHienTai = hd.HD_TongTienVayBanDau;
             //gán tạm
             hd.HD_Loai = ELoaiHopDong.Camdo;
             hd.HD_NgayDaoHan = await _hopDongService.TinhNgayDaoHan(hd.HD_HinhThucLai, hd.HD_NgayVay, hd.HD_TongThoiGianVay, hd.HD_KyLai);
-            hd.TongTienLai = await _hopDongService.TinhLaiHD(hd.HD_HinhThucLai, hd.HD_TongThoiGianVay, hd.HD_LaiSuat, hd.HD_TongTienVayBanDau);
+            hd.TongTienLai = await _hopDongService.TinhLaiHD(hd.HD_HinhThucLai, hd.HD_TongThoiGianVay, hd.HD_LaiSuat, hd.TongTienVayHienTai, hd.TongTienDaThanhToan);
             _db.HopDongs.Add(hd);
             await _db.SaveChangesAsync();
 
@@ -132,7 +137,7 @@ namespace BaseSource.BackendApi.Controllers
             result.CMND_NoiCap = kh.CMND_NoiCap;
             result.TyLeLai = hd.HD_LaiSuat + htl.TyLeLai;
 
-            
+
             return Ok(new ApiSuccessResult<HopDongVm>(result));
         }
         [HttpPost("Edit")]
@@ -167,7 +172,7 @@ namespace BaseSource.BackendApi.Controllers
             model.KhachHangId = kh.Id;
             _mapper.Map(model, hd);
             hd.HD_NgayDaoHan = await _hopDongService.TinhNgayDaoHan(hd.HD_HinhThucLai, hd.HD_NgayVay, hd.HD_TongThoiGianVay, hd.HD_KyLai);
-            hd.TongTienLai = await _hopDongService.TinhLaiHD(hd.HD_HinhThucLai, hd.HD_TongThoiGianVay, hd.HD_LaiSuat, hd.HD_TongTienVayBanDau);
+            hd.TongTienLai = await _hopDongService.TinhLaiHD(hd.HD_HinhThucLai, hd.HD_TongThoiGianVay, hd.HD_LaiSuat, hd.TongTienVayHienTai, hd.TongTienDaThanhToan);
             await _db.SaveChangesAsync();
 
             if (isChangeKyLai)
@@ -177,6 +182,49 @@ namespace BaseSource.BackendApi.Controllers
 
             return Ok(new ApiSuccessResult<string>("Cập nhật hợp đồng thành công"));
         }
+        #region Trả bớt gốc
+        [HttpPost("TraBotGoc")]
+        public async Task<IActionResult> TraBotGoc(TraBotGocRequestVm model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
+            }
+            var hd = await _db.HopDongs.FindAsync(model.HopDongId);
+            if (hd != null)
+            {
+                hd.TongTienDaThanhToan += model.SoTienTraTruoc ?? 0;
+                hd.TongTienVayHienTai = hd.HD_TongTienVayBanDau - (model.SoTienTraTruoc ?? 0); ;
+                hd.TongTienLai = await _hopDongService.TinhLaiHD(hd.HD_HinhThucLai, hd.HD_TongThoiGianVay, hd.HD_LaiSuat, hd.TongTienVayHienTai, hd.TongTienDaThanhToan);
+                await _db.SaveChangesAsync();
+                var result = Task.Run(() => CreateCuaHang_TransactionLog(hd.Id, EHopDong_ActionType.TraGoc, EFeatureType.Camdo, UserId, model.SoTienTraTruoc ?? 0));
+                var rs = Task.Run(() => TaoKyDongLai(hd.Id));
+
+                return Ok(new ApiSuccessResult<double>(hd.TongTienVayHienTai));
+            }
+            return Ok(new ApiErrorResult<string>("Not Found!"));
+        }
+        [HttpPost("XoaTraBotGoc")]
+        public async Task<IActionResult> XoaTraBotGoc([FromForm] long tranLogId)
+        {
+            var tran = await _db.CuaHang_TransactionLogs.FindAsync(tranLogId);
+            if (tran != null)
+            {
+                var hd = await _db.HopDongs.FindAsync(tran.HopDongId);
+
+                hd.TongTienDaThanhToan -= tran.MoneyPay;
+                hd.TongTienVayHienTai += tran.MoneyPay;
+                hd.TongTienLai = await _hopDongService.TinhLaiHD(hd.HD_HinhThucLai, hd.HD_TongThoiGianVay, hd.HD_LaiSuat, hd.TongTienVayHienTai, hd.TongTienDaThanhToan);
+                _db.CuaHang_TransactionLogs.Remove(tran);
+                await _db.SaveChangesAsync();
+                var result = Task.Run(() => CreateCuaHang_TransactionLog(hd.Id, EHopDong_ActionType.HuyTraGoc, EFeatureType.Camdo, UserId, tran.MoneyPay));
+                var rs = Task.Run(() => TaoKyDongLai(hd.Id));
+
+                return Ok(new ApiSuccessResult<double>(hd.TongTienVayHienTai));
+            }
+            return Ok(new ApiErrorResult<string>("Not Found!"));
+        }
+        #endregion
 
 
         #region helper
@@ -203,11 +251,13 @@ namespace BaseSource.BackendApi.Controllers
 
             return khachHangId;
         }
-        [AllowAnonymous]
-        [HttpPost("TaoKyDongLai")]
-        public async Task TaoKyDongLai(int hopdongId)
+        private async Task TaoKyDongLai(int hopdongId)
         {
             await _hopDongService.TaoKyDongLai(hopdongId);
+        }
+        private async Task CreateCuaHang_TransactionLog(int hopDongId, EHopDong_ActionType actionType, EFeatureType featureType, string userId, double soTienTraGoc = 0, long paymentId = 0)
+        {
+            await _cuaHang_TransactionLogService.CreateTransactionLog(hopDongId, actionType, featureType, userId, soTienTraGoc, paymentId);
         }
         #endregion
     }

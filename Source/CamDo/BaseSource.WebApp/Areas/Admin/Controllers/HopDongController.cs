@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using BaseSource.ApiIntegration.WebApi;
 using BaseSource.ApiIntegration.WebApi.CauHinhHangHoa;
+using BaseSource.ApiIntegration.WebApi.CuaHang_TransactionLog;
 using BaseSource.ApiIntegration.WebApi.HD_PaymentLog;
 using BaseSource.ApiIntegration.WebApi.HopDong;
+using BaseSource.Shared.Enums;
 using BaseSource.ViewModels.CauHinhHangHoa;
 using BaseSource.ViewModels.Common;
 using BaseSource.ViewModels.HD_PaymentLog;
@@ -24,14 +26,16 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         private readonly IHopDongApiClient _hopDongApiClient;
         private readonly IUserApiClient _userApiClient;
         private readonly IHD_PaymentLogApiClient _hdPaymentLogApiClient;
+        private readonly ICuaHang_TransactionLogApiClient _cuaHang_TransactionLog;
         public HopDongController(ICauHinhHangHoaApiClient cauHinhHangHoaApiClient,
             IHopDongApiClient hopDongApiClient, IUserApiClient userApiClient,
-            IHD_PaymentLogApiClient hdPaymentLogApiClient)
+            IHD_PaymentLogApiClient hdPaymentLogApiClient, ICuaHang_TransactionLogApiClient cuaHang_TransactionLog)
         {
             _cauHinhHangHoaApiClient = cauHinhHangHoaApiClient;
             _hopDongApiClient = hopDongApiClient;
             _userApiClient = userApiClient;
             _hdPaymentLogApiClient = hdPaymentLogApiClient;
+            _cuaHang_TransactionLog = cuaHang_TransactionLog;
 
         }
         public async Task<IActionResult> Create()
@@ -225,5 +229,34 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         #endregion
 
 
+        #region Trả bớt gốc
+        public async Task<IActionResult> GetListTraBotGoc(int hopDongId)
+        {
+            var result = await _cuaHang_TransactionLog.GetCuaHang_TransactionLogHistory(hopDongId, EHopDong_ActionType.TraGoc);
+            return PartialView("_ListTraBotGoc", result.ResultObj);
+        }
+        public async Task<IActionResult> TraBotGoc(TraBotGocRequestVm model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Json(new ApiErrorResult<string>(ModelState.GetListErrors()));
+            }
+            var result = await _hopDongApiClient.TraBotGoc(model);
+            if (!result.IsSuccessed)
+            {
+                return Json(new ApiErrorResult<string>(result.ValidationErrors));
+            }
+            return Json(new ApiSuccessResult<double>(result.ResultObj));
+        }
+        public async Task<IActionResult> XoaTraBotGoc(long tranLogId)
+        {
+            var result = await _hopDongApiClient.XoaTraBotGoc(tranLogId);
+            if (!result.IsSuccessed)
+            {
+                return Json(new ApiErrorResult<string>(result.Message));
+            }
+            return Json(new ApiSuccessResult<double>(result.ResultObj));
+        }
+        #endregion
     }
 }

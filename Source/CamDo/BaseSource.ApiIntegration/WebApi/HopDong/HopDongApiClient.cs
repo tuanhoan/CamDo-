@@ -45,5 +45,22 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.GetAsync<ApiResult<PagedResult<HopDongVm>>>("/api/HopDong/GetPagings", model);
         }
+
+        public async Task<ApiResult<double>> TraBotGoc(TraBotGocRequestVm model)
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.PostAsync<ApiResult<double>>("/api/HopDong/TraBotGoc", model);
+        }
+
+        public async Task<ApiResult<double>> XoaTraBotGoc(long tranLogId)
+        {
+            var dic = new Dictionary<string, string>()
+            {
+                { "tranLogId", tranLogId.ToString() }
+            };
+
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.PostAsyncFormUrl<ApiResult<double>>("/api/HopDong/XoaTraBotGoc", dic);
+        }
     }
 }

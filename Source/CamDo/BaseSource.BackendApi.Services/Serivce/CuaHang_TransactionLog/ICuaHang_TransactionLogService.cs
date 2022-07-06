@@ -9,6 +9,6 @@ namespace BaseSource.BackendApi.Services.Serivce.CuaHang_TransactionLog
 {
     public interface ICuaHang_TransactionLogService
     {
-        Task CreateTransactionLog(long paymentId, EHopDong_ActionType actionType, EFeatureType featureType, string userId);
+        Task CreateTransactionLog(int hopDongId, EHopDong_ActionType actionType, EFeatureType featureType, string userId, double soTienTraGoc = 0, long paymentI = 0);
     }
 }

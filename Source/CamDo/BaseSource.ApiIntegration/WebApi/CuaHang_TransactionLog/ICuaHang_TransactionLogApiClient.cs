@@ -11,6 +11,6 @@ namespace BaseSource.ApiIntegration.WebApi.CuaHang_TransactionLog
 {
     public interface ICuaHang_TransactionLogApiClient
     {
-        Task<ApiResult<List<CuaHang_TransactionLogVm>>> GetCuaHang_TransactionLogHistory(int hopDongId);
+        Task<ApiResult<List<CuaHang_TransactionLogVm>>> GetCuaHang_TransactionLogHistory(int hopDongId, EHopDong_ActionType actionType = 0);
     }
 }
