@@ -72,7 +72,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             {
                 return Json(new ApiErrorResult<string>(result.ValidationErrors));
             }
-            return Json(new ApiSuccessResult<string>());
+            return Json(new ApiSuccessResult<string>(result.ResultObj));
         }
 
         public async Task<IActionResult> Edit(int id)
@@ -244,9 +244,17 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             var result = await _hopDongApiClient.TraBotGoc(model);
             if (!result.IsSuccessed)
             {
-                return Json(new ApiErrorResult<string>(result.ValidationErrors));
+                if (result.ValidationErrors != null && result.ValidationErrors.Count > 0)
+                {
+                    return Json(new ApiErrorResult<string>(result.ValidationErrors));
+                }
+                else if (result.Message != null)
+                {
+                    return Json(new ApiErrorResult<string>(result.Message));
+                }
+
             }
-            return Json(new ApiSuccessResult<double>(result.ResultObj));
+            return Json(new ApiSuccessResult<string>(result.ResultObj, result.Message));
         }
         public async Task<IActionResult> XoaTraBotGoc(long tranLogId)
         {
@@ -255,7 +263,31 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             {
                 return Json(new ApiErrorResult<string>(result.Message));
             }
-            return Json(new ApiSuccessResult<double>(result.ResultObj));
+            return Json(new ApiSuccessResult<string>(result.ResultObj, result.Message));
+        }
+        #endregion
+
+        #region Vay thêm
+        public async Task<IActionResult> VayThem(VayThemRequestVm model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Json(new ApiErrorResult<string>(ModelState.GetListErrors()));
+            }
+            var result = await _hopDongApiClient.VayThem(model);
+            if (!result.IsSuccessed)
+            {
+                if (result.ValidationErrors != null && result.ValidationErrors.Count > 0)
+                {
+                    return Json(new ApiErrorResult<string>(result.ValidationErrors));
+                }
+                else if (result.Message != null)
+                {
+                    return Json(new ApiErrorResult<string>(result.Message));
+                }
+
+            }
+            return Json(new ApiSuccessResult<string>(result.ResultObj, result.Message));
         }
         #endregion
     }

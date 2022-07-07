@@ -35,6 +35,18 @@ namespace BaseSource.ViewModels.CuaHang_TransactionLog
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public DateTime CreatedDate { get; set; }
-
+    }
+    public class CreateCuaHang_TransactionLogVm
+    {
+        public int HopDongId { get; set; }
+        public EHopDong_ActionType ActionType { get; set; }
+        public EFeatureType FeatureType { get; set; }
+        public string UserId { get; set; }
+        public string Note { get; set; }
+        public double? SoTienTraGoc { get; set; }
+        public long? PaymentId { get; set; }
+        public DateTime? NgayTraGoc { get; set; }
+        public double? TienVayThem { get; set; }
+        public DateTime? NgayVayThem { get; set; }
     }
 }

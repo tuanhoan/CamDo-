@@ -22,12 +22,20 @@ namespace BaseSource.BackendApi.Controllers
         [HttpGet("GetCuaHang_TransactionLogHistory")]
         public async Task<IActionResult> GetCuaHang_TransactionLogHistory(int hopDongId, EHopDong_ActionType actionType = 0)
         {
-           
+
             var model = _db.CuaHang_TransactionLogs.AsQueryable();
             model = model.Where(x => x.HopDongId == hopDongId);
             if (actionType != 0)
             {
-                model = model.Where(x => x.ActionType == (byte)actionType);
+                if (actionType == EHopDong_ActionType.TraGoc || actionType == EHopDong_ActionType.VayThemGoc)
+                {
+                    model = model.Where(x => x.ActionType == (byte)EHopDong_ActionType.TraGoc || x.ActionType == (byte)EHopDong_ActionType.VayThemGoc);
+                }
+                else
+                {
+                    model = model.Where(x => x.ActionType == (byte)actionType);
+                }
+
             }
             var result = await model.Join(_db.UserProfiles, trans => trans.UserId,
                 u => u.UserId, (trans, u) => new CuaHang_TransactionLogVm()
@@ -45,8 +53,8 @@ namespace BaseSource.BackendApi.Controllers
                     FromDate = trans.FromDate,
                     ToDate = trans.ToDate,
                     CreatedDate = trans.CreatedDate,
-                  
-                }).OrderByDescending(x => x.CreatedDate).ToListAsync();
+                    Note = trans.Note,
+                }).OrderBy(x => x.Id).ToListAsync();
             return Ok(new ApiSuccessResult<List<CuaHang_TransactionLogVm>>(result));
         }
     }

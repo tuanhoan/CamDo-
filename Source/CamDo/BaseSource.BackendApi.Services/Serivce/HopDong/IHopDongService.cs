@@ -12,7 +12,7 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
     {
         Task TaoKyDongLai(int hopdongId);
 
-        Task<double> TinhLaiHD(EHinhThucLai hinhThucLai, int tongThoiGianVay, double laiSuat, double tongTienVayHienTai, double tongTienDaThanhToan = 0);
+        Task<double> TinhLaiHD(EHinhThucLai hinhThucLai, int tongThoiGianVay, double laiSuat, double tongTienVayHienTai);
         Task<int> TinhTongSoNgayVay(EHinhThucLai hinhThucLai, int kyLai, int tongThoiGianVay);
         Task<DateTime> TinhNgayDaoHan(EHinhThucLai hinhThucLai, DateTime hd_NgayVay, int hd_TongThoiGianVay, int kyLai);
     }

@@ -4,6 +4,7 @@ using BaseSource.Data.EF;
 using BaseSource.Data.Entities;
 using BaseSource.Shared.Enums;
 using BaseSource.ViewModels.Common;
+using BaseSource.ViewModels.CuaHang_TransactionLog;
 using BaseSource.ViewModels.HD_PaymentLog;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -85,10 +86,16 @@ namespace BaseSource.BackendApi.Controllers
                 NgayDongLaiGanNhat = hd.NgayDongLaiGanNhat?.ToString("dd/MM/yyyy"),
                 TongTienLaiDaDong = hd.TongTienLaiDaThanhToan,
                 TongTienGhiNo = hd.TongTienGhiNo
-
             };
-            var rs = Task.Run(() => CreateCuaHang_TransactionLog(hd.Id, EHopDong_ActionType.DongTienLai, EFeatureType.Camdo, UserId, payment.Id));
-
+            var tranLog = new CreateCuaHang_TransactionLogVm()
+            {
+                HopDongId = hd.Id,
+                ActionType = EHopDong_ActionType.DongTienLai,
+                FeatureType = EFeatureType.Camdo,
+                UserId = UserId,
+                PaymentId = payment.Id
+            };
+            var rs = Task.Run(() => CreateCuaHang_TransactionLog(tranLog));
             return Ok(new ApiSuccessResult<HD_PaymentLogReponse>(response, "Đóng lãi nhanh thành công"));
         }
         [HttpPost("Delete")]
@@ -125,7 +132,15 @@ namespace BaseSource.BackendApi.Controllers
                     TongTienLaiDaDong = hd.TongTienLaiDaThanhToan,
                     TongTienGhiNo = hd.TongTienGhiNo
                 };
-                var result = Task.Run(() => CreateCuaHang_TransactionLog(hd.Id, EHopDong_ActionType.HuyDongTienLai, EFeatureType.Camdo, UserId, payment.Id));
+                var tranLog = new CreateCuaHang_TransactionLogVm()
+                {
+                    HopDongId = hd.Id,
+                    ActionType = EHopDong_ActionType.HuyDongTienLai,
+                    FeatureType = EFeatureType.Camdo,
+                    UserId = UserId,
+                    PaymentId = payment.Id
+                };
+                var result = Task.Run(() => CreateCuaHang_TransactionLog(tranLog));
                 return Ok(new ApiSuccessResult<HD_PaymentLogReponse>(response, "Hủy đóng lãi thành công"));
             }
             return Ok(new ApiErrorResult<HD_PaymentLogReponse>("Not Found!"));
@@ -247,9 +262,9 @@ namespace BaseSource.BackendApi.Controllers
         {
             await _hopDongService.TaoKyDongLai(hopdongId);
         }
-        private async Task CreateCuaHang_TransactionLog(int hopDongId, EHopDong_ActionType actionType, EFeatureType featureType, string userId, double soTienTraGoc = 0, long paymentId = 0)
+        private async Task CreateCuaHang_TransactionLog(CreateCuaHang_TransactionLogVm model)
         {
-            await _cuaHang_TransactionLogService.CreateTransactionLog(hopDongId, actionType, featureType, userId, soTienTraGoc, paymentId);
+            await _cuaHang_TransactionLogService.CreateTransactionLog(model);
         }
 
         #endregion

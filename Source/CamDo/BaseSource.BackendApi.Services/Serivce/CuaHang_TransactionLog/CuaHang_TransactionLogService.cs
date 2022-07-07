@@ -1,6 +1,8 @@
 ﻿using BaseSource.Data.EF;
 using BaseSource.Shared.Enums;
+using BaseSource.ViewModels.CuaHang_TransactionLog;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Threading.Tasks;
 
 namespace BaseSource.BackendApi.Services.Serivce.CuaHang_TransactionLog
@@ -12,22 +14,23 @@ namespace BaseSource.BackendApi.Services.Serivce.CuaHang_TransactionLog
         {
             _serviceScopeFactory = serviceScopeFactory;
         }
-        public async Task CreateTransactionLog(int hopDongId, EHopDong_ActionType actionType, EFeatureType featureType, string userId, double soTienTraGoc = 0, long paymentId = 0)
+        public async Task CreateTransactionLog(CreateCuaHang_TransactionLogVm model)
         {
             using var _db = _serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<BaseSourceDbContext>();
 
-            var hopDong = await _db.HopDongs.FindAsync(hopDongId);
+            var hopDong = await _db.HopDongs.FindAsync(model.HopDongId);
             var khachHang = await _db.KhachHangs.FindAsync(hopDong.KhachHangId);
 
             var transaction = new Data.Entities.CuaHang_TransactionLog();
             transaction.CuaHangId = hopDong.CuaHangId;
             transaction.HopDongId = hopDong.Id;
-            transaction.UserId = userId;
+            transaction.UserId = model.UserId;
             transaction.TotalMoneyLoan = hopDong.TongTienVayHienTai;
             transaction.TenKhachHang = khachHang?.Ten;
-            transaction.ActionType = (byte)actionType;
+            transaction.ActionType = (byte)model.ActionType;
+            transaction.Note = model.Note;
 
-            switch (actionType)
+            switch (model.ActionType)
             {
                 case EHopDong_ActionType.TaoMoiHD:
                     break;
@@ -35,9 +38,9 @@ namespace BaseSource.BackendApi.Services.Serivce.CuaHang_TransactionLog
                     break;
                 case EHopDong_ActionType.HuyDongTienLai:
                 case EHopDong_ActionType.DongTienLai:
-                    var payment = await _db.HopDong_PaymentLogs.FindAsync(paymentId);
-                    transaction.ReferId = paymentId;
-                    transaction.FeatureType = featureType;
+                    var payment = await _db.HopDong_PaymentLogs.FindAsync(model.PaymentId);
+                    transaction.ReferId = model.PaymentId;
+                    transaction.FeatureType = model.FeatureType;
                     transaction.MoneyAdd = payment.MoneyPayNeed;
                     transaction.MoneyDebit = payment.MoneyPayNeed - payment.MoneyInterest;
                     transaction.MoneyInterest = payment.MoneyInterest;
@@ -46,14 +49,19 @@ namespace BaseSource.BackendApi.Services.Serivce.CuaHang_TransactionLog
                     transaction.MoneyPayNeed = payment.MoneyPayNeed;
                     transaction.FromDate = payment.FromDate;
                     transaction.ToDate = payment.ToDate;
+                    transaction.CreatedDate = DateTime.Now;
                     break;
                 case EHopDong_ActionType.TraGoc:
-                    transaction.MoneyAdd = soTienTraGoc;
-                    transaction.MoneyPay = soTienTraGoc;
+                    transaction.MoneyAdd = model.SoTienTraGoc ?? 0;
+                    transaction.MoneyPay = model.SoTienTraGoc ?? 0;
+                    transaction.CreatedDate = model.NgayTraGoc.Value;
                     break;
                 case EHopDong_ActionType.VayThemGoc:
+                    transaction.MoneyAdd = model.TienVayThem ?? 0;
+                    transaction.CreatedDate = model.NgayVayThem.Value;
                     break;
                 case EHopDong_ActionType.HuyTraGoc:
+                    transaction.MoneySub = model.SoTienTraGoc ?? 0;
                     break;
                 case EHopDong_ActionType.HuyVayThemGoc:
                     break;

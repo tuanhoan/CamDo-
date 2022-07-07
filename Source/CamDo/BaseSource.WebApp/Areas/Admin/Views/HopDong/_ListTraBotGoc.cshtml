@@ -1,11 +1,12 @@
 ﻿@model List<CuaHang_TransactionLogVm>
 @{
     int idx = 1;
+
 }
 <div class="info-hd-header">
     <i class="fa fa-list"></i> Lịch sử trả tiền gốc
 </div>
-<div class="list-payment">
+<div class="list-tragoc">
     <table class="table table-bordered head-bg-gray table-hover">
         <thead>
             <tr>
@@ -22,14 +23,27 @@
             {
                 @foreach (var item in Model)
                 {
+                    string clss = "";
                     <tr>
                         <td>@idx</td>
-                        <td>@item.CreatedDate.ToString("HH:mm dd/MM/yyyy")</td>
+                        <td>@item.CreatedDate.ToString("dd/MM/yyyy")</td>
                         <td>@EnumExtensions.GetEnumDisplayName(((EHopDong_ActionType)item.ActionType))</td>
                         <td>@item.Note</td>
-                        <td class="text-right">-@item.MoneyAdd.ToString("N0") VND</td>
+                        <td class="text-right">
+                            @if ((EHopDong_ActionType)item.ActionType == EHopDong_ActionType.VayThemGoc)
+                            {
+                                <span> @item.MoneyAdd.ToString("N0") VND</span>
+                                clss = "btn-xoavaythem";
+                            }
+                            else
+                            {
+                                <span> -@item.MoneyAdd.ToString("N0") VND</span>
+                                clss = "btn-xoatragoc";
+                            }
+
+                        </td>
                         <td class="text-center">
-                            <button class="btn btn-red btn-icon btn-sm" type="button" data-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn xóa trả gốc?" data-href="@Url.Action("XoaTraBotGoc", new { tranLogId = item.Id })" title="Xóa trả gốc">
+                            <button class="btn btn-red btn-icon btn-sm @clss" type="button" data-hopdongId="@item.HopDongId" data-title="Bạn có chắc chắn muốn xóa trả gốc?" data-href="@Url.Action("XoaTraBotGoc", new { tranLogId = item.Id })" title="Xóa trả gốc">
                                 <i class="fas fa-times"></i>
                             </button>
                         </td>
@@ -45,7 +59,7 @@
             }
             <tr>
                 <td colspan="4" class="text-danger text-right">Tổng gốc còn lại:</td>
-                <td class="text-danger text-right" id="lblTongTienVayHienTai">0</td>
+                <td class="text-danger text-right lblTongTienVayHienTai">0</td>
             </tr>
 
 

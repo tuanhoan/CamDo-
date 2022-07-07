@@ -15,9 +15,8 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
         Task<ApiResult<string>> Create(CreateHopDongVm model);
         Task<ApiResult<HopDongVm>> GetById(int id);
         Task<ApiResult<string>> Edit(EditHopDongVm model);
-        Task<ApiResult<double>> TraBotGoc(TraBotGocRequestVm model);
-        Task<ApiResult<double>> XoaTraBotGoc(long tranLogId);
-
-
+        Task<ApiResult<string>> TraBotGoc(TraBotGocRequestVm model);
+        Task<ApiResult<string>> XoaTraBotGoc(long tranLogId);
+        Task<ApiResult<string>> VayThem(VayThemRequestVm model);
     }
 }

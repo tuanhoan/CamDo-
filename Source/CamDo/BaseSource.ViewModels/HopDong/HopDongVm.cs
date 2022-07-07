@@ -143,8 +143,19 @@ namespace BaseSource.ViewModels.HopDong
         public int HopDongId { get; set; }
         [Required(ErrorMessage ="Vui lòng nhập số tiền")]
         [Range(1, int.MaxValue, ErrorMessage = "Số tiền phải lớn hơn 0")]
-        public double? SoTienTraTruoc { get; set; }
+        public double? SoTienTraGoc { get; set; }
         public DateTime NgayTraGoc { get; set; }
+        public string Note { get; set; }
+    }
+    public class VayThemRequestVm
+    {
+        [Required]
+        public int HopDongId { get; set; }
+        [Required(ErrorMessage = "Vui lòng nhập số tiền")]
+        [Range(1, int.MaxValue, ErrorMessage = "Số tiền phải lớn hơn 0")]
+        public double? SoTienVayThem { get; set; }
+        public DateTime NgayVayThem { get; set; }
+        public string Note { get; set; }
     }
 
 

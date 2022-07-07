@@ -43,7 +43,7 @@ function taoNhacNo() {
                 $btnSubmit.removeAttr("disabled");
                 $form.find(".field-validation-valid").empty();
                 if (res.isSuccessed == true) {
-                    toastr.success(res.message);
+                    toastr.info(res.message);
                     var hopDongId = $form.find('input[name=HopDongId]').val();
                     $form[0].reset();
                     geHopDong_DebtNote(hopDongId);

@@ -37,10 +37,10 @@
                         <td class="text-right">@item.MoneyPay.ToString("N0")</td>
                         <td class="text-right">0</td>
                     }
-                    <td style="border:none !important">
+                    <td style="border-right:none !important">
                         @EnumExtensions.GetEnumDisplayName(((EHopDong_ActionType)item.ActionType))
                     </td>
-                    <td style="border:none !important">
+                    <td style="border-left:none !important">
                         @if (item.FromDate != null)
                         {
                             <span class="text-danger ky-tranlog">Kỳ: @item.FromDate?.ToString("dd/MM/yyyy") - @item.ToDate?.ToString("dd/MM/yyyy")</span>

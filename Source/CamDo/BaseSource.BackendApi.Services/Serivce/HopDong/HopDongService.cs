@@ -63,12 +63,9 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
                         else
                         {
                             item.ToDate = item.FromDate.AddDays(hd.HD_KyLai - 1);
-                            moneyInterest = (hd.TongTienVayHienTai / 1000000) * hd.HD_LaiSuat * hd.HD_KyLai * 1000;
+                            moneyInterest = (hd.TongTienVayHienTai * hd.HD_LaiSuat * 1000 * hd.HD_KyLai) / 1000000;
                             item.CountDay = hd.HD_KyLai;
-
                         }
-
-
                         break;
                     case EHinhThucLai.LaiNgayKNgay:
                         if (i == tongKyDong)
@@ -82,10 +79,7 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
                             item.ToDate = item.FromDate.AddDays(hd.HD_KyLai - 1);
                             moneyInterest = hd.HD_LaiSuat * hd.HD_KyLai * 1000;
                             item.CountDay = hd.HD_KyLai;
-
                         }
-
-
                         break;
                     case EHinhThucLai.LaiThangPhanTram:
                         if (i == tongKyDong)
@@ -93,7 +87,6 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
                             item.ToDate = hd.HD_NgayDaoHan;
                             moneyInterest = hd.TongTienLai - (hd.TongTienLaiDaThanhToan + tongLaiTheoKy);
                             item.CountDay = (hd.HD_NgayDaoHan - item.FromDate).Days + 1;
-
                         }
                         else
                         {
@@ -103,7 +96,6 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
                             int months = (item.ToDate.Year - item.FromDate.Year) * 12 + item.ToDate.Month - item.FromDate.Month;
                             moneyInterest = months * moneyInterestOneMonth;
                         }
-
                         break;
                     case EHinhThucLai.LaiThangDinhKi:
                         if (i == tongKyDong)
@@ -120,7 +112,6 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
                             int totalMonth = (item.ToDate.Year - item.FromDate.Year) * 12 + item.ToDate.Month - item.FromDate.Month;
                             moneyInterest = totalMonth * moneyInterestOneMonthDinhKy;
                         }
-
                         break;
                     case EHinhThucLai.LaiTuanPhanTram:
                     case EHinhThucLai.LaiTuanVND:
@@ -138,8 +129,6 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
                             double weeks = Math.Ceiling((item.ToDate - item.FromDate).TotalDays / 7);
                             moneyInterest = weeks * moneyInterestOneWeek;
                         }
-
-
                         break;
                     default:
                         break;
@@ -158,7 +147,7 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
             _db.HopDong_PaymentLogs.AddRange(lstKyDongLai);
             await _db.SaveChangesAsync();
         }
-        
+
         /// <summary>
         /// Tạo các kỳ đóng lãi của hợp đồng
         /// </summary>
@@ -269,14 +258,13 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
         /// <param name="laiSuat"></param>
         /// <param name="tongTienVayBanDau"></param>
         /// <returns></returns>
-        public Task<double> TinhLaiHD(EHinhThucLai hinhThucLai, int tongThoiGianVay, double laiSuat, double tongTienVayHienTai, double tongTienDaThanhToan)
+        public Task<double> TinhLaiHD(EHinhThucLai hinhThucLai, int tongThoiGianVay, double laiSuat, double tongTienVayHienTai)
         {
             double laiSuatResult = 0;
-            double tongTienConLai = tongTienVayHienTai - tongTienDaThanhToan;
             switch (hinhThucLai)
             {
                 case EHinhThucLai.LaiNgayKTrieu:
-                    laiSuatResult = (tongTienConLai / 1000000) * laiSuat * tongThoiGianVay * 1000;
+                    laiSuatResult = (tongTienVayHienTai * laiSuat * 1000 * tongThoiGianVay) / 1000000;
                     break;
                 case EHinhThucLai.LaiNgayKNgay:
                     laiSuatResult = laiSuat * 1000 * tongThoiGianVay;
@@ -284,7 +272,7 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
                 case EHinhThucLai.LaiThangPhanTram:
                 case EHinhThucLai.LaiThangDinhKi:
                 case EHinhThucLai.LaiTuanPhanTram:
-                    laiSuatResult = ((tongTienConLai * laiSuat) / 100) * tongThoiGianVay;
+                    laiSuatResult = ((tongTienVayHienTai * laiSuat) / 100) * tongThoiGianVay;
                     break;
                 case EHinhThucLai.LaiTuanVND:
                     laiSuatResult = laiSuat * 1000;
