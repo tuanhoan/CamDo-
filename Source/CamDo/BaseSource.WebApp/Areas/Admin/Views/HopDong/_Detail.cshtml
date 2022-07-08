@@ -133,8 +133,8 @@
     <div class="tabs" data-type="tab-vaythem">
         <h6><i class="fas fa-address-card"></i> Vay thêm</h6>
     </div>
-    <div class="tabs" id="tab04">
-        <h6>Gia hạn</h6>
+    <div class="tabs tab-giahan" data-type="tab-giahan">
+        <h6><i class="fas fa-retweet"></i> Gia hạn</h6>
     </div>
     <div class="tabs" id="tab05">
         <h6>Chuộc đồ</h6>
@@ -168,7 +168,7 @@
     <fieldset id="tab-trabotgoc">
         <div class="d-flex justify-content-center">
             <div class="col-md-6">
-                <form id="frmTraBotGoc" asp-action="TraBotGoc" method="post">
+                <form id="frmTraBotGoc" asp-action="TraBotGoc" asp-controller="HopDong_VayRutGoc" method="post">
                     <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.Id" />
                     <div class="form-group row">
                         <label class="col-4">Ngày trả trước gốc</label>
@@ -211,7 +211,7 @@
     <fieldset id="tab-vaythem">
         <div class="d-flex justify-content-center">
             <div class="col-md-6">
-                <form id="frmVayThem" asp-action="VayThem" method="post">
+                <form id="frmVayThem" asp-action="VayThem" asp-controller="HopDong_VayRutGoc" method="post">
                     <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.Id" />
                     <div class="form-group row">
                         <label class="col-4">Ngày vay thêm gốc</label>
@@ -248,6 +248,48 @@
             </div>
         </div>
         <div id="divContent-ListVayThem">
+
+        </div>
+    </fieldset>
+    <fieldset id="tab-giahan">
+        <div class="d-flex justify-content-center">
+            <div class="col-md-6">
+                <form id="frmGiaHan" asp-action="GiaHan" asp-controller="HopDong_GiaHan" method="post">
+                    <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.Id" />
+                    <div class="form-group row">
+                        <label class="col-4">Khách Hàng</label>
+                        <div class="col-8">
+                            <span>@Model.TenKhachHang</span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4">Gia hạn thêm</label>
+                        <div class="col-8">
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="SoNgayGiaHan" />
+                                <div class="input-group-append">
+                                    <span class="input-group-text">@Model.ThoiGian.GetEnumDisplayName()</span>
+                                </div>
+                            </div>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="SoNgayGiaHan" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4">Ghi chú</label>
+                        <div class="col-8">
+                            <textarea class="form-control" name="Note" rows="4"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4"></label>
+                        <div class="col-8">
+                            <button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-thumbs-up"></i> Đồng ý</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="divContent-GiaHan">
 
         </div>
     </fieldset>
@@ -297,19 +339,19 @@
 
 
     $(".tabs").click(function () {
-                                var tabType = $(this).data("type");
-                                loadDataTab(tabType);
+        var tabType = $(this).data("type");
+        loadDataTab(tabType);
         $(".tabs").removeClass("active");
         $(this).children("h6").addClass("font-weight-bold");
         $(this).addClass("active");
 
-                                current_fs = $(".active");
-                                next_fs = "#" + tabType;
+        current_fs = $(".active");
+         next_fs = "#" + tabType;
 
         $("fieldset").removeClass("show");
         $(next_fs).addClass("show");
 
-                                current_fs.animate({}, {
+         current_fs.animate({}, {
                                 step: function () {
                                         current_fs.css({
                                             'display': 'none',
@@ -336,8 +378,8 @@
             case "tab-trabotgoc":
             case "tab-vaythem":
                 getHistoryLoanExtra(type,@Model.Id);
-
-
+            case "tab-giahan":
+                getListGiaHan(@Model.Id);
             default:
             // code block
         }

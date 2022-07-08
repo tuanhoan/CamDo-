@@ -29,6 +29,8 @@ using BaseSource.ApiIntegration.WebApi.HD_PaymentLog;
 using BaseSource.ApiIntegration.WebApi.HD_PaymentLogNote;
 using BaseSource.ApiIntegration.WebApi.CuaHang_TransactionLog;
 using BaseSource.ApiIntegration.WebApi.HopDong_DebtNote;
+using BaseSource.ApiIntegration.WebApi.HopDong_VayRutGoc;
+using BaseSource.ApiIntegration.WebApi.HopDong_GianHan;
 
 namespace BaseSource.WebApp
 {
@@ -107,6 +109,8 @@ namespace BaseSource.WebApp
             services.AddTransient<IHD_PaymentLogNote, HD_PaymentLogNote>();
             services.AddTransient<ICuaHang_TransactionLogApiClient, CuaHang_TransactionLogApiClient>();
             services.AddTransient<IHopDong_DebtNoteApiClient, HopDong_DebtNoteApiClient>();
+            services.AddTransient<IHopDong_VayRutGocApiClient, HopDong_VayRutGocApiClient>();
+            services.AddTransient<IHopDong_GianHanApiClient, HopDong_GianHanApiClient>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }

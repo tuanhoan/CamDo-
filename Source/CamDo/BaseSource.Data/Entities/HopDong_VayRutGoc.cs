@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BaseSource.Shared.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,7 @@ namespace BaseSource.Data.Entities
         public string Note { get; set; }
         public string UserId { get; set; }
         public DateTime CreatedDate { get; set; }
+        public EHopDong_ActionType ActionType { get; set; }
         public virtual HopDong HopDong { get; set; }
     }
 }

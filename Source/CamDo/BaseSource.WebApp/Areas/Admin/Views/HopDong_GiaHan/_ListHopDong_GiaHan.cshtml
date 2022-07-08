@@ -1,0 +1,46 @@
+﻿@model List<HopDong_GiaHanVm>
+@{
+    int idx = 1;
+}
+<div class="info-hd-header">
+    <i class="fa fa-list"></i> Lịch sử gia hạn
+</div>
+<div class="list-tragoc">
+    <table class="table table-bordered head-bg-gray table-hover">
+        <thead>
+            <tr>
+                <th class="text-center">STT</th>
+                <th class="text-center">Từ ngày</th>
+                <th class="text-center">Đến ngày</th>
+                <th class="text-center">Số ngày</th>
+                <th class="text-center">Nội dung</th>
+                <th class="text-center">Ghi chú</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Count > 0)
+            {
+                @foreach (var item in Model)
+                {
+                    string clss = "";
+                    <tr>
+                        <td>@idx</td>
+                        <td>@item.OldDate.ToString("dd/MM/yyyy")</td>
+                        <td>@item.NewDate.ToString("dd/MM/yyyy")</td>
+                        <td>@item.CountDate</td>
+                        <td>Gia hạn</td>
+                        <td>@item.Note</td>
+                    </tr>
+                    idx++;
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" class="text-center">Không có dữ liệu</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

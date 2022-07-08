@@ -48,5 +48,7 @@ namespace BaseSource.ViewModels.CuaHang_TransactionLog
         public DateTime? NgayTraGoc { get; set; }
         public double? TienVayThem { get; set; }
         public DateTime? NgayVayThem { get; set; }
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
     }
 }

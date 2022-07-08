@@ -23,6 +23,7 @@ namespace BaseSource.Data.Configurations
             builder.Property(x => x.Note);
             builder.Property(x => x.UserId).IsRequired().HasMaxLength(128);
             builder.Property(x => x.CreatedDate).IsRequired().HasDefaultValueSql("GetDate()");
+            builder.Property(x => x.ActionType).IsRequired();
 
             builder.HasOne(x => x.HopDong).WithMany(x => x.HopDong_VayRutGocs).HasForeignKey(x => x.HopDongId).OnDelete(DeleteBehavior.Cascade);
         }

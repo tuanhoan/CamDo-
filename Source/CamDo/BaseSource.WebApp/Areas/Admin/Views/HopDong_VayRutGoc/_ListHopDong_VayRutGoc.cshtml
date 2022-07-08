@@ -1,7 +1,6 @@
-﻿@model List<CuaHang_TransactionLogVm>
+﻿@model List<HopDong_VayRutGocVm>
 @{
     int idx = 1;
-
 }
 <div class="info-hd-header">
     <i class="fa fa-list"></i> Lịch sử trả tiền gốc
@@ -26,18 +25,18 @@
                     string clss = "";
                     <tr>
                         <td>@idx</td>
-                        <td>@item.CreatedDate.ToString("dd/MM/yyyy")</td>
+                        <td>@item.ExtraDate.ToString("dd/MM/yyyy")</td>
                         <td>@EnumExtensions.GetEnumDisplayName(((EHopDong_ActionType)item.ActionType))</td>
                         <td>@item.Note</td>
                         <td class="text-right">
                             @if ((EHopDong_ActionType)item.ActionType == EHopDong_ActionType.VayThemGoc)
                             {
-                                <span> @item.MoneyAdd.ToString("N0") VND</span>
+                                <span> @item.TotalMoney.ToString("N0") VND</span>
                                 clss = "btn-xoavaythem";
                             }
                             else
                             {
-                                <span> -@item.MoneyAdd.ToString("N0") VND</span>
+                                <span> -@item.TotalMoney.ToString("N0") VND</span>
                                 clss = "btn-xoatragoc";
                             }
 

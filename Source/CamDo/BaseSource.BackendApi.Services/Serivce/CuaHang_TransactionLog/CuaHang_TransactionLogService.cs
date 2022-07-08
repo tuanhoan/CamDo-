@@ -29,6 +29,7 @@ namespace BaseSource.BackendApi.Services.Serivce.CuaHang_TransactionLog
             transaction.TenKhachHang = khachHang?.Ten;
             transaction.ActionType = (byte)model.ActionType;
             transaction.Note = model.Note;
+            transaction.CreatedDate = DateTime.Now;
 
             switch (model.ActionType)
             {
@@ -49,7 +50,7 @@ namespace BaseSource.BackendApi.Services.Serivce.CuaHang_TransactionLog
                     transaction.MoneyPayNeed = payment.MoneyPayNeed;
                     transaction.FromDate = payment.FromDate;
                     transaction.ToDate = payment.ToDate;
-                    transaction.CreatedDate = DateTime.Now;
+                   
                     break;
                 case EHopDong_ActionType.TraGoc:
                     transaction.MoneyAdd = model.SoTienTraGoc ?? 0;
@@ -72,6 +73,8 @@ namespace BaseSource.BackendApi.Services.Serivce.CuaHang_TransactionLog
                 case EHopDong_ActionType.TraNo:
                     break;
                 case EHopDong_ActionType.GiaHan:
+                    transaction.FromDate = model.FromDate;
+                    transaction.ToDate = model.ToDate;
                     break;
                 case EHopDong_ActionType.MoLaiHD:
                     break;

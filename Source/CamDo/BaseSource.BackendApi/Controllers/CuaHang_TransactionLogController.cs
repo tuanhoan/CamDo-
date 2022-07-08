@@ -54,7 +54,7 @@ namespace BaseSource.BackendApi.Controllers
                     ToDate = trans.ToDate,
                     CreatedDate = trans.CreatedDate,
                     Note = trans.Note,
-                }).OrderBy(x => x.Id).ToListAsync();
+                }).OrderByDescending(x => x.CreatedDate).ToListAsync();
             return Ok(new ApiSuccessResult<List<CuaHang_TransactionLogVm>>(result));
         }
     }

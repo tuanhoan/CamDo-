@@ -36,6 +36,7 @@ namespace BaseSource.BackendApi.Controllers
             _hopDongService = hopDongService;
             _cuaHang_TransactionLogService = cuaHang_TransactionLogService;
         }
+        #region Hợp đồng
         [HttpGet("GetPagings")]
         public async Task<IActionResult> GetPagings([FromQuery] GetHopDongPagingRequest request)
         {
@@ -138,6 +139,7 @@ namespace BaseSource.BackendApi.Controllers
             result.CMND_NgayCap = kh.CMND_NgayCap;
             result.CMND_NoiCap = kh.CMND_NoiCap;
             result.TyLeLai = hd.HD_LaiSuat + htl.TyLeLai;
+            result.ThoiGian = htl.ThoiGian;
 
 
             return Ok(new ApiSuccessResult<HopDongVm>(result));
@@ -184,125 +186,9 @@ namespace BaseSource.BackendApi.Controllers
 
             return Ok(new ApiSuccessResult<string>("Cập nhật hợp đồng thành công"));
         }
-        #region Trả bớt gốc
-        [HttpPost("TraBotGoc")]
-        public async Task<IActionResult> TraBotGoc(TraBotGocRequestVm model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
-            }
-            var hd = await _db.HopDongs.FindAsync(model.HopDongId);
-            if (hd != null)
-            {
-                if (hd.NgayDongLaiGanNhat != null)
-                {
-                    if (model.NgayTraGoc < hd.NgayDongLaiGanNhat)
-                    {
-                        return Ok(new ApiErrorResult<string>($"Ngày [Trả gốc] phải >= ngày đóng lãi cuối cùng là ngày: {hd.NgayDongLaiGanNhat.Value.ToString("dd/MM/yyyy")}"));
-                    }
-                }
-                if (model.SoTienTraGoc > hd.TongTienVayHienTai)
-                {
-                    return Ok(new ApiErrorResult<string>($"Tiền [Trả gốc] phải <= tiền đang có của hợp đồng"));
-                }
-                hd.TongTienDaThanhToan += model.SoTienTraGoc ?? 0;
-                hd.TongTienVayHienTai -= model.SoTienTraGoc ?? 0;
-                hd.TongTienLai = await _hopDongService.TinhLaiHD(hd.HD_HinhThucLai, hd.HD_TongThoiGianVay, hd.HD_LaiSuat, hd.TongTienVayHienTai);
-                await _db.SaveChangesAsync();
-                var tranLog = new CreateCuaHang_TransactionLogVm()
-                {
-                    HopDongId = hd.Id,
-                    ActionType = EHopDong_ActionType.TraGoc,
-                    FeatureType = EFeatureType.Camdo,
-                    UserId = UserId,
-                    Note = model.Note,
-                    SoTienTraGoc = model.SoTienTraGoc,
-                    NgayTraGoc = model.NgayTraGoc
-                };
-                var result = Task.Run(() => CreateCuaHang_TransactionLog(tranLog));
-                var rs = Task.Run(() => TaoKyDongLai(hd.Id));
-
-                return Ok(new ApiSuccessResult<double>(hd.TongTienVayHienTai, "Trả bớt gốc thành công"));
-            }
-            return Ok(new ApiErrorResult<string>("Not Found!"));
-        }
-        [HttpPost("XoaTraBotGoc")]
-        public async Task<IActionResult> XoaTraBotGoc([FromForm] long tranLogId)
-        {
-            var tran = await _db.CuaHang_TransactionLogs.FindAsync(tranLogId);
-            if (tran != null)
-            {
-                var hd = await _db.HopDongs.FindAsync(tran.HopDongId);
-
-                if (hd.NgayDongLaiGanNhat != null)
-                {
-                    if (hd.NgayDongLaiGanNhat > tran.CreatedDate)
-                    {
-                        return Ok(new ApiErrorResult<string>("Không thể hủy giao dịch vì ngày đóng lãi cuối cùng lớn hơn giao dịch này"));
-                    }
-                }
-
-                hd.TongTienDaThanhToan -= tran.MoneyPay;
-                hd.TongTienVayHienTai += tran.MoneyPay;
-                hd.TongTienLai = await _hopDongService.TinhLaiHD(hd.HD_HinhThucLai, hd.HD_TongThoiGianVay, hd.HD_LaiSuat, hd.TongTienVayHienTai);
-                _db.CuaHang_TransactionLogs.Remove(tran);
-                await _db.SaveChangesAsync();
-
-                var tranLog = new CreateCuaHang_TransactionLogVm()
-                {
-                    HopDongId = hd.Id,
-                    ActionType = EHopDong_ActionType.HuyTraGoc,
-                    FeatureType = EFeatureType.Camdo,
-                    UserId = UserId,
-                    SoTienTraGoc = tran.MoneyPay
-
-                };
-                var result = Task.Run(() => CreateCuaHang_TransactionLog(tranLog));
-                var rs = Task.Run(() => TaoKyDongLai(hd.Id));
-
-                return Ok(new ApiSuccessResult<double>(hd.TongTienVayHienTai, "Hủy trả bớt gốc thành công"));
-            }
-            return Ok(new ApiErrorResult<string>("Not Found!"));
-        }
         #endregion
-        #region Vay Thêm
-        [HttpPost("VayThem")]
-        public async Task<IActionResult> VayThem(VayThemRequestVm model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
-            }
-            var hd = await _db.HopDongs.FindAsync(model.HopDongId);
-            if (hd != null)
-            {
 
-                if (model.NgayVayThem < hd.HD_NgayVay)
-                {
-                    return Ok(new ApiErrorResult<string>("Ngày xử lý phải lớn hơn ngày vay của hợp đồng"));
-                }
-
-                hd.TongTienVayHienTai += model.SoTienVayThem.Value;
-                hd.TongTienLai = await _hopDongService.TinhLaiHD(hd.HD_HinhThucLai, hd.HD_TongThoiGianVay, hd.HD_LaiSuat, hd.TongTienVayHienTai);
-                await _db.SaveChangesAsync();
-                var tranLog = new CreateCuaHang_TransactionLogVm()
-                {
-                    HopDongId = hd.Id,
-                    ActionType = EHopDong_ActionType.VayThemGoc,
-                    FeatureType = EFeatureType.Camdo,
-                    UserId = UserId,
-                    TienVayThem = model.SoTienVayThem,
-                    NgayVayThem = model.NgayVayThem
-                };
-                var result = Task.Run(() => CreateCuaHang_TransactionLog(tranLog));
-                var rs = Task.Run(() => TaoKyDongLai(hd.Id));
-
-                return Ok(new ApiSuccessResult<double>(hd.TongTienVayHienTai, "Vay thêm gốc thành công"));
-            }
-            return Ok(new ApiErrorResult<string>("Not Found!"));
-        }
-        #endregion
+    
 
         #region helper
 

@@ -227,68 +227,6 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             return Json(new ApiSuccessResult<HD_PaymentLogReponse>(result.ResultObj, result.Message));
         }
         #endregion
-
-
-        #region Trả bớt gốc
-        public async Task<IActionResult> GetListTraBotGoc(int hopDongId)
-        {
-            var result = await _cuaHang_TransactionLog.GetCuaHang_TransactionLogHistory(hopDongId, EHopDong_ActionType.TraGoc);
-            return PartialView("_ListTraBotGoc", result.ResultObj);
-        }
-        public async Task<IActionResult> TraBotGoc(TraBotGocRequestVm model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return Json(new ApiErrorResult<string>(ModelState.GetListErrors()));
-            }
-            var result = await _hopDongApiClient.TraBotGoc(model);
-            if (!result.IsSuccessed)
-            {
-                if (result.ValidationErrors != null && result.ValidationErrors.Count > 0)
-                {
-                    return Json(new ApiErrorResult<string>(result.ValidationErrors));
-                }
-                else if (result.Message != null)
-                {
-                    return Json(new ApiErrorResult<string>(result.Message));
-                }
-
-            }
-            return Json(new ApiSuccessResult<string>(result.ResultObj, result.Message));
-        }
-        public async Task<IActionResult> XoaTraBotGoc(long tranLogId)
-        {
-            var result = await _hopDongApiClient.XoaTraBotGoc(tranLogId);
-            if (!result.IsSuccessed)
-            {
-                return Json(new ApiErrorResult<string>(result.Message));
-            }
-            return Json(new ApiSuccessResult<string>(result.ResultObj, result.Message));
-        }
-        #endregion
-
-        #region Vay thêm
-        public async Task<IActionResult> VayThem(VayThemRequestVm model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return Json(new ApiErrorResult<string>(ModelState.GetListErrors()));
-            }
-            var result = await _hopDongApiClient.VayThem(model);
-            if (!result.IsSuccessed)
-            {
-                if (result.ValidationErrors != null && result.ValidationErrors.Count > 0)
-                {
-                    return Json(new ApiErrorResult<string>(result.ValidationErrors));
-                }
-                else if (result.Message != null)
-                {
-                    return Json(new ApiErrorResult<string>(result.Message));
-                }
-
-            }
-            return Json(new ApiSuccessResult<string>(result.ResultObj, result.Message));
-        }
-        #endregion
+         
     }
 }
