@@ -31,7 +31,7 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong_AlarmLog
                 hopDongId = hopDongId
             };
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
-            return await client.GetAsync<ApiResult<List<HopDong_AlarmLogVm>>>("/api/HopDong_AlarmLog/GetHopDong_DebtNote", obj);
+            return await client.GetAsync<ApiResult<List<HopDong_AlarmLogVm>>>("/api/HopDong_AlarmLog/GetHopDong_AlarmLog", obj);
         }
     }
 }

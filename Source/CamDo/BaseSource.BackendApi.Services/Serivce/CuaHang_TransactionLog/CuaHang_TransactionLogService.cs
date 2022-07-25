@@ -28,6 +28,7 @@ namespace BaseSource.BackendApi.Services.Serivce.CuaHang_TransactionLog
             transaction.TotalMoneyLoan = hopDong.TongTienVayHienTai;
             transaction.TenKhachHang = khachHang?.Ten;
             transaction.ActionType = (byte)model.ActionType;
+            transaction.FeatureType = model.FeatureType;
             transaction.Note = model.Note;
             transaction.CreatedDate = DateTime.Now;
 
@@ -41,7 +42,6 @@ namespace BaseSource.BackendApi.Services.Serivce.CuaHang_TransactionLog
                 case EHopDong_ActionType.DongTienLai:
                     var payment = await _db.HopDong_PaymentLogs.FindAsync(model.PaymentId);
                     transaction.ReferId = model.PaymentId;
-                    transaction.FeatureType = model.FeatureType;
                     transaction.MoneyAdd = payment.MoneyPayNeed;
                     transaction.MoneyDebit = payment.MoneyPayNeed - payment.MoneyInterest;
                     transaction.MoneyInterest = payment.MoneyInterest;
@@ -50,7 +50,7 @@ namespace BaseSource.BackendApi.Services.Serivce.CuaHang_TransactionLog
                     transaction.MoneyPayNeed = payment.MoneyPayNeed;
                     transaction.FromDate = payment.FromDate;
                     transaction.ToDate = payment.ToDate;
-                   
+
                     break;
                 case EHopDong_ActionType.TraGoc:
                     transaction.MoneyAdd = model.SoTienTraGoc ?? 0;
@@ -69,8 +69,10 @@ namespace BaseSource.BackendApi.Services.Serivce.CuaHang_TransactionLog
                 case EHopDong_ActionType.DongHD:
                     break;
                 case EHopDong_ActionType.NoLai:
+                    transaction.MoneyDebit = model.TienGhiNo;
                     break;
                 case EHopDong_ActionType.TraNo:
+                    transaction.MoneyDebit = -model.TienTraNo;
                     break;
                 case EHopDong_ActionType.GiaHan:
                     transaction.FromDate = model.FromDate;

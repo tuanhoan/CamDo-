@@ -27,7 +27,20 @@
                     <td>@idx</td>
                     <td>@item.CreatedDate.ToString("HH:mm dd/MM/yyyy")</td>
                     <td>@item.FullName</td>
-                    @if (item.ActionType == (byte)EHopDong_ActionType.DongTienLai)
+                    @if (item.ActionType == (byte)EHopDong_ActionType.TraNo || item.ActionType == (byte)EHopDong_ActionType.NoLai)
+                    {
+                        if (item.MoneyDebit < 0)
+                        {
+                            <td class="text-right">0</td>
+                            <td class="text-right">@((item.MoneyDebit*-1).ToString("N0"))</td>
+                        }
+                        else
+                        {
+                            <td class="text-right">@item.MoneyDebit.ToString("N0")</td>
+                            <td class="text-right">0</td>
+                        }
+                    }
+                    else if (item.MoneyAdd != 0)
                     {
                         <td class="text-right">0</td>
                         <td class="text-right">@item.MoneyPay.ToString("N0")</td>

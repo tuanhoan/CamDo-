@@ -227,6 +227,50 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             return Json(new ApiSuccessResult<HD_PaymentLogReponse>(result.ResultObj, result.Message));
         }
         #endregion
-         
+
+        #region Ghi nợ - trả nợ
+        [HttpPost]
+        public async Task<IActionResult> NoLai(HopDongNoLaiVm model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Json(new ApiErrorResult<string>(ModelState.GetListErrors()));
+            }
+            var rs = await _hopDongApiClient.NoLai(model);
+            if (!rs.IsSuccessed)
+            {
+                if (rs.ValidationErrors != null && rs.ValidationErrors.Count > 0)
+                {
+                    return Json(new ApiErrorResult<string>(rs.ValidationErrors));
+                }
+                else if (!string.IsNullOrEmpty(rs.Message))
+                {
+                    return Json(new ApiErrorResult<string>(rs.Message));
+                }
+            }
+            return Json(new ApiSuccessResult<double>(double.Parse(rs.ResultObj), rs.Message));
+        }
+        public async Task<IActionResult> TraNo(HopDongTraNoVm model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Json(new ApiErrorResult<string>(ModelState.GetListErrors()));
+            }
+            var rs = await _hopDongApiClient.TraNo(model);
+            if (!rs.IsSuccessed)
+            {
+                if (rs.ValidationErrors != null && rs.ValidationErrors.Count > 0)
+                {
+                    return Json(new ApiErrorResult<string>(rs.ValidationErrors));
+                }
+                else if (!string.IsNullOrEmpty(rs.Message))
+                {
+                    return Json(new ApiErrorResult<string>(rs.Message));
+                }
+            }
+            return Json(new ApiSuccessResult<double>(double.Parse(rs.ResultObj), rs.Message));
+        }
+        #endregion
+
     }
 }

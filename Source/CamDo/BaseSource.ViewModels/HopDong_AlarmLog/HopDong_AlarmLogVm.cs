@@ -23,7 +23,7 @@ namespace BaseSource.ViewModels.HopDong_AlarmLog
         [Required]
         public int HopDongId { get; set; }
         public string Note { get; set; }
-        public DateTime DateAlarm { get; set; }
+        public DateTime AlarmDate { get; set; }
         public bool IsDisable { get; set; }
     }
 }

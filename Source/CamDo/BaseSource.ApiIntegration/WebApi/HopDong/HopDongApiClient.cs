@@ -45,6 +45,17 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.GetAsync<ApiResult<PagedResult<HopDongVm>>>("/api/HopDong/GetPagings", model);
         }
-         
+
+        public async Task<ApiResult<string>> NoLai(HopDongNoLaiVm model)
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.PostAsync<ApiResult<string>>("/api/HopDong/NoLai", model);
+        }
+
+        public async Task<ApiResult<string>> TraNo(HopDongTraNoVm model)
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.PostAsync<ApiResult<string>>("/api/HopDong/TraNo", model);
+        }
     }
 }

@@ -137,5 +137,23 @@ namespace BaseSource.ViewModels.HopDong
         public double TongTienDaThanhToan { get; set; }
         public DateTime NgayDongLaiTiepTheo { get; set; }
     }
-     
+
+    public class HopDongNoLaiVm
+    {
+        [Required]
+        public int HopDongId { get; set; }
+        [Required(ErrorMessage = "Vui lòng nhập số tiền")]
+        [Range(100, int.MaxValue, ErrorMessage = "Số tiền phải lơn hơn 100 VNĐ")]
+        public double? SoTienNoLai { get; set; }
+    }
+    public class HopDongTraNoVm
+    {
+        [Required]
+        public int HopDongId { get; set; }
+        [Required(ErrorMessage = "Vui lòng nhập số tiền")]
+        [Range(100, int.MaxValue, ErrorMessage = "Số tiền phải lơn hơn 100 VNĐ")]
+        public double? SoTienTraNo { get; set; }
+    }
+
+
 }

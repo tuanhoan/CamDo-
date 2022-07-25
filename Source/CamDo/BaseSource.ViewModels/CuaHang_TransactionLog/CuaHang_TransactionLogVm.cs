@@ -50,5 +50,7 @@ namespace BaseSource.ViewModels.CuaHang_TransactionLog
         public DateTime? NgayVayThem { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
+        public double TienGhiNo { get; set; }
+        public double TienTraNo { get; set; }
     }
 }

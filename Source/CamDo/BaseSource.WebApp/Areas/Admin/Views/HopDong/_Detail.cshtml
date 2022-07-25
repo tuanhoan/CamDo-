@@ -3,6 +3,7 @@
     Layout = null;
     string lblDisplayDebitOrOverMoney = "";
     string lblDisplayLoanDebit = "";
+    var tienthuaHD = Model.TongTienDaThanhToan - Model.TongTienGhiNo;
 }
 <style>
     fieldset {
@@ -77,7 +78,7 @@
                     </td>
                 </tr>
                 <tr>
-                    @if (Model.TongTienGhiNo <= 0)
+                    @if (tienthuaHD <= 0)
                     {
                         lblDisplayDebitOrOverMoney = "Nợ cũ KH";
                         lblDisplayLoanDebit = "Nợ cũ HĐ";
@@ -89,27 +90,27 @@
                     }
                     <td>
                         <span class="font-weight-bold" id="lblDisplayDebitOrOverMoney">@lblDisplayDebitOrOverMoney: </span>
-                        <span class="@(Model.TongTienGhiNo <= 0?"text-danger":"text-success") font-weight-bold" id="lblCustomerDebitMoney">
-                            @if (Model.TongTienGhiNo < 0)
+                        <span class="@(tienthuaHD <= 0?"text-danger":"text-success") font-weight-bold" id="lblCustomerDebitMoney">
+                            @if (tienthuaHD < 0)
                             {
-                                <span>@((Model.TongTienGhiNo*-1).ToString("N0")) VNĐ</span>
+                                <span>@(tienthuaHD * -1).ToString("N0")) VNĐ</span>
                             }
                             else
                             {
-                                <span>@((Model.TongTienGhiNo).ToString("N0")) VNĐ</span>
+                                <span>@(tienthuaHD.ToString("N0")) VNĐ</span>
                             }
                         </span>
                     </td>
                     <td align="right">
                         <span class="font-weight-bold" id="lblDisplayLoanDebit">@lblDisplayLoanDebit: </span>
-                        <span class="@(Model.TongTienGhiNo <= 0?"text-danger":"text-success") font-weight-bold" id="lblLoanDebitMoney">
-                            @if (Model.TongTienGhiNo < 0)
+                        <span class="@(tienthuaHD <= 0?"text-danger":"text-success") font-weight-bold" id="lblLoanDebitMoney">
+                            @if (tienthuaHD < 0)
                             {
-                                <span>@((Model.TongTienGhiNo*-1).ToString("N0")) VNĐ</span>
+                                <span>@(tienthuaHD * -1).ToString("N0")) VNĐ</span>
                             }
                             else
                             {
-                                <span>@((Model.TongTienGhiNo).ToString("N0")) VNĐ</span>
+                                <span>@(tienthuaHD.ToString("N0")) VNĐ</span>
                             }
                         </span>
                     </td>
@@ -139,11 +140,11 @@
     <div class="tabs" id="tab05">
         <h6>Chuộc đồ</h6>
     </div>
-    <div class="tabs" id="tab06">
-        <h6>Nợ</h6>
+    <div class="tabs" data-type="tab-no">
+        <h6><i class="fas fa-tag" style="transform: rotateY(180deg);"></i> Nợ</h6>
     </div>
-    <div class="tabs" id="tab07">
-        <h6>Chứng từ</h6>
+    <div class="tabs" data-type="tab-chungtu">
+        <h6><i class="fas fa-image"></i> Chứng từ</h6>
     </div>
     <div class="tabs" data-type="tab-history">
         <h6 class="font-weight-bold"><i class="fas fa-clipboard-list"></i> Lịch sử</h6>
@@ -152,7 +153,7 @@
         <h6>Lịch sử trả chậm</h6>
     </div>
     <div class="tabs" data-type="tab-hengio">
-        <h6>Hẹn giờ</h6>
+        <h6><i class="fas fa-clock"></i> Hẹn giờ</h6>
     </div>
 </div>
 <div class="line"></div>
@@ -329,7 +330,7 @@
     <fieldset id="tab-hengio">
         <div class="d-flex justify-content-center">
             <div class="col-md-6">
-                <form id="frmHenGio" asp-action="Create" asp-controller="HopDong_HopDong_AlarmLog" method="post">
+                <form id="frmHenGio" asp-action="Create" asp-controller="HopDong_AlarmLog" method="post">
                     <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.Id" />
                     <input type="hidden" name="IsDisable" id="IsDisable" />
                     <div class="form-group row">
@@ -347,8 +348,8 @@
                     <div class="form-group row">
                         <label class="col-4"></label>
                         <div class="col-8">
-                            <button class="btn btn-primary btn-sm" type="button" onclick="saveHenGio(true)"><i class="fas fa-thumbs-up"></i> Tạo hẹn giờ</button>
-                            <button class="btn btn-danger btn-sm" type="button" onclick="saveHenGio(false)"><i class="fas fa-thumbs-up"></i> Dừng hẹn giờ</button>
+                            <button class="btn btn-primary btn-sm" type="button" onclick="saveHenGio(false)"> Tạo hẹn giờ</button>
+                            <button class="btn btn-danger btn-sm" type="button" onclick="saveHenGio(true)"> Dừng hẹn giờ</button>
                         </div>
                     </div>
                 </form>
@@ -358,15 +359,104 @@
 
         </div>
     </fieldset>
+    <fieldset id="tab-chungtu">
+        <div class="row">
+            <div class="col-6">
+                <div class="info-hd-header">
+                    <i class="fa fa-image"></i> Upload ảnh khách hàng
+                </div>
+                <div class="list-image-customer">
 
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="info-hd-header">
+                    <i class="fa fa-image"></i> Upload chứng từ hợp đồng
+                </div>
+                <div class="list-image-hd">
+
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset id="tab-no">
+        <div class="row">
+            <div class="col-6">
+                <div class="card shadow h-100 mb-4 ">
+                    <div class="card-header">
+                        <h3 class="m-0 font-weight-bold"><i class="fa fa-coins"></i> Khách hàng nợ lãi - Trả tiền thừa</h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" asp-action="NoLai" data-name="frmGhiNo">
+                            <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.Id">
+                            <input type="hidden" name="Type" value="@((int)EHopDong_ActionType.NoLai)">
+                            <div class="form-group row">
+                                <label class="col-3">Số tiền nợ lại</label>
+                                <div class="col-9">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="SoTienNoLaiDisplay" value="">
+                                        <input type="hidden" name="SoTienNoLai">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">VNĐ</span>
+                                        </div>
+                                    </div>
+                                    <span class="text-danger field-validation-valid" data-valmsg-for="SoTienVayThem" data-valmsg-replace="true"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-3"></label>
+                                <div class="col-9">
+                                    <button class="btn btn-danger btn-sm" type="submit"><i class="fas fa-thumbs-down"></i> Ghi nợ</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card shadow h-100 mb-4 ">
+                    <div class="card-header">
+                        <h3 class="m-0 font-weight-bold"><i class="fa fa-money-bill"></i> Khách hàng trả nợ</h3>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" asp-action="TraNo" data-name="frmTraNo">
+                            <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.Id">
+                            <input type="hidden" name="Type" value="@((int)EHopDong_ActionType.TraNo)">
+                            <div class="form-group row">
+                                <label class="col-3">Số tiền trả nợ</label>
+                                <div class="col-9">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="SoTienTraNoDisplay" value="">
+                                        <input type="hidden" name="SoTienTraNo">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">VNĐ</span>
+                                        </div>
+                                    </div>
+                                    <span class="text-danger field-validation-valid" data-valmsg-for="SoTienVayThem" data-valmsg-replace="true"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-3"></label>
+                                <div class="col-9">
+                                    <button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-thumbs-up"></i> Thanh toán</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
 </div>
 
 <script>
     $(document).ready(function () {
-        setMoneyTextBox("#SoTienTraGocDisplay");
-        setMoneyTextBox('#SoTienVayThemDisplay');
+        setMoneyTextBox("#SoTienTraNoDisplay");
+        setMoneyTextBox('#SoTienNoLaiDisplay');
        getListPaymentLog(@Model.Id);
         getInfoPaymentByDate(@Model.Id);
+        $(".list-image-customer").imageUploader();
+        $(".list-image-hd").imageUploader();
     })
 
 
@@ -384,16 +474,16 @@
         $(next_fs).addClass("show");
 
          current_fs.animate({}, {
-                                step: function () {
-                                        current_fs.css({
-                                            'display': 'none',
-                    'position': 'relative'
-                                        });
-                                        next_fs.css({
-                                            'display': 'block'
-                                        });
-                                    }
-                                });
+           step: function () {
+              current_fs.css({
+               'display': 'none',
+                'position': 'relative'
+              });
+             next_fs.css({
+              'display': 'block'
+             });
+         }
+         });
 
 
                             });
@@ -414,6 +504,7 @@
                 getListGiaHan(@Model.Id);
                case "tab-hengio":
                 getListAlarmLog(@Model.Id);
+
             default:
             // code block
         }

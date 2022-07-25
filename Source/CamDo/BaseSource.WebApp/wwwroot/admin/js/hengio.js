@@ -6,7 +6,7 @@ function getListAlarmLog(hopDongId) {
         data: { hopDongId: hopDongId },
         success: function (data) {
             $('#divContent-HenGio').html(data);
-            saveHenGio(true);
+
         }
     })
 }
@@ -18,7 +18,6 @@ function saveHenGio(type) {
         $('#frmHenGio').find('input[name=IsDisable]').val(false);
     }
     var $form = $('#frmHenGio');
-    var $form = $(this);
     var $btnSubmit = $form.find("button[type='submit']");
     $btnSubmit.attr("disabled", "true");
 
@@ -38,6 +37,7 @@ function saveHenGio(type) {
             if (res.isSuccessed == true) {
                 var hopDongId = $form.find('input[name=HopDongId]').val();
                 toastr.info(res.resultObj);
+                $form[0].reset();
                 setTimeout(getListAlarmLog(hopDongId), 2000);
             } else if (res.validationErrors != null && res.validationErrors.length) {
                 $.each(res.validationErrors, function (i, v) {

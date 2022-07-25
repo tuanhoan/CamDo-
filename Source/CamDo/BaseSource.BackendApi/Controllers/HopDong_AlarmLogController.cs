@@ -46,7 +46,7 @@ namespace BaseSource.BackendApi.Controllers
                 Note = model.Note,
                 UserId = UserId,
                 CreatedDate = DateTime.Now,
-                AlarmDate = model.DateAlarm,
+                AlarmDate = !model.IsDisable ? model.AlarmDate : null,
                 IsDisable = model.IsDisable
             };
             _db.HopDong_AlarmLogs.Add(log);

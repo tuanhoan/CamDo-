@@ -188,7 +188,74 @@ namespace BaseSource.BackendApi.Controllers
         }
         #endregion
 
-    
+
+        #region Ghi nợ - trả nợ
+        [HttpPost("NoLai")]
+        public async Task<IActionResult> NoLai(HopDongNoLaiVm model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
+            }
+            var hd = await _db.HopDongs.FindAsync(model.HopDongId);
+            if (hd == null)
+            {
+                return Ok(new ApiErrorResult<string>("Not found"));
+            }
+
+            if (model.SoTienNoLai > hd.TongTienDaThanhToan)
+            {
+                return Ok(new ApiErrorResult<string>("Tiền nợ phải nhỏ hơn hoặc bằng số tiền đã thanh toán"));
+            }
+
+            else
+            {
+                hd.TongTienGhiNo += model.SoTienNoLai ?? 0;
+                await _db.SaveChangesAsync();
+
+                var tranLog = new CreateCuaHang_TransactionLogVm()
+                {
+                    HopDongId = hd.Id,
+                    ActionType = EHopDong_ActionType.NoLai,
+                    FeatureType = EFeatureType.Camdo,
+                    UserId = UserId,
+                    TienGhiNo = model.SoTienNoLai ?? 0
+
+                };
+                var result = Task.Run(() => CreateCuaHang_TransactionLog(tranLog));
+            }
+            var moneyResult = hd.TongTienDaThanhToan - hd.TongTienGhiNo;
+            return Ok(new ApiSuccessResult<double>(moneyResult, "Nợ lại thành công"));
+        }
+        [HttpPost("TraNo")]
+        public async Task<IActionResult> TraNo(HopDongTraNoVm model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
+            }
+            var hd = await _db.HopDongs.FindAsync(model.HopDongId);
+            if (hd == null)
+            {
+                return Ok(new ApiErrorResult<string>("Not found"));
+            }
+            hd.TongTienDaThanhToan += model.SoTienTraNo ?? 0;
+            await _db.SaveChangesAsync();
+
+            var tranLog = new CreateCuaHang_TransactionLogVm()
+            {
+                HopDongId = hd.Id,
+                ActionType = EHopDong_ActionType.TraNo,
+                FeatureType = EFeatureType.Camdo,
+                UserId = UserId,
+                TienTraNo = model.SoTienTraNo ?? 0
+            };
+            var result = Task.Run(() => CreateCuaHang_TransactionLog(tranLog));
+            var moneyResult = hd.TongTienDaThanhToan - hd.TongTienGhiNo;
+            return Ok(new ApiSuccessResult<double>(moneyResult, "Trả nợ thành công"));
+        }
+        #endregion
+
 
         #region helper
 

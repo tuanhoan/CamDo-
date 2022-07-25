@@ -15,5 +15,7 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
         Task<ApiResult<string>> Create(CreateHopDongVm model);
         Task<ApiResult<HopDongVm>> GetById(int id);
         Task<ApiResult<string>> Edit(EditHopDongVm model);
+        Task<ApiResult<string>> NoLai(HopDongNoLaiVm model);
+        Task<ApiResult<string>> TraNo(HopDongTraNoVm model);
     }
 }
