@@ -1,8 +1,151 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Cầm đồ";
+    Layout = "_HomepageLayout";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-  
+<div id="homepage">
+    <div class="hompage-header">
+        <div class="container">
+            <div class="hompage-navbar">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="hidden-xs">
+                            <a href="javascript:void(0)">
+                                <img src="images/Mecash-03.jpg" alt="" width="200" height="80">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6 padding-top-20">
+                        <div class="d-flex justify-content-around align-items-center">
+                            <a class="hompage-top-link active" href="/">Trang chủ</a>
+                            <a class="hompage-top-link" href="/tinh-nang.html">Tính năng</a>
+                            <a class="hompage-top-link" href="https://www.youtube.com/channel/UCcFVrUeA3yMi8rFNQM3hPJQ/featured?disable_polymer=1" target="_blank">Video</a>
+                            <a class="hompage-top-link" href="/thanh-toan.html">Thanh toán</a>
+                            <a class="hompage-top-link" href="/ctkm">Khuyến mại</a>
+                            <a class="hompage-top-link" href="/lien-he.html">Liên hệ</a>
+                        </div>
+                    </div>
+                    <div class="col-md-3 padding-top-20 padding-right-10">
+                        <div class="d-flex justify-content-around align-items-center">
+                            <a class="btn-top btn-top-login" href="#">Đăng nhập</a>
+                            <a class="btn-top btn-top-register" href="#">Đăng ký</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="position-relative h-100">
+                        <img src="images/img_banner.png" class="img-responsive" alt="">
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="position-relative h-100">
+                        <div class="content-center">
+                            <h3 class="homepage-header-title">
+                                PHẦN MỀM QUẢN LÝ
+                                <br>
+                                CỬA HÀNG CẦM ĐỒ - VAY LÃI BÁT HỌ
+                            </h3>
+                            <ul class="list-unstyled homepage-header-list">
+                                <li>An toàn tuyệt đối, không lo mất dữ liệu</li>
+                                <li>Truy cập mọi lúc, mọi nơi, sử dụng trên mọi thiết bị</li>
+                                <li>Chức năng lịch nhắc thu tiền</li>
+                                <li>Gửi SMS nhắc nợ miễn phí</li>
+                                <li>Kiểm soát nhân viên ngăn ngừa thất thoát tiền</li>
+                            </ul>
+                            <a href="https://admin.mecash.vn/User/register?t=Mecash" class="homepage-header-btn-submit">Dùng thật miễn phí</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="homepage-why-like container">
+        <h3 class="title">Tại sao bạn thích MeCash ?</h3>
+
+        <div class="reasons row">
+            <div class="col-md-4 col-sm-12">
+                <div class="item">
+                    <img src="images/reason.png" class="img-responsive" alt="">
+                    <div class="name">Đơn giản & tinh tế </div>
+                    <div class="value">Chỉ mất 5 phút để làm quen và tạo hợp đồng cầm đồ, vay lãi, bát họ. Giao diện đơn giản, lược giản, thân thiện, thông minh, tiện lợi. </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-12">
+                <div class="item">
+                    <img src="images/reason.png" class="img-responsive" alt="">
+                    <div class="name">An toàn, bảo mật </div>
+                    <div class="value">Trong bất cứ trường hợp nào, dữ liệu của bạn cũng luôn được bảo vệ và an toàn với hệ thống server dự phòng sao lưu dữ liệu thời gian thực. </div>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-12">
+                <div class="item">
+                    <img src="images/reason.png" class="img-responsive" alt=""/>
+                    <div class="name">Tiết kiệm chi phí nhất</div>
+                    <div class="value">Không cần tới hàng chục triệu mới có thể sử dụng phần mềm, chỉ với 3000đ/1 ngày là bạn đã hoàn toàn sở hữu phần mềm. </div>
+                </div>
+            </div>
+        </div>
+
+        <a href="https://admin.mecash.vn/User/register?t=Mecash" class="homepage-header-btn-submit">Dùng thật miễn phí</a>
+    </div>
+
+    <div class="homepage-values container">
+        <h3 class="title">MeCash giúp gì cho bạn?</h3>
+        <p class="description">MeCash giúp gì cho bạn? </p>
+
+        <div class="row">
+            <div class="col-md-6 col-sm-12 left-content">
+                <div class="value d-flex justify-content-around align-items-start">
+                    <img src="images/icon.png" />
+                    <div class="ml-2">
+                        <div class="item-title">Quản lý hợp đồng cầm đồ, vay họ </div>
+                        <div class="item-description">Hợp đồng được quản lý và phân loại theo trạng thái hợp đồng : Đang trả lãi, chậm lãi, quá hạn ... </div>
+                    </div>
+                </div>
+
+                <div class="value d-flex justify-content-around align-items-start">
+                    <img src="images/icon.png" />
+                    <div class="ml-2">
+                        <div class="item-title">Sổ thu tiền họ, lịch nhắc thu tiền lã</div>
+                        <div class="item-description">Sang ngày mới, thay vì miệt mài làm sổ họ, liệt kê những khách hàng cần đóng lãi, trả gốc thì hệ thống sẽ tự động làm việc đó giúp bạn</div>
+                    </div>
+                </div>
+
+                <div class="value d-flex justify-content-around align-items-start">
+                    <img src="images/icon.png" />
+                    <div class="ml-2">
+                        <div class="item-title">Quản lý khách hàng</div>
+                        <div class="item-description">Thông tin cá nhân, số điện thoại, địa chỉ... được lưu trữ và quản lý dễ dàng </div>
+                    </div>
+                </div>
+
+                <div class="value d-flex justify-content-around align-items-start">
+                    <img src="images/icon.png" />
+                    <div class="ml-2">
+                        <div class="item-title">Báo cáo lợi nhuận, tiền thu, tiền xuất hàng ngày</div>
+                        <div class="item-description">Báo cáo tiền thu về, tiền xuất ra trong ngày tránh thất thoát tiền. Thống kê lợi nhuận theo tuần, theo tháng ...</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <img src="images/img.jpg" class="img-responsive" alt=""/>
+            </div>
+        </div>
+    </div>
+
+    <div class="reviews">
+        <h3 class="title">
+           Chúng tôi đang giúp khách hàng xử lý
+           <br>
+           hơn <span>+ 75,000</span> giao dịch mỗi ngày
+        </h3>
+
+        <p class="description">Hãy nghe khách hàng đã sử dụng nói về chúng tôi</p>
+    </div>
 </div>
