@@ -5,6 +5,40 @@
 
 <div id="homepage">
     <div class="hompage-header">
+        <nav id="navbar" class="navbar navbar-expand-lg navbar-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="d-flex justify-content-right align-items-center">
+                <a class="btn-top btn-top-login" href="#">Đăng nhập</a>
+                <a class="btn-top btn-top-register" href="#">Đăng ký</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Trang chủ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Tính năng</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Video</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Thanh toán</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Khuyến mại</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Liên hệ</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
         <div class="container">
             <div class="hompage-navbar">
                 <div class="row">
@@ -137,9 +171,11 @@
                 <img src="images/img.jpg" class="img-responsive" alt=""/>
             </div>
         </div>
+
+        <a href="https://admin.mecash.vn/User/register?t=Mecash" class="homepage-header-btn-submit">Dùng thật miễn phí</a>
     </div>
 
-    <div class="reviews">
+    <div class="reviews container">
         <h3 class="title">
            Chúng tôi đang giúp khách hàng xử lý
            <br>
@@ -147,5 +183,98 @@
         </h3>
 
         <p class="description">Hãy nghe khách hàng đã sử dụng nói về chúng tôi</p>
+
+        <div class="owl-carousel owl-theme">
+            <div class="item">
+                <div class="row">
+                    <div class="col-md-9 col-sm-12">
+                        <span>
+                            <i class="fas fa-quote-left icon"></i>
+                            Phần mềm dùng rất tiện lợi, cầm đồ như anh không thể thiếu được. Đỡ phải cộng trừ nhân chia,nặng đầu
+                            <i class="fas fa-quote-right icon"></i>
+                        </span>
+                        <br />
+                        <div class="name"><strong>_ Cầm đồ 79 _</strong></div>
+                        <div class="address">Đống Đa, Hà Nội</div>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <img class="img-responsive img-circle" src="https://mecash.vn/Content/images/khachhang2.jpg" width="145px" height="145px">
+                    </div>
+                </div>
+            </div>
+
+            <div class="item">
+                 <div class="row">
+                    <div class="col-md-9 col-sm-12">
+                        <span>
+                            <i class="fas fa-quote-left icon"></i>
+                            Anh cũng thấy quảng cáo trên Facebook nhiều rồi , cái anh đang dùng cũng tiện. Nhưng phần
+                            mềm của em còn tiền gấp 10 lần. Anh làm nhiều lắm, nhiều khi toàn quên không giục khách đóng lãi
+                            để nó thành nợ xấu. Giờ có phần mềm bên em không sót khách nào                 
+                            <i class="fas fa-quote-right icon"></i>
+                        </span>
+                        <br />
+                        <div class="name"><strong>Cầm Đồ Thanh Bình</strong></div>
+                        <div class="address">Khoái Châu, Hưng Yên</div>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <img class="img-responsive img-circle" src="https://mecash.vn/Content/images/khachhang1.jpg" width="145px" height="145px">
+                    </div>
+                </div>
+            </div>
+
+            <div class="item">
+                <div class="row">
+                    <div class="col-md-9 col-sm-12">
+                        <span>
+                            <i class="fas fa-quote-left icon"></i>
+                            Anh khoái nhất phần tin nhắn bên em, đỡ mất thời gian gọi điện nhắc đóng tiền
+                            <i class="fas fa-quote-right icon"></i>
+                        </span>
+                        <br />
+                        <div class="name"><strong>_ Cầm đồ _ </strong></div>
+                        <div class="address">Liên Khê, Khoái Châu, Hưng Yên</div>
+                    </div>
+                    <div class="col-md-3 col-sm-12">
+                        <img class="img-responsive img-circle" src="https://mecash.vn/Content/images/khachhang1.jpg" width="145px" height="145px">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="partner">
+        <div class="container">
+            <h3 class="title">Đồng hành 24/7 cùng công việc quản lý bán hàng của bạn</h3>
+            <p class="description">Mecash mang đến giải pháp tốt nhất cho hơn 3500 khách hàng</p>
+
+            <div class="center">
+                <div class="item">
+                    <p class="top">100+</p>
+                    <p class="bot">nhân viên</p>
+                </div>
+
+                <div class="item">
+                    <p class="top">3000+</p>
+                    <p class="bot">khách hàng</p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+
+@section Scripts{
+    <script>
+        $(document).ready(function() {
+            $('.owl-carousel').owlCarousel({
+                loop:true,
+                margin:10,
+                items:1,
+                autoplay: true,
+                autoplayTimeout: 5000,
+                autoplayHoverPause: true,
+            });
+        });
+    </script>
+}

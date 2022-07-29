@@ -31,6 +31,10 @@
   <ItemGroup>
     <None Include="Areas\Admin\Views\Home\Index.cshtml" />
     <None Include="compilerconfig.json" />
+    <None Include="wwwroot\lib\owl-carousuel\LICENSE" />
+    <None Include="wwwroot\lib\owl-carousuel\owl.carousel.js" />
+    <None Include="wwwroot\lib\owl-carousuel\owl.carousel.min.js" />
+    <None Include="wwwroot\lib\owl-carousuel\README.md" />
   </ItemGroup>
 
 </Project>
