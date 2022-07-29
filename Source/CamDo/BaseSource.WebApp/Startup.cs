@@ -63,7 +63,7 @@ namespace BaseSource.WebApp
                     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", bearerToken);
             });
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews().AddRazorRuntimeCompilation();
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
            .AddCookie(options =>
            {

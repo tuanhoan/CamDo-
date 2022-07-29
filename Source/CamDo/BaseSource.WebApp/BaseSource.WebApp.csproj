@@ -9,6 +9,7 @@
     <PackageReference Include="FluentValidation.AspNetCore" Version="9.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="5.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.17" />
     <PackageReference Include="Microsoft.IdentityModel.Logging" Version="6.8.0" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.8.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />

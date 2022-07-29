@@ -10,13 +10,17 @@
             </a>
             <div class="collapse" id="collapseCuahang" data-parent="#accordionSidenav">
                 <nav class="sidenav-menu-nested nav">
+                    <a class="nav-link summaryshop-nav" href="@Url.Action("SummaryReportShop", "CuaHang")">Tổng quát chuỗi cửa hàng</a>
+                    <a class="nav-link detailshop-nav" href="@Url.Action("DetailShop", "CuaHang")">Thông tin chi tiết cửa hàng</a>
                     <a class="nav-link cuahang-nav" href="@Url.Action("Index", "CuaHang")">Danh sách cửa hàng</a>
                     <a class="nav-link cauhinhhanghoa-nav" href="@Url.Action("Index", "CauHinhHangHoa")">Cấu hình hàng hóa</a>
+                    <a class="nav-link moneynewdate-nav" href="@Url.Action("MoneyNewDate", "CuaHang")">Nhập tiền quỹ đầu ngày</a>
+
                 </nav>
             </div>
             <a class="nav-link user-nav" href="@Url.Action("Index", "Pawn")">
                 <div class="nav-link-icon"><i data-feather="briefcase"></i></div>
-                Cầm đồ      
+                Cầm đồ
             </a>
             <a class="nav-link user-nav" href="@Url.Action("Index", "User")">
                 <div class="nav-link-icon"><i data-feather="users"></i></div>
