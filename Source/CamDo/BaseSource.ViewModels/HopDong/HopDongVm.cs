@@ -1,5 +1,6 @@
 ﻿using BaseSource.Shared.Enums;
 using BaseSource.ViewModels.Common;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -155,5 +156,19 @@ namespace BaseSource.ViewModels.HopDong
         public double? SoTienTraNo { get; set; }
     }
 
+    public class HopDong_AddChungTuVm
+    {
+        public int HopDongId { get; set; }
+        public List<IFormFile> ListImage { get; set; }
+
+        public EHopDong_ChungTuType ChungTuType { get; set; }
+    }
+    public class HopDong_ChungTuResponseVm
+    {
+        public int HopDongId { get; set; }
+        public string ImageHopDong { get; set; }
+        public string ImageKhachHang { get; set; }
+
+    }
 
 }

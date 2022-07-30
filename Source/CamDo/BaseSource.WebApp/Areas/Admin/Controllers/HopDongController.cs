@@ -9,6 +9,7 @@ using BaseSource.ViewModels.CauHinhHangHoa;
 using BaseSource.ViewModels.Common;
 using BaseSource.ViewModels.HD_PaymentLog;
 using BaseSource.ViewModels.HopDong;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
@@ -272,5 +273,17 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         }
         #endregion
 
+        #region Chứng từ
+        [HttpPost]
+        public async Task<IActionResult> UploadChungTu(HopDong_AddChungTuVm model)
+        {
+            var result = await _hopDongApiClient.UpdateChungTu(model);
+            if (!result.IsSuccessed)
+            {
+                return Json(new ApiErrorResult<string>(result.Message));
+            }
+            return Json(new ApiSuccessResult<string>());
+        }
+        #endregion
     }
 }

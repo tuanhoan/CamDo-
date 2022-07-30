@@ -4,12 +4,15 @@ using BaseSource.BackendApi.Services.Serivce.HopDong;
 using BaseSource.Data.EF;
 using BaseSource.Data.Entities;
 using BaseSource.Shared.Enums;
+using BaseSource.Utilities.Helper;
 using BaseSource.ViewModels.Common;
 using BaseSource.ViewModels.CuaHang_TransactionLog;
 using BaseSource.ViewModels.HopDong;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -26,15 +29,24 @@ namespace BaseSource.BackendApi.Controllers
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IHopDongService _hopDongService;
         private readonly ICuaHang_TransactionLogService _cuaHang_TransactionLogService;
+        private readonly IWebHostEnvironment _appEnvironment;
+        private readonly IConfiguration _configuration;
+        private string baseAddressUploadApi = "";
+
+
         public HopDongController(BaseSourceDbContext db, IMapper mapper,
             IServiceScopeFactory serviceScopeFactory, IHopDongService hopDongService,
-            ICuaHang_TransactionLogService cuaHang_TransactionLogService)
+            ICuaHang_TransactionLogService cuaHang_TransactionLogService,
+            IWebHostEnvironment appEnvironment, IConfiguration configuration)
         {
             _db = db;
             _mapper = mapper;
             _serviceScopeFactory = serviceScopeFactory;
             _hopDongService = hopDongService;
             _cuaHang_TransactionLogService = cuaHang_TransactionLogService;
+            _appEnvironment = appEnvironment;
+            _configuration = configuration;
+            baseAddressUploadApi = _configuration["BaseAddressUploadApi"];
         }
         #region Hợp đồng
         [HttpGet("GetPagings")]
@@ -256,6 +268,64 @@ namespace BaseSource.BackendApi.Controllers
         }
         #endregion
 
+        #region Chứng từ
+        [HttpPost("UpdateChungTu")]
+        public async Task<IActionResult> UpdateChungTu([FromForm] HopDong_AddChungTuVm model)
+        {
+            var hd = await _db.HopDongs.FindAsync(model.HopDongId);
+            if (hd == null)
+            {
+                return Ok(new ApiErrorResult<string>("Not found"));
+            }
+            var lstFilePath = new List<string>();
+
+            foreach (var file in model.ListImage)
+            {
+                if (file != null && file.Length > 0)
+                {
+                    if (FileHelper.IsValidImage(file))
+                    {
+                        var filePath = await FileHelper.Upload(file, FileUploadType.KhachHang, _appEnvironment.WebRootPath);
+                        lstFilePath.Add(baseAddressUploadApi + filePath);
+                    }
+                }
+            }
+            var lstPath = string.Join(";", lstFilePath);
+            if (model.ChungTuType == EHopDong_ChungTuType.HopDong)
+            {
+                hd.ImageList = lstPath;
+            }
+            else
+            {
+                var kh = await _db.KhachHangs.FindAsync(hd.KhachHangId);
+                if (kh != null)
+                {
+                    kh.ImageList = lstPath;
+                }
+            }
+            await _db.SaveChangesAsync();
+            return Ok(new ApiSuccessResult<string>());
+        }
+
+        [HttpGet("GetChungTuByHopDong")]
+        public async Task<IActionResult> GetChungTuByHopDong(int hopDongId)
+        {
+            var hd = await _db.HopDongs.FindAsync(hopDongId);
+            if (hd == null)
+            {
+                return Ok(new ApiErrorResult<string>("Not found"));
+            }
+            var kh = await _db.KhachHangs.FindAsync(hd.KhachHangId);
+            var response = new HopDong_ChungTuResponseVm()
+            {
+                HopDongId = hd.Id,
+                ImageHopDong = hd.ImageList,
+                ImageKhachHang = kh?.ImageList
+            };
+            return Ok(new ApiSuccessResult<HopDong_ChungTuResponseVm>(response));
+        }
+
+        #endregion
 
         #region helper
 

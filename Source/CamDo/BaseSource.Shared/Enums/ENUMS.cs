@@ -240,4 +240,9 @@ namespace BaseSource.Shared.Enums
         KetThuc = EHopDong_CommonStatusFilter.KetThuc
     }
     #endregion
+    public enum EHopDong_ChungTuType : byte
+    {
+        HopDong = 1,
+        KhachHang
+    }
 }

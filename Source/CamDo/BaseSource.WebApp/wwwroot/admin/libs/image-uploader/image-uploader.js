@@ -105,7 +105,7 @@
 
                 // Trigger input click
                 $input.trigger('click');
-                 
+
             });
 
             // Stop propagation on input click
@@ -233,7 +233,7 @@
         };
 
         let fileSelectHandler = function (e) {
-            
+            debugger;
             // Prevent browser default event and stop propagation
             prevent(e);
 
@@ -242,7 +242,7 @@
 
             // Get the files as an array of files
             let files = Array.from(e.target.files || e.originalEvent.dataTransfer.files);
-          
+
             // Will keep only the valid files
             let validFiles = [];
 
@@ -272,7 +272,8 @@
 
                 // Makes the upload
                 setPreview($container, validFiles);
-                console.log(validFiles);
+                
+              /*  $('#frmImageCustomer').submit();*/
             } else {
 
                 // Update input files (it is now empty due to a default browser action)

@@ -9,6 +9,9 @@ using System.Text;
 using System.Threading.Tasks;
 using BaseSource.Utilities.Helper;
 using BaseSource.ViewModels.HD_PaymentLog;
+using Newtonsoft.Json;
+using System.Net.Http.Headers;
+using System.IO;
 
 namespace BaseSource.ApiIntegration.WebApi.HopDong
 {
@@ -40,6 +43,16 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
             return await client.GetAsync<ApiResult<HopDongVm>>("/api/HopDong/GetById", obj);
         }
 
+        public async Task<ApiResult<HopDong_ChungTuResponseVm>> GetChungTuByHopDong(int hopDongId)
+        {
+            var obj = new
+            {
+                hopDongId = hopDongId
+            };
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.GetAsync<ApiResult<HopDong_ChungTuResponseVm>>("/api/HopDong/GetChungTuByHopDong", obj);
+        }
+
         public async Task<ApiResult<PagedResult<HopDongVm>>> GetPagings(GetHopDongPagingRequest model)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
@@ -56,6 +69,38 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.PostAsync<ApiResult<string>>("/api/HopDong/TraNo", model);
+        }
+
+        public async Task<ApiResult<string>> UpdateChungTu(HopDong_AddChungTuVm model)
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            var multiContent = new MultipartFormDataContent();
+            if (model.ListImage != null && model.ListImage.Count > 0)
+            {
+                foreach (var item in model.ListImage)
+                {
+                    byte[] data;
+                    using (var br = new BinaryReader(item.OpenReadStream()))
+                    {
+                        data = br.ReadBytes((int)item.OpenReadStream().Length);
+                    }
+                    ByteArrayContent bytes = new ByteArrayContent(data);
+                    bytes.Headers.ContentType = MediaTypeHeaderValue.Parse(item.ContentType);
+
+                    multiContent.Add(bytes, "ListImage", item.FileName);
+                }
+
+
+            }
+            multiContent.Add(new StringContent(model.HopDongId.ToString()), "HopDongId");
+            multiContent.Add(new StringContent(model.ChungTuType.ToString()), "ChungTuType");
+
+            using (var response = await client.PostAsync("api/HopDong/UpdateChungTu", multiContent))
+            {
+                var responseString = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<ApiResult<string>>(responseString);
+                return result;
+            }
         }
     }
 }
