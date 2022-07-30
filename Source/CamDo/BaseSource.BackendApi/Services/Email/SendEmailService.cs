@@ -90,7 +90,7 @@ namespace BaseSource.BackendApi.Services.Email
             string host = _configuration.GetValue<string>("WebBaseAddress");
             string url = $"{host}/Account/ConfirmEmail?userId={model.UserID}&code={model.Code}";
             model.Body = $"Hãy xác nhận địa chỉ email bằng cách <a href='{url}'>bấm vào đây</a>.";
-            model.Subject = "[Casa] Xác nhận địa chỉ email";
+            model.Subject = "[Mecash] Xác nhận địa chỉ email";
             await SendMail(model);
 
         }
@@ -101,7 +101,7 @@ namespace BaseSource.BackendApi.Services.Email
             string url = $"{host}/Account/ResetPassword?code={model.Code}&email={model.To}";
 
             model.Body = $"Vui lòng click <a href='{url}'>vào đây</a> để reset mật khẩu.";
-            model.Subject = "[Casa] Reset Password";
+            model.Subject = "[Mecash] Reset Password";
 
             await SendMail(model);
         }

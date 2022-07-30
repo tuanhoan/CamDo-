@@ -5,10 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="compilerconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="9.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="5.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="5.0.17" />
     <PackageReference Include="Microsoft.IdentityModel.Logging" Version="6.8.0" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.8.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
@@ -25,6 +30,11 @@
 
   <ItemGroup>
     <None Include="Areas\Admin\Views\Home\Index.cshtml" />
+    <None Include="compilerconfig.json" />
+    <None Include="wwwroot\lib\owl-carousuel\LICENSE" />
+    <None Include="wwwroot\lib\owl-carousuel\owl.carousel.js" />
+    <None Include="wwwroot\lib\owl-carousuel\owl.carousel.min.js" />
+    <None Include="wwwroot\lib\owl-carousuel\README.md" />
   </ItemGroup>
 
 </Project>

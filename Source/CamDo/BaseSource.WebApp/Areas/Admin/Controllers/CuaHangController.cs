@@ -23,7 +23,7 @@ using System.Threading.Tasks;
 
 namespace BaseSource.WebApp.Areas.Admin.Controllers
 {
-    
+
     public class CuaHangController : BaseAdminController
     {
         private readonly ICuaHangApiClient _cuaHangApiClient;
@@ -147,5 +147,27 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             return principal;
         }
 
+
+        #region Shop details
+        public async Task<IActionResult> DetailShop()
+        {
+            return View();
+        }
+        #endregion
+
+        #region SumaryReportShop
+
+        public async Task<IActionResult> SummaryReportShop()
+        {
+            return View();
+        }
+        #endregion
+
+        #region MoneyNewDate
+        public async Task<IActionResult> MoneyNewDate()
+        {
+            return View();
+        }
+        #endregion
     }
 }

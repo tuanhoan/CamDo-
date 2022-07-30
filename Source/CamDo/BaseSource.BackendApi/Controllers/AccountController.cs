@@ -312,34 +312,49 @@ namespace BaseSource.BackendApi.Controllers
             }
             try
             {
-                var user = await _db.Users.FirstOrDefaultAsync(x => x.Email.ToLower() == model.Email.ToLower());
-                if (user != null)
+                if (!string.IsNullOrEmpty(model.Email))
                 {
-                    var userLogin = await _db.UserLogins.FirstOrDefaultAsync(x => x.UserId == user.Id && x.LoginProvider == model.Type && x.ProviderKey == model.Id);
-                    //add provider login
-                    if (userLogin == null)
+                    var user = await _db.Users.FirstOrDefaultAsync(x => x.Email.ToLower() == model.Email.ToLower());
+                    if (user != null)
                     {
-                        _db.UserLogins.Add(new AppUserLogin
+                        var userLogin = await _db.UserLogins.FirstOrDefaultAsync(x => x.UserId == user.Id && x.LoginProvider == model.Type && x.ProviderKey == model.Id);
+                        //add provider login
+                        if (userLogin == null)
                         {
-                            LoginProvider = model.Type,
-                            ProviderDisplayName = model.Type,
-                            ProviderKey = model.Id,
-                            UserId = user.Id,
-                        });
-                        await _db.SaveChangesAsync();
+                            _db.UserLogins.Add(new AppUserLogin
+                            {
+                                LoginProvider = model.Type,
+                                ProviderDisplayName = model.Type,
+                                ProviderKey = model.Id,
+                                UserId = user.Id,
+                            });
+                            await _db.SaveChangesAsync();
+                        }
+                        var jwtToken = await GenerateJwtToken(user);
+                        return Ok(new ApiSuccessResult<string>(jwtToken));
                     }
+                }
+
+                // check exists user login
+                var login = await _db.UserLogins.FirstOrDefaultAsync(x => x.LoginProvider == model.Type && x.ProviderKey == model.Id);
+                if (login != null)
+                {
+                    var user = await _db.Users.FindAsync(login.UserId);
+
                     var jwtToken = await GenerateJwtToken(user);
                     return Ok(new ApiSuccessResult<string>(jwtToken));
                 }
 
                 var newUser = new AppUser()
                 {
-                    Email = model.Email,
-                    NormalizedEmail = model.Email.ToUpper(),
-                    UserName = model.Email,
-                    NormalizedUserName = model.Email.ToUpper(),
+                    Id = Guid.NewGuid().ToString(),
                     SecurityStamp = Guid.NewGuid().ToString()
                 };
+
+                newUser.Email = string.IsNullOrEmpty(model.Email) ? null : model.Email;
+                newUser.NormalizedEmail = string.IsNullOrEmpty(model.Email) ? null : model.Email.ToUpper();
+                newUser.UserName = string.IsNullOrEmpty(model.Email) ? newUser.Id : model.Email;
+                newUser.NormalizedUserName = string.IsNullOrEmpty(model.Email) ? newUser.Id : model.Email.ToUpper();
 
                 //insert user
                 _db.Users.Add(newUser);
