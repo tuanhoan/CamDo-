@@ -5,15 +5,12 @@
 
 <div id="homepage">
     <div class="hompage-header">
-        <nav id="navbar" class="navbar navbar-expand-lg navbar-light">
+        <nav id="navbar-homepage" class="navbar navbar-expand-lg navbar-light">
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="d-flex justify-content-right align-items-center">
-                <a class="btn-top btn-top-login" href="#">Đăng nhập</a>
-                <a class="btn-top btn-top-register" href="#">Đăng ký</a>
-            </div>
+            @await Html.PartialAsync("_LoginPartial")
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
@@ -21,13 +18,13 @@
                         <a class="nav-link" href="#">Trang chủ</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Tính năng</a>
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Feature">Tính năng</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Video</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Thanh toán</a>
+                        <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Payment">Thanh toán</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Khuyến mại</a>
@@ -52,18 +49,15 @@
                     <div class="col-md-6 padding-top-20">
                         <div class="d-flex justify-content-around align-items-center">
                             <a class="hompage-top-link active" href="/">Trang chủ</a>
-                            <a class="hompage-top-link" href="/tinh-nang.html">Tính năng</a>
+                            <a class="hompage-top-link" asp-area="" asp-controller="TinhNang" asp-action="Index">Tính năng</a>
                             <a class="hompage-top-link" href="https://www.youtube.com/channel/UCcFVrUeA3yMi8rFNQM3hPJQ/featured?disable_polymer=1" target="_blank">Video</a>
-                            <a class="hompage-top-link" href="/thanh-toan.html">Thanh toán</a>
+                            <a class="hompage-top-link" asp-area="" asp-controller="Home" asp-action="Payment">Thanh toán</a>
                             <a class="hompage-top-link" href="/ctkm">Khuyến mại</a>
                             <a class="hompage-top-link" href="/lien-he.html">Liên hệ</a>
                         </div>
                     </div>
-                    <div class="col-md-3 padding-top-20 padding-right-10">
-                        <div class="d-flex justify-content-around align-items-center">
-                            <a class="btn-top btn-top-login" href="#">Đăng nhập</a>
-                            <a class="btn-top btn-top-register" href="#">Đăng ký</a>
-                        </div>
+                    <div class="col-md-3 login-panel">
+                        @await Html.PartialAsync("_LoginPartial")
                     </div>
                 </div>
             </div>
