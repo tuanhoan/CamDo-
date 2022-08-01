@@ -360,32 +360,8 @@
         </div>
     </fieldset>
     <fieldset id="tab-chungtu">
-        <div class="row">
-            <div class="col-6">
-                <div class="info-hd-header">
-                    <i class="fa fa-image"></i> Upload ảnh khách hàng
-                </div>
-                <form id="frmImageCustomer" asp-action="UploadChungTu" method="post" enctype='multipart/form-data'>
-                    <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.Id" />
-                    <input type="hidden" name="ChungTuType" value="@EHopDong_ChungTuType.KhachHang" />
-                    <div class="list-image-customer">
+        <div id="chungTuContent">
 
-                    </div>
-                </form>
-
-            </div>
-            <div class="col-6">
-                <div class="info-hd-header">
-                    <i class="fa fa-image"></i> Upload chứng từ hợp đồng
-                </div>
-                <form id="frmImageHopDong" asp-action="UploadChungTu" method="post" enctype='multipart/form-data'>
-                    <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.Id" />
-                    <input type="hidden" name="ChungTuType" value="@EHopDong_ChungTuType.HopDong" />
-                    <div class="list-image-hd">
-
-                    </div>
-                </form>
-            </div>
         </div>
     </fieldset>
     <fieldset id="tab-no">
@@ -464,15 +440,6 @@
         setMoneyTextBox('#SoTienNoLaiDisplay');
        getListPaymentLog(@Model.Id);
         getInfoPaymentByDate(@Model.Id);
-        $(".list-image-customer").imageUploader({ imagesInputName: "ListImage" });
-        $(".list-image-hd").imageUploader({ imagesInputName: "ListImage" });
-
-        $('#frmImageCustomer input[name=ListImage]').change(function () {
-            $('#frmImageCustomer').submit();
-        });
-        $('#frmImageHopDong input[name=ListImage]').change(function () {
-            $('#frmImageHopDong').submit();
-        })
 
     })
 
@@ -519,43 +486,14 @@
                 getHistoryLoanExtra(type,@Model.Id);
             case "tab-giahan":
                 getListGiaHan(@Model.Id);
-               case "tab-hengio":
+            case "tab-hengio":
                 getListAlarmLog(@Model.Id);
+             case "tab-chungtu":
+                getChungTu(@Model.Id);
 
             default:
             // code block
         }
     }
-    $('form[id="frmImageCustomer"]').submit(function (e) {
-        e.preventDefault();
-        var formData = new FormData(this);
-        var $form = $(this);
-        $.ajax({
-            method: $form.attr("method"),
-            url: $form.attr("action"),
-            data: formData,
-            dataType: 'json',
-            contentType: false,
-            processData: false,
-            success: function (res) {
-
-            }
-        });
-    });
-    $('form[id="frmImageHopDong"]').submit(function (e) {
-        e.preventDefault();
-        var formData = new FormData(this);
-        var $form = $(this);
-        $.ajax({
-            method: $form.attr("method"),
-            url: $form.attr("action"),
-            data: formData,
-            dataType: 'json',
-            contentType: false,
-            processData: false,
-            success: function (res) {
-
-            }
-        });
-    });
+    
 </script>

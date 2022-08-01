@@ -1,0 +1,114 @@
+﻿@model HopDong_ChungTuResponseVm
+@{
+    var preloadedImageHopDong = JsonConvert.SerializeObject(Model.ImageHopDong);
+    var preloadedImageKhachHang = JsonConvert.SerializeObject(Model.ImageKhachHang);
+}
+@using (Html.BeginForm("DeleteChungTu", "HopDong", FormMethod.Post, new { @id = "frmDeleteImage", @class = "d-none" }))
+{
+    <input type="hidden" name="HopDongId" value="@Model.HopDongId" />
+}
+<div class="row">
+    <div class="col-6">
+        <div class="info-hd-header">
+            <i class="fa fa-image"></i> Upload ảnh khách hàng
+        </div>
+        <form id="frmImageCustomer" class="divChungTu" asp-action="UploadChungTu" method="post" enctype='multipart/form-data'>
+            <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.HopDongId" />
+            <input type="hidden" name="ChungTuType" value="@EHopDong_ChungTuType.KhachHang" />
+            <div class="list-image-customer">
+
+            </div>
+        </form>
+
+    </div>
+    <div class="col-6">
+        <div class="info-hd-header">
+            <i class="fa fa-image"></i> Upload chứng từ hợp đồng
+        </div>
+        <form id="frmImageHopDong" class="divChungTu" asp-action="UploadChungTu" method="post" enctype='multipart/form-data'>
+            <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.HopDongId" />
+            <input type="hidden" name="ChungTuType" value="@EHopDong_ChungTuType.HopDong" />
+            <div class="list-image-hd">
+
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    var imageHopDong=@Html.Raw(preloadedImageHopDong);
+    var imageKhachHang =@Html.Raw(preloadedImageKhachHang);
+    var arrImageHD = [];
+    var arrImageKH = [];
+    if (imageHopDong != null && imageHopDong != '') {
+        var images = imageHopDong.split(";");
+        for (var i = 0; i < images.length; i++) {
+            arrImageHD.push({
+                id: i+1,
+                src: images[i],
+            })
+        }
+    }
+
+    if (imageKhachHang != null && imageKhachHang != '') {
+        var images = imageKhachHang.split(";");
+        for (var i = 0; i < images.length; i++) {
+            arrImageKH.push({
+                id: i + 1,
+                src: images[i]
+            })
+        }
+    }
+            $(".list-image-customer").imageUploader(
+                {
+                    imagesInputName: "ListImage",
+                    preloaded: arrImageKH
+                }
+            );
+            $(".list-image-hd").imageUploader(
+                {
+                    imagesInputName: "ListImage",
+                    preloaded: arrImageHD
+                }
+            );
+
+        $('#frmImageCustomer input[name=ListImage]').change(function () {
+            $('#frmImageCustomer').submit();
+        });
+    $('#frmImageHopDong input[name=ListImage]').change(function () {
+            $('#frmImageHopDong').submit();
+        })
+    $('form[id="frmImageCustomer"]').submit(function (e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+        var $form = $(this);
+        $.ajax({
+            method: $form.attr("method"),
+            url: $form.attr("action"),
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                getChungTu(@Model.HopDongId);
+            }
+        });
+    });
+    $('form[id="frmImageHopDong"]').submit(function (e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+        var $form = $(this);
+        $.ajax({
+            method: $form.attr("method"),
+            url: $form.attr("action"),
+            data: formData,
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                 getChungTu(@Model.HopDongId);
+            }
+        });
+    });
+
+</script>

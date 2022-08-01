@@ -277,30 +277,50 @@ namespace BaseSource.BackendApi.Controllers
             {
                 return Ok(new ApiErrorResult<string>("Not found"));
             }
-            var lstFilePath = new List<string>();
-
-            foreach (var file in model.ListImage)
+            var lstPath = "";
+            if (model.ListImage != null && model.ListImage.Count > 0)
             {
-                if (file != null && file.Length > 0)
+                var lstFilePath = new List<string>();
+                foreach (var file in model.ListImage)
                 {
-                    if (FileHelper.IsValidImage(file))
+                    if (file != null && file.Length > 0)
                     {
-                        var filePath = await FileHelper.Upload(file, FileUploadType.KhachHang, _appEnvironment.WebRootPath);
-                        lstFilePath.Add(baseAddressUploadApi + filePath);
+                        if (FileHelper.IsValidImage(file))
+                        {
+                            var filePath = await FileHelper.Upload(file, model.ChungTuType == EHopDong_ChungTuType.HopDong ? FileUploadType.HopDong : FileUploadType.KhachHang, _appEnvironment.WebRootPath);
+                            lstFilePath.Add(filePath);
+                        }
                     }
                 }
+                lstPath = string.Join(";", lstFilePath);
             }
-            var lstPath = string.Join(";", lstFilePath);
+
             if (model.ChungTuType == EHopDong_ChungTuType.HopDong)
             {
-                hd.ImageList = lstPath;
+                if (!string.IsNullOrEmpty(hd.ImageList))
+                {
+                    hd.ImageList += ";" + lstPath;
+                }
+                else
+                {
+                    hd.ImageList = lstPath;
+                }
+
             }
             else
             {
                 var kh = await _db.KhachHangs.FindAsync(hd.KhachHangId);
                 if (kh != null)
                 {
-                    kh.ImageList = lstPath;
+                    if (!string.IsNullOrEmpty(kh.ImageList))
+                    {
+                        kh.ImageList += ";" + lstPath;
+                    }
+                    else
+                    {
+                        kh.ImageList = lstPath;
+                    }
+
                 }
             }
             await _db.SaveChangesAsync();
@@ -316,13 +336,69 @@ namespace BaseSource.BackendApi.Controllers
                 return Ok(new ApiErrorResult<string>("Not found"));
             }
             var kh = await _db.KhachHangs.FindAsync(hd.KhachHangId);
+            var lstImagepathHD = new List<string>();
+            var lstImagepathKH = new List<string>();
+            if (!string.IsNullOrEmpty(hd.ImageList))
+            {
+                var lstPath = hd.ImageList.Split(";");
+                foreach (var item in lstPath)
+                {
+                    var img = baseAddressUploadApi + item;
+                    lstImagepathHD.Add(img);
+                }
+            }
+            if (kh != null)
+            {
+                if (!string.IsNullOrEmpty(kh.ImageList))
+                {
+                    var lstPath = kh.ImageList.Split(";");
+                    foreach (var item in lstPath)
+                    {
+                        var img = baseAddressUploadApi + item;
+                        lstImagepathKH.Add(img);
+                    }
+                }
+            }
             var response = new HopDong_ChungTuResponseVm()
             {
                 HopDongId = hd.Id,
-                ImageHopDong = hd.ImageList,
-                ImageKhachHang = kh?.ImageList
+                ImageHopDong = lstImagepathHD.Count > 0 ? string.Join(";", lstImagepathHD) : "",
+                ImageKhachHang = lstImagepathKH.Count > 0 ? string.Join(";", lstImagepathKH) : "",
             };
             return Ok(new ApiSuccessResult<HopDong_ChungTuResponseVm>(response));
+        }
+        [HttpPost("DeleteChungTu")]
+        public async Task<IActionResult> DeleteChungTu(DeleteChungTu_Vm model)
+        {
+            var hd = await _db.HopDongs.FindAsync(model.HopDongId);
+            if (hd != null)
+            {
+                if (model.ChungTuType == EHopDong_ChungTuType.HopDong)
+                {
+                    if (!string.IsNullOrEmpty(hd.ImageList))
+                    {
+                        var lstFilePathOld = hd.ImageList.Split(";").ToList();
+                        var src = model.Src.Replace(baseAddressUploadApi, "");
+                        lstFilePathOld.Remove(src);
+                        hd.ImageList = string.Join(";", lstFilePathOld);
+                    }
+                }
+                else
+                {
+                    var kh = await _db.KhachHangs.FindAsync(hd.KhachHangId);
+                    if (kh != null && !string.IsNullOrEmpty(kh.ImageList))
+                    {
+                        var lstFilePathOld = kh.ImageList.Split(";").ToList();
+                        var src = model.Src.Replace(baseAddressUploadApi, "");
+                        lstFilePathOld.Remove(src);
+                        kh.ImageList = string.Join(";", lstFilePathOld);
+
+                    }
+                }
+                await _db.SaveChangesAsync();
+
+            }
+            return Ok(new ApiSuccessResult<string>());
         }
 
         #endregion

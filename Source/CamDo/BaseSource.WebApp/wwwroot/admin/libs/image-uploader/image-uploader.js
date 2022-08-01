@@ -204,7 +204,8 @@
                 }
 
                 // Remove this image from the container
-                $container.remove();
+                // hard tạm
+                //$container.remove();
 
                 // If there is no more uploaded files
                 if (!$parent.children().length) {
@@ -233,7 +234,6 @@
         };
 
         let fileSelectHandler = function (e) {
-            debugger;
             // Prevent browser default event and stop propagation
             prevent(e);
 
@@ -272,8 +272,8 @@
 
                 // Makes the upload
                 setPreview($container, validFiles);
-                
-              /*  $('#frmImageCustomer').submit();*/
+
+                /*  $('#frmImageCustomer').submit();*/
             } else {
 
                 // Update input files (it is now empty due to a default browser action)
@@ -329,7 +329,6 @@
         };
 
         let setPreview = function ($container, files) {
-
             // Add the 'has-files' class
             $container.addClass('has-files');
 

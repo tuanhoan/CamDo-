@@ -170,5 +170,11 @@ namespace BaseSource.ViewModels.HopDong
         public string ImageKhachHang { get; set; }
 
     }
+    public class DeleteChungTu_Vm
+    {
+        public int HopDongId { get; set; }
+        public string Src { get; set; }
+        public EHopDong_ChungTuType ChungTuType { get; set; }
+    }
 
 }

@@ -1,4 +1,5 @@
-﻿using BaseSource.ViewModels.Common;
+﻿using BaseSource.Shared.Enums;
+using BaseSource.ViewModels.Common;
 using BaseSource.ViewModels.HD_PaymentLog;
 using BaseSource.ViewModels.HopDong;
 using System;
@@ -19,5 +20,6 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
         Task<ApiResult<string>> TraNo(HopDongTraNoVm model);
         Task<ApiResult<string>> UpdateChungTu(HopDong_AddChungTuVm model);
         Task<ApiResult<HopDong_ChungTuResponseVm>> GetChungTuByHopDong(int hopDongId);
+        Task<ApiResult<string>> DeleteChungTu(DeleteChungTu_Vm model);
     }
 }

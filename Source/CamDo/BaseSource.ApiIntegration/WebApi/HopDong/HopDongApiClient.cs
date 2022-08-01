@@ -12,6 +12,7 @@ using BaseSource.ViewModels.HD_PaymentLog;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.IO;
+using BaseSource.Shared.Enums;
 
 namespace BaseSource.ApiIntegration.WebApi.HopDong
 {
@@ -27,6 +28,13 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.PostAsync<ApiResult<string>>("/api/HopDong/Create", model);
         }
+
+        public async Task<ApiResult<string>> DeleteChungTu(DeleteChungTu_Vm model)
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.PostAsync<ApiResult<string>>("/api/HopDong/DeleteChungTu", model);
+        }
+
         public async Task<ApiResult<string>> Edit(EditHopDongVm model)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);

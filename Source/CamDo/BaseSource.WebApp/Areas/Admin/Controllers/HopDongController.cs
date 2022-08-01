@@ -274,6 +274,11 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         #endregion
 
         #region Chứng từ
+        public async Task<IActionResult> GetChungTu(int hopDongId)
+        {
+            var result = await _hopDongApiClient.GetChungTuByHopDong(hopDongId);
+            return PartialView("_ChungTu", result.ResultObj);
+        }
         [HttpPost]
         public async Task<IActionResult> UploadChungTu(HopDong_AddChungTuVm model)
         {
@@ -283,6 +288,16 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
                 return Json(new ApiErrorResult<string>(result.Message));
             }
             return Json(new ApiSuccessResult<string>());
+        }
+        [HttpPost]
+        public async Task<IActionResult> DeleteChungTu(DeleteChungTu_Vm model)
+        {
+            var result = await _hopDongApiClient.DeleteChungTu(model);
+            if (result.IsSuccessed)
+            {
+                return Json(new ApiSuccessResult<string>());
+            }
+            return Json(new ApiErrorResult<string>(result.Message));
         }
         #endregion
     }
