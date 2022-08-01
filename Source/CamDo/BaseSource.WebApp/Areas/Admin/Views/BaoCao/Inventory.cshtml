@@ -1,0 +1,224 @@
+﻿@{
+    ViewData["Title"] = "Biên bản bàn giao ca";
+}
+
+
+<div class="row">
+    <!-- table  Lastest Tickets -->
+    <div class="col-12 ">
+        <div class="card shadow h-100 mb-4 ">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="m-0 font-weight-bold">@ViewData["Title"]</h3>
+            </div>
+            <div class="card-body">
+                <div class="m-widget1__item w-75">
+                    <button id="btnPrint" class="btn btn-warning m-btn btn-sm  m-btn--air font-weight-bold" onclick="alert('12312')">
+                        <span>
+                            <i class="fa fa-print"></i> In biên bản
+                        </span>
+                    </button>
+                    <br>
+                    <br>
+                    <p style="text-align:left;font-size:12px">
+                        <i>
+                            Cửa hàng <b>abc</b>
+                        </i>
+                    </p>
+                    <h3 style="text-align:center;text-transform:uppercase">Biên bản bàn giao ca</h3>
+                    <div> Ngày bàn giao : 30/07/2022 (thực hiện lúc : 10:40 30/07/2022) </div>
+                    <div style="margin:10px 0px 0px 0px;font-weight:600">
+                        <span style="text-transform:uppercase">Phần I. Số tiền bàn giao</span>
+                    </div>
+                    <table width="290px">
+                        <tbody>
+                            <tr>
+                                <td>Quỹ tiền mặt đầu ngày</td>
+                                <td class="align-right">
+                                    <span >
+                                        <b class="text-blue">+999,992,022</b>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tiền cầm đồ</td>
+                                <td class="align-right">
+                                    <span >
+                                        <b class="text-danger">0</b>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tiền vay lãi</td>
+                                <td class="align-right">
+                                    <span >
+                                        <b class="text-danger">0</b>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tiền bát họ</td>
+                                <td class="align-right">
+                                    <span>
+                                        <b class="text-danger">0</b>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Thu chi</td>
+                                <td class="align-right">
+                                    <span>
+                                        <b class="text-danger">0</b>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Vốn</td>
+                                <td class="align-right">
+                                    <span>
+                                        <b class="text-danger">0</b>
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tiền mặt còn lại</td>
+                                <td class="align-right">
+                                    <span>
+                                        <b class="text-blue">+999,992,022</b>
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div >
+                        <div style="margin:10px 0px 0px 0px;font-weight:600" >
+                            <span style="text-transform:uppercase">Phần II. Bàn giao tài sản cầm cố </span>: <span >Tổng số 0 tài sản, tổng giá trị 0 VNĐ</span>
+                        </div>
+                    </div>
+                    <div style="font-weight:bold;font-size:13px;">
+                        <span ></span>
+                    </div>
+                    <div ></div>
+                    <div >
+                        <div style="margin:10px 0px 0px 0px;font-weight:600" >
+                            <span style="text-transform:uppercase">Phần III. Bàn giao tài sản vay tín chấp </span>: <span >Tổng số 0 tài sản, tổng giá trị 0 VNĐ</span>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered" style="margin-bottom:26px!important;">
+                            <thead>
+                                <tr style="background-color: #3f86c3;color: white;">
+                                    <th width="30px" class="align-center">STT</th>
+                                    <th width="120px" class="align-center">Mã HĐ</th>
+                                    <th width="140px" class="align-center">Tên KH</th>
+                                    <th style="text-align:center" width="100px">Ngày vay</th>
+                                    <th class="align-right" width="100px">Số tiền vay</th>
+                                    <th>Tài sản</th>
+                                </tr>
+                            </thead>
+                            <tbody >
+                                <tr class="tr_footer">
+                                    <td colspan="4" class="align-right">
+                                        <b>Tổng</b>
+                                    </td>
+                                    <td class="align-right">
+                                        <b>0</b>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                        <div style="margin:10px 0px 0px 0px;font-weight:600" >
+                            <span style="text-transform:uppercase">Phần IV. Bàn giao tài sản vay họ </span>: <span >Tổng số 0 tài sản, tổng giá trị 0 VNĐ</span>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table  table-hover table-bordered ">
+                            <thead>
+                                <tr style="background-color: #3f86c3;color: white;">
+                                    <th width="30px" class="align-center">STT</th>
+                                    <th width="120px" class="align-center">Mã HĐ</th>
+                                    <th width="140px" class="align-center">Tên KH</th>
+                                    <th style="text-align:center" width="100px">Ngày vay</th>
+                                    <th class="align-right" width="130px">Tiền giao khách</th>
+                                    <th class="align-right" width="130px">Còn phải đóng</th>
+                                    <th>Ghi Chú</th>
+                                </tr>
+                            </thead>
+                            <tbody >
+                                <tr class="tr_footer">
+                                    <td colspan="4" class="align-right">
+                                        <b>Tổng</b>
+                                    </td>
+                                    <td class="align-right">
+                                        <b>0</b>
+                                    </td>
+                                    <td class="align-right">
+                                        <b>0</b>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="margin:10px 0px 0px 0px;font-weight:600">
+                        <span style="text-transform:uppercase">Phần V. Bàn giao tài sản khác</span>
+                    </div>
+                    <div style="border-bottom:1px dotted #000">&nbsp;</div>
+                    <div style="border-bottom:1px dotted #000">&nbsp;</div>
+                    <div style="border-bottom:1px dotted #000">&nbsp;</div>
+                    <div style="margin:10px 0px 0px 0px;font-weight:600">
+                        <span style="text-transform:uppercase">BÊN GIAO</span>
+                    </div>
+                    <div style="clear:both;height:10px;"></div>
+                    <div style="float:left;width:80px;">Họ Tên :</div>
+                    <div style="float:left;width:250px;">..............................................</div>
+                    <div style="float:left;width:80px">Chữ ký :</div>
+                    <div style="float:left;width:250px;">..............................................</div>
+                    <div style="clear:both;height:10px;"></div>
+                    <div style="float:left;width:80px">Họ Tên :</div>
+                    <div style="float:left;width:250px;">..............................................</div>
+                    <div style="float:left;width:80px">Chữ ký :</div>
+                    <div style="float:left;width:250px;">..............................................</div>
+                    <!--BÊN NHẬN-->
+                    <div style="margin:10px 0px 0px 0px;font-weight:600;clear:both;padding-top:16px;">
+                        <span style="text-transform:uppercase">BÊN NHẬN</span>
+                    </div>
+                    <div style="clear:both;height:10px;"></div>
+                    <div style="float:left;width:80px;">Họ Tên :</div>
+                    <div style="float:left;width:250px;">..............................................</div>
+                    <div style="float:left;width:80px">Chữ ký :</div>
+                    <div style="float:left;width:250px;">..............................................</div>
+                    <div style="clear:both;height:10px;"></div>
+                    <div style="float:left;width:80px">Họ Tên :</div>
+                    <div style="float:left;width:250px;">..............................................</div>
+                    <div style="float:left;width:80px">Chữ ký :</div>
+                    <div style="float:left;width:250px;">..............................................</div>
+                    <!--Đại diện công ty-->
+                    <div style="margin:10px 0px 0px 0px;font-weight:600;clear:both;padding-top:16px;">
+                        <span style="text-transform:uppercase">Đại diện công ty</span>
+                    </div>
+                    <div style="clear:both;height:10px;"></div>
+                    <div style="float:left;width:80px;">Họ Tên :</div>
+                    <div style="float:left;width:250px;">..............................................</div>
+                    <div style="float:left;width:80px">Chữ ký :</div>
+                    <div style="float:left;width:250px;">..............................................</div>
+                    <div style="clear:both;height:10px;"></div>
+                    <div style="float:left;width:80px">Họ Tên :</div>
+                    <div style="float:left;width:250px;">..............................................</div>
+                    <div style="float:left;width:80px">Chữ ký :</div>
+                    <div style="float:left;width:250px;">..............................................</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        $(".expense-nav").addClass("active");
+
+    </script>
+}

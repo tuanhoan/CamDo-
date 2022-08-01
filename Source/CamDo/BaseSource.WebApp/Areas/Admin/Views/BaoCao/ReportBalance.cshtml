@@ -1,0 +1,197 @@
+﻿@{
+    ViewData["Title"] = "Tổng kết giao dịch";
+}
+
+
+<div class="row">
+    <!-- table  Lastest Tickets -->
+    <div class="col-12 ">
+        <div class="card shadow h-100 mb-4 ">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="m-0 font-weight-bold">@ViewData["Title"]</h3>
+            </div>
+            <div class="card-body">
+                <div class="row ">
+                    <div class="col-md-12">
+                        <div class="mb-2">
+                            <button class="btn btn-success"><i data-feather="printer"></i> Excel</button>
+                            <button class="btn btn-warning"> <i data-feather="printer"></i> In</button>
+                        </div>
+                        <div class="mb-3">
+                            <form class="form-inline">
+                                <div class="form-group mx-sm-3 mb-2">
+                                    <input type="date" class="form-control" id="from">
+                                </div>
+                                <div class="form-group mx-sm-3 mb-2">
+                                    <input type="date" class="form-control" id="to">
+                                </div>
+                                <div class="form-group mx-sm-3 mb-2">
+                                    <select class=" form-control" name="type">
+                                        <option value="AL">Tất cả loại phiếu</option>
+                                        <option value="AL">Tất cả loại phiếu</option>
+                                        <option value="AL">Tất cả loại phiếu</option>
+                                        <option value="AL">Tất cả loại phiếu</option>
+                                        <option value="AL">Tất cả loại phiếu</option>
+                                    </select>
+                                </div>
+                                <div class="form-group mx-sm-3 mb-2">
+                                    <select class=" form-control" name="type">
+                                        <option value="AL">Tất cả loại phiếu</option>
+                                        <option value="AL">Tất cả loại phiếu</option>
+                                        <option value="AL">Tất cả loại phiếu</option>
+                                        <option value="AL">Tất cả loại phiếu</option>
+                                        <option value="AL">Tất cả loại phiếu</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary mb-2">Tìm kiếm</button>
+                            </form>
+                        </div>
+                        <h5><i data-feather="file-text"></i>Bảng tổng kết giao dịch Từ ngày <i>30/07/2022 - 30/07/2022</i></h5>
+                        <div class="progress" style="height: 4px;">
+                            <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+
+                        <div class="table-responsive">
+                            <!--begin::Table-->
+                            <table class="table">
+                                <!--begin::Thead-->
+                                <thead>
+                                    <tr>
+                                        <td class="font-weight-bold">Loại hình giao dịch</td>
+                                        <td class="font-weight-bold ">Thu</td>
+                                        <td class="font-weight-bold">Chi</td>
+                                        <td class="font-weight-bold">Tổng cộng</td>
+                                    </tr>
+                                </thead>
+                                <!--end::Thead-->
+                                <!--begin::Tbody-->
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <span class="">Tiền đầu ngày</span>
+                                        </td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td class=" text-blue font-weight-bold lead"><span>999,992,022</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="">Cầm Đồ</span>
+                                        </td>
+                                        <td><span class="text-blue lead">0</span></td>
+                                        <td><span class="lead">0</span></td>
+                                        <td class=" text-blue lead"><span>0</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="">Vay Lãi</span>
+                                        </td>
+                                        <td><span class="text-blue lead">0</span></td>
+                                        <td><span class="lead">0</span></td>
+                                        <td class="text-blue lead"><span>0</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="">Bát Họ</span>
+                                        </td>
+                                        <td><span class="text-blue lead">0</span></td>
+                                        <td><span class="lead">0</span></td>
+                                        <td class=text-blue lead"><span>0</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="">Thu Hoạt Động</span>
+                                        </td>
+                                        <td><span class="text-blue lead">0</span></td>
+                                        <td><span class="lead">0</span></td>
+                                        <td class="text-blue lead"><span>0</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="">Chi Hoạt Động</span>
+                                        </td>
+                                        <td><span class="text-blue lead">0</span></td>
+                                        <td><span class="lead">0</span></td>
+                                        <td class="text-blue lead"><span>0</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="">Nguồn Vốn</span>
+                                        </td>
+                                        <td><span class="text-blue lead">0</span></td>
+                                        <td><span class="lead">0</span></td>
+                                        <td class="text-blue lead"><span>0</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <span class="">Tiền mặt còn lại</span>
+                                        </td>
+                                        <td>-</td>
+                                        <td>-</td>
+                                        <td class="text-blue font-weight-bold lead"><span>999,992,022</span></td>
+                                    </tr>
+                                </tbody>
+                                <!--end::Tbody-->
+                            </table>
+                            <!--end::Table-->
+                        </div>
+                        <h5><i data-feather="file-text"></i>Chi tiết giao dịch</h5>
+                         <div class="progress" style="height: 4px;">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="table-responsive mt-3">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">
+                                            #
+                                        </th>
+                                        <th scope="col">
+                                            Loại hình
+                                        </th>
+                                        <th scope="col">
+                                            Mã HĐ
+                                        </th>
+                                        <th scope="col">
+                                            Người GD
+                                        </th>
+                                        <th scope="col">
+                                            Khách hàng
+                                        </th>
+                                        <th scope="col">
+                                            Ngày giao dịch
+                                        </th>
+                                        <th scope="col">
+                                            Diễn Giải
+                                        </th>
+                                        <th scope="col">
+                                            Đã thu
+                                        </th>
+                                        <th scope="col">
+                                            Đã chi
+                                        </th>
+                                        <th scope="col">
+                                            Ghi chú
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        $(".expense-nav").addClass("active");
+        $('.select-type').select2();
+    </script>
+}
