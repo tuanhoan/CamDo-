@@ -706,6 +706,16 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 14px;
   font-family: "Roboto", sans-serif;
 }
+@media (max-width: 768px) {
+  #payment table.table-desktop {
+    display: none;
+  }
+}
+@media (min-width: 769px) {
+  #payment table.table-mobile {
+    display: none;
+  }
+}
 #payment table th {
   border: 1px solid #ddd;
 }
@@ -721,6 +731,11 @@ h1, h2, h3, h4, h5, h6 {
   color: black;
   padding: 10px 0px;
   margin: 0 0 20px;
+}
+@media (max-width: 768px) {
+  #payment .space {
+    margin-top: 10px;
+  }
 }
 #payment .box {
   text-align: center;
@@ -803,4 +818,9 @@ h1, h2, h3, h4, h5, h6 {
 
 .padding-right-10 {
   padding-right: 10px;
+}
+
+.border-right {
+  border-right: 1px solid #ebedf2;
+  border-bottom: 1px solid #ebedf2;
 }

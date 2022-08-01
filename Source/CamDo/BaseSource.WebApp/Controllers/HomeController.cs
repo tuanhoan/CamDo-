@@ -27,18 +27,6 @@ namespace BaseSource.WebApp.Controllers
         }
 
         [AllowAnonymous]
-        public IActionResult Feature()
-        {
-            return View();
-        }
-
-        [AllowAnonymous]
-        public IActionResult Payment()
-        {
-            return View();
-        }
-
-        [AllowAnonymous]
         public IActionResult Privacy()
         {
             return View();
