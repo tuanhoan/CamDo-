@@ -1,0 +1,216 @@
+﻿@{
+    ViewData["Title"] = "Danh sách khách hàng mua bảo hiểm";
+}
+<div class="row mb-2">
+    <div class="col-12 ">
+        <div class="card shadow h-100 ">
+
+            <div class="card-body">
+                <div class="row ">
+                    <div class="col-md-7">
+
+                        <div class="">
+                            <form class="form-inline">
+
+                                <div class="form-group mx-sm-3 mb-2">
+                                    <input type="date" class="form-control" id="from">
+                                </div>
+                                <div class="form-group mx-sm-3 mb-2">
+                                    <input type="date" class="form-control" id="to">
+                                </div>
+                                <div class="form-group mx-sm-3 mb-2">
+                                    <select class=" form-control" name="type">
+                                        <option value="AL">Tất cả loại phiếu</option>
+                                        <option value="AL">Tất cả loại phiếu</option>
+                                        <option value="AL">Tất cả loại phiếu</option>
+                                        <option value="AL">Tất cả loại phiếu</option>
+                                        <option value="AL">Tất cả loại phiếu</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary mb-2">Tìm kiếm</button>
+                            </form>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- table  Lastest Tickets -->
+    <div class="col-12 ">
+        <div class="card shadow h-100 mb-4 ">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="m-0 font-weight-bold">@ViewData["Title"]</h5>
+                <a class="btn btn-primary btn-sm" asp-action="Create">+ Thêm mới</a>
+            </div>
+            <div class="card-body">
+                <div class="row ">
+                    <div class="col-md-12">
+
+                        <div class="mb-2">
+                            <button class="btn btn-primary btn-sm mr-5"> Nạp tiền</button>
+                            <span class="ml-5">$ Số dư ví <span class="text-danger">0</span> VND</span>
+                            <span class="float-right"> Tổng số 0 khách hàng</span>
+                            <div class="mt-2">
+                                <a class="text-sm" href="#">Hợp đồng sử dụng</a>
+                            </div>
+                        </div>
+                        <div>
+
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">
+                                            STT
+                                        </th>
+                                        <th scope="col">
+                                            Khách hàng
+                                        </th>
+                                        <th scope="col">
+                                            Ngày đăng ký
+                                        </th>
+                                        <th scope="col">
+                                            Loại bảo hiểm
+                                        </th>
+                                        <th scope="col">
+                                            Doanh thu
+                                        </th>
+                                        <th scope="col">
+                                            Đã nộp
+                                        </th>
+                                        <th scope="col">
+                                            Chiết khấu được hưởng
+                                        </th>
+                                        <th scope="col">
+                                            Trạng thái
+                                        </th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>abc</td>
+                                        <td>28/07/2022</td>
+                                        <td>abc</td>
+                                        <td>10000</td>
+                                        <td>10000</td>
+                                        <td>10000</td>
+                                        <td>Đang chờ mua</td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>Tổng</td>
+                                        <td>-14000</td>
+                                        <td>10000</td>
+                                        <td>1000</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- The Modal -->
+<div class="modal fade" id="myModal">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Thông tin ký hợp đồng</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div>
+                    <a href="#">Hợp đồng sử dụng</a>
+                </div>
+                <hr />
+                <div class="">
+                    <form class="">
+                        <div class="form-group row">
+                            <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label ">Họ và tên <span class="text-danger">*</span></label>
+                            <div class="col-lg-3 col-sm-12 col-12">
+                                <input type="text" class="form-control " placeholder="Nhập họ và tên bạn">
+                            </div>
+                            <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label ">Số điện thoại <span class="text-danger">*</span></label>
+                            <div class="col-lg-3 col-sm-12 col-12">
+                                <input type="text" class="form-control " placeholder="Nhập số điện thoại">
+                            </div>
+                        </div>
+                        <div class="form-group row  mt-2">
+                            <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label ">Ngày sinh <span class="text-danger">*</span></label>
+                            <div class="col-lg-3 col-sm-12 col-12">
+                                <input type="date" class="form-control ">
+                            </div>
+                            <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label ">Số CMND/ Hộ chiếu <span class="text-danger">*</span></label>
+                            <div class="col-lg-3 col-sm-12 col-12">
+                                <input type="text" class="form-control " placeholder="Nhập số CMND/Hộ chiếu">
+                            </div>
+                        </div>
+                        <div class="form-group row  mt-2">
+                            <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label ">Email <span class="text-danger">*</span></label>
+                            <div class="col-lg-3 col-sm-12 col-12">
+                                <input type="text" class="form-control " placeholder="Nhập Email">
+                            </div>
+                            <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label ">Mã số thuế <span class="text-danger">*</span></label>
+                            <div class="col-lg-3 col-sm-12 col-12">
+                                <input type="text" class="form-control " placeholder="Nhập mã số thuế...">
+                            </div>
+                        </div>
+                        <div class="form-group row  mt-2">
+                            <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label  font-weight-bold">Địa chỉ <span class="text-danger">*</span></label>
+                            <div class="col-lg-9 col-sm-12 col-12">
+                                <textarea type="text" class="form-control " placeholder="Nhập địa chỉ"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row  mt-2">
+                            <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label  "> </label>
+                            <div class="col-lg-9 col-sm-12 col-12">
+                                <a href="#">Hợp đồng sử dụng</a>
+                            </div>
+                        </div>
+                        <div class="form-group row  mt-2">
+                            <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label  "> </label>
+                            <div class="col-lg-9 col-sm-12 col-12">
+                                <button class="btn btn-primary"><i data-feather="save"></i> Ký hợp đồng</button>
+                                <button type="button" class="btn btn-warning " data-dismiss="modal"><i data-feather="x"></i> Đóng</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script>
+        $(".insurance-nav").addClass("active");
+        $('.select-type').select2();
+        //show modal
+         $("#myModal").modal("show");
+    </script>
+}

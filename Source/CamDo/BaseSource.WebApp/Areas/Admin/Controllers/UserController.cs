@@ -37,8 +37,6 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
 
             return View(result.ResultObj);
         }
-
-        
         public async Task<ActionResult> EditUserRole(string id)
         {
             var result = await _apiClient.GetUserRoles(id);

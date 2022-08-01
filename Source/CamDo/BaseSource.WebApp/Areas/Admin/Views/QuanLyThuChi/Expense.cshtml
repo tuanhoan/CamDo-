@@ -1,0 +1,167 @@
+﻿@{
+    ViewData["Title"] = "Chi tiêu";
+}
+
+
+<div class="row">
+    <!-- table  Lastest Tickets -->
+    <div class="col-12 ">
+        <div class="card shadow h-100 mb-4 ">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="m-0 font-weight-bold">Shop ABCD</h3>
+            </div>
+            <div class="card-body">
+                <div class="row mt-5">
+                    <div class="col-md-5">
+                        <h5><i data-feather="dollar-sign"></i> Nhập phiếu chi tiền</h5>
+
+                        <hr />
+                        <form class="">
+                            <div class="form-group row">
+                                <label for="inputEmail3" class="col-sm-5 col-form-label ">Người nhận <span class="text-danger">*</span></label>
+                                <div class="col-sm-7">
+                                    <div class="input-group ">
+                                        <input type="text" class="form-control " placeholder="Nhập tên người nhận tiền">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputEmail3" class="col-sm-5 col-form-label">Số tiền <span class="text-danger">*</span></label>
+                                <div class="col-sm-7">
+                                    <div class="input-group ">
+                                        <input type="text" class="form-control " placeholder="0">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">VNĐ</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputEmail3" class="col-sm-5 col-form-label">Loại phiếu <span class="text-danger">*</span></label>
+                                <div class="col-sm-7">
+                                    <div class="input-group ">
+                                        <select class=" form-control" name="type">
+                                            <option value="AL">Tất cả loại phiếu</option>
+                                            <option value="AL">Tất cả loại phiếu</option>
+                                            <option value="AL">Tất cả loại phiếu</option>
+                                            <option value="AL">Tất cả loại phiếu</option>
+                                            <option value="AL">Tất cả loại phiếu</option>
+                                        </select>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputEmail3" class="col-sm-5 col-form-label">Lý do chi tiền <span class="text-danger">*</span></label>
+                                <div class="col-sm-7">
+                                    <div class="input-group ">
+                                        <textarea type="text" class="form-control" placeholder="Nhập lý do chi tiền" rows="5"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="inputEmail3" class="col-sm-5 col-form-label"></label>
+                                <div class="col-sm-7">
+                                    <button type="submit" class="btn btn-danger btn-sm my-1"><i data-feather="file-text"></i> Lưu lại</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-7">
+                        <h5><i data-feather="file-text"></i> Lịch sử lập phiếu chi</h5>
+                        <hr />
+                        <div class="">
+                            <form class="form-inline">
+                                <div class="form-group mb-2">
+                                    <input type="text" class="form-control" id="search" value="Tìm kiếm">
+                                </div>
+                                <div class="form-group mx-sm-3 mb-2">
+                                    <input type="date" class="form-control" id="from">
+                                </div>
+                                <div class="form-group mx-sm-3 mb-2">
+                                    <input type="date" class="form-control" id="to">
+                                </div>
+                                <div class="form-group mx-sm-3 mb-2">
+                                    <select class=" form-control" name="type">
+                                        <option value="AL">Tất cả loại phiếu</option>
+                                        <option value="AL">Tất cả loại phiếu</option>
+                                        <option value="AL">Tất cả loại phiếu</option>
+                                        <option value="AL">Tất cả loại phiếu</option>
+                                        <option value="AL">Tất cả loại phiếu</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary mb-2">Tìm kiếm</button>
+                            </form>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">
+                                            #
+                                        </th>
+                                        <th scope="col">
+                                            Ngày thu
+                                        </th>
+                                        <th scope="col">
+                                            Khách hàng
+                                        </th>
+                                        <th scope="col">
+                                            Loại phiếu
+                                        </th>
+                                        <th scope="col">
+                                            Lý do
+                                        </th>
+                                        <th scope="col">
+                                            Số tiền
+                                        </th>
+                                        <th scope="col">
+                                            Nhân viên
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>28/07/2022</td>
+                                        <td>test123</td>
+                                        <td>Trả lương</td>
+                                        <td>Lý do</td>
+                                        <td class="text-danger">+123</td>
+                                        <td class="text-danger">abc</td>
+                                        <td>
+                                            <button class="btn"><i data-feather="printer"></i></button>
+                                            <button class="btn"><i data-feather="trash-2"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>Tổng tiền</td>
+                                        <td class="text-danger">-14000</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        $(".expense-nav").addClass("active");
+        $('.select-type').select2();
+    </script>
+}
