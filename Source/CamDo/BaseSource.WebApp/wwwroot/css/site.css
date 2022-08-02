@@ -113,9 +113,11 @@ footer ul {
 footer ul li a {
   font-size: 17px;
   color: #444;
+  text-decoration: none;
 }
 footer ul li a:hover {
   color: #666;
+  text-decoration: underline;
 }
 footer .hotline {
   color: #b1b1b1;
@@ -190,14 +192,61 @@ h1, h2, h3, h4, h5, h6 {
   text-decoration: none;
   color: #FFFFFF;
 }
-#homepage .hompage-header .hompage-top-link {
+
+#homepage #navbar-homepage {
+  background: #e9e9e9;
+  box-shadow: 0px 2px 5px #bbb;
+  border-radius: 4px;
+  margin: 0px 12px;
+}
+@media (min-width: 992px) {
+  #homepage #navbar-homepage {
+    display: none;
+  }
+}
+#homepage #navbar-homepage .nav-link {
   font-size: 18px;
   color: #3f3e3c;
   padding: 6px 0px;
   font-family: Roboto-Light;
 }
+#homepage .hompage-header {
+  background: url(../images/bg_banner.png) repeat;
+  min-height: 680px;
+  padding-top: 38px;
+}
+@media (max-width: 768px) {
+  #homepage .hompage-header {
+    padding-top: 10px;
+  }
+}
+#homepage .hompage-header .hompage-navbar {
+  background: #FFF;
+  display: table;
+  width: 100%;
+  border-radius: 4px;
+  box-shadow: 0px 0px 5px #bbb;
+  min-height: 70px;
+}
+@media (max-width: 991px) {
+  #homepage .hompage-header .hompage-navbar {
+    display: none;
+  }
+}
+#homepage .hompage-header .hompage-navbar .login-panel {
+  padding-top: 20px;
+  padding-right: 25px;
+}
+#homepage .hompage-header .hompage-top-link {
+  font-size: 18px;
+  color: #3f3e3c;
+  padding: 6px 0px;
+  font-family: Roboto-Light;
+  text-decoration: none;
+}
 #homepage .hompage-header .hompage-top-link:hover {
   color: #f05403;
+  border-bottom: 2px solid #f05403;
 }
 #homepage .hompage-header .hompage-top-link.active {
   color: #f05403;
@@ -391,6 +440,400 @@ h1, h2, h3, h4, h5, h6 {
   color: #303030;
   font-size: 16px;
   margin-bottom: 40px;
+}
+#homepage .reviews .owl-theme .item .icon {
+  font-size: 21px;
+  color: #e2e2e2;
+}
+#homepage .reviews .owl-theme .item .icon.fa-quote-left {
+  margin-right: 20px;
+}
+#homepage .reviews .owl-theme .item .icon.fa-quote-right {
+  margin-left: 20px;
+}
+#homepage .reviews .owl-theme .item .name {
+  margin-top: 15px;
+  color: #f05403;
+  text-align: right;
+  font-size: 16px;
+}
+#homepage .reviews .owl-theme .item .address {
+  text-align: right;
+  color: #5e5e5e;
+}
+#homepage .reviews .owl-theme .item span {
+  color: #5e5e5e;
+  font-size: 16px;
+  min-height: 145px;
+}
+#homepage .reviews .owl-theme .item .img-circle {
+  border-radius: 50%;
+  border: 2px solid #d2e9b4;
+  padding: 4px;
+  width: 150px;
+  height: 150px;
+}
+@media (max-width: 768px) {
+  #homepage .reviews .owl-theme .item .img-circle {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+#homepage .partner {
+  min-height: 540px;
+  background: url(https://mecash.vn/Content/images/bg_images.jpg) no-repeat bottom center;
+  background-size: auto;
+  background-size: cover;
+  padding-top: 70px;
+}
+@media (max-width: 768px) {
+  #homepage .partner {
+    padding-top: 40px;
+  }
+}
+#homepage .partner .title {
+  font-size: 38px;
+  color: #FFF;
+  text-align: center;
+}
+@media (max-width: 768px) {
+  #homepage .partner .title {
+    font-size: 20px;
+  }
+}
+#homepage .partner .description {
+  font-family: Roboto-Regular;
+  text-align: center;
+  color: #FFF;
+  font-size: 16px;
+  margin-bottom: 60px;
+  margin-top: 20px;
+}
+#homepage .partner .center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#homepage .partner .item {
+  color: #FFF;
+  width: 169px;
+  height: 169px;
+  display: block;
+  margin: 0px 60px;
+  background: url(../images/bg_clip.png) no-repeat;
+  padding-top: 65px;
+}
+@media (max-width: 768px) {
+  #homepage .partner .item {
+    color: #FFF;
+    width: 145px;
+    height: 145px;
+    display: block;
+    margin: 0px 0px;
+    background-size: auto;
+    padding-top: 50px;
+    background-size: 100%;
+  }
+}
+#homepage .partner .item .top {
+  font-size: 43px;
+  text-align: center;
+  line-height: 20px;
+}
+#homepage .partner .item .bot {
+  font-size: 16px;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  #feature .left-menu {
+    background-color: #FFF;
+    display: table;
+    margin-bottom: 30px;
+  }
+}
+#feature .left-menu ul {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+  color: #666;
+}
+#feature .left-menu ul li {
+  border-left: 1px solid #d4d4d4;
+  border-right: 1px solid #d4d4d4;
+  border-top: 1px solid #d4d4d4;
+}
+#feature .left-menu ul li:last-child {
+  border-bottom: 1px solid #d4d4d4;
+}
+@media (max-width: 768px) {
+  #feature .left-menu ul li {
+    border: 1px solid #d4d4d4;
+    display: table;
+    float: left;
+    width: 40%;
+  }
+  #feature .left-menu ul li:nth-of-type(2n+1) {
+    width: 60%;
+  }
+}
+#feature .left-menu ul li.active {
+  border: 1px solid #f05403 !important;
+  position: relative;
+  background: #f05403;
+}
+#feature .left-menu ul li.active a {
+  color: #fff !important;
+}
+@media (min-width: 769px) {
+  #feature .left-menu ul li.active::after {
+    content: "";
+    display: block;
+    height: 43.7px;
+    width: 23px;
+    position: absolute;
+    top: -1px;
+    right: -24px;
+    background-image: url(../images/menu_active.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+}
+#feature .left-menu ul li a {
+  color: #383838;
+  font-size: 14px;
+  padding: 10px 30px;
+  display: block;
+  text-decoration: none;
+  font-family: "Roboto", sans-serif;
+}
+#feature .left-menu ul li a:hover {
+  color: #f05403;
+}
+
+#payment h3 {
+  font-size: 24px;
+  font-weight: 400;
+  font-family: Roboto-Bold;
+}
+#payment .red {
+  color: red;
+}
+#payment table {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-family: "Roboto", sans-serif;
+}
+@media (max-width: 768px) {
+  #payment table.table-desktop {
+    display: none;
+  }
+}
+@media (min-width: 769px) {
+  #payment table.table-mobile {
+    display: none;
+  }
+}
+#payment table th {
+  border: 1px solid #ddd;
+}
+#payment table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  line-height: 1.42857;
+  vertical-align: top;
+}
+#payment content-2 {
+  text-align: left;
+  font-size: 14px;
+  color: black;
+  padding: 10px 0px;
+  margin: 0 0 20px;
+}
+@media (max-width: 768px) {
+  #payment .space {
+    margin-top: 10px;
+  }
+}
+#payment .box {
+  text-align: center;
+  color: white;
+  padding: 24px;
+  font-family: "Roboto", sans-serif;
+  line-height: 42.85px;
+  height: 100%;
+}
+#payment .box.orange {
+  background: #f05403;
+}
+#payment .box.yellow {
+  background: #e8bb26;
+}
+#payment .box .name {
+  font-size: 20px;
+}
+#payment .box .description {
+  font-size: 30px;
+}
+#payment .box .note {
+  font-size: 20px;
+}
+
+#feedback .title {
+  font-size: 30px;
+  background-color: #f05403;
+  padding: 18px;
+  text-align: center;
+  border: 1px solid #ddd;
+  margin-bottom: 0px;
+}
+#feedback .description {
+  font-size: 25px;
+  padding: 18px;
+  text-align: center;
+  border: 1px solid #ddd;
+  border-top: none;
+}
+#feedback .content {
+  margin-top: 25px;
+}
+@media (max-width: 768px) {
+  #feedback .content .form-panel {
+    background: #f5f5f5;
+    padding: 20px 10px;
+  }
+}
+#feedback .content .form-panel .header-label {
+  font-size: 25px;
+  color: #565656;
+  line-height: 1.42857;
+  font-family: "Roboto", sans-serif;
+}
+#feedback .content .form-panel .header-label-success {
+  font-size: 25px;
+  color: red;
+  text-align: center;
+  line-height: 1.42857;
+  font-family: "Roboto", sans-serif;
+}
+#feedback .content .form-panel form {
+  color: #666;
+}
+#feedback .content .form-panel form label {
+  text-align: left;
+  font-size: 16px;
+  font-weight: 400;
+}
+#feedback .content .form-panel form red {
+  color: red;
+}
+#feedback .content .form-panel form input, #feedback .content .form-panel form textarea {
+  background: #fff none repeat scroll 0 0;
+  border: 1px solid #dadada;
+  border-radius: 3px;
+  color: #292929;
+  font-size: 14px;
+  margin: 0;
+  overflow: visible;
+  padding: 8px 12px;
+  width: 100%;
+  font-family: sans-serif;
+  line-height: 1.15;
+}
+#feedback .content .form-panel form input:hover, #feedback .content .form-panel form textarea:hover {
+  border: 1px solid #b9b9b9;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+#feedback .content .form-panel form input[type=submit] {
+  background: #f05403;
+  border: medium none;
+  border-radius: 3px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  padding: 18px 80px;
+  text-transform: uppercase;
+  font-family: sans-serif;
+  line-height: 1.15;
+  margin: 0;
+  border-style: none;
+  padding: 18px 80px;
+}
+#feedback .content .form-panel form input[type=submit]:hover {
+  background: #ce4904;
+}
+#feedback .content .form-panel form textarea {
+  height: 145px;
+}
+#feedback .content .branch-name {
+  color: #f05403;
+  font-size: 18px;
+  margin: 0 0 10px;
+  font-weight: bold;
+  font-family: "Roboto", sans-serif;
+}
+#feedback .content .address {
+  font-family: "Roboto", sans-serif;
+  color: #666;
+  font-size: 14px;
+}
+#feedback .content iframe {
+  width: 100%;
+}
+
+.banner {
+  margin-top: 20px;
+  background: #ccc;
+  padding: 95px 0;
+  text-align: center;
+  color: #fff;
+}
+@media (max-width: 768px) {
+  .banner {
+    padding: 50px 0;
+  }
+}
+.banner .title {
+  font-size: 42px;
+  color: #f05403;
+  text-align: center;
+  line-height: 1.1;
+  font-weight: 400;
+}
+@media (max-width: 768px) {
+  .banner .title {
+    font-size: 33px;
+  }
+}
+.banner a {
+  margin-top: 40px;
+  background: #f05403;
+  height: 74px;
+  color: #fff !important;
+  font-size: 33px;
+  font-weight: 600;
+  padding: 0 27px;
+  line-height: 72px;
+  border-radius: 10px;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  touch-action: manipulation;
+  cursor: pointer;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  user-select: none;
+  text-decoration: none;
+}
+@media (max-width: 768px) {
+  .banner a {
+    font-size: 22px;
+    height: 60px;
+    line-height: 60px !important;
+  }
 }
 
 .padding-top-20 {

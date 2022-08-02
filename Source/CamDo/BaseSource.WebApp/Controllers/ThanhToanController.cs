@@ -1,14 +1,28 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using BaseSource.ApiIntegration.WebApi.GoiSanPham;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace BaseSource.WebApp.Controllers
 {
     public class ThanhToanController : Controller
     {
-        [AllowAnonymous]
-        public IActionResult Index()
+        private readonly IGoiSanPhamApiClient _apiClient;
+
+        public ThanhToanController(IGoiSanPhamApiClient apiClient)
         {
-            return View();
+            _apiClient = apiClient;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var result = await _apiClient.GetAll();
+
+            if (!result.IsSuccessed)
+            {
+                return NotFound();
+            }
+
+            return View(result.ResultObj);
         }
     }
 }

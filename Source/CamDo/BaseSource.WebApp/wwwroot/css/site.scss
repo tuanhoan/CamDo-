@@ -123,12 +123,15 @@ footer {
             @media (max-width: 768px) {
                 margin-bottom: 10px;
             }
+
             a {
                 font-size: 17px;
                 color: #444;
+                text-decoration: none;
 
                 &:hover {
                     color: #666;
+                    text-decoration: underline;
                 }
             }
         }
@@ -311,7 +314,7 @@ h1, h2, h3, h4, h5, h6 {
 
             .login-panel {
                 padding-top: 20px;
-                padding-left: 25px;
+                padding-right: 25px;
             }
         }
 
@@ -320,10 +323,10 @@ h1, h2, h3, h4, h5, h6 {
             color: #3f3e3c;
             padding: 6px 0px;
             font-family: Roboto-Light;
+            text-decoration: none;
 
             &:hover {
                 color: #f05403;
-                text-decoration: none;
                 border-bottom: 2px solid #f05403;
             }
 
@@ -1021,6 +1024,7 @@ h1, h2, h3, h4, h5, h6 {
         border: 1px solid transparent;
         white-space: nowrap;
         user-select: none;
+        text-decoration: none;
 
         @media (max-width: 768px) {
             font-size: 22px;
