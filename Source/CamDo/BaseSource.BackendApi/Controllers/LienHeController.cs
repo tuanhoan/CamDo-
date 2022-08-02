@@ -2,6 +2,7 @@
 using BaseSource.Data.Entities;
 using BaseSource.ViewModels.Common;
 using BaseSource.ViewModels.LienHe;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -16,6 +17,7 @@ namespace BaseSource.BackendApi.Controllers
             _db = db;
         }
 
+        [AllowAnonymous]
         [HttpPost("Create")]
         public async Task<IActionResult> Create(CreateLienHeVm model)
         {

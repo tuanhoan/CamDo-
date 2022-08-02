@@ -9,6 +9,7 @@ namespace BaseSource.ViewModels.LienHe
         public string Name { get; set; }
 
         [Display(Name = "Email")]
+        [EmailAddress]
         [Required(ErrorMessage = "Vui lòng nhập email")]
         public string Email { get; set; }
 
