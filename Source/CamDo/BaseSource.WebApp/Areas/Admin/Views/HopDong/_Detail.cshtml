@@ -93,7 +93,8 @@
                         <span class="@(tienthuaHD <= 0?"text-danger":"text-success") font-weight-bold" id="lblCustomerDebitMoney">
                             @if (tienthuaHD < 0)
                             {
-                                <span>@(tienthuaHD * -1).ToString("N0")) VNĐ</span>
+                                tienthuaHD = tienthuaHD * -1;
+                                <span>@(tienthuaHD.ToString("N0")) VNĐ</span>
                             }
                             else
                             {
@@ -106,7 +107,8 @@
                         <span class="@(tienthuaHD <= 0?"text-danger":"text-success") font-weight-bold" id="lblLoanDebitMoney">
                             @if (tienthuaHD < 0)
                             {
-                                <span>@(tienthuaHD * -1).ToString("N0")) VNĐ</span>
+                                tienthuaHD = tienthuaHD * -1;
+                                <span>@(tienthuaHD.ToString("N0")) VNĐ</span>
                             }
                             else
                             {
@@ -137,8 +139,8 @@
     <div class="tabs tab-giahan" data-type="tab-giahan">
         <h6><i class="fas fa-retweet"></i> Gia hạn</h6>
     </div>
-    <div class="tabs" id="tab05">
-        <h6>Chuộc đồ</h6>
+    <div class="tabs" data-type="tab-chuocdo">
+        <h6><i class="fas fa-motorcycle"></i> Chuộc đồ</h6>
     </div>
     <div class="tabs" data-type="tab-no">
         <h6><i class="fas fa-tag" style="transform: rotateY(180deg);"></i> Nợ</h6>
@@ -432,6 +434,16 @@
             </div>
         </div>
     </fieldset>
+    <fieldset id="tab-chuocdo">
+        <div class="d-flex justify-content-center">
+            <div class="col-md-5">
+                <div id="divContent-chuocdo">
+
+                </div>
+            </div>
+        </div>
+
+    </fieldset>
 </div>
 
 <script>
@@ -470,7 +482,7 @@
          });
 
 
-                            });
+     });
     function loadDataTab(type) {
         switch (type) {
             case "tab-history":
@@ -484,16 +496,23 @@
             case "tab-trabotgoc":
             case "tab-vaythem":
                 getHistoryLoanExtra(type,@Model.Id);
+                break;
             case "tab-giahan":
                 getListGiaHan(@Model.Id);
+                break;
             case "tab-hengio":
                 getListAlarmLog(@Model.Id);
+                break;
              case "tab-chungtu":
                 getChungTu(@Model.Id);
-
+                break;
+             case "tab-chuocdo":
+                getInfoChuocDo(@Model.Id);
+                break;
             default:
+                break;
             // code block
         }
     }
-    
+
 </script>

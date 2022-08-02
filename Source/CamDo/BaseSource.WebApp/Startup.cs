@@ -32,6 +32,7 @@ using BaseSource.ApiIntegration.WebApi.HopDong_DebtNote;
 using BaseSource.ApiIntegration.WebApi.HopDong_VayRutGoc;
 using BaseSource.ApiIntegration.WebApi.HopDong_GianHan;
 using BaseSource.ApiIntegration.WebApi.HopDong_AlarmLog;
+using BaseSource.ApiIntegration.WebApi.HopDong_ChuocDo;
 
 namespace BaseSource.WebApp
 {
@@ -113,6 +114,7 @@ namespace BaseSource.WebApp
             services.AddTransient<IHopDong_VayRutGocApiClient, HopDong_VayRutGocApiClient>();
             services.AddTransient<IHopDong_GianHanApiClient, HopDong_GianHanApiClient>();
             services.AddTransient<IHopDong_AlarmLog, HopDong_AlarmLog>();
+            services.AddTransient<IHopDong_ChuocDoApiClient, HopDong_ChuocDoApiClient>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }

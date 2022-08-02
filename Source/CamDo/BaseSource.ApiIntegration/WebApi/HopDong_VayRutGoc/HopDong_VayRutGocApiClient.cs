@@ -32,7 +32,7 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong_VayRutGoc
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.PostAsync<ApiResult<string>>("/api/HopDong_VayRutGoc/TraBotGoc", model);
         }
-        public async Task<ApiResult<string>> XoaTraBotGoc(long tranLogId)
+        public async Task<ApiResult<string>> XoaTraBotGoc(int tranLogId)
         {
             var dic = new Dictionary<string, string>()
             {

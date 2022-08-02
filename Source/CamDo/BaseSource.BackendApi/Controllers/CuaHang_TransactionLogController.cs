@@ -22,9 +22,9 @@ namespace BaseSource.BackendApi.Controllers
         [HttpGet("GetCuaHang_TransactionLogHistory")]
         public async Task<IActionResult> GetCuaHang_TransactionLogHistory(int hopDongId, EHopDong_ActionType actionType = 0)
         {
-
             var model = _db.CuaHang_TransactionLogs.AsQueryable();
             model = model.Where(x => x.HopDongId == hopDongId);
+            
             if (actionType != 0)
             {
                 if (actionType == EHopDong_ActionType.TraGoc || actionType == EHopDong_ActionType.VayThemGoc)
@@ -50,6 +50,7 @@ namespace BaseSource.BackendApi.Controllers
                     MoneySub = trans.MoneySub,
                     MoneyDebit = trans.MoneyDebit,
                     MoneyPayNeed = trans.MoneyPayNeed,
+                    MoneyPay = trans.MoneyPay,
                     FromDate = trans.FromDate,
                     ToDate = trans.ToDate,
                     CreatedDate = trans.CreatedDate,

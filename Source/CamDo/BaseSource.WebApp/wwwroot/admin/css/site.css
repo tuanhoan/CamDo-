@@ -221,3 +221,12 @@ select.form-control {
 .ky-tranlog {
     font-size: 13px;
 }
+
+.chuocdo-info {
+    color: darkcyan
+}
+
+.chuocdo-tongtienchuoc {
+    color: #f4516c;
+    font-weight: bold;
+}

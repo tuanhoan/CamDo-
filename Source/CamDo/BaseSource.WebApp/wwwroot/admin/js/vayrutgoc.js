@@ -8,9 +8,11 @@ function getHistoryLoanExtra(type, hopDongId) {
         success: function (data) {
             if (type == "tab-trabotgoc") {
                 $('#divContent-ListTraGoc').html(data);
+                setMoneyTextBox('#SoTienTraGocDisplay');
             }
             else {
                 $('#divContent-ListVayThem').html(data);
+                setMoneyTextBox('#SoTienVayThemDisplay');
             }
             var tongTienVayHienTai = $('#lblTotalMoney').text();
             $('.lblTongTienVayHienTai').text(tongTienVayHienTai);
@@ -39,6 +41,7 @@ $("body").on("submit", 'form[id="frmTraBotGoc"]', function (e) {
             if (res.isSuccessed == true) {
                 var hopDongId = $form.find('input[name=HopDongId]').val();
                 toastr.info(res.message);
+                $form[0].reset();
                 setTimeout(getHistoryLoanExtra("tab-trabotgoc", hopDongId), 2000);
                 $('.lblTongTienVayHienTai').text(format(res.resultObj));
             } else if (res.validationErrors != null && res.validationErrors.length) {
@@ -141,7 +144,6 @@ $("body").on("click", '.btn-xoavaythem', function (e) {
             success: function (res) {
                 if (res.isSuccessed == true) {
                     toastr.info(res.message);
-                    $form[0].reset();
                     getHistoryLoanExtra("tab-vaythem", hopdongId);
                     $('.lblTongTienVayHienTai').text(format(res.resultObj));
                 } else {

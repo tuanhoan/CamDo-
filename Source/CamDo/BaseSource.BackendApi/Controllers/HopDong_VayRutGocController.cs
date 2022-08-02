@@ -99,9 +99,9 @@ namespace BaseSource.BackendApi.Controllers
             return Ok(new ApiErrorResult<string>("Not Found!"));
         }
         [HttpPost("XoaTraBotGoc")]
-        public async Task<IActionResult> XoaTraBotGoc([FromForm] long tranLogId)
+        public async Task<IActionResult> XoaTraBotGoc([FromForm] int tranLogId)
         {
-            var tran = await _db.CuaHang_TransactionLogs.FindAsync(tranLogId);
+            var tran = await _db.HopDong_VayRutGocs.FindAsync(tranLogId);
             if (tran != null)
             {
                 var hd = await _db.HopDongs.FindAsync(tran.HopDongId);
@@ -114,10 +114,10 @@ namespace BaseSource.BackendApi.Controllers
                     }
                 }
 
-                hd.TongTienDaThanhToan -= tran.MoneyPay;
-                hd.TongTienVayHienTai += tran.MoneyPay;
+                hd.TongTienDaThanhToan -= tran.TotalMoney;
+                hd.TongTienVayHienTai += tran.TotalMoney;
                 hd.TongTienLai = await _hopDongService.TinhLaiHD(hd.HD_HinhThucLai, hd.HD_TongThoiGianVay, hd.HD_LaiSuat, hd.TongTienVayHienTai);
-                _db.CuaHang_TransactionLogs.Remove(tran);
+                _db.HopDong_VayRutGocs.Remove(tran);
                 await _db.SaveChangesAsync();
 
                 var tranLog = new CreateCuaHang_TransactionLogVm()
@@ -126,7 +126,7 @@ namespace BaseSource.BackendApi.Controllers
                     ActionType = EHopDong_ActionType.HuyTraGoc,
                     FeatureType = EFeatureType.Camdo,
                     UserId = UserId,
-                    SoTienTraGoc = tran.MoneyPay
+                    SoTienTraGoc = tran.TotalMoney
 
                 };
                 var result = Task.Run(() => CreateCuaHang_TransactionLog(tranLog));
