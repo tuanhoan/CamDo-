@@ -791,6 +791,18 @@ h1, h2, h3, h4, h5, h6 {
         font-size: 14px;
         font-family: "Roboto", sans-serif;
 
+        &.table-desktop {
+            @media (max-width: 768px) {
+                display: none;
+            }
+        }
+
+        &.table-mobile {
+            @media (min-width: 769px) {
+                display: none;
+            }
+        }
+
         th {
             border: 1px solid #ddd;
         }
@@ -809,6 +821,12 @@ h1, h2, h3, h4, h5, h6 {
         color: black;
         padding: 10px 0px;
         margin: 0 0 20px;
+    }
+
+    .space {
+        @media (max-width: 768px) {
+            margin-top: 10px;
+        }
     }
 
     .box {
