@@ -77,6 +77,7 @@ namespace BaseSource.Data.EF
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<CuaHang> CuaHangs { get; set; }
         public DbSet<KhachHang> KhachHangs { get; set; }
+        public DbSet<LienHe> LienHes { get; set; }
         public DbSet<CauHinhHangHoa> CauHinhHangHoas { get; set; }
         public DbSet<MoTaHinhThucLai> MoTaHinhThucLais { get; set; }
         public DbSet<FeedBack> FeedBacks { get; set; }
