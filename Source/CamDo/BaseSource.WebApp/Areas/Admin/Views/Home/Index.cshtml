@@ -1,5 +1,173 @@
 ﻿@{
-    ViewData["Title"] = "Admin";
+    ViewData["Title"] = "Trạng thái";
 }
+<style>
+    .badge-white {
+        color: black;
+        background-color: #fff;
+    }
+</style>
 
-<h1>Admin</h1>
+<div class="row">
+    <div class="col-12 mb-3">
+        <span class="text-black h1">Trang chủ</span>
+        <span class="float-right mr-2 badge badge-pill badge-white p-2">Ngày hết hạn: <span class="text-primary">18/08/2022</span> </span>
+        <span class="float-right badge badge-pill badge-white p-2">Số tiền dùng tính năng thêm:<span class="text-orange">0 vnđ</span> </span>
+    </div>
+
+    <!-- table  Lastest Tickets -->
+    <div class="col-12 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <span class="text-black">Thông báo:</span><span class="text-orange">THÔNG BÁO : Mecash cung cấp dịch vụ Bảo Hiểm Khoản Vay mang lại nhiều quyền lợi đảm bảo cho khách hàng. Chi tiết liên hệ : 024.73054.222</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 mb-3">
+        <div class="card">
+            <div class="card-body font-weight-bold">
+                <span class="text-blue">Tính năng mới:</span> <span class="text-orange">Kiểm tra đang vay tại các cơ sở tín dụng</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-3 mb-3">
+        <div class="card">
+            <div class="card-body font-weight-bold">
+                <h3 class="text-primary">999,991,022</h3>
+                <h4 class="text-black">TỔNG QUỸ TIỀN MẶT</h4>
+            </div>
+            <div class="progress" style="height:4px">
+                <div class="progress-bar w-100 bg-primary" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-3 mb-3">
+        <div class="card">
+            <div class="card-body font-weight-bold">
+                <h3 class="text-orange">999,991,022</h3>
+                <h4 class="text-black">SỐ HỢP ĐỒNG ĐANG VAY</h4>
+            </div>
+            <div class="progress" style="height:4px">
+                <div class="progress-bar w-100 bg-danger" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-3 mb-3">
+        <div class="card">
+            <div class="card-body font-weight-bold">
+                <h3 class="text-blue">999,991,022</h3>
+                <h4 class="text-black">TIỀN ĐANG CHO VAY</h4>
+            </div>
+            <div class="progress" style="height:4px">
+                <div class="progress-bar w-100 bg-blue" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-3 mb-3">
+        <div class="card">
+            <div class="card-body font-weight-bold">
+                <h3 class="text-green">999,991,022</h3>
+                <h4 class="text-black">LÃI ĐÃ THU TRONG THÁNG</h4>
+            </div>
+            <div class="progress" style="height:4px">
+                <div class="progress-bar w-100 bg-green" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 ">
+        <div class="card shadow h-100 mb-4 ">
+
+            <div class="card-body">
+                <div class="row ">
+                    <div class="col-md-12">
+                        <div class="row mb-5">
+                            <div class="col-md-4 text-center border-right">
+                                <div class="table-responsive">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center"></th>
+                                                <th class="text-center">Số HĐ Đang vay</th>
+                                                <th class="text-center">Tổng số</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr class="">
+                                                <td>Cầm đồ</td>
+                                                <td>1</td>
+                                                <td>1</td>
+                                            </tr>
+                                            <tr class="">
+                                                <td>Vay lãi</td>
+                                                <td>1</td>
+                                                <td>1</td>
+                                            </tr>
+                                            <tr class="">
+                                                <td>Bát họ</td>
+                                                <td>1</td>
+                                                <td>1</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-center border-right">
+                                <h4>Đang cho vay</h4>
+                                <canvas id="myChart" style="width:100%;max-width:600px"></canvas>
+                            </div>
+                            <div class="col-md-4 text-center border-right">
+                                <h4>Lợi nhuận</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 mt-3">
+        <div class="card shadow h-100 mb-4 ">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="m-0 font-weight-bold">Giao dịch trong ngày</h3>
+            </div>
+            <div class="card-body">
+                <div class="row ">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script>
+        var xValues = ["Cầm đồ", "Vay lãi", "Bát họ"];
+        var yValues = [90, 6, 4];
+        var barColors = [
+            "#716aca",
+            "#f4516c",
+            "#34bfa3"
+
+        ];
+
+        new Chart("myChart", {
+            type: "doughnut",
+            data: {
+                labels: xValues,
+                datasets: [{
+                    backgroundColor: barColors,
+                    data: yValues
+                }]
+            },
+            //options: {
+            //    title: {
+            //        display: false,
+            //        text: "Cầm đồ"
+            //    }
+            //}
+        });
+    </script>
+}

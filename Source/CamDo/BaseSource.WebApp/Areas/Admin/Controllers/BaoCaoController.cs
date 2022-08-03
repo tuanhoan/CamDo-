@@ -66,5 +66,10 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         {
             return View();
         }
+        //Khách hàng bị báo xấu
+        public async Task<IActionResult> ReportCustomer()
+        {
+            return View();
+        }
     }
 }

@@ -1,0 +1,90 @@
+﻿@{
+    ViewData["Title"] = "Danh sách khách hàng nợ xấu";
+}
+
+
+<div class="row">
+    <!-- table  Lastest Tickets -->
+    <div class="col-12 ">
+        <div class="card shadow h-100 mb-4 ">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="m-0 font-weight-bold">Tìm kiếm khách hàng bị báo xấu</h3>
+            </div>
+            <div class="card-body">
+                <div class="row ">
+                    <div class="col-md-12">
+
+                        <div class="mb-3">
+                            <form class="form-inline">
+                                <div class="form-group mx-sm-3 mb-2">
+                                    <input type="text" class="form-control" id="search" placeholder="Tìm kiếm theo CMND,SDT">
+                                </div>
+                                <br />
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary mb-2"><i class="fa fa-plus" aria-hidden="true"></i> Báo xấu khách hàng</button>
+                                </div>
+
+                            </form>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">
+                                            #
+                                        </th>
+                                        <th scope="col">
+                                            Tên khách hàng
+                                        </th>
+                                        <th scope="col">
+                                            Số điện thoại
+                                        </th>
+                                        <th scope="col">
+                                            CMND
+                                        </th>
+                                        <th scope="col">
+                                            Địa chỉ
+                                        </th>
+                                        <th scope="col">
+                                            Lý do
+                                        </th>
+                                        <th scope="col">
+                                            Người báo xấu
+                                        </th>
+                                        <th scope="col">
+                                            Thời gian báo
+                                        </th>
+                                        <th scope="col">
+                                            Nguồn
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>1</td>
+                                        <td>Phạm Thị Lợi</td>
+                                        <td>1234567890</td>
+                                        <td>1234567890</td>
+                                        <td>1234567890</td>
+                                        <td>Nợ xấu</td>
+                                        <td>123</td>
+                                        <td>08:42 01/08/2022</td>
+                                        <td>ecash.v1</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+
+    </script>
+}
