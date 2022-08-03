@@ -93,7 +93,7 @@ namespace BaseSource.WebApp
                 //options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromDays(15);
                 options.LoginPath = "/Account/Login";
-                // ReturnUrlParameter requires 
+                // ReturnUrlParameter requires
                 //using Microsoft.AspNetCore.Authentication.Cookies;
                 //options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
                 //options.SlidingExpiration = true;
@@ -117,6 +117,9 @@ namespace BaseSource.WebApp
             services.AddTransient<IHopDong_GianHanApiClient, HopDong_GianHanApiClient>();
             services.AddTransient<IHopDong_AlarmLog, HopDong_AlarmLog>();
             services.AddTransient<IHopDong_ChuocDoApiClient, HopDong_ChuocDoApiClient>();
+
+            services.AddTransient<IUserAdminApiClient, UserAdminApiClient>();
+
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
