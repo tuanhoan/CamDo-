@@ -1,6 +1,6 @@
-﻿@model             BaseSource.ViewModels.Common.List<DanhMucBaiVietAdminVm>
+﻿@model PagedResult<BaiVietAdminVm>
 @{
-    ViewData["Title"] = "Quản lý danh mục bài viết";
+    ViewData["Title"] = "Quản lý bài viết";
 
 }
 
@@ -22,6 +22,9 @@
                                     Tên
                                 </th>
                                 <th scope="col">
+                                    Đường dẫn
+                                </th>
+                                <th scope="col">
                                     Ngày tạo
                                 </th>
                                 <th></th>
@@ -37,14 +40,14 @@
                                             @item.Name
                                         </td>
                                         <td>
+                                            @item.Url
+                                        </td>
+                                        <td>
                                             @item.CreatedTime.ToString("HH:mm dd/MM/yyyy")
                                         </td>
                                         <td width="175">
                                             <a class="btn btn-secondary btn-sm" href="@Url.Action("Edit", new { id = item.Id })"><i class="fas fa-pencil-alt fa-fw"></i> Edit</a>
-                                            @if (item.DisableDelete == false)
-                                            {
-                                                <button class="btn btn-sm btn-danger" data-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn xóa?" data-href="@Url.Action("Delete", new { id = item.Id })" title="Delete"><i class="fas fa-trash-alt fa-fw"></i> Delete</button>
-                                            }
+                                            <button class="btn btn-sm btn-danger" data-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn xóa?" data-href="@Url.Action("Delete", new { id = item.Id })" title="Delete"><i class="fas fa-trash-alt fa-fw"></i> Delete</button>
                                         </td>
                                     </tr>
                                 }
@@ -78,6 +81,6 @@
 
 @section Scripts{
     <script>
-        $(".danhmucbaiviet-nav").addClass("active");
+        $(".baiviet-nav").addClass("active");
     </script>
 }

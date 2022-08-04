@@ -37,7 +37,7 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
                 CreatedTime = x.CreatedTime
             }).OrderByDescending(x => x.Id).ToPagedListAsync(request.Page, request.PageSize);
 
-            var pagedResult = new List<BaiVietAdminVm>()
+            var pagedResult = new PagedResult<BaiVietAdminVm>()
             {
                 TotalItemCount = data.TotalItemCount,
                 PageSize = data.PageSize,
@@ -45,13 +45,15 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
                 Items = data.ToList()
             };
 
-            return Ok(new ApiSuccessResult<List<BaiVietAdminVm>>(pagedResult));
+            return Ok(new ApiSuccessResult<PagedResult<BaiVietAdminVm>>(pagedResult));
         }
 
         [HttpGet("GetById")]
         public async Task<IActionResult> GetById(int id)
         {
             var x = await _db.BaiViets.FindAsync(id);
+
+            var danhMuc = await _db.DanhMucBaiViets.FindAsync(x.DanhMucBaiVietId);
 
             if (x == null)
             {
@@ -64,10 +66,11 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
                 Name = x.Name,
                 DanhMucBaiViet = new DanhMucBaiVietAdminVm
                 {
-                    Id = x.DanhMucBaiViet.Id,
-                    Name = x.DanhMucBaiViet.Name,
-                    CreatedTime = x.DanhMucBaiViet.CreatedTime,
+                    Id = danhMuc.Id,
+                    Name = danhMuc.Name,
+                    CreatedTime = danhMuc.CreatedTime,
                 },
+                Content = x.Content,
                 Url = x.Url,
                 CreatedTime = x.CreatedTime
             };
@@ -83,10 +86,20 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
                 return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
             }
 
+            var anotherSameUrl = _db.BaiViets.Where(x => x.Url == model.Url).FirstOrDefault();
+
+            if (anotherSameUrl != null)
+            {
+                ModelState.AddModelError("Url", "Url đã tồn tại");
+                return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
+            }
+
             var record = new BaiViet()
             {
                 Name = model.Name,
-                DanhMucBaiVietId = model.DanhMucBaiVietId
+                DanhMucBaiVietId = model.DanhMucBaiVietId,
+                Content = model.Content,
+                Url = model.Url,
             };
 
             _db.BaiViets.Add(record);
@@ -107,6 +120,14 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
             if (x == null)
             {
                 return Ok(new ApiErrorResult<string>("Not found"));
+            }
+
+            var anotherSameUrl = _db.BaiViets.Where(x => x.Id != model.Id && x.Url == model.Url).FirstOrDefault();
+
+            if (anotherSameUrl != null)
+            {
+                ModelState.AddModelError("Url", "Url đã tồn tại");
+                return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
             }
 
             x.Name = model.Name;

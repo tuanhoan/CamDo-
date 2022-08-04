@@ -47,7 +47,7 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
                 CreatedTime = x.CreatedTime
             }).ToPagedListAsync(request.Page, request.PageSize);
 
-            var pagedResult = new ViewModels.Common.List<DanhMucBaiVietAdminVm>()
+            var pagedResult = new PagedResult<DanhMucBaiVietAdminVm>()
             {
                 TotalItemCount = data.TotalItemCount,
                 PageSize = data.PageSize,
@@ -55,7 +55,7 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
                 Items = data.ToList()
             };
 
-            return base.Ok(new ApiSuccessResult<ViewModels.Common.List<DanhMucBaiVietAdminVm>>((ViewModels.Common.PagedResult<DanhMucBaiVietAdminVm>)pagedResult));
+            return base.Ok(new ApiSuccessResult<PagedResult<DanhMucBaiVietAdminVm>>(pagedResult));
         }
 
         [HttpGet("GetById")]

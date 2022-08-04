@@ -42,10 +42,10 @@ namespace BaseSource.ApiIntegration.AdminApi.DanhMucBaiViet
             return await client.PostAsync<ApiResult<string>>("/api/admin/DanhMucBaiViet/Edit", model);
         }
 
-        public async Task<ApiResult<ViewModels.Common.List<DanhMucBaiVietAdminVm>>> GetAll()
+        public async Task<ApiResult<List<DanhMucBaiVietAdminVm>>> GetAll()
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
-            return await client.GetAsync<ApiResult<ViewModels.Common.List<DanhMucBaiVietAdminVm>>>("/api/admin/DanhMucBaiViet/GetAll");
+            return await client.GetAsync<ApiResult<List<DanhMucBaiVietAdminVm>>>("/api/admin/DanhMucBaiViet/GetAll");
         }
 
         public async Task<ApiResult<DanhMucBaiVietAdminVm>> GetById(int id)
@@ -58,10 +58,10 @@ namespace BaseSource.ApiIntegration.AdminApi.DanhMucBaiViet
             return await client.GetAsync<ApiResult<DanhMucBaiVietAdminVm>>("/api/admin/DanhMucBaiViet/GetById", obj);
         }
 
-        public async Task<ApiResult<ViewModels.Common.List<DanhMucBaiVietAdminVm>>> GetPagings(GetDanhMucBaiVietPagingRequest_Admin model)
+        public async Task<ApiResult<PagedResult<DanhMucBaiVietAdminVm>>> GetPagings(GetDanhMucBaiVietPagingRequest_Admin model)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
-            return await client.GetAsync<ApiResult<ViewModels.Common.List<DanhMucBaiVietAdminVm>>>("/api/admin/DanhMucBaiViet/GetPagings", model);
+            return await client.GetAsync<ApiResult<PagedResult<DanhMucBaiVietAdminVm>>>("/api/admin/DanhMucBaiViet/GetPagings", model);
         }
     }
 }

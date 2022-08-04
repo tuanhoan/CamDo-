@@ -1,6 +1,6 @@
-﻿@model CreateBaiVietAdminVm
+﻿@model EditBaiVietAdminVm
 @{
-    ViewData["Title"] = "Thêm mới bài viết";
+    ViewData["Title"] = "Chỉnh sửa bài viết";
 }
 <div>
     <div class="card shadow h-100">
@@ -10,8 +10,10 @@
         </div>
 
         <div class="card-body">
-            <form asp-action="Create" data-name="ajaxForm" enctype="multipart/form-data">
+            <form asp-action="Edit" data-name="ajaxForm" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                @Html.HiddenFor(x => x.Id)
 
                 <div class="form-group row">
                     <label asp-for="Name" class="control-label col-md-2"></label>
@@ -51,7 +53,7 @@
                 </div>
 
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Create</button>
+                    <button type="submit" class="btn btn-primary">Save Change</button>
                 </div>
             </form>
         </div>

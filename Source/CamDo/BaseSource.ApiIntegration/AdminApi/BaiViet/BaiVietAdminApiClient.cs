@@ -49,10 +49,10 @@ namespace BaseSource.ApiIntegration.AdminApi.BaiViet
             return await client.GetAsync<ApiResult<BaiVietAdminVm>>("/api/admin/BaiViet/GetById", obj);
         }
 
-        public async Task<ApiResult<ViewModels.Common.List<BaiVietAdminVm>>> GetPagings(GetBaiVietPagingRequest_Admin model)
+        public async Task<ApiResult<PagedResult<BaiVietAdminVm>>> GetPagings(GetBaiVietPagingRequest_Admin model)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
-            return await client.GetAsync<ApiResult<ViewModels.Common.List<BaiVietAdminVm>>>("/api/admin/BaiViet/GetPagings", model);
+            return await client.GetAsync<ApiResult<PagedResult<BaiVietAdminVm>>>("/api/admin/BaiViet/GetPagings", model);
         }
     }
 }

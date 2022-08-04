@@ -1,5 +1,6 @@
 ﻿using BaseSource.ViewModels.Common;
 using System;
+using System.Collections.Generic;
 
 namespace BaseSource.ViewModels.Admin
 {
@@ -17,12 +18,6 @@ namespace BaseSource.ViewModels.Admin
         public DanhMucBaiVietAdminVm DanhMucBaiViet { get; set; }
     }
 
-    public class SelectListItem
-    {
-        public string Text { get; set; }
-        public string Value { get; set; }
-    }
-
     public class CreateBaiVietAdminVm
     {
         public string Name { get; set; }
@@ -30,7 +25,7 @@ namespace BaseSource.ViewModels.Admin
         public string Url { get; set; }
         public int DanhMucBaiVietId { get; set; }
 
-        public List<SelectListItem> DanhMucSelect;
+        public List<DanhMucBaiVietAdminVm> DanhMucSelect;
     }
 
     public class EditBaiVietAdminVm : CreateBaiVietAdminVm
