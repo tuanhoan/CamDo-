@@ -1,5 +1,6 @@
 using BaseSource.ApiIntegration.AdminApi;
 using BaseSource.ApiIntegration.AdminApi.CauHinhHangHoa;
+using BaseSource.ApiIntegration.AdminApi.DanhMucBaiViet;
 using BaseSource.ApiIntegration.AdminApi.FeedBack;
 using BaseSource.ApiIntegration.AdminApi.GoiSanPham;
 using BaseSource.ApiIntegration.AdminApi.LienHe;
@@ -85,6 +86,7 @@ namespace BaseSource.AdminApp
             services.AddTransient<INotifySystemAdminApiClient, NotifySystemAdminApiClient>();
             services.AddTransient<IUserAdminApiClient, UserAdminApiClient>();
             services.AddTransient<ILienHeAdminApiClient, LienHeAdminApiClient>();
+            services.AddTransient<IDanhMucBaiVietAdminApiClient, DanhMucBaiVietAdminApiClient>();
 
         }
 
