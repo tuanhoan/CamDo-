@@ -2,6 +2,7 @@ using BaseSource.ApiIntegration.AdminApi;
 using BaseSource.ApiIntegration.AdminApi.CauHinhHangHoa;
 using BaseSource.ApiIntegration.AdminApi.FeedBack;
 using BaseSource.ApiIntegration.AdminApi.GoiSanPham;
+using BaseSource.ApiIntegration.AdminApi.LienHe;
 using BaseSource.ApiIntegration.AdminApi.MoTaHinhThucLai;
 using BaseSource.ApiIntegration.AdminApi.NotifySystem;
 using BaseSource.ApiIntegration.AdminApi.ReportCustomer;
@@ -83,7 +84,8 @@ namespace BaseSource.AdminApp
             services.AddTransient<IGoiSanPhamAdminApiClient, GoiSanPhamAdminApiClient>();
             services.AddTransient<INotifySystemAdminApiClient, NotifySystemAdminApiClient>();
             services.AddTransient<IUserAdminApiClient, UserAdminApiClient>();
-      
+            services.AddTransient<ILienHeAdminApiClient, LienHeAdminApiClient>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
