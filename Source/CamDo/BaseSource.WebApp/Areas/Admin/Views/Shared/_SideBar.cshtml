@@ -3,6 +3,13 @@
         <div class="nav accordion" id="accordionSidenav">
 
             <div class="sidenav-menu-heading">DATA</div>
+
+            <a class="nav-link collapsed" href="/admin">
+                <div class="nav-link-icon"><i data-feather="file-text"></i></div>
+                Trang chủ
+
+            </a>
+
             <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse" data-target="#collapseDichvu" aria-expanded="false" aria-controls="collapseCTLQ">
                 <div class="nav-link-icon"><i data-feather="file-text"></i></div>
                 Dịch vụ
@@ -60,7 +67,7 @@
             </a>
             <a class="nav-link user-nav" href="@Url.Action("Index", "User")">
                 <div class="nav-link-icon"><i data-feather="users"></i></div>
-                User
+                Quản lý nhân viên
             </a>
             <a class="nav-link setting-nav" href="@Url.Action("Index", "Setting")">
                 <div class="nav-link-icon"><i data-feather="settings"></i></div>
@@ -88,6 +95,22 @@
 
                 </nav>
             </div>
+            <a class="nav-link collapsed" href="javascript:void(0);" data-toggle="collapse" data-target="#collapseNoXau" aria-expanded="false" aria-controls="collapseCTLQ">
+                <div class="nav-link-icon"><i data-feather="file-text"></i></div>
+                Check Nợ Xấu
+                <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+            </a>
+            <div class="collapse" id="collapseNoXau" data-parent="#accordionSidenav">
+                <nav class="sidenav-menu-nested nav">
+                    <a class="nav-link reportbalance-nav" href="#">Check Nợ Xấu</a>
+                    <a class="nav-link profit-nav" href="#">Thêm mới bạn bè</a>
+                    <a class="nav-link receiveInterest-nav" href="#">Xác nhận bạn bè</a>
+                </nav>
+            </div>
+            @*<a class="nav-link setting-nav" href="#">
+                <div class="nav-link-icon"><i data-feather="settings"></i></div>
+                Tính năng t
+            </a>*@
         </div>
     </div>
 </nav>

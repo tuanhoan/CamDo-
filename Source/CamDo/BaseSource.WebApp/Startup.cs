@@ -34,6 +34,7 @@ using BaseSource.ApiIntegration.WebApi.HopDong_GianHan;
 using BaseSource.ApiIntegration.WebApi.HopDong_AlarmLog;
 using BaseSource.ApiIntegration.WebApi.LienHe;
 using BaseSource.ApiIntegration.WebApi.HopDong_ChuocDo;
+using BaseSource.ApiIntegration.WebApi.GoiSanPham;
 
 namespace BaseSource.WebApp
 {
@@ -93,7 +94,7 @@ namespace BaseSource.WebApp
                 //options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromDays(15);
                 options.LoginPath = "/Account/Login";
-                // ReturnUrlParameter requires 
+                // ReturnUrlParameter requires
                 //using Microsoft.AspNetCore.Authentication.Cookies;
                 //options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
                 //options.SlidingExpiration = true;
@@ -109,6 +110,7 @@ namespace BaseSource.WebApp
             services.AddTransient<IHopDongApiClient, HopDongApiClient>();
             services.AddTransient<IKhachHangApiClient, KhachHangApiClient>();
             services.AddTransient<ILienHeApiClient, LienHeApiClient>();
+            services.AddTransient<IGoiSanPhamApiClient, GoiSanPhamApiClient>();
             services.AddTransient<IHD_PaymentLogApiClient, HD_PaymentLogApiClient>();
             services.AddTransient<IHD_PaymentLogNote, HD_PaymentLogNote>();
             services.AddTransient<ICuaHang_TransactionLogApiClient, CuaHang_TransactionLogApiClient>();
@@ -117,6 +119,9 @@ namespace BaseSource.WebApp
             services.AddTransient<IHopDong_GianHanApiClient, HopDong_GianHanApiClient>();
             services.AddTransient<IHopDong_AlarmLog, HopDong_AlarmLog>();
             services.AddTransient<IHopDong_ChuocDoApiClient, HopDong_ChuocDoApiClient>();
+
+            services.AddTransient<IUserAdminApiClient, UserAdminApiClient>();
+
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
