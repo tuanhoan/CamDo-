@@ -23,6 +23,18 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
         {
             _httpClientFactory = httpClientFactory;
         }
+
+        public async Task<ApiResult<string>> ChuyenTrangThaiChoThanhLy(int hopDongId)
+        {
+            var dic = new Dictionary<string, string>()
+            {
+                { "hopDongId", hopDongId.ToString() }
+            };
+
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.PostAsyncFormUrl<ApiResult<string>>("/api/HopDong/ChuyenTrangThaiChoThanhLy", dic);
+        }
+
         public async Task<ApiResult<string>> Create(CreateHopDongVm model)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
@@ -33,6 +45,17 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.PostAsync<ApiResult<string>>("/api/HopDong/DeleteChungTu", model);
+        }
+
+        public async Task<ApiResult<string>> DeleteHopDong(int hopDongId)
+        {
+            var dic = new Dictionary<string, string>()
+            {
+                { "hopDongId", hopDongId.ToString() }
+            };
+
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.PostAsyncFormUrl<ApiResult<string>>("/api/HopDong/DeleteHopDong", dic);
         }
 
         public async Task<ApiResult<string>> Edit(EditHopDongVm model)
@@ -67,10 +90,31 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
             return await client.GetAsync<ApiResult<PagedResult<HopDongVm>>>("/api/HopDong/GetPagings", model);
         }
 
+        public async Task<ApiResult<InDongLaiResponseVm>> InKyDongLai(long paymentId)
+        {
+            var obj = new
+            {
+                paymentId = paymentId
+            };
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.GetAsync<ApiResult<InDongLaiResponseVm>>("/api/HopDong/InKyDongLai", obj);
+        }
+
         public async Task<ApiResult<string>> NoLai(HopDongNoLaiVm model)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.PostAsync<ApiResult<string>>("/api/HopDong/NoLai", model);
+        }
+
+        public async Task<ApiResult<string>> ThanhLyHopDong(int hopDongId)
+        {
+            var dic = new Dictionary<string, string>()
+            {
+                { "hopDongId", hopDongId.ToString() }
+            };
+
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.PostAsyncFormUrl<ApiResult<string>>("/api/HopDong/ThanhLyHopDong", dic);
         }
 
         public async Task<ApiResult<string>> TraNo(HopDongTraNoVm model)
@@ -97,8 +141,6 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
 
                     multiContent.Add(bytes, "ListImage", item.FileName);
                 }
-
-
             }
             multiContent.Add(new StringContent(model.HopDongId.ToString()), "HopDongId");
             multiContent.Add(new StringContent(model.ChungTuType.ToString()), "ChungTuType");

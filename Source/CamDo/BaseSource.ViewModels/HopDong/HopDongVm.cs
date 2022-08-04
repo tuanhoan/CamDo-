@@ -14,6 +14,10 @@ namespace BaseSource.ViewModels.HopDong
     {
         public string Info { get; set; }
         public ELoaiHopDong LoaiHopDong { get; set; }
+        public DateTime? FormDate { get; set; }
+        public DateTime? ToDate { get; set; }
+        public int? Status { get; set; }
+        public int? LoaiHangHoa { get; set; }
     }
     public class HopDongVm
     {
@@ -32,6 +36,7 @@ namespace BaseSource.ViewModels.HopDong
         public DateTime HD_NgayVay { get; set; }
         public DateTime HD_NgayDaoHan { get; set; }
         public DateTime? NgayDongLaiGanNhat { get; set; }
+        public DateTime? NgayDongLaiTiepTheo { get; set; }
         public string HD_GhiChu { get; set; }
         public string ListThuocTinhHangHoa { get; set; }
         public string ImageList { get; set; }
@@ -57,6 +62,8 @@ namespace BaseSource.ViewModels.HopDong
         public string SDT { get; set; }
         //nợ khách hàng
         public bool IsDebit { get; set; }
+        public string StatusName { get; set; }
+        public byte HD_Status { get; set; }
 
     }
     public class CreateHopDongVm : IValidatableObject
@@ -176,5 +183,4 @@ namespace BaseSource.ViewModels.HopDong
         public string Src { get; set; }
         public EHopDong_ChungTuType ChungTuType { get; set; }
     }
-
 }

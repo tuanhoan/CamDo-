@@ -18,6 +18,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using BaseSource.Utilities.Extensions;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+using System.Drawing;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace BaseSource.WebApp.Areas.Admin.Controllers
 {
@@ -28,15 +34,18 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         private readonly IUserApiClient _userApiClient;
         private readonly IHD_PaymentLogApiClient _hdPaymentLogApiClient;
         private readonly ICuaHang_TransactionLogApiClient _cuaHang_TransactionLog;
+        private readonly IWebHostEnvironment _appEnvironment;
         public HopDongController(ICauHinhHangHoaApiClient cauHinhHangHoaApiClient,
             IHopDongApiClient hopDongApiClient, IUserApiClient userApiClient,
-            IHD_PaymentLogApiClient hdPaymentLogApiClient, ICuaHang_TransactionLogApiClient cuaHang_TransactionLog)
+            IHD_PaymentLogApiClient hdPaymentLogApiClient, ICuaHang_TransactionLogApiClient cuaHang_TransactionLog,
+            IWebHostEnvironment appEnvironment)
         {
             _cauHinhHangHoaApiClient = cauHinhHangHoaApiClient;
             _hopDongApiClient = hopDongApiClient;
             _userApiClient = userApiClient;
             _hdPaymentLogApiClient = hdPaymentLogApiClient;
             _cuaHang_TransactionLog = cuaHang_TransactionLog;
+            _appEnvironment = appEnvironment;
 
         }
         public async Task<IActionResult> Create()
@@ -161,12 +170,50 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             }
             return Json(model);
         }
-        public async Task<IActionResult> Detail(int id)
+        public async Task<IActionResult> Detail(int id, string tabActive)
         {
             var hd = await _hopDongApiClient.GetById(id);
-
+            ViewData["TabActive"] = tabActive;
             return PartialView("_Detail", hd.ResultObj);
         }
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _hopDongApiClient.DeleteHopDong(id);
+            if (!result.IsSuccessed)
+            {
+                return Json(new ApiErrorResult<string>(result.Message));
+            }
+            return Json(new ApiSuccessResult<string>(result.ResultObj));
+
+        }
+        #region In hợp đồng
+        public async Task<IActionResult> InKyDongLai(long paymentId)
+        {
+            var result = await _hopDongApiClient.InKyDongLai(paymentId);
+            if (!result.IsSuccessed)
+            {
+                return Json(new ApiErrorResult<string>(result.Message));
+            }
+            var pathToFile = System.IO.Path.Combine(_appEnvironment.WebRootPath, "PrintTemplate", "InPhieuDongLai.html");
+            using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
+            {
+                var source = await SourceReader.ReadToEndAsync();
+                source = source.Replace("{mahopdong}", result.ResultObj.MaHD);
+                source = source.Replace("{ngay}", DateTime.Now.Day.ToString());
+                source = source.Replace("{thang}", DateTime.Now.Month.ToString());
+                source = source.Replace("{nam}", DateTime.Now.Year.ToString());
+                source = source.Replace("{tenkhachhang}", result.ResultObj.TenKhachHang);
+                source = source.Replace("{tennhanvien}", result.ResultObj.TenNhanVien);
+                source = source.Replace("{fromdate}", result.ResultObj.FromDate.ToString("dd/MM/yyyy"));
+                source = source.Replace("{todate}", result.ResultObj.ToDate.ToString("dd/MM/yyyy"));
+                source = source.Replace("{tienlai}", result.ResultObj.TienLai.ToString("N0"));
+                source = source.Replace("{ngaydonglaitieptheo}", result.ResultObj.NgayDongLaiTiepTheo?.ToString("dd/MM/yyyy"));
+                return Json(new ApiSuccessResult<string>(source));
+            }
+
+        }
+        #endregion
+
 
         #region Thanh toán lãi
         public async Task<IActionResult> GetListPaymentLog(int hdId)
@@ -298,6 +345,90 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
                 return Json(new ApiSuccessResult<string>());
             }
             return Json(new ApiErrorResult<string>(result.Message));
+        }
+        #endregion
+
+        #region Export
+        public async Task<IActionResult> Export(string info, DateTime? from, DateTime? to, int? loaihanghoa, int? status, ELoaiHopDong loaiHD, int page = 1)
+        {
+            var request = new GetHopDongPagingRequest()
+            {
+                Page = 1,
+                PageSize = int.MaxValue,
+                LoaiHopDong = loaiHD,
+                FormDate = from,
+                ToDate = to,
+                Info = info,
+                LoaiHangHoa = loaihanghoa,
+                Status = status
+            };
+
+            var result = await _hopDongApiClient.GetPagings(request);
+            string fileName = loaiHD + "-" + DateTime.Now.ToString("ddMMyyyy_HHmmss") + ".xlsx";
+
+            using (ExcelPackage p = new ExcelPackage())
+            {
+                p.Workbook.Properties.Title = loaiHD.GetEnumDisplayName();
+
+                //Create a sheet
+                p.Workbook.Worksheets.Add(loaiHD.GetEnumDisplayName());
+                ExcelWorksheet ws = p.Workbook.Worksheets[0];
+                ws.Name = loaiHD.GetEnumDisplayName(); //Setting Sheet's name
+                ws.Cells.Style.Font.Size = 11; //Default font size for whole sheet
+                ws.Cells.Style.Font.Name = "Calibri"; //Default Font name for whole sheet
+
+
+                // Create header column
+                string[] arrColumnHeader = { "Mã HĐ", "Tên KH", "SĐT", "Tiền vay", "Lãi", "Ngày vay",
+                                           "Ngày hết hạn","Đồ cầm","Đóng lãi đến","Tiền lãi đã đóng","Ngày đóng lãi tiếp theo"};
+                var countColHeader = arrColumnHeader.Count();
+
+                int colIndex = 1;
+                int rowIndex = 1;
+
+                //Creating Headings
+                foreach (var item in arrColumnHeader)
+                {
+                    var cell = ws.Cells[rowIndex, colIndex];
+
+                    //Setting the background color of header cells to Gray
+                    cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    cell.Style.Fill.BackgroundColor.SetColor(Color.MediumBlue);
+                    cell.Style.Font.Color.SetColor(Color.White);
+                    cell.Style.Font.Bold = true;
+
+                    cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    cell.AutoFitColumns();
+                    //Setting Value in cell
+                    cell.Value = item;
+
+                    colIndex++;
+                }
+
+                // Adding Data into rows
+
+                foreach (var item in result.ResultObj.Items)
+                {
+                    colIndex = 1;
+                    rowIndex++;
+                    ws.Cells[rowIndex, colIndex++].Value = item.HD_Ma;
+                    ws.Cells[rowIndex, colIndex++].Value = item.TenKhachHang;
+                    ws.Cells[rowIndex, colIndex++].Value = item.SDT;
+                    ws.Cells[rowIndex, colIndex++].Value = item.TongTienVayHienTai.ToString("N0");
+                    ws.Cells[rowIndex, colIndex++].Value = item.TyLeLai;
+                    ws.Cells[rowIndex, colIndex++].Value = item.HD_NgayVay.ToString("dd/MM/yyyy");
+                    ws.Cells[rowIndex, colIndex++].Value = item.HD_NgayDaoHan.ToString("dd/MM/yyyy");
+                    ws.Cells[rowIndex, colIndex++].Value = item.TenTaiSan;
+                    ws.Cells[rowIndex, colIndex++].Value = item.NgayDongLaiGanNhat?.ToString("dd/MM/yyyy");
+                    ws.Cells[rowIndex, colIndex++].Value = item.TongTienLaiDaThanhToan.ToString("N0");
+                    ws.Cells[rowIndex, colIndex++].Value = item.NgayDongLaiTiepTheo?.ToString("dd/MM/yyyy");
+                }
+                ws.Cells.AutoFitColumns();
+                //Generate A File with name
+                Byte[] bin = p.GetAsByteArray();
+                return File(bin, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+            }
+
         }
         #endregion
     }

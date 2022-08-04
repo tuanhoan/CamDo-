@@ -43,6 +43,7 @@ namespace BaseSource.Data.Entities
         public DateTime? DeletedDate { get; set; }
         public string UserIdCreated { get; set; }
         public string UserIdAssigned { get; set; }
+        public byte HD_Status { get; set; }
 
         public virtual CuaHang CuaHang { get; set; }
         public virtual List<HopDong_VayRutGoc> HopDong_VayRutGocs { get; set; }

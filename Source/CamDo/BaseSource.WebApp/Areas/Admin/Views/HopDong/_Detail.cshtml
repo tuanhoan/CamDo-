@@ -4,6 +4,11 @@
     string lblDisplayDebitOrOverMoney = "";
     string lblDisplayLoanDebit = "";
     var tienthuaHD = Model.TongTienDaThanhToan - Model.TongTienGhiNo;
+    var tabActive = ViewData["TabActive"] as string;
+    if (string.IsNullOrEmpty(tabActive))
+    {
+        tabActive = "tab-dongtienlai";
+    }
 }
 <style>
     fieldset {
@@ -118,7 +123,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td><span class="font-weight-bold">Trạng thái</span></td>
+                    <td><span class="font-weight-bold">@Model.StatusName</span></td>
                     <td colspan="2" align="right" class=""><span id="lblStatus"><span class="m-badge m-badge--info m-badge--wide" style="font-size:12px">Hôm nay đóng tiền</span></span></td>
                 </tr>
             </tbody>
@@ -127,7 +132,7 @@
 </div>
 
 <div class="row d-flex justify-content-between">
-    <div class="tabs active" data-type="tab-dongtienlai">
+    <div class="tabs tab-dongtienlai" data-type="tab-dongtienlai">
         <h6><i class="fas fa-money-bill"></i> Đóng tiền lãi</h6>
     </div>
     <div class="tabs tab-trabotgoc" data-type="tab-trabotgoc">
@@ -139,7 +144,7 @@
     <div class="tabs tab-giahan" data-type="tab-giahan">
         <h6><i class="fas fa-retweet"></i> Gia hạn</h6>
     </div>
-    <div class="tabs" data-type="tab-chuocdo">
+    <div class="tabs tab-chuocdo" data-type="tab-chuocdo">
         <h6><i class="fas fa-motorcycle"></i> Chuộc đồ</h6>
     </div>
     <div class="tabs" data-type="tab-no">
@@ -154,13 +159,13 @@
     <div class="tabs" id="tab09">
         <h6>Lịch sử trả chậm</h6>
     </div>
-    <div class="tabs" data-type="tab-hengio">
+    <div class="tabs tab-hengio" data-type="tab-hengio">
         <h6><i class="fas fa-clock"></i> Hẹn giờ</h6>
     </div>
 </div>
 <div class="line"></div>
 <div class="mt-3">
-    <fieldset class="show" id="tab-dongtienlai">
+    <fieldset id="tab-dongtienlai">
         <div id="divContent-Tralaitheongay">
 
         </div>
@@ -329,6 +334,7 @@
 
         </div>
     </fieldset>
+
     <fieldset id="tab-hengio">
         <div class="d-flex justify-content-center">
             <div class="col-md-6">
@@ -452,7 +458,8 @@
         setMoneyTextBox('#SoTienNoLaiDisplay');
        getListPaymentLog(@Model.Id);
         getInfoPaymentByDate(@Model.Id);
-
+        var tab = '@tabActive';
+        $('.' + tab).click();
     })
 
 
@@ -486,7 +493,7 @@
     function loadDataTab(type) {
         switch (type) {
             case "tab-history":
-                getCuahang_TransactionLog(@Model.Id);
+                getCuahang_TransactionLog(@Model.Id,'@Model.HD_Loai');
                  geHopDong_DebtNote(@Model.Id);
                 break;
             case "tab-dongtienlai":
