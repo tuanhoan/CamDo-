@@ -1,8 +1,12 @@
 ﻿using BaseSource.ApiIntegration.AdminApi.BaiViet;
 using BaseSource.ApiIntegration.AdminApi.DanhMucBaiViet;
+using BaseSource.ApiIntegration.AdminApi.Upload;
 using BaseSource.ViewModels.Admin;
+using BaseSource.ViewModels.CKEditor;
 using BaseSource.ViewModels.Common;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace BaseSource.AdminApp.Controllers
@@ -11,10 +15,12 @@ namespace BaseSource.AdminApp.Controllers
     {
         private readonly IBaiVietAdminApiClient _apiClient;
         private readonly IDanhMucBaiVietAdminApiClient _danhMucBaiVietAdminApiClient;
-        public BaiVietController(IBaiVietAdminApiClient apiClient, IDanhMucBaiVietAdminApiClient danhMucBaiVietAdminApiClient)
+        private readonly IUploadAdminApiClient _uploadAdminApiClient;
+        public BaiVietController(IBaiVietAdminApiClient apiClient, IDanhMucBaiVietAdminApiClient danhMucBaiVietAdminApiClient, IUploadAdminApiClient uploadAdminApiClient)
         {
             _apiClient = apiClient;
             _danhMucBaiVietAdminApiClient = danhMucBaiVietAdminApiClient;
+            _uploadAdminApiClient = uploadAdminApiClient;
         }
 
         public async Task<IActionResult> Index(int page = 1)
@@ -102,6 +108,28 @@ namespace BaseSource.AdminApp.Controllers
                 return Json(new ApiSuccessResult<string>());
             }
             return Json(new ApiErrorResult<string>(result.Message));
+        }
+
+        [HttpPost]
+        [RequestSizeLimit(int.MaxValue)]
+        [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue)]
+        public async Task<JsonResult> UploadImage([FromForm] IFormFile upload)
+        {
+            var result = await _uploadAdminApiClient.UploadImage(upload);
+
+            var model = new UploadSuccessCKEditorVm()
+            {
+                Uploaded = 1,
+                FileName = Path.GetFileName(result.ResultObj),
+                Url = result.ResultObj,
+            };
+
+            if (result.IsSuccessed)
+            {
+                return new JsonResult(model);
+            }
+
+            return null;
         }
     }
 }
