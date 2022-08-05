@@ -19,6 +19,7 @@ namespace BaseSource.ViewModels.CuaHang_TransactionLog
         public int? HopDongId { get; set; }
         public string UserId { get; set; }
         public string FullName { get; set; }
+        public string UserName { get; set; }
         public long? ReferId { get; set; }
         public EFeatureType FeatureType { get; set; }
         public byte ActionType { get; set; }
@@ -43,6 +44,8 @@ namespace BaseSource.ViewModels.CuaHang_TransactionLog
         public EFeatureType FeatureType { get; set; }
         public string UserId { get; set; }
         public string Note { get; set; }
+        public string Customer { get; set; }
+        public double? Amount { get; set; }
         public double? SoTienTraGoc { get; set; }
         public long? PaymentId { get; set; }
         public DateTime? NgayTraGoc { get; set; }
@@ -52,5 +55,16 @@ namespace BaseSource.ViewModels.CuaHang_TransactionLog
         public DateTime? ToDate { get; set; }
         public double TienGhiNo { get; set; }
         public double TienTraNo { get; set; }
+    }
+
+    public class CreateCuaHang_TransactionLogThuChiVm
+    {
+        public EFeatureType FeatureType { get; set; }
+        public int ShopId { get; set; }
+        public double Amount { get; set; }
+        public string Note { get; set; }
+        public byte ActionType { get; set; }
+        public string Customer { get; set; }
+        public long? ReferId { get; set; }
     }
 }

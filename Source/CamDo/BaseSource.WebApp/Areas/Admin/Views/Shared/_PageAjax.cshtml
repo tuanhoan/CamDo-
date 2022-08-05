@@ -1,0 +1,57 @@
+﻿
+@using BaseSource.ViewModels.Common
+
+@model PagedResultBase
+
+@{
+    var urlTemplate = Model.PageUrl + "?page={0}";
+    urlTemplate = ViewContext.HttpContext.Request.Query.ConvertToUrlString(urlTemplate, new[] { "page", "pageSize" });
+
+    var startIndex = Math.Max(Model.PageNumber - 2, 1);
+    var finishIndex = Math.Min(Model.PageNumber + 2, Model.PageCount);
+
+    var urlTemplateFull = urlTemplate;
+}
+
+<div class="rows-page  float-right">
+    <nav class="rows-page__navigation align-items-center">
+        @if (Model.PageCount > 1)
+        {
+            <ul class="pagination">
+                @if (Model.PageNumber != startIndex)
+                {
+                    <li class="page-item">
+                        <button class="page-link text-secondary" data-href="@urlTemplateFull.Replace("{0}", "1")" href="@urlTemplateFull.Replace("{0}", "1")">&#10094;&#10094;</button>
+                    </li>
+                    <li class="page-item">
+                        <button class="page-link text-secondary" data-href="@urlTemplateFull.Replace("{0}", (Model.PageNumber-1).ToString())" href="@urlTemplateFull.Replace("{0}", (Model.PageNumber-1).ToString())">&#10094;</button>
+                    </li>
+                }
+                @for (var i = startIndex; i <= finishIndex; i++)
+                {
+                    if (i == Model.PageNumber)
+                    {
+                        <li class="page-item active">
+                            <span class="page-link">@i <span class="sr-only">(current)</span></span>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            <button class="page-link text-secondary" data-href="@urlTemplateFull.Replace("{0}", i.ToString())">@i</button>
+                        </li>
+                    }
+                }
+                @if (Model.PageNumber != finishIndex)
+                {
+                    <li class="page-item">
+                        <button class="page-link text-secondary" data-href="@urlTemplateFull.Replace("{0}", (Model.PageNumber+1).ToString())">&#10095;</button>
+                    </li>
+                    <li class="page-item">
+                        <button class="page-link text-secondary" data-href="@urlTemplateFull.Replace("{0}", Model.PageNumber.ToString())">&#10095;&#10095;</button>
+                    </li>
+                }
+            </ul>
+        }
+    </nav>
+</div>

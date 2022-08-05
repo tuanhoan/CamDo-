@@ -1,0 +1,106 @@
+﻿@model PagedResult<CuaHang_TransactionLogAdminVm>
+    <style>
+        .text-decoration-line-through {
+            text-decoration-line: line-through
+        }
+    </style>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">
+                    #
+                </th>
+                <th scope="col">
+                    Ngày thu
+                </th>
+                <th scope="col">
+                    Khách hàng
+                </th>
+                <th scope="col">
+                    Loại phiếu
+                </th>
+                <th scope="col">
+                    Lý do
+                </th>
+                <th scope="col">
+                    Số tiền
+                </th>
+                <th scope="col">
+                    Nhân viên
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Items.Count > 1)
+            {
+                var index = ((Model.PageNumber - 1) * Model.PageSize + 1);
+                for (int i = 0; i < Model.Items.Count - 1; i++)
+                {
+                    var classThrough = Model.Items[i].CanceledDate != null ? "text-decoration-line-through" : "";
+                    <tr>
+                        <td>@index</td>
+                        <td class="@classThrough">@Model.Items[i].CreatedDate.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td class="@classThrough">@Model.Items[i].TenKhachHang</td>
+                        <td class="@classThrough">@Model.Items[i].ActionName</td>
+                        <td>@Model.Items[i].Note</td>
+                        @if (Model.Items[i].ActionType != (byte)EPhieuThu_ActionType.HuyPhieuThu)
+                        {
+                            <td class="text-primary @classThrough">+@Model.Items[i].MoneyAdd</td>
+                        }
+                        else
+                        {
+                            <td class="text-danger @classThrough">-@Model.Items[i].MoneySub</td>
+                        }
+
+                        <td class="text-danger @classThrough">
+                            <p>@Model.Items[i].FullName</p>
+                            <p>TK:@Model.Items[i].UserName</p>
+                        </td>
+                        <td>
+                            @if (Model.Items[i].CanceledDate == null && Model.Items[i].ActionType != (byte)EPhieuThu_ActionType.HuyPhieuThu)
+                            {
+                                <button class="btn">
+                                    <i class="fa fa-print" aria-hidden="true"></i>
+                                </button>
+                                <button class="btn" data-toggle="modal" data-target="#deleteModal" onclick="confirmDelete(@Model.Items[i].Id,'@Model.Items[i].UserName',@Model.Items[i].MoneyAdd)">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </button>
+                            }
+                            else
+                            {
+                                <p class="text-center">-</p>
+                            }
+
+                        </td>
+                    </tr>
+                    index++;
+                }
+            }
+
+        </tbody>
+        <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="text-danger">Tổng tiền</td>
+                <td class="text-primary">+ @(Model.Items.LastOrDefault()?.MoneyAdd??0)</td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+    @if (Model.PageCount > 1)
+    {
+        <div>
+            @await Html.PartialAsync("_PageAjax", new PagedResultBase()
+       {
+           PageNumber = Model.PageNumber,
+           PageSize = Model.PageSize,
+           TotalItemCount = Model.TotalItemCount,
+           PageUrl = Url.Action("PageFilterIncome")
+       })
+        </div>
+    }

@@ -29,6 +29,7 @@ namespace BaseSource.Data.Entities
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public DateTime CreatedDate { get; set; }
+        public DateTime? CanceledDate { get; set; }
         public virtual HopDong HopDong { get; set; }
         public virtual CuaHang CuaHang { get; set; }
     }

@@ -11,5 +11,6 @@ namespace BaseSource.BackendApi.Services.Serivce.CuaHang_TransactionLog
     public interface ICuaHang_TransactionLogService
     {
         Task CreateTransactionLog(CreateCuaHang_TransactionLogVm model);
+        Task<KeyValuePair<bool, string>> CreateCuaHang_TransactionLogThuChiVm(string userId, CreateCuaHang_TransactionLogThuChiVm model);
     }
 }

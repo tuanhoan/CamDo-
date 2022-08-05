@@ -120,7 +120,9 @@ namespace BaseSource.Shared.Enums
         [Display(Name = "Hoa hồng")]
         HoaHong = 6,
         [Display(Name = "Thu vé hoặc văn phòng")]
-        ThuVeHoacVanPhong = 7
+        ThuVeHoacVanPhong = 7,
+        [Display(Name = "Hủy phiếu thu")]
+        HuyPhieuThu = 8
     }
 
     public enum EPhieuChi_ActionType : byte
@@ -140,7 +142,9 @@ namespace BaseSource.Shared.Enums
         [Display(Name = "Hoa hồng")]
         HoaHong = 7,
         [Display(Name = "Chi vé hoặc văn phòng")]
-        ChiVeHoacVanPhong = 8
+        ChiVeHoacVanPhong = 8,
+        [Display(Name = "Hủy phiếu chi")]
+        HuyPhieuChi = 9
     }
 
     public enum EQuyTienCuaHang_LogType : byte

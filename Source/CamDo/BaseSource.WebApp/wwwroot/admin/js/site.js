@@ -55,7 +55,7 @@ $(function () {
         }
         localStorage.clear();
     }
-  
+
 });
 
 $("#page-top").on("click", 'button[data-toggle="btn-confirm"]', function (e) {
@@ -364,3 +364,36 @@ $('form[data-name="ajaxFormFeedBack"]').submit(function (e) {
     });
 });
 /*=======END Feedback========*/
+
+/*=======BEGIN PageAjax========*/
+
+$('body').on('click', '.page-link', function (e) {
+    e.preventDefault();
+    let url = $(this).attr('data-href');
+    var $form = $('#form-Search');
+    getPaging(url, $form.serializeArray(), '.table-responsive');
+});
+$('body').on('submit', '#form-Search', function (e) {
+    e.preventDefault();
+    var $form = $('#form-Search');
+    getPaging($form.attr('action'), $form.serializeArray(), '.table-responsive');
+});
+function getPaging(url, data, element) {
+    $.ajax({
+        type: "GET",
+        url: url,
+        data: data,
+        success: function (response) {
+            switch (response.code) {
+                case -2:
+                    window.location = response.data;
+                    break;
+                default:
+                    console.log(response);
+                    $(element).html(response);
+                    break;
+            }
+        }
+    });
+}
+/*=======End PageAjax========*/
