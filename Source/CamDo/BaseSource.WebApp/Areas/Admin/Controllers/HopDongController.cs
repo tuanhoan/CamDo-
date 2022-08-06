@@ -212,6 +212,56 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             }
 
         }
+        public async Task<IActionResult> InLichDongTien(int hopDongId)
+        {
+            var result = await _hdPaymentLogApiClient.GetPaymentLogByHD(hopDongId);
+            if (!result.IsSuccessed)
+            {
+                return Json(new ApiErrorResult<string>(result.Message));
+            }
+            var pathToFile = System.IO.Path.Combine(_appEnvironment.WebRootPath, "PrintTemplate", "InLichDongLai.html");
+            string strData = string.Empty;
+            int i = 1;
+            foreach (var item in result.ResultObj.ListPaymentLog)
+            {
+                var template = "<tr>" +
+                                 "<td class='text-center'>{stt}</td>" +
+                                 "<td class='text-center'>{fromDate} - {toDate}</td>" +
+                                 "<td class='text-center'>{countday}</td>" +
+                                 "<td class='text-right'>{tienlai}</td>" +
+                                 "<td class='text-right'>{tienkhac}</td>" +
+                                 "<td class='text-right'>{tonglai}</td>" +
+                                 "<td class='text-right'>{tienkhachtra}</td>" +
+                                 "<td class='text-center'><input type ='checkbox' {checked} ></td></tr>";
+
+                template = template.Replace("{stt}", i.ToString());
+                template = template.Replace("{fromDate}", item.FromDate.ToString("dd/MM/yyyy"));
+                template = template.Replace("{toDate}", item.ToDate.ToString("dd/MM/yyyy"));
+                template = template.Replace("{countday}", item.CountDay.ToString());
+                template = template.Replace("{tienlai}", item.MoneyInterest.ToString("N0"));
+                template = template.Replace("{tienkhac}", item.MoneyOther.ToString("N0"));
+                template = template.Replace("{tonglai}", ((item.MoneyInterest + item.MoneyOther).ToString("N0")));
+                template = template.Replace("{tienkhachtra}", item.MoneyPay.ToString("N0"));
+                if (item.PaidDate != null)
+                {
+                    template = template.Replace("{checked}", "checked");
+                }
+                else
+                {
+                    template = template.Replace("{checked}", "");
+                }
+                strData += strData;
+                i++;
+
+            }
+            using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
+            {
+                var source = await SourceReader.ReadToEndAsync();
+                source = source.Replace("{body}", strData);
+                return Json(new ApiSuccessResult<string>(source));
+            }
+
+        }
         #endregion
 
 
