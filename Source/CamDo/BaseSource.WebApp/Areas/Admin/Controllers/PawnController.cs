@@ -2,6 +2,7 @@
 using BaseSource.ApiIntegration.WebApi.HopDong;
 using BaseSource.Shared.Enums;
 using BaseSource.ViewModels.CauHinhHangHoa;
+using BaseSource.ViewModels.Common;
 using BaseSource.ViewModels.HopDong;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -45,7 +46,35 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             ViewData["ListHangHoa"] = new SelectList(resultHH.Result.ResultObj.Items, "Id", "Ten");
             return View(result.Result.ResultObj);
         }
-    
 
+        #region Thanh lý
+        public async Task<IActionResult> ChuyenTTChoThanhLy(int hopDongId)
+        {
+            var result = await _hopDongApiClient.ChuyenTrangThaiChoThanhLy(hopDongId);
+            if (!result.IsSuccessed)
+            {
+                return Json(new ApiErrorResult<string>(result.Message));
+            }
+            return Json(new ApiSuccessResult<string>(Url.Action("Index")));
+        }
+        public async Task<IActionResult> ChuyenTTVeDangVay(int hopDongId)
+        {
+            var result = await _hopDongApiClient.ChuyenTrangThaiVeDangVay(hopDongId);
+            if (!result.IsSuccessed)
+            {
+                return Json(new ApiErrorResult<string>(result.Message));
+            }
+            return Json(new ApiSuccessResult<string>(Url.Action("Index")));
+        }
+        public async Task<IActionResult> ThanhLy(int hopDongId)
+        {
+            var result = await _hopDongApiClient.ThanhLyHopDong(hopDongId);
+            if (!result.IsSuccessed)
+            {
+                return Json(new ApiErrorResult<string>(result.Message));
+            }
+            return Json(new ApiSuccessResult<string>(Url.Action("Index")));
+        }
+        #endregion
     }
 }

@@ -281,94 +281,8 @@ namespace BaseSource.BackendApi.Controllers
             return Ok(new ApiSuccessResult<string>("Xóa hợp đồng thành công"));
         }
 
-        [HttpPost("ChuyenTrangThaiChoThanhLy")]
-        public async Task<IActionResult> ChuyenTrangThaiChoThanhLy([FromForm] int hopDongId)
-        {
-            var hd = await _db.HopDongs.FindAsync(hopDongId);
-            if (hd == null)
-            {
-                return Ok(new ApiErrorResult<string>("Not Found"));
-            }
-            switch (hd.HD_Loai)
-            {
-                case ELoaiHopDong.Camdo:
-                    var currentStatus = (EHopDong_CamDoStatusFilter)hd.HD_Status;
-                    if (currentStatus == EHopDong_CamDoStatusFilter.DaThanhLy)
-                    {
-                        return Ok(new ApiErrorResult<string>("Hợp đồng này đã thanh lý trước đó"));
-                    }
-                    else
-                    {
-                        hd.HD_Status = (byte)EHopDong_CamDoStatusFilter.ChoThanhLy;
-                    }
-                    break;
-                case ELoaiHopDong.Vaylai:
-                    break;
-                case ELoaiHopDong.GopVon:
-                    break;
-                default:
-                    break;
-            }
-
-            await _db.SaveChangesAsync();
-            var tranLog = new CreateCuaHang_TransactionLogVm()
-            {
-                HopDongId = hd.Id,
-                ActionType = EHopDong_ActionType.ChoThanhLy,
-                FeatureType = EFeatureType.Camdo,
-                UserId = UserId,
-                TotalMoneyLoan = hd.TongTienVayHienTai
-
-            };
-            var result = Task.Run(() => CreateCuaHang_TransactionLog(tranLog));
-            return Ok(new ApiSuccessResult<string>("Xóa hợp đồng thành công"));
-        }
-
-        [HttpPost("ThanhLyHopDong")]
-        public async Task<IActionResult> ThanhLyHopDong([FromForm] int hopDongId)
-        {
-            var hd = await _db.HopDongs.FindAsync(hopDongId);
-            if (hd == null)
-            {
-                return Ok(new ApiErrorResult<string>("Not Found"));
-            }
-            switch (hd.HD_Loai)
-            {
-                case ELoaiHopDong.Camdo:
-                    var currentStatus = (EHopDong_CamDoStatusFilter)hd.HD_Status;
-                    if (currentStatus == EHopDong_CamDoStatusFilter.DaThanhLy)
-                    {
-                        return Ok(new ApiErrorResult<string>("Hợp đồng này đã thanh lý trước đó"));
-                    }
-                    else
-                    {
-                        hd.HD_Status = (byte)EHopDong_CamDoStatusFilter.DaThanhLy;
-                    }
-                    break;
-                case ELoaiHopDong.Vaylai:
-                    break;
-                case ELoaiHopDong.GopVon:
-                    break;
-                default:
-                    break;
-            }
-
-            await _db.SaveChangesAsync();
-            var tranLog = new CreateCuaHang_TransactionLogVm()
-            {
-                HopDongId = hd.Id,
-                ActionType = EHopDong_ActionType.ThanhLyDo,
-                FeatureType = EFeatureType.Camdo,
-                UserId = UserId,
-                TotalMoneyLoan = hd.TongTienVayHienTai
-
-            };
-            var result = Task.Run(() => CreateCuaHang_TransactionLog(tranLog));
-            return Ok(new ApiSuccessResult<string>("Xóa hợp đồng thành công"));
-        }
 
         #endregion
-
 
         #region Ghi nợ - trả nợ
         [HttpPost("NoLai")]
@@ -621,6 +535,127 @@ namespace BaseSource.BackendApi.Controllers
                 TienVay = hd.TongTienVayHienTai
             };
             return Ok(new ApiSuccessResult<InChuocDoResponseVm>(response));
+        }
+        #endregion
+
+        #region Thanh lý
+        [HttpPost("ChuyenTrangThaiChoThanhLy")]
+        public async Task<IActionResult> ChuyenTrangThaiChoThanhLy([FromForm] int hopDongId)
+        {
+            var hd = await _db.HopDongs.FindAsync(hopDongId);
+            if (hd == null)
+            {
+                return Ok(new ApiErrorResult<string>("Not Found"));
+            }
+            switch (hd.HD_Loai)
+            {
+                case ELoaiHopDong.Camdo:
+                    var currentStatus = (EHopDong_CamDoStatusFilter)hd.HD_Status;
+                    if (currentStatus == EHopDong_CamDoStatusFilter.DaThanhLy)
+                    {
+                        return Ok(new ApiErrorResult<string>("Hợp đồng này đã thanh lý trước đó"));
+                    }
+                    else
+                    {
+                        hd.HD_Status = (byte)EHopDong_CamDoStatusFilter.ChoThanhLy;
+                    }
+                    break;
+                case ELoaiHopDong.Vaylai:
+                    break;
+                case ELoaiHopDong.GopVon:
+                    break;
+                default:
+                    break;
+            }
+
+            await _db.SaveChangesAsync();
+            //var tranLog = new CreateCuaHang_TransactionLogVm()
+            //{
+            //    HopDongId = hd.Id,
+            //    ActionType = EHopDong_ActionType.ChoThanhLy,
+            //    FeatureType = EFeatureType.Camdo,
+            //    UserId = UserId,
+            //    TotalMoneyLoan = hd.TongTienVayHienTai
+
+            //};
+            //var result = Task.Run(() => CreateCuaHang_TransactionLog(tranLog));
+            return Ok(new ApiSuccessResult<string>("Xóa hợp đồng thành công"));
+        }
+
+        [HttpPost("ThanhLyHopDong")]
+        public async Task<IActionResult> ThanhLyHopDong([FromForm] int hopDongId)
+        {
+            var hd = await _db.HopDongs.FindAsync(hopDongId);
+            if (hd == null)
+            {
+                return Ok(new ApiErrorResult<string>("Not Found"));
+            }
+            switch (hd.HD_Loai)
+            {
+                case ELoaiHopDong.Camdo:
+                    var currentStatus = (EHopDong_CamDoStatusFilter)hd.HD_Status;
+                    if (currentStatus == EHopDong_CamDoStatusFilter.DaThanhLy)
+                    {
+                        return Ok(new ApiErrorResult<string>("Hợp đồng này đã thanh lý trước đó"));
+                    }
+                    else
+                    {
+                        hd.HD_Status = (byte)EHopDong_CamDoStatusFilter.DaThanhLy;
+                    }
+                    break;
+                case ELoaiHopDong.Vaylai:
+                    break;
+                case ELoaiHopDong.GopVon:
+                    break;
+                default:
+                    break;
+            }
+
+            await _db.SaveChangesAsync();
+            var tranLog = new CreateCuaHang_TransactionLogVm()
+            {
+                HopDongId = hd.Id,
+                ActionType = EHopDong_ActionType.ThanhLyDo,
+                FeatureType = EFeatureType.Camdo,
+                UserId = UserId,
+                TotalMoneyLoan = hd.TongTienVayHienTai
+
+            };
+            var result = Task.Run(() => CreateCuaHang_TransactionLog(tranLog));
+            return Ok(new ApiSuccessResult<string>("Xóa hợp đồng thành công"));
+        }
+        [HttpPost("ChuyenTrangThaiVeDangVay")]
+        public async Task<IActionResult> ChuyenTrangThaiVeDangVay([FromForm] int hopDongId)
+        {
+            var hd = await _db.HopDongs.FindAsync(hopDongId);
+            if (hd == null)
+            {
+                return Ok(new ApiErrorResult<string>("Not Found"));
+            }
+            switch (hd.HD_Loai)
+            {
+                case ELoaiHopDong.Camdo:
+                    var currentStatus = (EHopDong_CamDoStatusFilter)hd.HD_Status;
+                    if (currentStatus == EHopDong_CamDoStatusFilter.ChoThanhLy)
+                    {
+                        hd.HD_Status = (byte)EHopDong_CamDoStatusFilter.DangCam;
+
+                    }
+                    else
+                    {
+                        return Ok(new ApiErrorResult<string>("Bạn không thể chuyển trạng thái đơn hàng"));
+                    }
+                    break;
+                case ELoaiHopDong.Vaylai:
+                    break;
+                case ELoaiHopDong.GopVon:
+                    break;
+                default:
+                    break;
+            }
+
+            await _db.SaveChangesAsync();
+            return Ok(new ApiSuccessResult<string>("Xóa hợp đồng thành công"));
         }
         #endregion
 

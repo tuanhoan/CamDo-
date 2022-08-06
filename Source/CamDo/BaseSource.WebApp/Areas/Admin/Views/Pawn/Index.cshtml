@@ -172,6 +172,15 @@
                                             <button class="btn btn-sm btn-success detaileHD m-1" data-tab="tab-hengio" type="button" data-id="@item.Id" data-url="@Url.Action("Detail","HopDong")" title="Hẹn giờ khoản vay">
                                                 <i class="fas fa-clock"></i>
                                             </button>
+                                            <button class="btn btn-sm btn-warning m-1" type="button" data-bs-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn chuyển sang trạng thái chờ thanh lý?" data-href="@Url.Action("ChuyenTTChoThanhLy", new { hopDongId = item.Id })" title="Chuyển HĐ qua trạng thái chờ thanh lý">
+                                                <i class="fas fa-radiation fa-fw"></i>
+                                            </button>
+                                            @if (item.HD_Status == (byte)EHopDong_CamDoStatusFilter.ChoThanhLy)
+                                            {
+                                                <button class="btn btn-sm btn-secondary m-1" type="button" data-bs-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn chuyển sang trạng thái đang vay?" data-href="@Url.Action("ChuyenTTVeDangVay", new { hopDongId = item.Id })" title="Chuyển HĐ từ chờ thanh lý về đang vay">
+                                                    <i class="fas fa-heart fa-fw"></i>
+                                                </button>
+                                            }
                                         </td>
                                     </tr>
                                     idx++;
