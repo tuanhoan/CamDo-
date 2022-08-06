@@ -13,40 +13,40 @@
         <h1 class="title">Đăng ký cửa hàng</h1>
         <h2 class="description">Điền thông tin để tạo cửa hàng</h2>
 
-        <form action="/Account/Login?returnUrl=@ViewBag.ReturnUrl" method="post">
+        <form data-name="ajaxForm" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="form-group">
+            <div class="form-group mt-3">
                 <input type="text" asp-for="UserName" class="account-input-field" placeholder="Tên đăng nhập">
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
+            <div class="form-group mt-3">
                 <input type="text" asp-for="Password" class="account-input-field" placeholder="Mật khẩu">
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
+            <div class="form-group mt-3">
                 <input type="text" asp-for="FullName" class="account-input-field" placeholder="Họ tên">
                 <span asp-validation-for="FullName" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
+            <div class="form-group mt-3">
                 <input type="text" asp-for="PhoneNumber" class="account-input-field" placeholder="Số điện thoại">
                 <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
+            <div class="form-group mt-3">
                 <input type="text" asp-for="Address" class="account-input-field" placeholder="Địa chỉ">
                 <span asp-validation-for="Address" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
+            <div class="form-group mt-3">
                 <input type="text" asp-for="TenCuaHang" class="account-input-field" placeholder="Tên cửa hàng">
                 <span asp-validation-for="TenCuaHang" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
+            <div class="form-group mt-3">
                 <label asp-for="VonDauTu"></label>
                 <input id="VonDauTuDisplay" type="text" class="account-input-field" value="@Model.VonDauTu" />
 
@@ -54,7 +54,7 @@
                 <span asp-validation-for="VonDauTu" class="text-danger"></span>
             </div>
 
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex justify-content-between align-items-center mt-3">
                 <button type="submit">Đăng ký</button>
                 <a class="cancel-link" asp-controller="Account" asp-action="Login">Huỷ</a>
             </div>
