@@ -93,7 +93,8 @@ namespace BaseSource.Data.EF
         public DbSet<CuaHang_TransactionLog> CuaHang_TransactionLogs { get; set; }
         public DbSet<HopDong_DebtNote> HopDong_DebtNotes { get; set; }
         public DbSet<CuaHang_QuyTienLog> CuaHang_QuyTienLogs { get; set; }
-
+        public DbSet<DanhMucBaiViet> DanhMucBaiViets { get; set; }
+        public DbSet<BaiViet> BaiViets { get; set; }
     }
 }
 

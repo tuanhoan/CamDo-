@@ -35,6 +35,7 @@ using BaseSource.ApiIntegration.WebApi.HopDong_AlarmLog;
 using BaseSource.ApiIntegration.WebApi.LienHe;
 using BaseSource.ApiIntegration.WebApi.HopDong_ChuocDo;
 using BaseSource.ApiIntegration.WebApi.GoiSanPham;
+using BaseSource.ApiIntegration.WebApi.BaiViet;
 
 namespace BaseSource.WebApp
 {
@@ -119,6 +120,7 @@ namespace BaseSource.WebApp
             services.AddTransient<IHopDong_GianHanApiClient, HopDong_GianHanApiClient>();
             services.AddTransient<IHopDong_AlarmLog, HopDong_AlarmLog>();
             services.AddTransient<IHopDong_ChuocDoApiClient, HopDong_ChuocDoApiClient>();
+            services.AddTransient<IBaiVietApiClient, BaiVietApiClient>();
 
             services.AddTransient<IUserAdminApiClient, UserAdminApiClient>();
 

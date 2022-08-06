@@ -46,4 +46,8 @@
     <UpToDateCheckInput Remove="Views\Shared\_SideBar.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\NewFolder\" />
+  </ItemGroup>
+
 </Project>

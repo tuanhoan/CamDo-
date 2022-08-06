@@ -1,11 +1,14 @@
 using BaseSource.ApiIntegration.AdminApi;
+using BaseSource.ApiIntegration.AdminApi.BaiViet;
 using BaseSource.ApiIntegration.AdminApi.CauHinhHangHoa;
+using BaseSource.ApiIntegration.AdminApi.DanhMucBaiViet;
 using BaseSource.ApiIntegration.AdminApi.FeedBack;
 using BaseSource.ApiIntegration.AdminApi.GoiSanPham;
 using BaseSource.ApiIntegration.AdminApi.LienHe;
 using BaseSource.ApiIntegration.AdminApi.MoTaHinhThucLai;
 using BaseSource.ApiIntegration.AdminApi.NotifySystem;
 using BaseSource.ApiIntegration.AdminApi.ReportCustomer;
+using BaseSource.ApiIntegration.AdminApi.Upload;
 using BaseSource.ApiIntegration.WebApi;
 using BaseSource.Shared.Constants;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -85,7 +88,9 @@ namespace BaseSource.AdminApp
             services.AddTransient<INotifySystemAdminApiClient, NotifySystemAdminApiClient>();
             services.AddTransient<IUserAdminApiClient, UserAdminApiClient>();
             services.AddTransient<ILienHeAdminApiClient, LienHeAdminApiClient>();
-
+            services.AddTransient<IDanhMucBaiVietAdminApiClient, DanhMucBaiVietAdminApiClient>();
+            services.AddTransient<IBaiVietAdminApiClient, BaiVietAdminApiClient>();
+            services.AddTransient<IUploadAdminApiClient, UploadAdminApiClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

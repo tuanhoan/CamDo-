@@ -35,6 +35,7 @@
     <Folder Include="logs\" />
     <Folder Include="wwwroot\" />
     <Folder Include="Services\CuaHang\" />
+    <Folder Include="wwwroot\upload\images\" />
   </ItemGroup>
 
 </Project>
