@@ -149,10 +149,11 @@ $("body").on("click", '.detaileHD', function (e) {
     $("#hd-modal .modal-title").html('Bảng chi tiết Hợp đồng cầm đồ');
     $("#hd-modal").modal('show');
     var idHd = $(this).data("id");
+    var typeTab = $(this).data("tab");
     $.ajax({
         method: "GET",
         url: $(this).data("url"),
-        data: { id: idHd },
+        data: { id: idHd, tabActive: typeTab },
         success: function (res) {
             $("#hd-modal .modal-body").html(res);
             var triggerTabList = [].slice.call(document.querySelectorAll('.nav-item'))
@@ -164,15 +165,15 @@ $("body").on("click", '.detaileHD', function (e) {
                     tabTrigger.show()
                 })
             })
+
+
             setMoneyTextBox(".money-textbox");
             saveHopDong();
-
         }, error: function (error) {
             alert("Error!");
         }
     });
 })
-
 function saveHopDong() {
     $('form[data-name="ajaxFormHopDong"]').on("submit", function (e) {
         e.preventDefault();
@@ -214,4 +215,3 @@ function saveHopDong() {
         });
     });
 }
- 

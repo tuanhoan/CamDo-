@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<body>
+    <style>
+	
+	.table-bordered th, .table-bordered td {
+    border: 1px solid #e0e5ec;
+	padding: 0.5rem;
+}
+.table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #69707a;
+	border-collapse: collapse;
+}
+ 
+.head-bg-gray thead {
+    background: #f2f0f7;
+    font-weight: 600;
+}
+.text-right{
+text-align:right;
+}
+.text-center
+{
+text-align:center;
+}
+	</style>
+<table class="table table-bordered head-bg-gray table-hover">
+   <thead>
+      <tr>
+         <th class="text-center">STT</th>
+         <th class="text-center">Ngày</th>
+         <th class="text-center">Số ngày</th>
+         <th class="text-center">Tiền lãi</th>
+         <th class="text-center">Tiền khác</th>
+         <th class="text-center">Tổng lãi</th>
+         <th class="text-center">Tiền khách trả</th>
+         <th class="text-center"></th>
+      </tr>
+   </thead>
+   <tbody>{body}</tbody>
+</table>
+</body>
+</html>

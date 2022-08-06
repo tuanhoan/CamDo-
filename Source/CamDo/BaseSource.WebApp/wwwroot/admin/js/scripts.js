@@ -3,14 +3,11 @@
     * Copyright 2013-2020 Start Bootstrap
     * Licensed under SEE_LICENSE (https://github.com/StartBootstrap/sb-admin-pro/blob/master/LICENSE)
     */
-    (function ($) {
-    "use strict";
 
-    // Enable Bootstrap tooltips via data-attributes globally
-    $('[data-toggle="tooltip"]').tooltip();
+$(document).ready(function () {
+    $('[data-bs-toggle="tooltip"]').tooltip();
 
-    // Enable Bootstrap popovers via data-attributes globally
-    $('[data-toggle="popover"]').popover();
+    $('[data-bs-toggle="popover"]').popover();
 
     $(".popover-dismiss").popover({
         trigger: "focus"
@@ -50,8 +47,8 @@
             target = target.length ? target : $("[name=" + this.hash.slice(1) + "]");
             if (target.length) {
                 $("html, body").animate({
-                        scrollTop: target.offset().top - 81
-                    },
+                    scrollTop: target.offset().top - 81
+                },
                     200
                 );
                 return false;
@@ -89,5 +86,4 @@
         $('[data-target="#' + this.id + '"]').removeClass('collapsed');
 
     })
-
-})(jQuery);
+});

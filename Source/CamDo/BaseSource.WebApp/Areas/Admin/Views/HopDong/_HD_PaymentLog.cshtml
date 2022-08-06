@@ -36,16 +36,16 @@
                     <td class="text-right">@((item.MoneyInterest + item.MoneyOther).ToString("N0"))</td>
                     @if (item.PaidDate != null)
                     {
-                        <td class="text-right">@item.MoneyPayNeed.ToString("N0")</td>
+                        <td class="text-right">@item.MoneyPay.ToString("N0")</td>
                     }
                     else
                     {
-                        <td class="text-right"><input type="text" class="form-control money-textbox text-right" id="input-customer-pay-@item.Id" value="@item.MoneyPayNeed"></td>
+                        <td class="text-right"><input type="text" class="form-control money-textbox text-right" id="input-customer-pay-@item.Id" value="@item.MoneyPay"></td>
                     }
                     <td>
                         @if (item.PaidDate != null)
                         {
-                            <a href="#" class="icon-print"><i class="fas fa-print"></i></a>
+                            <a href="javascript:void(0)" onclick="printPayment(@item.Id)" class="icon-print"><i class="fas fa-print"></i></a>
                         }
                     </td>
                     <td class="text-center">

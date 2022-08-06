@@ -102,7 +102,9 @@ namespace BaseSource.Shared.Enums
         [Display(Name = "Thanh lý đồ")]
         ThanhLyDo = 14,
         [Display(Name = "Xóa hợp đồng")]
-        XoaHD = 15
+        XoaHD = 15,
+        [Display(Name = "Chờ thanh lý")]
+        ChoThanhLy = 16
     }
 
     public enum EPhieuThu_ActionType : byte
@@ -213,7 +215,10 @@ namespace BaseSource.Shared.Enums
         [Display(Name = "Đã xóa")]
         DaXoa = EHopDong_CommonStatusFilter.DaXoa,
         [Display(Name = "Chờ thanh lý")]
-        ChoThanhLy = EHopDong_CommonStatusFilter.ChoThanhLy
+        ChoThanhLy = EHopDong_CommonStatusFilter.ChoThanhLy,
+        [Display(Name = "Đang cầm")]
+        DangCam
+
     }
 
     public enum EHopDong_VayLaiStatusFilter : byte

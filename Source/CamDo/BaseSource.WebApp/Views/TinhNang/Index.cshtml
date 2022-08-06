@@ -1,4 +1,6 @@
-﻿@{
+﻿@using BaseSource.ViewModels.BaiViet
+@model TinhNangPageVm
+@{
     ViewData["Title"] = "Tính năng";
 }
 
@@ -8,39 +10,33 @@
             <div class="col-md-3 col-sm-12">
                 <div class="left-menu">
                     <ul id="MenuTinhNang">
-                        <li id="tinh-nang" class="active">
-                            <a asp-area="" asp-controller="TinhNang" asp-action="Index">Tổng hợp tính năng</a>
-                        </li>
-                        <li id="cam-do">
-                            <a href="?t=camdo">Cầm đồ</a>
-                        </li>
-                        <li id="vay-ho">
-                            <a href="?t=vayho">Vay họ</a>
-                        </li>
-                        <li id="khach-hang">
-                            <a href="?t=khachhang">Khách hàng</a>
-                        </li>
-                        <li id="cua-hang">
-                            <a href="?t=cuahang">Cửa hàng</a>
-                        </li>
-                        <li id="thu-chi">
-                            <a href="?t=thuchi">Thu chi</a>
-                        </li>
-                        <li id="nguon-von">
-                            <a href="?t=nguonvon">Nguồn vốn</a>
-                        </li>
-                        <li id="nhan-vien">
-                            <a href="?t=nhanvien">Nhân viên</a>
-                        </li>
-                        <li id="bao-cao">
-                            <a href="?t=baocao">Thống kê</a>
-                        </li>
-                        <li id="check-cic">
-                            <a href="?t=checkcic">Kiểm tra CIC</a>
-                        </li>
+                       @foreach (var item in Model.menus)
+                       {
+                            @if(item.Url == Model.baiViet.Url)
+                            {
+                                <li class="active">
+                                    <a href="/TinhNang?url=@item.Url">@item.Name</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li>
+                                    <a href="/TinhNang?url=@item.Url">@item.Name</a>
+                                </li>
+                            }
+                        }
                     </ul>
                 </div>
+            </div>
+            <div class="col-md-9 col-sm-12">
+                @Html.Raw(@Model.baiViet.Content)
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts{
+    <script>
+        $(".tinhnang-nav").addClass("active");
+    </script>
+} 

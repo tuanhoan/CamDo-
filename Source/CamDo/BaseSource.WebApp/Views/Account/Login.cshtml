@@ -1,40 +1,46 @@
 ﻿@model LoginRequestVm
 @{
     ViewData["Title"] = "Login";
+    Layout = "_AccountLayout";
 }
- 
-<div class="col-md-4 form-account">
-    <h1>ĐĂNG NHẬP</h1>
-    <div class="listError"></div>
-    <form action="/Account/Login?returnUrl=@ViewBag.ReturnUrl" method="post">
-        <h4>Điền thông tin để đăng nhập</h4>
-        <hr />
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group">
-            <label asp-for="UserName">UserName</label>
-            <input type="text" class="form-control" asp-for="UserName">
-            <span asp-validation-for="UserName" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="Password">Password</label>
-            <input type="password" asp-for="Password" class="form-control">
-            <span asp-validation-for="Password" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary">Đăng nhập</button>
-        </div>
-        <div class="form-group">
-            <p>
-                <a id="forgot-password" href="/Account/ForgotPassword">Bạn quyên mật khẩu?</a>
-            </p>
-            <p>
-                <a href="/Account/Register">Chưa có tài khoản, đăng ký mới</a>
-            </p>
-        </div>
-        <div class="form-group">
-            <a href="/facebook-login?returnUrl=@ViewBag.ReturnUrl" class="btn btn-primary">Facebook</a>
-            <a href="/google-login?returnUrl=@ViewBag.ReturnUrl" class="btn btn-danger">Google</a>
-        </div>
-    </form>
+
+<div id="account-form">
+    <div class="form-panel small">
+        <a asp-controller="Home" asp-action="Index">
+            <img src="https://admin.mecash.vn/Template/assets/app/media/img//logos/logoNew.jpg" />
+        </a>
+
+        <h1 class="title">Đăng nhập vào hệ thống </h1>
+
+        <form action="/Account/Login?returnUrl=@ViewBag.ReturnUrl" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group mt-3">
+                <input type="text" asp-for="UserName" class="account-input-field" placeholder="Tên đăng nhập">
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-3">
+                <input type="password" asp-for="Password" class="account-input-field" placeholder="Mật khẩu">
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mt-1">
+                <label class="save-login">
+                    <input type="checkbox" class="cmd_remember" name="Remember" id="Remember">
+                    Ghi nhớ đăng nhập
+                    <span></span>
+                </label>
+
+                <a class="mini-label" asp-area="" asp-controller="Account" asp-action="ForgotPassword">Quên mật khẩu</a>
+            </div>
+
+            <center><button type="submit">Đăng nhập</button></center>
+
+            <div class="d-flex justify-content-center align-items-center mt-3">
+                <div class="mini-label ms-2 mr-2">Bạn chưa có tài khoản? </div>
+
+                <a class="register" asp-controller="CuaHang" asp-action="Register">Đăng ký</a>
+            </div>
+        </form>
+    </div>
 </div>
 

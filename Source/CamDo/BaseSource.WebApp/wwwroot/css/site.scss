@@ -123,12 +123,15 @@ footer {
             @media (max-width: 768px) {
                 margin-bottom: 10px;
             }
+
             a {
                 font-size: 17px;
                 color: #444;
+                text-decoration: none;
 
                 &:hover {
                     color: #666;
+                    text-decoration: underline;
                 }
             }
         }
@@ -311,7 +314,7 @@ h1, h2, h3, h4, h5, h6 {
 
             .login-panel {
                 padding-top: 20px;
-                padding-left: 25px;
+                padding-right: 25px;
             }
         }
 
@@ -320,10 +323,10 @@ h1, h2, h3, h4, h5, h6 {
             color: #3f3e3c;
             padding: 6px 0px;
             font-family: Roboto-Light;
+            text-decoration: none;
 
             &:hover {
                 color: #f05403;
-                text-decoration: none;
                 border-bottom: 2px solid #f05403;
             }
 
@@ -980,6 +983,156 @@ h1, h2, h3, h4, h5, h6 {
     }
 }
 
+#account-form {
+    position: relative;
+    min-height: 100vh;
+
+    .form-panel {
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 30%;
+        padding: 20px 0px;
+
+        &.small {
+            @media (min-width: 769px) {
+                position: absolute;
+                top: 50%;
+                transform: translateX(-50%) translateY(-50%);
+            }
+        }
+
+        form {
+            margin-top: 1.5rem;
+        }
+
+        img {
+            width: 256px;
+            position: relative;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .title {
+            color: #9e97aa;
+            text-align: center;
+            font-size: 1.5rem;
+            margin-top: 20px;
+            margin-bottom: 0.5rem;
+            font-family: inherit;
+            font-weight: 500;
+            line-height: 1.2;
+        }
+
+        .description {
+            color: #aba5b6;
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 300;
+            font-family: Tahoma;
+        }
+
+        .save-login {
+            color: #aba5b6;
+            font-size: 1rem;
+            display: inline-block;
+            position: relative;
+            margin-bottom: 10px;
+            cursor: pointer;
+
+            input {
+                position: relative;
+                top: 1px;
+            }
+        }
+
+        .mini-label {
+            color: #aba5b6;
+            font-size: 1rem;
+        }
+
+        button {
+            padding: 1.4rem 4rem;
+            margin-top: 0.8rem;
+            font-size: 1rem;
+            font-weight: 400;
+            font-family: Tahoma;
+            border-radius: 60px;
+            color: #fff;
+            background-color: #e9552d;
+            border-color: #e9552d;
+            white-space: nowrap;
+            vertical-align: middle;
+            user-select: none;
+            border: 1px solid transparent;
+            line-height: 1.25;
+
+            &:hover {
+                color: #fff;
+                background-color: #ec732e;
+                border-color: #ec732e;
+            }
+        }
+
+        .register {
+            color: #847b93;
+            font-size: 1rem;
+            font-weight: 400;
+            text-decoration: none;
+        }
+
+        .cancel-link {
+            display: inline-block;
+            text-align: center;
+            padding: 1.4rem 4rem;
+            font-size: 1rem;
+            color: black;
+            font-weight: 400;
+            font-family: Tahoma;
+            border-radius: 60px;
+            white-space: nowrap;
+            vertical-align: middle;
+            user-select: none;
+            border: 1px solid transparent;
+            line-height: 1.25;
+            text-decoration: none;
+            background: #e9e9ed;
+
+            &:hover {
+                background: #d0d0d7;
+            }
+        }
+    }
+
+    .account-input-field {
+        color: #9e97aa;
+        opacity: 1;
+        border-radius: 40px;
+        border: none;
+        padding: 1.5rem 1.5rem;
+        background: #f7f6f9;
+        font-family: Tahoma;
+        display: block;
+        width: 100%;
+        font-size: 1rem;
+        line-height: 1.25;
+        transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+
+        &::placeholder {
+            color: #9e97aa;
+            opacity: 1;
+        }
+    }
+}
+
+.account-bg {
+    background-image: url(../images/bg-account.jpg);
+    min-height: 100vh;
+}
+
+
+
 .banner {
     margin-top: 20px;
     background: #ccc;
@@ -1021,6 +1174,7 @@ h1, h2, h3, h4, h5, h6 {
         border: 1px solid transparent;
         white-space: nowrap;
         user-select: none;
+        text-decoration: none;
 
         @media (max-width: 768px) {
             font-size: 22px;

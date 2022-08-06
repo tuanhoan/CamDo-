@@ -1,4 +1,6 @@
-﻿@{
+﻿@using BaseSource.ViewModels.GoiSanPham
+@model List<GoiSanPhamVm>
+@{
     ViewData["Title"] = "Thanh toán";
 }
 
@@ -93,93 +95,29 @@
             - Nếu bạn ở Hà Nội hoặc TP. Hồ Chí Minh xin vui lòng liên hệ với Mecash theo số điện thoại <strong>024.7305.4222 </strong>để được hỗ trợ. Nhân viên của chúng tôi sẽ qua thu tiền mặt trực tiếp.
         </p>
 
-        <h3>3.Gói gia hạn thời gian sử dụng tài khoản <span class="red">*</span></h3>
+        <h3>3. Các gói sản phẩm</h3>
 
-        <div class="row">
-            <div class="col-md-3 col-sm-12">
-                <div class="box orange">
-                    <div class="name">GÓI 12 THÁNG</div>
-                    <div class="description">2.200.000 </div>
+        <div class="row row-cols-3">
+            @foreach (var item in Model)
+            {
+                <div class="col mt-3">
+                    <div class="box orange">
+                        <div class="name">@item.Ten</div>
+                        <div class="description">@item.TongTien</div>
+                        
+                        @if (item.KhuyenMai != null)
+                        {
+                            <div class="note">@item.KhuyenMai</div>
+                        }
+                    </div>
                 </div>
-            </div>
-
-            <div class="col-md-1 col-sm-0 space"></div>
-
-            <div class="col-md-3 col-sm-12">
-                <div class="box orange">
-                    <div class="name">GÓI 24 THÁNG</div>
-                    <div class="description">4.400.000</div>
-                    <div class="note">(KM : 6 tháng)</div>
-                </div>
-            </div>
-
-            <div class="col-md-1 col-sm-0 space"></div>
-
-            <div class="col-md-3 col-sm-12">
-                <div class="box orange">
-                    <div class="name">GÓI 36 THÁNG</div>
-                    <div class="description">6.600.000</div>
-                    <div class="note">(KM : 12 tháng)</div>
-                </div>
-            </div>
-        </div>
-        <div class="red mt-2">Áp dụng đối với phần mềm mới version 2.0</div>
-
-        <h3 class="mt-3">4.Gói nạp tiền sử dụng dịch vụ CIC</h3>
-        <div class="row">
-            <div class="col-md-3 col-sm-12">
-                <div class="box yellow">
-                    <div class="name">GÓI 1</div>
-                    <div class="description">100.000</div>
-                </div>
-            </div>
-
-            <div class="col-md-1 col-sm-0 space"></div>
-
-            <div class="col-md-3 col-sm-12">
-                <div class="box yellow">
-                    <div class="name">GÓI 2</div>
-                    <div class="description">300.000</div>
-                </div>
-            </div>
-
-            <div class="col-md-1 col-sm-0 space"></div>
-
-            <div class="col-md-3 col-sm-12">
-                <div class="box yellow">
-                    <div class="name">GÓI 3</div>
-                    <div class="description">500.000</div>
-                </div>
-            </div>
-        </div>
-
-        <h3 class="mt-3">5.Gói VIP - trang web dành riêng cho khách hàng theo năm <span class="red">*</span></h3>
-
-        <div class="row">
-            <div class="col-md-3 col-sm-12">
-                <div class="box orange">
-                    <div class="name">GÓI SIÊU VIP </div>
-                    <div class="description">100.000.000</div>
-                </div>
-            </div>
-
-            <div class="col-md-1 col-sm-0 space"></div>
-
-            <div class="col-md-3 col-sm-12">
-                <div class="box orange">
-                    <div class="name">GÓI VIP</div>
-                    <div class="description">50.000.000</div>
-                </div>
-            </div>
-
-            <div class="col-md-1 col-sm-0 space"></div>
-
-            <div class="col-md-3 col-sm-12">
-                <div class="box orange">
-                    <div class="name">GÓI THƯỜNG</div>
-                    <div class="description">30.000.000</div>
-                </div>
-            </div>
+            }
         </div>
     </div>
 </div>
+
+@section Scripts{
+    <script>
+        $(".thanhtoan-nav").addClass("active");
+    </script>
+}

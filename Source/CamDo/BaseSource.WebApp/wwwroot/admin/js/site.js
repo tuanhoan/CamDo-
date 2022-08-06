@@ -58,7 +58,7 @@ $(function () {
 
 });
 
-$("#page-top").on("click", 'button[data-toggle="btn-confirm"]', function (e) {
+$("#page-top").on("click", 'button[data-bs-toggle="btn-confirm"]', function (e) {
     e.preventDefault();
 
     if (confirm($(this).attr("data-title"))) {

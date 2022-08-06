@@ -38,7 +38,7 @@ $("body").on("submit", 'form[id="frmChuocDo"]', function (e) {
             $btnSubmit.removeAttr("disabled");
             $form.find(".field-validation-valid").empty();
             if (res.isSuccessed == true) {
-                toastr.info(res.message);
+                toastr.info(res.resultObj);
             } else if (res.validationErrors != null && res.validationErrors.length) {
                 $.each(res.validationErrors, function (i, v) {
                     console.log(v);

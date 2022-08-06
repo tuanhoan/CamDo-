@@ -87,3 +87,7 @@ body {
 .form-control {
     padding: 0.575rem 1.125rem !important;
 }
+
+.ck-editor__editable {
+    min-height: 500px;
+}

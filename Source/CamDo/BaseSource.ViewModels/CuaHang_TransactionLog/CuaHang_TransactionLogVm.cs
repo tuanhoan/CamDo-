@@ -55,6 +55,7 @@ namespace BaseSource.ViewModels.CuaHang_TransactionLog
         public DateTime? ToDate { get; set; }
         public double TienGhiNo { get; set; }
         public double TienTraNo { get; set; }
+        public double TotalMoneyLoan { get; set; }
     }
 
     public class CreateCuaHang_TransactionLogThuChiVm

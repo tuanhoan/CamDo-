@@ -230,3 +230,25 @@ select.form-control {
     color: #f4516c;
     font-weight: bold;
 }
+
+.body-box {
+    padding: 10px;
+    border-radius: 5px !important;
+    margin-bottom: 15px;
+    background: #d6d4db;
+    color: #444;
+    font-weight: 400;
+    text-align: center;
+}
+
+    .body-box h4 {
+        font-weight: 600;
+        font-size: 18px !important;
+    }
+
+.btn-xs {
+    padding: 0.25rem 0.5rem !important;
+    font-size: 0.7rem !important;
+    border-radius: 0.35rem;
+    line-height: 1 !important;
+}

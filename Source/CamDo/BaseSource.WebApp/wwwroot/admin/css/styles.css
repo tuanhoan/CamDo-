@@ -18278,30 +18278,30 @@ body {
   top: 0.5625rem !important;
 }
 
-.card-collapsable .card-header[data-toggle=collapse] {
+.card-collapsable .card-header[data-bs-toggle=collapse] {
   display: flex;
   text-decoration: none;
   position: relative;
   align-items: center;
   justify-content: space-between;
 }
-.card-collapsable .card-header[data-toggle=collapse] .card-collapsable-arrow {
+.card-collapsable .card-header[data-bs-toggle=collapse] .card-collapsable-arrow {
   height: 0.9rem;
   width: 0.9rem;
   display: inline-flex;
   font-size: 0.9rem;
   transition: transform 0.1s ease-in-out;
 }
-.card-collapsable .card-header[data-toggle=collapse] .card-collapsable-arrow svg,
-.card-collapsable .card-header[data-toggle=collapse] .card-collapsable-arrow i,
-.card-collapsable .card-header[data-toggle=collapse] .card-collapsable-arrow .feather {
+.card-collapsable .card-header[data-bs-toggle=collapse] .card-collapsable-arrow svg,
+.card-collapsable .card-header[data-bs-toggle=collapse] .card-collapsable-arrow i,
+.card-collapsable .card-header[data-bs-toggle=collapse] .card-collapsable-arrow .feather {
   height: 0.9rem;
   width: 0.9rem;
 }
-.card-collapsable .card-header[data-toggle=collapse].collapsed {
+.card-collapsable .card-header[data-bs-toggle=collapse].collapsed {
   border-radius: 0.35rem;
 }
-.card-collapsable .card-header[data-toggle=collapse].collapsed .card-collapsable-arrow {
+.card-collapsable .card-header[data-bs-toggle=collapse].collapsed .card-collapsable-arrow {
   transform: rotate(-90deg);
 }
 

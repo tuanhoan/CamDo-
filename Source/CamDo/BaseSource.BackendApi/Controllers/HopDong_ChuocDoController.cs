@@ -87,6 +87,11 @@ namespace BaseSource.BackendApi.Controllers
             {
                 return Ok(new ApiErrorResult<string>("Not Found"));
             }
+            //xử lý tạm cho cầm đồ
+            if (hd.HD_Status == (byte)EHopDong_CamDoStatusFilter.KetThuc)
+            {
+                return Ok(new ApiErrorResult<string>("Hợp đồng này đã kết thúc"));
+            }
             double tienLai = 0;
             double tongSoNgayLai = 0;
             double noCu = 0;

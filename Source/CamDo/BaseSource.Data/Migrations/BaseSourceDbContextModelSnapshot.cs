@@ -55,7 +55,7 @@ namespace BaseSource.Data.Migrations
                         new
                         {
                             Id = "c1105ce5-9dbc-49a9-a7d5-c963b6daa62a",
-                            ConcurrencyStamp = "d1b9bc93-de6d-4c19-9d9f-25b19f154426",
+                            ConcurrencyStamp = "df14b78f-e425-4d86-98f5-d17f2b98a85b",
                             Description = "Administrator role",
                             Name = "Admin",
                             NormalizedName = "Admin"
@@ -133,18 +133,47 @@ namespace BaseSource.Data.Migrations
                         {
                             Id = "ffded6b0-3769-4976-841b-69459049a62d",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0b1e7a4c-3bb7-431d-ac32-91e5b79975cf",
+                            ConcurrencyStamp = "8253424a-727d-4190-8ac8-9bba7421115e",
                             Email = "doangiau2006@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "doangiau2006@gmail.com",
                             NormalizedUserName = "superadmin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEMehVRB1TvK89i706OxnJaZ0+D/zRp3ZM31laEKsBChhjrw9/8SRkygTo/ASv6tpCA==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEBa/dj/nvIC5NZn4ALLSMVE9lCW/xVPG1/njIeuXoPc8MjVgV/So+U5UQXvqfIp8bQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
                             UserName = "superadmin"
                         });
+                });
+
+            modelBuilder.Entity("BaseSource.Data.Entities.BaiViet", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("DanhMucBaiVietId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DanhMucBaiVietId");
+
+                    b.ToTable("BaiViets");
                 });
 
             modelBuilder.Entity("BaseSource.Data.Entities.CauHinhHangHoa", b =>
@@ -386,6 +415,27 @@ namespace BaseSource.Data.Migrations
                     b.ToTable("CuaHang_TransactionLogs");
                 });
 
+            modelBuilder.Entity("BaseSource.Data.Entities.DanhMucBaiViet", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<DateTime>("CreatedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("DisableDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DanhMucBaiViets");
+                });
+
             modelBuilder.Entity("BaseSource.Data.Entities.FeedBack", b =>
                 {
                     b.Property<int>("Id")
@@ -523,6 +573,9 @@ namespace BaseSource.Data.Migrations
                     b.Property<DateTime>("HD_NgayVay")
                         .HasColumnType("datetime2");
 
+                    b.Property<byte>("HD_Status")
+                        .HasColumnType("tinyint");
+
                     b.Property<int>("HD_TongThoiGianVay")
                         .HasColumnType("int");
 
@@ -562,6 +615,12 @@ namespace BaseSource.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
+
+                    b.Property<double>("TienLaiToiNgayHienTai")
+                        .HasColumnType("float");
+
+                    b.Property<double>("TongTienChuoc")
+                        .HasColumnType("float");
 
                     b.Property<double>("TongTienDaThanhToan")
                         .HasColumnType("float");
@@ -1196,6 +1255,17 @@ namespace BaseSource.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("BaseSource.Data.Entities.BaiViet", b =>
+                {
+                    b.HasOne("BaseSource.Data.Entities.DanhMucBaiViet", "DanhMucBaiViet")
+                        .WithMany("BaiViets")
+                        .HasForeignKey("DanhMucBaiVietId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DanhMucBaiViet");
+                });
+
             modelBuilder.Entity("BaseSource.Data.Entities.CauHinhHangHoa", b =>
                 {
                     b.HasOne("BaseSource.Data.Entities.CuaHang", "CuaHang")
@@ -1412,6 +1482,11 @@ namespace BaseSource.Data.Migrations
                     b.Navigation("HopDongs");
 
                     b.Navigation("KhachHangs");
+                });
+
+            modelBuilder.Entity("BaseSource.Data.Entities.DanhMucBaiViet", b =>
+                {
+                    b.Navigation("BaiViets");
                 });
 
             modelBuilder.Entity("BaseSource.Data.Entities.HopDong", b =>

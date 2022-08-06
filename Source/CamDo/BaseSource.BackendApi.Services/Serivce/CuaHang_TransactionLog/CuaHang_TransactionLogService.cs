@@ -125,6 +125,10 @@ namespace BaseSource.BackendApi.Services.Serivce.CuaHang_TransactionLog
                 case EHopDong_ActionType.ThanhLyDo:
                     break;
                 case EHopDong_ActionType.XoaHD:
+                    transaction.TotalMoneyLoan = model.TotalMoneyLoan;
+                    break;
+                case EHopDong_ActionType.ChoThanhLy:
+                    transaction.TotalMoneyLoan = model.TotalMoneyLoan;
                     break;
                 default:
                     break;

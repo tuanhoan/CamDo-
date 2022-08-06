@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>0c13618d-c4b3-432e-8b84-93f7312e27b5</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -10,6 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="EPPlus" Version="6.0.6" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="9.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="5.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="5.0.10" />

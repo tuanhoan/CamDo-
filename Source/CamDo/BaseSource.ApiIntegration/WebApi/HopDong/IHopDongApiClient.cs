@@ -21,5 +21,9 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
         Task<ApiResult<string>> UpdateChungTu(HopDong_AddChungTuVm model);
         Task<ApiResult<HopDong_ChungTuResponseVm>> GetChungTuByHopDong(int hopDongId);
         Task<ApiResult<string>> DeleteChungTu(DeleteChungTu_Vm model);
+        Task<ApiResult<string>> DeleteHopDong(int hopDongId);
+        Task<ApiResult<string>> ThanhLyHopDong(int hopDongId);
+        Task<ApiResult<string>> ChuyenTrangThaiChoThanhLy(int hopDongId);
+        Task<ApiResult<InDongLaiResponseVm>> InKyDongLai(long paymentId);
     }
 }

@@ -1,39 +1,92 @@
 ﻿@model PagedResult<HopDongVm>
 @{
-    ViewData["Title"] = "Quản lý hợp đồng cầm đồ";
+    ViewData["Title"] = "Hợp đồng cầm đồ";
+    var listHangHoa = ViewData["ListHangHoa"] as SelectList;
 }
 <div class="row">
     <!-- table  Lastest Tickets -->
-    <div class="col-12  ">
+    <div class="col-12 ">
         <div class="card shadow h-100 mb-4 ">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h3 class="m-0 font-weight-bold">@ViewData["Title"]</h3>
-                <button type="button" class="btn btn-primary btn-sm addEditHD" data-id="0" data-url="@Url.Action("Create","HopDong")">Thêm mới</button>
+
             </div>
             <div class="card-body">
-                <form asp-action="Index" method="get" class="mb-4">
-
-                    <div class="form-group row">
-                        <label for="username" class="col-sm-2 font-weight-bolder text-dark col-form-label">Tên</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" name="ten" value="@Context.Request.Query["ten"]">
+                <div class="row clearfix">
+                    <div class="m--margin-top-10 col-md-6" id="dvMoneyEndDate">
+                        <div class="body-box">
+                            <div> QUỸ TIỀN MẶT <a style="cursor:pointer;" onclick="ReloadMoneyDataShop()"><i class="flaticon-share m--font-danger" title="Reload dữ liệu"></i></a>  </div>
+                            <h4 id="lbl_LoanPawn_MoneyEndDate">1,000,407,050</h4>
                         </div>
                     </div>
-
-                    <div class="form-group row">
-                        <div class="col-sm-2"></div>
-                        <div class="col-sm-10">
-                            <button type="submit" class="btn btn-primary btn-sm">
-                                <i class="fas fa-search"></i>
-                                <span class="ml-1">Tìm kiếm</span>
-                            </button>
-                            <a asp-action="Index" class="btn btn-success btn-sm ml-2">
-                                <i class="fas fa-sync-alt"></i>
-                                <span class="ml-1">Reset</span>
-                            </a>
+                    <div class="m--margin-top-10 col-md-6" id="dvMoneyInvestment">
+                        <div class="body-box">
+                            <span>TIỀN CHO VAY</span>
+                            <h4 id="lbl_LoanPawn_MoneyInvestment">0</h4>
                         </div>
                     </div>
+                    <div class="m--margin-top-10 col-md-4" id="dvMoneyDebtor">
+                        <div class="body-box">
+                            <span>TIỀN NỢ</span>
+                            <h4 id="lbl_LoanPawn_MoneyDebtor">0</h4>
+                        </div>
+                    </div>
+                    <div class="m--margin-top-10 col-md-4" id="dvInterestExpected">
+                        <div class="body-box m--bg-brand">
+                            <span id="lbl_interestToDay">LÃI DỰ KIẾN </span>
+                            <h4 id="lbl_LoanPawn_InterestExpected">0</h4>
+                        </div>
+                    </div>
+                    <div class="m--margin-top-10 col-md-4" id="dvInterestEarned">
+                        <div class="body-box" data-html="true" data-bs-toggle="m-tooltip" title="" data-placement="top" data-original-title="Tổng tiền lãi trong tháng 8 năm 2022 ">
+                            <span>LÃI ĐÃ THU</span>
+                            <h4 id="lbl_LoanPawn_InterestEarned">0</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-12 d-flex">
+                        <button type="button" class="btn btn-primary btn-sm addEditHD" data-id="0" data-url="@Url.Action("Create","HopDong")">Thêm mới</button>
+                        <form action="@Url.Action("Export","HopDong")" method="post">
+                            <input type="hidden" name="loaiHD" value="@ELoaiHopDong.Camdo" />
+                            <input type="hidden" class="form-control" name="info" value="@Context.Request.Query["info"]">
+                            <input type="hidden" class="form-control" name="from" value="@Context.Request.Query["from"]">
+                            <input type="hidden" class="form-control" name="to" value="@Context.Request.Query["to"]">
+                            <input type="hidden" class="form-control" name="loaihanghoa" value="@Context.Request.Query["loaihanghoa"]">
+                            <input type="hidden" class="form-control" name="status" value="@Context.Request.Query["status"]">
+
+                            <button type="submit" id="btnExportExcel" class="btn btn-info btn-sm mx-sm-3"> <i class="fas fa-file-export"></i> Xuất Excel</button>
+                        </form>
+                        <button type="button" class="btn btn-primary btn-sm mx-sm-1" data-id="0" data-url="@Url.Action("Create","HopDong")">Chọn mẫu hợp đồng</button>
+                    </div>
+                </div>
+                <form asp-action="Index" id="frmSearch" method="get" class="form-inline">
+                    <div class="form-group mb-2">
+                        <input type="text" class="form-control" name="info" value="@Context.Request.Query["info"]" placeholder="Tìm kiếm mã HĐ, Tên KH...">
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                        <input type="date" class="form-control" name="from" value="@Context.Request.Query["from"]">
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                        <input type="date" class="form-control" name="to" value="@Context.Request.Query["to"]">
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                        @Html.DropDownList("loaihanghoa", listHangHoa, "---Tất cả---", new { @class = "form-control" })
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                        @Html.DropDownList("status", Html.GetEnumSelectList<EHopDong_CamDoStatusFilter>(), "---Tất cả---", new { @class = "form-control" })
+                    </div>
+
                 </form>
+                <div class="row mb-2">
+                    <div class="col-md-12 d-flex">
+                        <button type="submit" class="btn btn-primary btn-sm mb-2"> <i class="fas fa-search"></i> Tìm kiếm</button>
+                        <a asp-action="Index" class="btn btn-success btn-sm mx-sm-1 mb-2">
+                            <i class="fas fa-sync-alt"></i> Reset
+                        </a>
+                    </div>
+                </div>
+
                 <div class="table-responsive">
                     <table class="table table-bordered">
                         <thead>
@@ -104,10 +157,19 @@
                                         <td>0</td>
                                         <td>0</td>
                                         <td>@item.HD_NgayVay.ToString("dd/MM/yyyy")</td>
-                                        <td>Tình trạng</td>
-                                        <td>
-                                            <button class="btn btn-sm btn-purple detaileHD" type="button" data-id="@item.Id" data-url="@Url.Action("Detail","HopDong")" title="Cập nhật">
+                                        <td><span class="m-badge m-badge--info m-badge--wide">@item.StatusName</span></td>
+                                        <td width="140" class="text-center">
+                                            <button class="btn btn-xs btn-secondary detaileHD m-1" type="button" data-id="@item.Id" data-url="@Url.Action("Detail","HopDong")" title="Đóng lãi">
                                                 <i class="fas fa-coins"></i>
+                                            </button>
+                                            <button class="btn btn-xs btn-danger m-1" type="button" data-bs-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn xóa hợp đồng?" data-href="@Url.Action("Delete","HopDong", new { id = item.Id })" title="Xóa hợp đồng">
+                                                <i class="fas fa-trash-alt fa-fw"></i>
+                                            </button>
+                                            <button class="btn btn-xs btn-info detaileHD m-1" data-tab="tab-chuocdo" type="button" data-id="@item.Id" data-url="@Url.Action("Detail","HopDong")" title="Chuộc đồ">
+                                                <i class="fas fa-anchor"></i>
+                                            </button>
+                                            <button class="btn btn-xs btn-success detaileHD m-1" data-tab="tab-hengio" type="button" data-id="@item.Id" data-url="@Url.Action("Detail","HopDong")" title="Hẹn giờ khoản vay">
+                                                <i class="fas fa-clock"></i>
                                             </button>
                                         </td>
                                     </tr>
@@ -130,7 +192,7 @@
     </div>
 </div>
 @section Scripts{
-  
+
     <script>
         $(".cauhinhhanghoa-nav").addClass("active");
     </script>
@@ -140,7 +202,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>

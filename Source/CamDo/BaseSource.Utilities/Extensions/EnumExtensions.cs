@@ -12,11 +12,20 @@ namespace BaseSource.Utilities.Extensions
     {
         public static string GetEnumDisplayName(this Enum enumValue)
         {
-            return enumValue.GetType()
-                            .GetMember(enumValue.ToString())
-                            .First()
-                            .GetCustomAttribute<DisplayAttribute>()
-                            .GetName();
+            try
+            {
+                return enumValue.GetType()
+                           .GetMember(enumValue.ToString())
+                           .First()
+                           .GetCustomAttribute<DisplayAttribute>()
+                           .GetName();
+            }
+            catch (Exception)
+            {
+
+                return string.Empty;
+            }
+
         }
     }
 }
