@@ -1,4 +1,4 @@
-﻿@model BaseSource.ViewModels.ThuChi.CreateChiHoatDongVm
+﻿@model BaseSource.ViewModels.Admin.ThuChi.CreateChiHoatDongVm
 @{
     ViewData["Title"] = "Chi tiêu";
     var dataExpenses = ViewBag.Incomes as PagedResult<CuaHang_TransactionLogAdminVm>;
@@ -10,7 +10,7 @@
     <div class="col-12 ">
         <div class="card shadow h-100 mb-4 ">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h3 class="m-0 font-weight-bold">@User.Claims.FirstOrDefault(x => x.Type == "TenCuaHang")?.Value)</h3>
+                <h3 class="m-0 font-weight-bold">@User.Claims.FirstOrDefault(x => x.Type == "TenCuaHang")?.Value</h3>
             </div>
             <div class="card-body">
                 <div class="row mt-5">
@@ -72,7 +72,7 @@
                             <div class="form-group row">
                                 <label for="inputEmail3" class="col-sm-5 col-form-label"></label>
                                 <div class="col-sm-7">
-                                    <button type="submit" class="btn btn-danger btn-sm my-1"><i data-feather="file-text"></i> Lưu lại</button>
+                                    <button type="submit" class="btn btn-danger btn-sm my-1"><i data-feather="file-text"></i> Chi tiền</button>
                                 </div>
                             </div>
                         </form>

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BaseSource.ViewModels.ThuChi
+namespace BaseSource.ViewModels.Admin.ThuChi
 {
     public class GetThuHoatDongPagingRequest : PageQuery
     {
@@ -44,5 +44,34 @@ namespace BaseSource.ViewModels.ThuChi
         public EPhieuChi_ActionType Type { get; set; }
         [Required(ErrorMessage = "Lý do không để trống")]
         public string Note { get; set; }
+    }
+    public class ExportExpenseTemplateVm
+    {
+        public string Customer { get; set; }
+        public string Address { get; set; }
+        public string Note { get; set; }
+        public double Amount { get; set; }
+        public string AmountString { get; set; }
+        public string UserName { get; set; }
+        public DateTime CreateDate { get; set; }
+        public string UserPrint { get; set; }
+        public DateTime PrintDate { get; set; }
+        public string ShopName { get; set; }
+        public string Hotline { get; set; }
+        public DateTime CurrentDate { get; set; }
+    }
+    public class ExportIncomeTemplateVm
+    {
+        public int Id { get; set; }
+        public string Customer { get; set; }
+        public string UserName { get; set; }
+        public string Address { get; set; }
+        public string Note { get; set; }
+        public double Amount { get; set; }
+        public string AmountString { get; set; }
+        public string ShopName { get; set; }
+        public string Number { get; set; }
+        public double Debt { get; set; }
+        public double Credit { get; set; }
     }
 }

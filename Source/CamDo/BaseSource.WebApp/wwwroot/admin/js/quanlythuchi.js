@@ -1,6 +1,6 @@
 ﻿
 $(function () {
-    $(".income-nav").addClass("active");
+
     $('.selectpicker').selectpicker();
 
 });
@@ -83,7 +83,7 @@ $("body").on("submit", 'form[id="frmExpense"]', function (e) {
 var printCollectionExpense = function (ID, CusName, Username, strMoney, Note, CreateDate) {
     $('button').blur();
     var strTitle = "In phiếu chi tiền";
-    var strUrl = "/Print/Expense";
+    var strUrl = "/Admin/QuanLyThuChi/PrintExpense";
     var strNumberText;
     strMoney = Math.abs(strMoney);
     strNumberText = DocTienBangChu(strMoney);
@@ -91,10 +91,11 @@ var printCollectionExpense = function (ID, CusName, Username, strMoney, Note, Cr
         type: "POST",
         url: strUrl,
         data: {
-            ID: ID, CustomerName: CusName, Username: Username, MoneySub: strMoney, CreateDate: CreateDate,
-            Note: Note, strNumberText: strNumberText, ShopID: shopID
+            ID: ID, Customer: CusName, Username: Username, Amount: strMoney, CreateDate: CreateDate,
+            Note: Note, AmountString: strNumberText
         }
     }).done(function (data) {
+        console.log(data);
         var mywindow = window.open('', strTitle, 'height=' + $(window).height() + ',width=' + $(window).width());
         mywindow.document.write('<html><head><title>' + strTitle + '</title>');
         mywindow.document.write('</head><body>');
@@ -107,6 +108,82 @@ var printCollectionExpense = function (ID, CusName, Username, strMoney, Note, Cr
 
         return true;
     });
+}
+
+var printCollectionIncome = function (ID, CusName, Username, strMoney, Note) {
+    $('button').blur();
+    var strTitle = "In phiếu thu tiền";
+    var strUrl = "/Admin/QuanLyThuChi/PrintIncome";
+    var strNumberText;
+    strMoney = Math.abs(strMoney);
+    strNumberText = DocTienBangChu(strMoney);
+    $.ajax({
+        type: "POST",
+        url: strUrl,
+        data: {
+            ID: ID, Customer: CusName, Username: Username, Amount: strMoney,
+            Note: Note, AmountString: strNumberText
+        }
+    }).done(function (data) {
+        console.log(data);
+        var mywindow = window.open('', strTitle, 'height=' + $(window).height() + ',width=' + $(window).width());
+        mywindow.document.write('<html><head><title>' + strTitle + '</title>');
+        mywindow.document.write('</head><body>');
+        mywindow.document.write(data);
+        mywindow.document.write('</body></html>');
+        mywindow.document.close(); // necessary for IE >= 10
+        mywindow.focus(); // necessary for IE >= 10
+        mywindow.print();
+        mywindow.close();
+
+        return true;
+    });
+}
+var ChuSo = new Array(" không ", " một ", " hai ", " ba ", " bốn ", " năm ", " sáu ", " bảy ", " tám ", " chín ");
+var Tien = new Array("", " nghìn", " triệu", " tỷ", " nghìn tỷ", " triệu tỷ");
+//1. Hàm đọc số có ba chữ số;
+function DocSo3ChuSo(baso) {
+    var tram;
+    var chuc;
+    var donvi;
+    var KetQua = "";
+    tram = parseInt(baso / 100);
+    chuc = parseInt((baso % 100) / 10);
+    donvi = baso % 10;
+    if (tram == 0 && chuc == 0 && donvi == 0) return "";
+    if (tram != 0) {
+        KetQua += ChuSo[tram] + " trăm ";
+        if ((chuc == 0) && (donvi != 0)) KetQua += " linh ";
+    }
+    if ((chuc != 0) && (chuc != 1)) {
+        KetQua += ChuSo[chuc] + " mươi";
+        if ((chuc == 0) && (donvi != 0)) KetQua = KetQua + " linh ";
+    }
+    if (chuc == 1) KetQua += " mười ";
+    switch (donvi) {
+        case 1:
+            if ((chuc != 0) && (chuc != 1)) {
+                KetQua += " mốt ";
+            }
+            else {
+                KetQua += ChuSo[donvi];
+            }
+            break;
+        case 5:
+            if (chuc == 0) {
+                KetQua += ChuSo[donvi];
+            }
+            else {
+                KetQua += " lăm ";
+            }
+            break;
+        default:
+            if (donvi != 0) {
+                KetQua += ChuSo[donvi];
+            }
+            break;
+    }
+    return KetQua;
 }
 //2. Hàm đọc số thành chữ (Sử dụng hàm đọc số có ba chữ số)
 function DocTienBangChu(SoTien) {

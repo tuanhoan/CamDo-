@@ -1,6 +1,7 @@
 ﻿using BaseSource.ViewModels.Admin;
+using BaseSource.ViewModels.Admin.ThuChi;
 using BaseSource.ViewModels.Common;
-using BaseSource.ViewModels.ThuChi;
+
 using System.Threading.Tasks;
 
 namespace BaseSource.ApiIntegration.WebApi.QuanlyThuChi

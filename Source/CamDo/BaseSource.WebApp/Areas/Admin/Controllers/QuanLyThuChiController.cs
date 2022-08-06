@@ -1,6 +1,6 @@
 ﻿using BaseSource.ApiIntegration.WebApi.QuanlyThuChi;
+using BaseSource.ViewModels.Admin.ThuChi;
 using BaseSource.ViewModels.Common;
-using BaseSource.ViewModels.ThuChi;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,13 +17,11 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         #region Chi Hoạt Động
         public async Task<IActionResult> Expense()
         {
-            var currentShop = int.Parse(User.Claims.FirstOrDefault(x => x.Type == "CuaHangId")?.Value);
-
             var data = await _quanLyThuChiApiClient.GetAllExpensesAsync(new GetChiHoatDongPagingRequest
             {
                 Page = 1,
                 PageSize = 10,
-                ShopId = currentShop,
+                ShopId = ShopId,
             });
 
             ViewBag.Incomes = data.ResultObj;
@@ -36,7 +34,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             model.Page = model.Page < 1 ? 1 : model.Page;
             model.PageSize = 10;
 
-            model.ShopId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == "CuaHangId")?.Value);
+            model.ShopId = ShopId;
             var result = await _quanLyThuChiApiClient.GetAllExpensesAsync(model);
             return PartialView("_PageExpense", result.ResultObj);
         }
@@ -48,7 +46,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             {
                 return Json(new ApiErrorResult<string>(ModelState.GetListErrors()));
             }
-            model.ShopId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == "CuaHangId")?.Value);
+            model.ShopId = ShopId;
             var result = await _quanLyThuChiApiClient.CreateExpenseAsync(model);
             if (!result.IsSuccessed)
             {
@@ -65,21 +63,31 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
                 return RedirectToAction("Expense");
             }
 
-            var result = await _quanLyThuChiApiClient.DeleteExpenseAsync(id);
+            await _quanLyThuChiApiClient.DeleteExpenseAsync(id);
             return RedirectToAction("Expense");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PrintExpense(ExportExpenseTemplateVm model)
+        {
+            //set default value
+            model.ShopName = ShopName;
+            model.UserPrint = UserName;
+            model.Hotline = "123456789";
+
+            return PartialView("_TemplateExportExpense", model);
         }
         #endregion
 
         #region Thu Hoạt Động
         public async Task<IActionResult> Income()
         {
-            var currentShop = int.Parse(User.Claims.FirstOrDefault(x => x.Type == "CuaHangId")?.Value);
 
             var data = await _quanLyThuChiApiClient.GetAllIncomesAsync(new GetThuHoatDongPagingRequest
             {
                 Page = 1,
                 PageSize = 10,
-                ShopId = currentShop,
+                ShopId = ShopId,
             });
 
             ViewBag.Incomes = data.ResultObj;
@@ -91,7 +99,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             model.Page = model.Page < 1 ? 1 : model.Page;
             model.PageSize = 10;
 
-            model.ShopId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == "CuaHangId")?.Value);
+            model.ShopId = ShopId;
             var result = await _quanLyThuChiApiClient.GetAllIncomesAsync(model);
             return PartialView("_PageIncome", result.ResultObj);
         }
@@ -104,7 +112,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             {
                 return Json(new ApiErrorResult<string>(ModelState.GetListErrors()));
             }
-            model.ShopId = int.Parse(User.Claims.FirstOrDefault(x => x.Type == "CuaHangId")?.Value);
+            model.ShopId = ShopId;
             var result = await _quanLyThuChiApiClient.CreateIncomeAsync(model);
             if (!result.IsSuccessed)
             {
@@ -123,6 +131,16 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
 
             var result = await _quanLyThuChiApiClient.DeleteInComeAsync(id);
             return RedirectToAction("Income");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PrintInCome(ExportIncomeTemplateVm model)
+        {
+            model.Number = model.Id.ToString();
+            //set default value
+            model.ShopName = ShopName;
+
+            return PartialView("_TemplateExportIncome", model);
         }
         #endregion
 
