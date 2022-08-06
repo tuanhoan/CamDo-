@@ -2776,9 +2776,6 @@ pre code {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
-.table-responsive > .table-bordered, .datatable > .table-bordered {
-  border: 0;
-}
 
 .form-control {
   display: block;
@@ -17960,7 +17957,7 @@ body {
   width: calc( (0.875rem * 1) + (0.875rem * 2) + (2px) ) !important;
 }
 .btn-icon .feather {
-  margin-top: 0 !important;
+  margin-top: 4px !important;
 }
 .btn-icon.btn-xl {
   height: calc( (1.125rem * 1) + (1.25rem * 2) + (2px) ) !important;
