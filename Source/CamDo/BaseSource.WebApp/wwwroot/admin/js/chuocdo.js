@@ -51,3 +51,26 @@ $("body").on("submit", 'form[id="frmChuocDo"]', function (e) {
         }
     });
 });
+function inChuocDo(id) {
+    $.ajax({
+        method: "GET",
+        url: "/Admin/HopDong/InHDChuocDo",
+        data: { hopDongId: id },
+        success: function (res) {
+            if (res.isSuccessed == true) {
+                var mywindow = window.open('', "Chuộc đồ", 'height=' + $(window).height() + ',width=' + $(window).width());
+                mywindow.document.write(res.resultObj);
+
+                mywindow.document.close(); // necessary for IE >= 10
+                mywindow.focus(); // necessary for IE >= 10
+
+                setTimeout(function () {
+                    mywindow.print();
+                    mywindow.close();
+                }, 500);
+            } else if (res.message != null) {
+                toastr.error(res.message);
+            }
+        }
+    });
+}

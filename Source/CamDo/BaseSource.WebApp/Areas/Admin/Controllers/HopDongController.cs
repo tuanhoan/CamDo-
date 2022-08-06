@@ -220,7 +220,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
                 return Json(new ApiErrorResult<string>(result.Message));
             }
             var pathToFile = System.IO.Path.Combine(_appEnvironment.WebRootPath, "PrintTemplate", "InLichDongLai.html");
-            string strData = string.Empty;
+            string strData = "";
             int i = 1;
             foreach (var item in result.ResultObj.ListPaymentLog)
             {
@@ -232,7 +232,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
                                  "<td class='text-right'>{tienkhac}</td>" +
                                  "<td class='text-right'>{tonglai}</td>" +
                                  "<td class='text-right'>{tienkhachtra}</td>" +
-                                 "<td class='text-center'><input type ='checkbox' {checked} ></td></tr>";
+                                 "<td class='text-center'><input type ='checkbox' {checked} /></td></tr>";
 
                 template = template.Replace("{stt}", i.ToString());
                 template = template.Replace("{fromDate}", item.FromDate.ToString("dd/MM/yyyy"));
@@ -250,7 +250,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
                 {
                     template = template.Replace("{checked}", "");
                 }
-                strData += strData;
+                strData += template;
                 i++;
 
             }
@@ -258,6 +258,30 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             {
                 var source = await SourceReader.ReadToEndAsync();
                 source = source.Replace("{body}", strData);
+                return Json(new ApiSuccessResult<string>(source));
+            }
+
+        }
+        public async Task<IActionResult> InHDChuocDo(int hopDongId)
+        {
+            var result = await _hopDongApiClient.InChuocDo(hopDongId);
+            if (!result.IsSuccessed)
+            {
+                return Json(new ApiErrorResult<string>(result.Message));
+            }
+            var pathToFile = System.IO.Path.Combine(_appEnvironment.WebRootPath, "PrintTemplate", "BienNhanChuocDo.html");
+            using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
+            {
+                var source = await SourceReader.ReadToEndAsync();
+                source = source.Replace("{mahopdong}", result.ResultObj.MaHD);
+                source = source.Replace("{ngay}", DateTime.Now.ToString("dd/MM/yyyy"));
+                source = source.Replace("{tentaisan}", result.ResultObj.TenTaiSan);
+                source = source.Replace("{tenkhachhang}", result.ResultObj.TenKhachHang);
+                source = source.Replace("{tennhanvien}", result.ResultObj.TenNhanVien);
+                source = source.Replace("{ngayvay}", result.ResultObj.NgayVay.ToString("dd/MM/yyyy"));
+                source = source.Replace("{ngaychuoc}", result.ResultObj.NgayChuoc?.ToString("dd/MM/yyyy"));
+                source = source.Replace("{tiencam}", result.ResultObj.TienVay.ToString("N0"));
+                source = source.Replace("{tienchuoc}", result.ResultObj.TienChuoc.ToString("N0"));
                 return Json(new ApiSuccessResult<string>(source));
             }
 

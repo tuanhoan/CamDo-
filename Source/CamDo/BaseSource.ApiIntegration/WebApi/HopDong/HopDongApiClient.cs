@@ -90,6 +90,16 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
             return await client.GetAsync<ApiResult<PagedResult<HopDongVm>>>("/api/HopDong/GetPagings", model);
         }
 
+        public async Task<ApiResult<InChuocDoResponseVm>> InChuocDo(int hopDongId)
+        {
+            var obj = new
+            {
+                hopDongId = hopDongId
+            };
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.GetAsync<ApiResult<InChuocDoResponseVm>>("/api/HopDong/InChuocDo", obj);
+        }
+
         public async Task<ApiResult<InDongLaiResponseVm>> InKyDongLai(long paymentId)
         {
             var obj = new

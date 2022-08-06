@@ -186,7 +186,7 @@ function printPayment(id) {
         data: { paymentId: id },
         success: function (res) {
             if (res.isSuccessed == true) {
-                var mywindow = window.open('', "123", 'height=' + $(window).height() + ',width=' + $(window).width());
+                var mywindow = window.open('', "Phiếu đóng lãi", 'height=' + $(window).height() + ',width=' + $(window).width());
                 mywindow.document.write(res.resultObj);
 
                 mywindow.document.close(); // necessary for IE >= 10
@@ -206,10 +206,10 @@ function printListPayment(id) {
     $.ajax({
         method: "GET",
         url: "/Admin/HopDong/InLichDongTien",
-        data: { paymentId: id },
+        data: { hopDongId: id },
         success: function (res) {
             if (res.isSuccessed == true) {
-                var mywindow = window.open('', "123", 'height=' + $(window).height() + ',width=' + $(window).width());
+                var mywindow = window.open('', "Lịch đóng tiền", 'height=' + $(window).height() + ',width=' + $(window).width());
                 mywindow.document.write(res.resultObj);
 
                 mywindow.document.close(); // necessary for IE >= 10

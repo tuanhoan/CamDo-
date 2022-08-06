@@ -25,5 +25,6 @@ namespace BaseSource.ViewModels.HopDong
         public double TienKhac { get; set; }
         public double TongTienChuoc { get; set; }
         public int TongSoNgayLai { get; set; }
+        public DateTime? NgayTatToan { get; set; }
     }
 }

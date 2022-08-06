@@ -70,6 +70,7 @@ namespace BaseSource.BackendApi.Controllers
                 TongTienChuoc = hd.TongTienVayHienTai + noCu + tienLai,
                 TongSoNgayLai = (int)tongSoNgayLai,
                 TongTienVay = hd.TongTienVayHienTai,
+                NgayTatToan = hd.NgayTatToan
             };
 
             return Ok(new ApiSuccessResult<HopDong_ChuocDoVm>(result));

@@ -598,6 +598,30 @@ namespace BaseSource.BackendApi.Controllers
             };
             return Ok(new ApiSuccessResult<InDongLaiResponseVm>(response));
         }
+
+        [HttpGet("InChuocDo")]
+        public async Task<IActionResult> InChuocDo(int hopDongId)
+        {
+            var hd = await _db.HopDongs.FindAsync(hopDongId);
+            if (hd == null)
+            {
+                return Ok(new ApiErrorResult<string>("Not Found"));
+            }
+            var kh = await _db.KhachHangs.FindAsync(hd.KhachHangId);
+            var user = await _db.UserProfiles.FindAsync(UserId);
+            var response = new InChuocDoResponseVm()
+            {
+                MaHD = hd.HD_Ma,
+                NgayChuoc = hd.NgayTatToan,
+                NgayVay = hd.HD_NgayVay,
+                TenKhachHang = kh.Ten,
+                TenNhanVien = user.FullName,
+                TenTaiSan = hd.TenTaiSan,
+                TienChuoc = hd.TongTienChuoc,
+                TienVay = hd.TongTienVayHienTai
+            };
+            return Ok(new ApiSuccessResult<InChuocDoResponseVm>(response));
+        }
         #endregion
 
         #region helper
