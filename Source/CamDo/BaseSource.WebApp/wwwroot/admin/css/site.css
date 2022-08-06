@@ -38,15 +38,16 @@ a.btn-icon i {
     padding: 10px;
 }
 
-    .menu-item a {
-        display: flex;
-        align-items: center;
-        color: #676c7b;
-    }
+.menu-item a {
+    display: flex;
+    align-items: center;
+    color: #676c7b;
+    text-decoration: none;
+}
 
-        .menu-item a svg {
-            margin-right: 5px;
-        }
+.menu-item a svg {
+    margin-right: 5px;
+}
 
 .list-shop {
     position: absolute;

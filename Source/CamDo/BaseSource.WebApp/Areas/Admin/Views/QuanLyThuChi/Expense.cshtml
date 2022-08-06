@@ -1,5 +1,7 @@
-﻿@{
+﻿@model BaseSource.ViewModels.Admin.ThuChi.CreateChiHoatDongVm
+@{
     ViewData["Title"] = "Chi tiêu";
+    var dataExpenses = ViewBag.Incomes as PagedResult<CuaHang_TransactionLogAdminVm>;
 }
 
 
@@ -8,7 +10,7 @@
     <div class="col-12 ">
         <div class="card shadow h-100 mb-4 ">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h3 class="m-0 font-weight-bold">Shop ABCD</h3>
+                <h3 class="m-0 font-weight-bold">@User.Claims.FirstOrDefault(x => x.Type == "TenCuaHang")?.Value</h3>
             </div>
             <div class="card-body">
                 <div class="row mt-5">
@@ -16,37 +18,43 @@
                         <h5><i data-feather="dollar-sign"></i> Nhập phiếu chi tiền</h5>
 
                         <hr />
-                        <form class="">
+                        <form asp-action="CreateExpense" id="frmExpense">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                             <div class="form-group row">
                                 <label for="inputEmail3" class="col-sm-5 col-form-label ">Người nhận <span class="text-danger">*</span></label>
                                 <div class="col-sm-7">
                                     <div class="input-group ">
-                                        <input type="text" class="form-control " placeholder="Nhập tên người nhận tiền">
+                                        <input asp-for="Customer" type="text" class="form-control " placeholder="Nhập tên người nhận tiền">
 
                                     </div>
+                                    <span asp-validation-for="Customer" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="inputEmail3" class="col-sm-5 col-form-label">Số tiền <span class="text-danger">*</span></label>
                                 <div class="col-sm-7">
                                     <div class="input-group ">
-                                        <input type="text" class="form-control " placeholder="0">
+                                        <input asp-for="Amount" type="number" value="0" class="form-control " placeholder="0">
                                         <div class="input-group-prepend">
                                             <div class="input-group-text">VNĐ</div>
                                         </div>
                                     </div>
+                                    <span asp-validation-for="Amount" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="inputEmail3" class="col-sm-5 col-form-label">Loại phiếu <span class="text-danger">*</span></label>
                                 <div class="col-sm-7">
                                     <div class="input-group ">
-                                        <select class=" form-control" name="type">
-                                            <option value="AL">Tất cả loại phiếu</option>
-                                            <option value="AL">Tất cả loại phiếu</option>
-                                            <option value="AL">Tất cả loại phiếu</option>
-                                            <option value="AL">Tất cả loại phiếu</option>
-                                            <option value="AL">Tất cả loại phiếu</option>
+                                        <select class=" selectpicker form-control" data-live-search="true" name="type">
+                                            @foreach (EPhieuChi_ActionType item in Enum.GetValues<EPhieuChi_ActionType>())
+                                            {
+                                                @if (item != EPhieuChi_ActionType.HuyPhieuChi)
+                                                {
+                                                    <option value="@((int)item)" data-tokens="@item.GetEnumDisplayName()">@item.GetEnumDisplayName()</option>
+                                                }
+
+                                            }
                                         </select>
 
                                     </div>
@@ -56,14 +64,15 @@
                                 <label for="inputEmail3" class="col-sm-5 col-form-label">Lý do chi tiền <span class="text-danger">*</span></label>
                                 <div class="col-sm-7">
                                     <div class="input-group ">
-                                        <textarea type="text" class="form-control" placeholder="Nhập lý do chi tiền" rows="5"></textarea>
+                                        <textarea asp-for="Note" type="text" class="form-control" placeholder="Nhập lý do chi tiền" rows="5"></textarea>
                                     </div>
+                                    <span asp-validation-for="Note" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="inputEmail3" class="col-sm-5 col-form-label"></label>
                                 <div class="col-sm-7">
-                                    <button type="submit" class="btn btn-danger btn-sm my-1"><i data-feather="file-text"></i> Lưu lại</button>
+                                    <button type="submit" class="btn btn-danger btn-sm my-1"><i data-feather="file-text"></i> Chi tiền</button>
                                 </div>
                             </div>
                         </form>
@@ -72,84 +81,34 @@
                         <h5><i data-feather="file-text"></i> Lịch sử lập phiếu chi</h5>
                         <hr />
                         <div class="">
-                            <form class="form-inline">
+                            <form class="form-inline" action="/admin/QuanlyThuChi/PageFilterExpense" id="form-Search" method="get">
                                 <div class="form-group mb-2">
-                                    <input type="text" class="form-control" id="search" value="Tìm kiếm">
+                                    <input type="text" class="form-control"  name="customer" placeholder="Tìm kiếm">
                                 </div>
                                 <div class="form-group mx-sm-3 mb-2">
-                                    <input type="date" class="form-control" id="from">
+                                    <input type="date" class="form-control" name="from" >
                                 </div>
                                 <div class="form-group mx-sm-3 mb-2">
-                                    <input type="date" class="form-control" id="to">
+                                    <input type="date" class="form-control" name="to">
                                 </div>
                                 <div class="form-group mx-sm-3 mb-2">
-                                    <select class=" form-control" name="type">
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
+                                    <select class=" selectpicker form-control" data-live-search="true" name="type">
+                                        <option value="" data-tokens="Tất cả loại phiếu">Tất cả loại phiếu</option>
+                                        @foreach (EPhieuChi_ActionType item in Enum.GetValues<EPhieuChi_ActionType>())
+                                        {
+                                            @if (item != EPhieuChi_ActionType.HuyPhieuChi)
+                                            {
+                                                <option value="@((int)item)" data-tokens="@item.GetEnumDisplayName()">@item.GetEnumDisplayName()</option>
+                                            }
+
+                                        }
                                     </select>
                                 </div>
                                 <button type="submit" class="btn btn-primary mb-2">Tìm kiếm</button>
                             </form>
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">
-                                            #
-                                        </th>
-                                        <th scope="col">
-                                            Ngày thu
-                                        </th>
-                                        <th scope="col">
-                                            Khách hàng
-                                        </th>
-                                        <th scope="col">
-                                            Loại phiếu
-                                        </th>
-                                        <th scope="col">
-                                            Lý do
-                                        </th>
-                                        <th scope="col">
-                                            Số tiền
-                                        </th>
-                                        <th scope="col">
-                                            Nhân viên
-                                        </th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>28/07/2022</td>
-                                        <td>test123</td>
-                                        <td>Trả lương</td>
-                                        <td>Lý do</td>
-                                        <td class="text-danger">+123</td>
-                                        <td class="text-danger">abc</td>
-                                        <td>
-                                            <button class="btn"><i data-feather="printer"></i></button>
-                                            <button class="btn"><i data-feather="trash-2"></i></button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td>Tổng tiền</td>
-                                        <td class="text-danger">-14000</td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                            @await Html.PartialAsync("_PageExpense", dataExpenses)
                         </div>
                     </div>
                 </div>
@@ -157,11 +116,40 @@
         </div>
     </div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form action="DeleteExpense" method="post" id="frmDelete">
+                <input name="id"  hidden value=""/>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Xóa Phiếu chi</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Bạn có chắc chắn muốn hủy phiếu chi với số tiền
+                        <strong class="text-amount">1,000</strong>  cho nhân viên <strong class="text-username">usertest1234</strong> ?
+                    </p>
+                    <p> Bạn sẽ không thể khôi phục phiếu chi này nữa!</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-danger">Đồng ý</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                </div>
+            </form>
 
+        </div>
+    </div>
+</div>
 @section Scripts{
 
+    <script src="~/admin/libs/bootstrap-select/js/popper.min.js"></script>
+    <script src="~/admin/libs/bootstrap-select/js/bootstrap.min.js"></script>
+    <script src="~/admin/libs/bootstrap-select/js/bootstrap-select.min.js"></script>
     <script>
         $(".expense-nav").addClass("active");
-        $('.select-type').select2();
     </script>
 }

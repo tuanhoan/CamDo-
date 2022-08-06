@@ -3,6 +3,7 @@ using BaseSource.Shared.Enums;
 using BaseSource.ViewModels.CuaHang_TransactionLog;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace BaseSource.BackendApi.Services.Serivce.CuaHang_TransactionLog
@@ -14,6 +15,42 @@ namespace BaseSource.BackendApi.Services.Serivce.CuaHang_TransactionLog
         {
             _serviceScopeFactory = serviceScopeFactory;
         }
+
+        public async Task<KeyValuePair<bool, string>> CreateCuaHang_TransactionLogThuChiVm(string userId, CreateCuaHang_TransactionLogThuChiVm model)
+        {
+            try
+            {
+                using var _db = _serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<BaseSourceDbContext>();
+
+                var transaction = new Data.Entities.CuaHang_TransactionLog();
+                transaction.ActionType = model.ActionType;
+                transaction.CuaHangId = model.ShopId;
+                transaction.CreatedDate = DateTime.Now;
+                transaction.Note = model.Note;
+                transaction.UserId = userId;
+                transaction.FeatureType = model.FeatureType;
+                transaction.TenKhachHang = model.Customer;
+                switch (model.FeatureType)
+                {
+                    case EFeatureType.Thu:
+                        transaction.MoneyAdd = model.Amount;
+                        break;
+                    case EFeatureType.Chi:
+                        transaction.MoneySub = model.Amount;
+                        break;
+                    default:
+                        return new KeyValuePair<bool, string>(false, "Tạo phiếu không thành công!");
+                }
+                _db.CuaHang_TransactionLogs.Add(transaction);
+                await _db.SaveChangesAsync();
+                return new KeyValuePair<bool, string>(true, string.Empty);
+            }
+            catch (Exception ex)
+            {
+                return new KeyValuePair<bool, string>(false, $"Tạo phiếu không thành công: [{ex.Message}]");
+            }
+        }
+
         public async Task CreateTransactionLog(CreateCuaHang_TransactionLogVm model)
         {
             using var _db = _serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<BaseSourceDbContext>();

@@ -1,0 +1,226 @@
+﻿@model BaseSource.ViewModels.Admin.ThuChi.ExportIncomeTemplateVm
+@{
+    var date = DateTime.Now.Day;
+    var month = DateTime.Now.Month;
+    var year = DateTime.Now.Year;
+}
+<!DOCTYPE html>
+<head>
+    <title>Phiếu chi tiền</title>
+</head>
+<body>
+    <style>
+        body {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .tbl_header {
+            width: 100%;
+        }
+
+        .top_contract > td {
+            text-align: center;
+        }
+
+        .diachi > td {
+            text-align: left;
+        }
+
+        .name_product {
+            margin: 0;
+        }
+
+        .p_conghoa {
+            margin: 0;
+            text-transform: uppercase;
+            margin-top: 3px;
+            font-size: 26px
+        }
+
+        .p_doclap {
+            font-size: 16px;
+            text-transform: capitalize;
+            margin: 0;
+            font-size: 26px
+        }
+
+        .p_line {
+            margin: -3px 0 0;
+            font-size: 16px;
+        }
+
+        .p_normal {
+            margin: 0 0 8px;
+        }
+
+        .date {
+            margin: 0 0 5px;
+        }
+
+        .title_hd {
+            font-size: 32px;
+            text-transform: uppercase;
+            font-weight: bold;
+            text-align: center;
+            margin: 15px 0px 0px 0px;
+            position: relative;
+        }
+
+        .after_title_hd {
+            text-align: center;
+            margin: 0px 0px 30px 0px;
+            position: relative;
+        }
+
+        .p_shopname {
+            font-size: 23px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .tab_line {
+            display: inline-table;
+            margin: 0 0 0 30px;
+            padding: 0;
+        }
+
+            .tab_line > label {
+                display: table-cell;
+                margin: 0;
+                padding: 0 15px 0 0;
+            }
+
+        .tab_line2 {
+            margin-left: 70px;
+        }
+
+        .tbl_thu {
+            width: 100%;
+            margin-top: 5px;
+        }
+
+        .tbl_ky {
+            width: 100%;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .daidienky {
+            margin: 0 0 5px;
+            text-transform: uppercase;
+        }
+
+        .text-left {
+            float: left;
+        }
+
+        .text-right {
+            float: right;
+        }
+
+        .text-small {
+            font-size: 13px;
+        }
+        .text-small-1 {
+            font-size: 14px;
+        }
+
+        .text-middle {
+            text-transform: capitalize;
+            margin: 0;
+            font-size: 20px
+        }
+
+        .text-bold {
+            font-weight: bold;
+        }
+
+        .mb-0 {
+            margin-bottom: 0px !important;
+        }
+
+        .mb-1 {
+            margin-bottom: 1px !important;
+            margin-top: 0px !important;
+        }
+        .mb-2{
+            margin-bottom: 1px !important;
+            margin-top: 1px !important;
+        }
+    </style>
+    <div style="width:700px;">
+        <table class="tbl_header" cellpadding="0" cellpadding="0">
+
+            <tr class="top_contract" valign="top">
+                <td>
+                    <p class=""><span class="text-bold">Đơn vị: </span><b>@Model.ShopName</b></p>
+                    <p class=""><span class="text-bold">Địa chỉ: </span><b>@Model.Address</b></p>
+                </td>
+                <td>
+                    <p class="p_conghoa"><b>PHIẾU THU</b></p>
+                    <p class="text-middle"><b>Số: @Model.Number</b></p>
+                    <p class="text-middle"><i>Liên 1</i></p>
+                    <p class="text-middle"><i>Ngày @date Tháng @month Năm @year</i></p>
+                </td>
+                <td>
+                    <p class="text-bold text-small mb-1"><b>Mẫu số 01-TT</b></p>
+                    <p class="text-small mb-1"><i>(Ban hành theo QĐ số: 15/2006/QĐ</i></p>
+                    <p class="text-small mb-1"><i>BTC</i></p>
+                    <p class="text-small mb-1"><i>Ngày 20/03/2006 của bộ trưởng BTC)</i></p>
+                    <p class="text-bold mb-1">Nợ:</p>
+                    <p class="text-bold mb-1">Có:</p>
+                </td>
+            </tr>
+        </table>
+        <br />
+        <br />
+        <p class="p_normal">Họ tên người nộp tiền: <b>@Model.Customer</b></p>
+        <p class="p_normal">Địa chỉ: <b>@Model.Address</b></p>
+        <p class="p_normal">Lý do nộp: <b>@Model.Note</b></p>
+        <p class="p_normal">Số tiền : <b>@(Model.Amount.ToString("N0")) vnđ</b> <span class="text-right">(Số tiền bằng chữ: @(Model.AmountString) đồng)</span></p>
+        <p class="p_normal">Kèm theo: <span class="text-right">chứng từ gốc</span></p>
+
+        <table class="tbl_ky">
+            <tr>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                    <p class=""><b>Ngày @date Tháng @month Năm @year</b></p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p class="text-bold mb-0"><b>Người nộp tiền</b></p>
+                    <i>(Ký, họ tên)</i>
+                </td>
+                <td>
+                    <p class="text-bold mb-0"><b>Người lập</b></p>
+                    <i>(Ký, họ tên)</i>
+                </td>
+                <td>
+                    <p class="text-bold mb-0"><b>Thủ quỹ</b></p>
+                    <i>(Ký, họ tên)</i>
+                </td>
+                <td>
+                    <p class="text-bold mb-0"><b>Giám đốc chi nhánh</b></p>
+                    <i>(Ký, họ tên)</i>
+                </td>
+            </tr>
+        </table>
+
+        <br />
+        <br />
+        <br />
+        <br />
+        <p class="text-small-1 mb-2">Đã nhận đủ số tiền (viết bằng chữ): @(Model.AmountString) đồng</p>
+        <p class="text-small-1 mb-2">+ Tỷ giá ngoại tệ (vàng, bạc, đá quý):</p>
+        <p class="text-small-1 mb-2">+ Số tiền quy đổi:</p>
+        <p class="text-small-1 mb-2">(Liên gửi ra ngoài phải đóng dấu)</p>
+    </div>
+</body>
+</html>
