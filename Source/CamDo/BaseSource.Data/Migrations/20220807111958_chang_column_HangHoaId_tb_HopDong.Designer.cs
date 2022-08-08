@@ -4,14 +4,16 @@ using BaseSource.Data.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BaseSource.Data.Migrations
 {
     [DbContext(typeof(BaseSourceDbContext))]
-    partial class BaseSourceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220807111958_chang_column_HangHoaId_tb_HopDong")]
+    partial class chang_column_HangHoaId_tb_HopDong
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,7 +57,7 @@ namespace BaseSource.Data.Migrations
                         new
                         {
                             Id = "c1105ce5-9dbc-49a9-a7d5-c963b6daa62a",
-                            ConcurrencyStamp = "f1597967-354f-49c0-9271-f2e9211fec04",
+                            ConcurrencyStamp = "f07a47b6-cff9-42b3-81a7-967ac2c1a804",
                             Description = "Administrator role",
                             Name = "Admin",
                             NormalizedName = "Admin"
@@ -133,13 +135,13 @@ namespace BaseSource.Data.Migrations
                         {
                             Id = "ffded6b0-3769-4976-841b-69459049a62d",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b97d0bb2-91bc-42b5-b41d-252a8751944a",
+                            ConcurrencyStamp = "446a8780-13ad-49ad-9a0d-9945cd153b7a",
                             Email = "doangiau2006@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "doangiau2006@gmail.com",
                             NormalizedUserName = "superadmin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJPGbcP0pUM3cDylvNICADkKE21UoMrK325XIF6lvVCSlVw0y0DlxpwZ2fT5aE+pog==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEM4/bgiF4OWGzJBIOr98mCOQVgCXvv4+mkpcUufg6FGJpJTvICI0KOka5xIinz/Yjg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -545,7 +547,7 @@ namespace BaseSource.Data.Migrations
                     b.Property<string>("HD_GhiChu")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<byte?>("HD_HinhThucLai")
+                    b.Property<byte>("HD_HinhThucLai")
                         .HasColumnType("tinyint");
 
                     b.Property<bool>("HD_IsThuLaiTruoc")
@@ -963,7 +965,7 @@ namespace BaseSource.Data.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<byte?>("HinhThucLai")
+                    b.Property<byte>("HinhThucLai")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("MoTaKyLai")
@@ -982,15 +984,6 @@ namespace BaseSource.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MoTaHinhThucLais");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 99,
-                            MoTaKyLai = "Đầu tư",
-                            ThoiGian = (byte)0,
-                            TyLeLai = "Không tính lãi"
-                        });
                 });
 
             modelBuilder.Entity("BaseSource.Data.Entities.NotifySystem", b =>

@@ -12,12 +12,12 @@ namespace BaseSource.Data.Entities
         public int Id { get; set; }
         public int CuaHangId { get; set; }
         public int KhachHangId { get; set; }
-        public int HangHoaId { get; set; }
+        public int? HangHoaId { get; set; }
         public string TenTaiSan { get; set; }
         public ELoaiHopDong HD_Loai { get; set; }
         public string HD_Ma { get; set; }
         public double HD_TongTienVayBanDau { get; set; }
-        public EHinhThucLai HD_HinhThucLai { get; set; }
+        public EHinhThucLai? HD_HinhThucLai { get; set; }
         public bool HD_IsThuLaiTruoc { get; set; }
         public int HD_TongThoiGianVay { get; set; }
         public int HD_KyLai { get; set; }

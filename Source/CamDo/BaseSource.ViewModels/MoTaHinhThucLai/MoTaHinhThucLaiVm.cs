@@ -15,7 +15,7 @@ namespace BaseSource.ViewModels.MoTaHinhThucLai
     public class MoTaHinhThucLaiVm
     {
         public int Id { get; set; }
-        public EHinhThucLai HinhThucLai { get; set; }
+        public EHinhThucLai? HinhThucLai { get; set; }
         public string TyLeLai { get; set; }
         public string MoTaKyLai { get; set; }
         public EThoiGianVay ThoiGian { get; set; }

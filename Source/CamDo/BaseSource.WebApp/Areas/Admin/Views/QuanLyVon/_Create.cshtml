@@ -1,15 +1,11 @@
-﻿@model EditHopDongVm
+﻿@model CreateHopDongGopVonVm
 @{
     Layout = null;
-    var listHangHoa = ViewData["ListHangHoa"] as SelectList;
     var lstUser = ViewData["ListUser"] as SelectList;
-    var lsThuocTinhHH = ViewData["ListThuocTinh"] as List<ThuocTinhHangHoaVm>;
-    var strTTHH = JsonConvert.SerializeObject(lsThuocTinhHH);
 }
 <div>
-    <form asp-action="Edit" asp-controller="HopDong" class="frmHD" data-name="ajaxFormHopDong">
+    <form asp-action="Create" asp-controller="QuanLyVon" class="frmHD" data-name="ajaxFormHopDong">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        @Html.HiddenFor(x => x.Id)
         <div class="info-hd-header">
             <i class="fa fa-user"></i> Thông tin khách hàng
         </div>
@@ -20,17 +16,14 @@
                 <label><input type="radio" name="TypeCustomer" /> Khách hàng cũ</label>
             </div>
         </div>
-        <div class="form-group row">
+        <div class="form-group row row-tenkhachang">
             <label asp-for="TenKhachHang" class="control-label col-md-2"></label>
             <div class="col-md-3">
                 <input asp-for="TenKhachHang" class="form-control" />
+                <span class="clear-info-customer"><i class="fas fa-times"></i></span>
                 <span asp-validation-for="TenKhachHang" class="text-danger"></span>
             </div>
-            <label asp-for="HD_Ma" class="control-label col-md-2"></label>
-            <div class="col-md-3">
-                <input asp-for="HD_Ma" class="form-control" />
-                <span asp-validation-for="HD_Ma" class="text-danger"></span>
-            </div>
+            @Html.HiddenFor(x => x.KhachHangId)
         </div>
         <div class="form-group row">
             <label asp-for="CMND" class="control-label col-md-2"></label>
@@ -43,27 +36,27 @@
             </div>
         </div>
         <div class="form-group row">
+            <label asp-for="CMND_NgayCap" class="control-label col-md-2"></label>
+            <div class="col-md-3">
+                <input asp-for="CMND_NgayCap" class="form-control" />
+            </div>
+            <label asp-for="CMND_NoiCap" class="control-label col-md-2"></label>
+            <div class="col-md-3">
+                <input asp-for="CMND_NoiCap" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group row">
             <label asp-for="DiaChi" class="control-label col-md-2"></label>
             <div class="col-md-3">
                 <textarea asp-for="DiaChi" class="form-control" rows="3"></textarea>
             </div>
         </div>
 
+
         <div class="info-hd-header">
-            <i class="fas fa-money-bill-alt"></i> Thông tin khoản vay
+            <i class="fas fa-money-bill-alt"></i> Thông tin hợp đồng
         </div>
-        <div class="form-group row">
-            <label asp-for="HangHoaId" class="control-label col-md-2"></label>
-            <div class="col-md-3">
-                <select class="form-control" asp-for="HangHoaId" asp-items="@listHangHoa" onchange="getThuocTinhByTaiSan()">
-                </select>
-            </div>
-            <label asp-for="TenTaiSan" class="control-label col-md-2"></label>
-            <div class="col-md-3">
-                <input asp-for="TenTaiSan" class="form-control" />
-                <span asp-validation-for="TenTaiSan" class="text-danger"></span>
-            </div>
-        </div>
+
         <div class="form-group row">
 
             <label asp-for="HD_TongTienVayBanDau" class="control-label col-md-2"></label>
@@ -79,10 +72,12 @@
             </div>
 
         </div>
+
         <div class="form-group row">
             <label asp-for="HD_HinhThucLai" class="control-label col-md-2"></label>
             <div class="col-md-3">
                 <select class="form-control" asp-for="HD_HinhThucLai" asp-items="@Html.GetEnumSelectList<EHinhThucLai>()" onchange="getMoTaHinhThucLai()">
+                    <option value="" selected>Vốn đầu tư(Không lãi)</option>
                 </select>
                 <span asp-validation-for="HD_HinhThucLai" class="text-danger"></span>
             </div>
@@ -90,7 +85,13 @@
                 <label><input asp-for="HD_IsThuLaiTruoc" /> Thu lãi trước</label>
             </div>
         </div>
-        <div class="form-group row">
+        <div class="form-group row " >
+            <label asp-for="HD_NgayVay" class="control-label col-md-2"></label>
+            <div class="col-md-3">
+                <input asp-for="HD_NgayVay" class="form-control" />
+            </div>
+        </div>
+        <div class="form-group row group_hidden" style="display:none">
             <label asp-for="HD_TongThoiGianVay" class="control-label col-md-2"></label>
             <div class="col-md-3">
                 <div class="input-group">
@@ -103,7 +104,7 @@
                 <span asp-validation-for="HD_TongThoiGianVay" class="text-danger"></span>
             </div>
         </div>
-        <div class="form-group row">
+        <div class="form-group row group_hidden" style=" display:none">
             <label asp-for="HD_KyLai" class="control-label col-md-2"></label>
             <div class="col-md-3">
                 <div class="input-group">
@@ -117,7 +118,7 @@
             <div class="col-md-5 moTaKyLai">
             </div>
         </div>
-        <div class="form-group row">
+        <div class="form-group row group_hidden" style="display:none">
             <label asp-for="HD_LaiSuat" class="control-label col-md-2"></label>
             <div class="col-md-3">
                 <div class="input-group">
@@ -129,34 +130,17 @@
                 <span asp-validation-for="HD_LaiSuat" class="text-danger"></span>
             </div>
         </div>
-        <div class="form-group row">
-            <label asp-for="HD_NgayVay" class="control-label col-md-2"></label>
-            <div class="col-md-3">
-                <input asp-for="HD_NgayVay" class="form-control" />
-            </div>
-        </div>
+
         <div class="form-group row">
             <label asp-for="HD_GhiChu" class="control-label col-md-2"></label>
             <div class="col-md-3">
                 <textarea asp-for="HD_GhiChu" rows="3" class="form-control"></textarea>
             </div>
         </div>
-        <div class="form-group row">
-            <label asp-for="UserIdAssigned" class="control-label col-md-2"></label>
-            <div class="col-md-3">
-                <select class="form-control" asp-for="UserIdAssigned" asp-items="@lstUser">
-                    <option value="">---Chọn nhân viên---</option>
-                </select>
-                <span asp-validation-for="UserIdAssigned" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="info-hd-header" style="cursor:pointer" data-bs-toggle="collapse" href="#collapseTaiSan" aria-expanded="true" aria-controls="collapseTaiSan">
-            <i class="fa fa-motorcycle"></i> Thông tin tài sản <b>cấu hình tại đây</b>
-        </div>
-        <div class="collapse" id="collapseTaiSan">
 
-        </div>
+
         <input type="hidden" name="ListThuocTinhHangHoa" id="ListThuocTinhHangHoa" />
+
         <div class="form-group row">
             <label class="control-label col-md-2">&nbsp;</label>
             <div class="col-md-5">
@@ -167,19 +151,3 @@
     </form>
 
 </div>
-@*@section Scripts{
-    <script>
-    $(document).ready(function () {
-
-        var lstTemp = '@Html.Raw(strTTHH)';
-    if (lstTemp != "") {
-          lstThuocTinh = @Html.Raw(strTTHH);
-    }
-    })
-
-    </script>
-
-
-}*@
-
-

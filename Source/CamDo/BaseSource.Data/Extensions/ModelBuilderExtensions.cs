@@ -53,6 +53,15 @@ namespace BaseSource.Data.Extensions
                    FullName = "Nguyễn Giàu",
                    JoinedDate = new DateTime(2022, 1, 1)
                });
+            modelBuilder.Entity<MoTaHinhThucLai>().HasData(
+               new MoTaHinhThucLai
+               {
+                   Id = 99,
+                   HinhThucLai = null,
+                   MoTaKyLai = "Đầu tư",
+                   ThoiGian = 0,
+                   TyLeLai = "Không tính lãi"
+               });
         }
     }
 }

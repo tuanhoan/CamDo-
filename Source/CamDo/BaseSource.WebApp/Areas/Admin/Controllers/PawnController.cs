@@ -34,6 +34,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
                 Info = info,
                 LoaiHangHoa = loaihanghoa,
                 Status = status
+                
             };
             var requestHH = new GetCauHinhHangHoaPagingRequest()
             {

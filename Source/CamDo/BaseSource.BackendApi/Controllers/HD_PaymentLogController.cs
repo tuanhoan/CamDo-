@@ -237,8 +237,8 @@ namespace BaseSource.BackendApi.Controllers
             {
                 itemPayment = lstPayment.Where(x => x.PaidDate != null).OrderByDescending(x => x.PaidDate).FirstOrDefault();
 
-                paymentByDate.FromDate = itemPayment.ToDate;
-                paymentByDate.ToDate = itemPayment.ToDate;
+                paymentByDate.FromDate = itemPayment != null ? itemPayment.FromDate : DateTime.Now;
+                paymentByDate.ToDate = itemPayment != null ? itemPayment.ToDate : DateTime.Now;
             }
 
 

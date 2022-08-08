@@ -70,6 +70,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
 
             return PartialView("_Create", model);
         }
+
         [HttpPost]
         public async Task<IActionResult> Create(CreateHopDongVm model)
         {
@@ -506,7 +507,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         }
         #endregion
 
-       
-        
+
+
     }
 }

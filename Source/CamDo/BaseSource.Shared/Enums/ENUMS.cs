@@ -52,7 +52,8 @@ namespace BaseSource.Shared.Enums
         [Display(Name = "Lãi tuần (%)")]
         LaiTuanPhanTram = 5,
         [Display(Name = "Lãi tuần (VNĐ)")]
-        LaiTuanVND = 6
+        LaiTuanVND = 6,
+
     }
 
     public enum ECamDo_HopDongPrintTemplate : byte

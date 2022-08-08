@@ -14,8 +14,10 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
     {
         Task<ApiResult<PagedResult<HopDongVm>>> GetPagings(GetHopDongPagingRequest model);
         Task<ApiResult<string>> Create(CreateHopDongVm model);
+        Task<ApiResult<string>> CreateHopDongGopVon(CreateHopDongGopVonVm model);
         Task<ApiResult<HopDongVm>> GetById(int id);
         Task<ApiResult<string>> Edit(EditHopDongVm model);
+        Task<ApiResult<string>> EditHopDongGopVon(EditHopDongGopVonVm model);
         Task<ApiResult<string>> NoLai(HopDongNoLaiVm model);
         Task<ApiResult<string>> TraNo(HopDongTraNoVm model);
         Task<ApiResult<string>> UpdateChungTu(HopDong_AddChungTuVm model);
