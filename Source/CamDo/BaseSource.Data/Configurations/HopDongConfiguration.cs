@@ -50,6 +50,8 @@ namespace BaseSource.Data.Configurations
             builder.Property(x => x.DeletedDate);
             builder.Property(x => x.UserIdCreated).IsRequired().HasMaxLength(128);
             builder.Property(x => x.UserIdAssigned).IsRequired().HasMaxLength(128);
+            builder.Property(x => x.SoNgayLaiToiHienTai).IsRequired().HasDefaultValue(0);
+            builder.Property(x => x.TienLaiToiNgayHienTai).IsRequired().HasDefaultValue(0);
 
             builder.HasOne(x => x.CuaHang).WithMany(x => x.HopDongs).HasForeignKey(x => x.CuaHangId).OnDelete(DeleteBehavior.Cascade);
 

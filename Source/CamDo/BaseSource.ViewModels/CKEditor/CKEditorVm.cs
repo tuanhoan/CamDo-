@@ -13,3 +13,4 @@ namespace BaseSource.ViewModels.CKEditor
         public string Url { get; set; }
     }
 }
+ 

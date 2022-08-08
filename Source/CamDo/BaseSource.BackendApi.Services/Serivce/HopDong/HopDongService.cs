@@ -282,5 +282,31 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
             }
             return Task.FromResult(laiSuatResult);
         }
+
+        public async Task TinhLaiToiNgayHienTai()
+        {
+            using var _db = _serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<BaseSourceDbContext>();
+            var lstHopDong = _db.HopDongs.AsQueryable();
+            lstHopDong = lstHopDong.Where(x => x.HD_Status != (byte)EHopDong_CamDoStatusFilter.DaThanhLy && x.HD_Status != (byte)EHopDong_CamDoStatusFilter.DaXoa && x.HD_Status != (byte)EHopDong_CamDoStatusFilter.KetThuc);
+            lstHopDong = lstHopDong.Where(x => x.HD_Status != (byte)EHopDong_VayLaiStatusFilter.DaXoa && x.HD_Status != (byte)EHopDong_CamDoStatusFilter.KetThuc);
+            lstHopDong = lstHopDong.Where(x => x.HD_Status != (byte)EHopDong_GopVonStatusFilter.KetThuc);
+
+            var data = await lstHopDong.ToListAsync();
+            foreach (var item in data)
+            {
+                var payment = await _db.HopDong_PaymentLogs.Where(x => x.PaidDate == null).OrderBy(x => x.CreatedDate).FirstOrDefaultAsync();
+                if (payment != null)
+                {
+                    var laiNgay = payment.MoneyInterest / payment.CountDay;
+                    var totalDay = (DateTime.Now - payment.FromDate).Days + 1;
+                    var tongLai = laiNgay * totalDay;
+                    item.TienLaiToiNgayHienTai = tongLai;
+                    item.SoNgayLaiToiHienTai = totalDay;
+                    await _db.SaveChangesAsync();
+                }
+            }
+
+        }
     }
 }
+

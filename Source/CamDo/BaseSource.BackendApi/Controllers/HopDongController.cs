@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -97,7 +99,7 @@ namespace BaseSource.BackendApi.Controllers
                                   TenKhachHang = kh.Ten,
                                   SDT = kh.SDT,
                                   TenTaiSan = hd.TenTaiSan,
-                                  TienNo = 0,
+                                  TongTienGhiNo = hd.TongTienGhiNo,
                                   TongTienDaThanhToan = hd.TongTienDaThanhToan,
                                   TyLeLai = hd.HD_LaiSuat + htl.TyLeLai,
                                   ThoiGian = htl.ThoiGian,
@@ -106,6 +108,7 @@ namespace BaseSource.BackendApi.Controllers
                                   TongTienVayHienTai = hd.TongTienVayHienTai,
                                   HD_Loai = hd.HD_Loai,
                                   HD_Status = hd.HD_Status,
+
                               }).OrderByDescending(x => x.Id).ToPagedListAsync(request.Page, request.PageSize);
 
             foreach (var item in data)
@@ -149,6 +152,7 @@ namespace BaseSource.BackendApi.Controllers
             hd.UserIdCreated = UserId;
             hd.UserIdAssigned = UserId;
             hd.TongTienVayHienTai = hd.HD_TongTienVayBanDau;
+            hd.ListThuocTinhHangHoa = JsonConvert.SerializeObject(hd.ListThuocTinhHangHoa, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
             //gán tạm
             hd.HD_Loai = ELoaiHopDong.Camdo;
             switch (hd.HD_Loai)
@@ -228,6 +232,16 @@ namespace BaseSource.BackendApi.Controllers
             _mapper.Map(model, hd);
             hd.HD_NgayDaoHan = await _hopDongService.TinhNgayDaoHan(hd.HD_HinhThucLai, hd.HD_NgayVay, hd.HD_TongThoiGianVay, hd.HD_KyLai);
             hd.TongTienLai = await _hopDongService.TinhLaiHD(hd.HD_HinhThucLai, hd.HD_TongThoiGianVay, hd.HD_LaiSuat, hd.TongTienVayHienTai);
+            var settings = new JsonSerializerSettings
+            {
+                ContractResolver = new DefaultContractResolver()
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy()
+                },
+                Formatting = Newtonsoft.Json.Formatting.Indented
+            };
+        
+            hd.ListThuocTinhHangHoa = JsonConvert.SerializeObject(hd.ListThuocTinhHangHoa, settings);
             await _db.SaveChangesAsync();
 
             if (isChangeKyLai)
@@ -710,5 +724,11 @@ namespace BaseSource.BackendApi.Controllers
             await _cuaHang_TransactionLogService.CreateTransactionLog(model);
         }
         #endregion
+
+        [HttpPost("TinhLaiNgay")]
+        public async Task TinhLaiNgay()
+        {
+            await _hopDongService.TinhLaiToiNgayHienTai();
+        }
     }
 }

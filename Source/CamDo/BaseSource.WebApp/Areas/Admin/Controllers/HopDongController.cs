@@ -61,7 +61,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             await Task.WhenAll(requestUser, resultCuaHinhHH);
 
             ViewData["ListHangHoa"] = new SelectList(resultCuaHinhHH.Result.ResultObj.Items, "Id", "Ten");
-            ViewData["ListUser"] = new SelectList(requestUser.Result.ResultObj, "UserName", "FullName");
+            ViewData["ListUser"] = new SelectList(requestUser.Result.ResultObj, "Id", "FullName");
 
             var model = new CreateHopDongVm()
             {
@@ -126,7 +126,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             await Task.WhenAll(requestUser, resultCuaHinhHH);
 
             ViewData["ListHangHoa"] = new SelectList(resultCuaHinhHH.Result.ResultObj.Items, "Id", "Ten");
-            ViewData["ListUser"] = new SelectList(requestUser.Result.ResultObj, "UserName", "FullName");
+            ViewData["ListUser"] = new SelectList(requestUser.Result.ResultObj, "Id", "FullName");
 
 
             return PartialView("_Edit", model);
@@ -158,13 +158,14 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             var model = new List<ThuocTinhHangHoaVm>();
             if (!string.IsNullOrEmpty(result.ResultObj.ListThuocTinh))
             {
-                var lstThuocTinh = JsonConvert.DeserializeObject<List<ThuocTinhHangHoaVm>>(result.ResultObj.ListThuocTinh);
+                var lstThuocTinhTemp = JsonConvert.DeserializeObject<dynamic>(result.ResultObj.ListThuocTinh);
+                var lstThuocTinh = JsonConvert.DeserializeObject<List<ThuocTinhHangHoaVm>>(lstThuocTinhTemp);
                 foreach (var item in lstThuocTinh)
                 {
                     model.Add(new ThuocTinhHangHoaVm()
                     {
-                        name = item.name,
-                        value = item.value,
+                        Name = item.Name,
+                        Value = "",
                     });
                 }
             }
@@ -506,7 +507,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         }
         #endregion
 
-       
-        
+
+
     }
 }

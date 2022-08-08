@@ -68,6 +68,11 @@ namespace BaseSource.ViewModels.Admin
     public class EditCauHinhHangHoaAdminVm : CreateCauHinhHangHoaAdminVm
     {
         public int Id { get; set; }
+        public List<ThuocTinhHangHoaVm_Admin> ThuocTinhs { get; set; }
     }
-
+    public class ThuocTinhHangHoaVm_Admin
+    {
+        public string Name { get; set; }
+        public string Value { get; set; }
+    }
 }

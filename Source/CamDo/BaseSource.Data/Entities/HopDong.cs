@@ -45,6 +45,7 @@ namespace BaseSource.Data.Entities
         public string UserIdAssigned { get; set; }
         public byte HD_Status { get; set; }
         public double TienLaiToiNgayHienTai { get; set; }
+        public int SoNgayLaiToiHienTai { get; set; }
         public double TongTienChuoc { get; set; }
 
         public virtual CuaHang CuaHang { get; set; }

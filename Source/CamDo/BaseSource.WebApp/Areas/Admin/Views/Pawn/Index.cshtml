@@ -155,7 +155,7 @@
                                             <p>(@item.TongSoNgayVay ngày)</p>
                                         </td>
                                         <td>@item.TongTienLaiDaThanhToan.ToString("N0")</td>
-                                        <td>0</td>
+                                        <td>@((item.TongTienGhiNo-item.TongTienDaThanhToan).ToString("N0"))</td>
                                         <td>0</td>
                                         <td>@item.HD_NgayVay.ToString("dd/MM/yyyy")</td>
                                         <td><span class="m-badge m-badge--info m-badge--wide">@item.StatusName</span></td>

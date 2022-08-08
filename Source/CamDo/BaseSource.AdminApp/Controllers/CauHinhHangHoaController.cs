@@ -2,6 +2,7 @@
 using BaseSource.ViewModels.Admin;
 using BaseSource.ViewModels.Common;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,6 +70,7 @@ namespace BaseSource.AdminApp.Controllers
                 TongThoiGianVay = result.ResultObj.TongThoiGianVay,
                 SoNgayQuaHan = result.ResultObj.SoNgayQuaHan,
                 ListThuocTinh = result.ResultObj.ListThuocTinh,
+                
             };
             return View(model);
         }

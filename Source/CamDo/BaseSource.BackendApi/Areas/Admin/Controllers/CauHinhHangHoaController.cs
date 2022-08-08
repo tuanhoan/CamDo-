@@ -5,6 +5,7 @@ using BaseSource.ViewModels.Admin;
 using BaseSource.ViewModels.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -116,7 +117,7 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
                 TongThoiGianVay = model.TongThoiGianVay,
                 SoNgayQuaHan = model.SoNgayQuaHan,
                 IsThuLaiTruoc = model.IsThuLaiTruoc,
-                ListThuocTinh = model.ListThuocTinh
+                ListThuocTinh = JsonConvert.SerializeObject(model.ListThuocTinh)
             };
 
             _db.CauHinhHangHoas.Add(hanghoa);
@@ -147,10 +148,10 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
             hanghoa.TongThoiGianVay = model.TongThoiGianVay;
             hanghoa.SoNgayQuaHan = model.SoNgayQuaHan;
             hanghoa.IsThuLaiTruoc = model.IsThuLaiTruoc;
-            hanghoa.ListThuocTinh = model.ListThuocTinh;
+            hanghoa.ListThuocTinh = JsonConvert.SerializeObject(model.ListThuocTinh);
 
             await _db.SaveChangesAsync();
-            return Ok(new ApiSuccessResult<string>(hanghoa.Id.ToString()));
+            return Ok(new ApiSuccessResult<string>(hanghoa.Id.ToString()));;
         }
         [HttpPost("Delete")]
         public async Task<IActionResult> Delete([FromForm] int id)
