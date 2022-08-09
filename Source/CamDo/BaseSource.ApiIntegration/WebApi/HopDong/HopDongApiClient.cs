@@ -52,6 +52,12 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
             return await client.PostAsync<ApiResult<string>>("/api/HopDong/Create", model);
         }
 
+        public async Task<ApiResult<string>> CreateHopDongGopVon(CreateHopDongGopVonVm model)
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.PostAsync<ApiResult<string>>("/api/HopDongGopVon/Create", model);
+        }
+
         public async Task<ApiResult<string>> DeleteChungTu(DeleteChungTu_Vm model)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
@@ -73,6 +79,12 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.PostAsync<ApiResult<string>>("/api/HopDong/Edit", model);
+        }
+
+        public async Task<ApiResult<string>> EditHopDongGopVon(EditHopDongGopVonVm model)
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.PostAsync<ApiResult<string>>("/api/HopDongGopVon/Edit", model);
         }
 
         public async Task<ApiResult<HopDongVm>> GetById(int id)

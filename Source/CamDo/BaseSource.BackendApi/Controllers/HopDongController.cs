@@ -61,6 +61,7 @@ namespace BaseSource.BackendApi.Controllers
             if (!string.IsNullOrEmpty(request.Info))
             {
                 model = model.Where(x => x.HD_Ma.Contains(request.Info.Trim()));
+               
             }
 
             if (request.FormDate != null)
@@ -80,51 +81,109 @@ namespace BaseSource.BackendApi.Controllers
                 model = model.Where(x => x.HD_Status == (byte)request.Status);
             }
 
-            var data = await (from hd in model
-                              join kh in _db.KhachHangs on hd.KhachHangId equals kh.Id
-                              join hh in _db.CauHinhHangHoas on hd.HangHoaId equals hh.Id
-                              join htl in _db.MoTaHinhThucLais on hd.HD_HinhThucLai equals htl.HinhThucLai
-                              select new HopDongVm()
-                              {
-                                  Id = hd.Id,
-                                  HD_Ma = hd.HD_Ma,
-                                  HD_LaiSuat = hd.HD_LaiSuat,
-                                  HD_NgayVay = hd.HD_NgayVay,
-                                  HD_TongThoiGianVay = hd.HD_TongThoiGianVay,
-                                  HD_TongTienVayBanDau = hd.HD_TongTienVayBanDau,
-                                  HD_HinhThucLai = hd.HD_HinhThucLai,
-                                  HD_KyLai = hd.HD_KyLai,
-                                  TongTienLaiDaThanhToan = hd.TongTienLaiDaThanhToan,
-                                  MaTaiSan = hh.MaTS,
-                                  TenKhachHang = kh.Ten,
-                                  SDT = kh.SDT,
-                                  TenTaiSan = hd.TenTaiSan,
-                                  TongTienGhiNo = hd.TongTienGhiNo,
-                                  TongTienDaThanhToan = hd.TongTienDaThanhToan,
-                                  TyLeLai = hd.HD_LaiSuat + htl.TyLeLai,
-                                  ThoiGian = htl.ThoiGian,
-                                  NgayDongLaiTiepTheo = hd.NgayDongLaiTiepTheo,
-                                  HD_NgayDaoHan = hd.HD_NgayDaoHan,
-                                  TongTienVayHienTai = hd.TongTienVayHienTai,
-                                  HD_Loai = hd.HD_Loai,
-                                  HD_Status = hd.HD_Status,
-
-                              }).OrderByDescending(x => x.Id).ToPagedListAsync(request.Page, request.PageSize);
-
-            foreach (var item in data)
+            if (request.LoaiHopDong == ELoaiHopDong.GopVon)
             {
-                item.TongSoNgayVay = await _hopDongService.TinhTongSoNgayVay(item.HD_HinhThucLai, item.HD_KyLai, item.HD_TongThoiGianVay);
-                item.StatusName = GetTrangThaiHopDong(item.HD_Loai, item.HD_Status);
+                var totalVonDauTu = await model.SumAsync(x => x.HD_TongTienVayBanDau);
+                var totalLai = await model.SumAsync(x => x.TongTienLaiDaThanhToan);
+
+                var dataGopVon = await (from hd in model
+                                        join htl in _db.MoTaHinhThucLais on hd.HD_HinhThucLai equals htl.HinhThucLai into htls
+                                        from xhtl in htls.DefaultIfEmpty()
+                                        join kh in _db.KhachHangs on hd.KhachHangId equals kh.Id
+                                        select new HopDongVm()
+                                        {
+                                            Id = hd.Id,
+                                            HD_Ma = hd.HD_Ma,
+                                            HD_LaiSuat = hd.HD_LaiSuat,
+                                            HD_NgayVay = hd.HD_NgayVay,
+                                            HD_TongThoiGianVay = hd.HD_TongThoiGianVay,
+                                            HD_TongTienVayBanDau = hd.HD_TongTienVayBanDau,
+                                            HD_HinhThucLai = hd.HD_HinhThucLai,
+                                            HD_KyLai = hd.HD_KyLai,
+                                            TongTienLaiDaThanhToan = hd.TongTienLaiDaThanhToan,
+                                            TenKhachHang = kh.Ten,
+                                            SDT = kh.SDT,
+                                            TenTaiSan = hd.TenTaiSan,
+                                            TienNo = 0,
+                                            TongTienDaThanhToan = hd.TongTienDaThanhToan,
+                                            TyLeLai = xhtl != null ? hd.HD_LaiSuat + xhtl.TyLeLai : "Không tính lãi",
+                                            ThoiGian = xhtl != null ? xhtl.ThoiGian : EThoiGianVay.Ngay,
+                                            NgayDongLaiTiepTheo = hd.NgayDongLaiTiepTheo,
+                                            HD_NgayDaoHan = hd.HD_NgayDaoHan,
+                                            TongTienVayHienTai = hd.TongTienVayHienTai,
+                                            HD_Loai = hd.HD_Loai,
+                                            HD_Status = hd.HD_Status,
+                                        }).OrderByDescending(x => x.Id).ToPagedListAsync(request.Page, request.PageSize);
+
+
+                foreach (var item in dataGopVon)
+                {
+                    item.TongSoNgayVay = await _hopDongService.TinhTongSoNgayVay(item.HD_HinhThucLai, item.HD_KyLai, item.HD_TongThoiGianVay);
+                    item.StatusName = GetTrangThaiHopDong(item.HD_Loai, item.HD_Status);
+                }
+                var pagedResult = new PagedResult<HopDongVm>()
+                {
+                    TotalItemCount = dataGopVon.TotalItemCount,
+                    PageSize = dataGopVon.PageSize,
+                    PageNumber = dataGopVon.PageNumber,
+                    Items = dataGopVon.ToList()
+                };
+                //add record total
+                pagedResult.Items.Add(new HopDongVm
+                {
+                    TongTienLaiDaThanhToan = totalLai,
+                    HD_TongTienVayBanDau = totalVonDauTu
+                });
+
+                return Ok(new ApiSuccessResult<PagedResult<HopDongVm>>(pagedResult));
             }
-
-            var pagedResult = new PagedResult<HopDongVm>()
+            else
             {
-                TotalItemCount = data.TotalItemCount,
-                PageSize = data.PageSize,
-                PageNumber = data.PageNumber,
-                Items = data.ToList()
-            };
-            return Ok(new ApiSuccessResult<PagedResult<HopDongVm>>(pagedResult));
+                var data = await (from hd in model
+                                  join kh in _db.KhachHangs on hd.KhachHangId equals kh.Id
+                                  join hh in _db.CauHinhHangHoas on hd.HangHoaId equals hh.Id
+                                  join htl in _db.MoTaHinhThucLais on hd.HD_HinhThucLai equals htl.HinhThucLai
+                                  select new HopDongVm()
+                                  {
+                                      Id = hd.Id,
+                                      HD_Ma = hd.HD_Ma,
+                                      HD_LaiSuat = hd.HD_LaiSuat,
+                                      HD_NgayVay = hd.HD_NgayVay,
+                                      HD_TongThoiGianVay = hd.HD_TongThoiGianVay,
+                                      HD_TongTienVayBanDau = hd.HD_TongTienVayBanDau,
+                                      HD_HinhThucLai = hd.HD_HinhThucLai,
+                                      HD_KyLai = hd.HD_KyLai,
+                                      TongTienLaiDaThanhToan = hd.TongTienLaiDaThanhToan,
+                                      MaTaiSan = hh.MaTS,
+                                      TenKhachHang = kh.Ten,
+                                      SDT = kh.SDT,
+                                      TenTaiSan = hd.TenTaiSan,
+                                  TongTienGhiNo = hd.TongTienGhiNo,
+                                      TongTienDaThanhToan = hd.TongTienDaThanhToan,
+                                      TyLeLai = hd.HD_LaiSuat + htl.TyLeLai,
+                                      ThoiGian = htl.ThoiGian,2fa
+                                      NgayDongLaiTiepTheo = hd.NgayDongLaiTiepTheo,
+                                      HD_NgayDaoHan = hd.HD_NgayDaoHan,
+                                      TongTienVayHienTai = hd.TongTienVayHienTai,
+                                      HD_Loai = hd.HD_Loai,
+                                      HD_Status = hd.HD_Status,
+
+                                  }).OrderByDescending(x => x.Id).ToPagedListAsync(request.Page, request.PageSize);
+
+                foreach (var item in data)
+                {
+                    item.TongSoNgayVay = await _hopDongService.TinhTongSoNgayVay(item.HD_HinhThucLai, item.HD_KyLai, item.HD_TongThoiGianVay);
+                    item.StatusName = GetTrangThaiHopDong(item.HD_Loai, item.HD_Status);
+                }
+                var pagedResult = new PagedResult<HopDongVm>()
+                {
+                    TotalItemCount = data.TotalItemCount,
+                    PageSize = data.PageSize,
+                    PageNumber = data.PageNumber,
+                    Items = data.ToList()
+                };
+                return Ok(new ApiSuccessResult<PagedResult<HopDongVm>>(pagedResult));
+            }
         }
         [HttpPost("Create")]
         public async Task<IActionResult> Create(CreateHopDongVm model)
@@ -175,6 +234,7 @@ namespace BaseSource.BackendApi.Controllers
             var rs = Task.Run(() => TaoKyDongLai(hd.Id));
             return Ok(new ApiSuccessResult<string>("Tạo mới hợp đồng thành công"));
         }
+
 
         [HttpGet("GetById")]
         public async Task<IActionResult> GetById(int id)
@@ -251,6 +311,8 @@ namespace BaseSource.BackendApi.Controllers
 
             return Ok(new ApiSuccessResult<string>("Cập nhật hợp đồng thành công"));
         }
+
+
 
         [HttpPost("DeleteHopDong")]
         public async Task<IActionResult> DeleteHopDong([FromForm] int hopDongId)

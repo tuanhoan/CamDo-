@@ -4,14 +4,16 @@ using BaseSource.Data.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BaseSource.Data.Migrations
 {
     [DbContext(typeof(BaseSourceDbContext))]
-    partial class BaseSourceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220808020144_add_datadefault_MotaHinhThucLai")]
+    partial class add_datadefault_MotaHinhThucLai
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -611,20 +613,13 @@ namespace BaseSource.Data.Migrations
                     b.Property<DateTime?>("NgayThanhLy")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("SoNgayLaiToiHienTai")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
-
                     b.Property<string>("TenTaiSan")
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<double>("TienLaiToiNgayHienTai")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("float")
-                        .HasDefaultValue(0.0);
+                        .HasColumnType("float");
 
                     b.Property<double>("TongTienChuoc")
                         .HasColumnType("float");

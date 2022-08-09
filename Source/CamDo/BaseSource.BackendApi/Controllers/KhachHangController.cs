@@ -21,7 +21,7 @@ namespace BaseSource.BackendApi.Controllers
         [HttpGet("GetByName")]
         public async Task<IActionResult> GetByName(string info)
         {
-            var lst = await _db.KhachHangs.Where(x => x.Ten.Contains(info.Trim())).Select(x => new KhachHangVm()
+            var lst = await _db.KhachHangs.Where(x => x.Ten.Contains(info.Trim()) && x.CuaHangId== CuaHangId).Select(x => new KhachHangVm()
             {
                 Id = x.Id,
                 Ten = x.Ten,

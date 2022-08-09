@@ -1,0 +1,206 @@
+﻿@model PagedResult<HopDongVm>
+@{
+    ViewData["Title"] = "Quản lý vốn";
+
+}
+<div class="row">
+    <!-- table  Lastest Tickets -->
+    <div class="col-12 ">
+        <div class="card shadow h-100 mb-4 ">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="m-0 font-weight-bold">Hợp đồng góp vốn</h3>
+
+            </div>
+            <div class="card-body">
+
+                <div class="row mb-2">
+                    <div class="col-md-12 d-flex">
+                        <button type="button" class="btn btn-primary btn-sm addEditHD" data-id="0" data-url="@Url.Action("Create","QuanLyVon")">Thêm mới</button>
+                    </div>
+                </div>
+                <form asp-action="Index" id="frmSearch" method="get" class="form-inline">
+
+                    <div class="form-group mb-2">
+                         <input type="text" class="form-control" name="info" value="@Context.Request.Query["info"]" placeholder="Tìm kiếm mã HĐ, Tên KH...">
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                         <input type="date" class="form-control" name="from" value="@Context.Request.Query["from"]">
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                        <input type="date" class="form-control" name="to" value="@Context.Request.Query["to"]">
+                    </div>
+                    <div class="form-group mx-sm-3 mb-2">
+                        @Html.DropDownList("status", Html.GetEnumSelectList<EHopDong_GopVonStatusFilter>(), "---Tất cả hợp đồng đang vay---", new { @class = "form-control" })
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-12 d-flex">
+                            <button type="submit" class="btn btn-primary btn-sm mb-2"> <i class="fas fa-search"></i> Tìm kiếm</button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    #
+                                </th>
+                                <th scope="col">
+                                    Khách hàng
+                                </th>
+                                <th scope="col">
+                                    Ghi chú
+                                </th>
+                                <th scope="col">
+                                    Số tiền (VNĐ)
+                                </th>
+                                <th scope="col">
+                                    Ngày góp
+                                </th>
+                                <th scope="col">
+                                    Loại vốn
+                                </th>
+                                <th scope="col">
+                                    Lãi suất
+                                </th>
+                                <th scope="col">
+                                    Lãi đã trả
+                                </th>
+                                <th scope="col">
+                                    Ngày phải đóng lãi
+                                </th>
+                                <th scope="col">
+                                    Tình trạng
+                                </th>
+                                <th scope="col">
+                                    Chức năng
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Items.Count > 1)
+                            {
+
+                                int idx = ((Model.PageNumber - 1) * Model.PageSize + 1);
+                                var index = 1;
+                                foreach (var item in Model.Items)
+                                {
+
+                                    if (index <= Model.TotalItemCount)
+                                    {
+                                        <tr>
+                                            <td>@idx</td>
+                                            <td>
+                                                <p class="addEditHD hd_tenkhachang" data-id="@item.Id" data-url="@Url.Action("Edit","QuanLyVon")">@item.TenKhachHang</p>
+                                                <p class="font-12"><i class="fas fa-phone-alt"></i> @item.SDT</p>
+                                            </td>
+                                            <td>@item.HD_GhiChu</td>
+                                            <td>
+                                                @item.HD_TongTienVayBanDau.ToString("N0")
+                                                @*<p class="hd_laisuat">@item.TyLeLai</p>*@
+                                            </td>
+                                            <td>
+                                                @item.HD_NgayVay.ToString("dd/MM/yyyy")
+                                                @*<p>(@item.TongSoNgayVay ngày)</p>*@
+                                            </td>
+                                            <td>
+                                                @if (item.HD_HinhThucLai == null)
+                                                {
+                                                    <p>Đầu tư</p>
+                                                }
+                                                else
+                                                {
+                                                    <p>Đi vay</p>
+                                                }
+                                            </td>
+                                            <td>
+
+                                                @if (item.HD_LaiSuat != 0)
+                                                {
+                                                    <p class="hd_laisuat">@item.TyLeLai</p>
+                                                }
+
+                                            </td>
+                                            <td>@item.TongTienLaiDaThanhToan</td>
+                                            <td>
+                                                @if (item.HD_HinhThucLai == null)
+                                                {
+                                                    <p class="text-success"> Không tính lãi</p>
+                                                }
+                                                else
+                                                {
+                                                    <p>@item.HD_NgayDaoHan.ToString("dd/MM/yyyy")</p>
+                                                }
+                                            </td>
+                                            <td>
+                                                <span class="m-badge m-badge--info m-badge--wide">
+                                                    @if (item.HD_HinhThucLai == null)
+                                                    {
+                                                        <span class="text-success"> Đang đầu tư</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>Đang vay</span>
+                                                    }
+                                                </span>
+                                            </td>
+                                            <td width="140" class="text-center">
+                                                <button class="btn btn-sm btn-secondary detaileHD m-1" type="button" data-id="@item.Id" data-url="@Url.Action("Detail","QuanLyVon")" title="Đóng lãi">
+                                                    <i class="fas fa-coins"></i>
+                                                </button>
+
+
+                                            </td>
+                                        </tr>
+                                    }
+
+                                    idx++;
+                                    index++;
+                                }
+                            }
+
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td></td>
+                                <td class="text-danger"><b>Tổng Tiền</b></td>
+                                <td></td>
+                                <td class="text-danger"><b>@(Model.Items.LastOrDefault()?.HD_TongTienVayBanDau.ToString("N0"))</b></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td class="text-danger"><b>@(Model.Items.LastOrDefault()?.TongTienLaiDaThanhToan.ToString("N0"))</b></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+
+                        </tfoot>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+
+    <script>
+        $(".quanlyvon-nav").addClass("active");
+    </script>
+}
+<div class="modal fade" id="hd-modal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lager" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+        </div>
+    </div>
+</div>

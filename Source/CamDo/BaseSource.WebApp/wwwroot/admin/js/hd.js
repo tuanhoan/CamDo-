@@ -110,7 +110,15 @@ function getMoTaHinhThucLai() {
         url: "/Admin/MoTaHinhThucLai/GetMoTaHinhThucLai",
         data: { hinhThucLai: type },
         success: function (data) {
+
             if (data && data.length > 0) {
+
+                if (type === 0 || type === "") {
+                    $('.group_hidden').hide();
+                } else {
+                    $('.group_hidden').show();
+                }
+
                 $('.tyLeLai').html(data[0].tyLeLai);
                 $('.motaKyLai').html(data[0].moTaKyLai);
                 $('.thoiGianVay').html(data[0].thoiGianDisplay);

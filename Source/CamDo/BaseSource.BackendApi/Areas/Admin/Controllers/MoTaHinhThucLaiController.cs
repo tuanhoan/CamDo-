@@ -37,7 +37,7 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
             var data = await model.Select(x => new MoTaHinhThucLaiAdminVm()
             {
                 Id = x.Id,
-                HinhThucLai = x.HinhThucLai,
+                HinhThucLai = x.HinhThucLai.GetValueOrDefault(),
                 MoTaKyLai = x.MoTaKyLai,
                 TyLeLai = x.TyLeLai,
                 ThoiGian = x.ThoiGian
@@ -63,7 +63,7 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
             var result = new MoTaHinhThucLaiAdminVm()
             {
                 Id = x.Id,
-                HinhThucLai = x.HinhThucLai,
+                HinhThucLai = x.HinhThucLai.GetValueOrDefault(),
                 MoTaKyLai = x.MoTaKyLai,
                 TyLeLai = x.TyLeLai,
                 ThoiGian = x.ThoiGian

@@ -1,4 +1,5 @@
-﻿using BaseSource.Data.EF;
+﻿using AutoMapper;
+using BaseSource.Data.EF;
 using BaseSource.Data.Entities;
 using BaseSource.Shared.Enums;
 using BaseSource.ViewModels.HopDong;
@@ -15,9 +16,11 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
     public class HopDongService : IHopDongService
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
-        public HopDongService(IServiceScopeFactory serviceScopeFactory)
+        private readonly IMapper _mapper;
+        public HopDongService(IServiceScopeFactory serviceScopeFactory, IMapper mapper)
         {
             _serviceScopeFactory = serviceScopeFactory;
+            _mapper = mapper;
         }
 
         public async Task TaoKyDongLai(int hopdongId)
@@ -196,7 +199,7 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
         /// <param name="hd_TongThoiGianVay"></param>
         /// <param name="kyLai"></param>
         /// <returns></returns>
-        public Task<DateTime> TinhNgayDaoHan(EHinhThucLai type, DateTime hd_NgayVay, int hd_TongThoiGianVay, int kyLai)
+        public Task<DateTime> TinhNgayDaoHan(EHinhThucLai? type, DateTime hd_NgayVay, int hd_TongThoiGianVay, int kyLai)
         {
             var tongKyDong = Math.Ceiling(hd_TongThoiGianVay * 1.0 / kyLai * 1.0);
             var result = new DateTime();
@@ -217,6 +220,7 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
                     result = hd_NgayVay.AddDays((hd_TongThoiGianVay * 7) - 1);
                     break;
                 default:
+                    result = hd_NgayVay.AddYears(10);
                     break;
             }
             return Task.FromResult(result);
@@ -228,7 +232,7 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
         /// <param name="kyLai"></param>
         /// <param name="hd_TongThoiGianVay"></param>
         /// <returns></returns>
-        public Task<int> TinhTongSoNgayVay(EHinhThucLai type, int kyLai, int hd_TongThoiGianVay)
+        public Task<int> TinhTongSoNgayVay(EHinhThucLai? type, int kyLai, int hd_TongThoiGianVay)
         {
             int totalDay = 0;
             switch (type)
@@ -246,6 +250,7 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
                     totalDay = 7 * hd_TongThoiGianVay;
                     break;
                 default:
+                    totalDay = Convert.ToInt32((DateTime.Now.AddYears(10) - DateTime.Now).TotalDays);
                     break;
             }
             return Task.FromResult(totalDay);
@@ -258,7 +263,7 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
         /// <param name="laiSuat"></param>
         /// <param name="tongTienVayBanDau"></param>
         /// <returns></returns>
-        public Task<double> TinhLaiHD(EHinhThucLai hinhThucLai, int tongThoiGianVay, double laiSuat, double tongTienVayHienTai)
+        public Task<double> TinhLaiHD(EHinhThucLai? hinhThucLai, int tongThoiGianVay, double laiSuat, double tongTienVayHienTai)
         {
             double laiSuatResult = 0;
             switch (hinhThucLai)
@@ -281,6 +286,96 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
                     break;
             }
             return Task.FromResult(laiSuatResult);
+        }
+
+        public async Task<KeyValuePair<bool, string>> CreateHopDongAsync(CreateHopDongVm model, int cuahangId, string userId)
+        {
+
+            using var _db = _serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<BaseSourceDbContext>();
+            using (var transaction = await _db.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    var kh = new KhachHang()
+                    {
+                        Id = model.KhachHangId,
+                        Ten = model.TenKhachHang,
+                        CMND = model.CMND,
+                        SDT = model.SDT,
+                        DiaChi = model.DiaChi,
+                        CuaHangId = cuahangId
+                    };
+
+                    int khachHangId = await AddOrUpDateCustomer(kh);
+
+                    var hd = _mapper.Map<Data.Entities.HopDong>(model);
+                    hd.TongTienVayHienTai = hd.HD_TongTienVayBanDau;
+                    hd.KhachHangId = khachHangId;
+                    hd.CuaHangId = cuahangId;
+                    hd.UserIdCreated = userId;
+                    hd.UserIdAssigned = userId;
+                    hd.TongTienVayHienTai = hd.HD_TongTienVayBanDau;
+
+                    //set  type HD
+                    hd.HD_Loai = model.LoaiHopDong;
+
+                    switch (hd.HD_Loai)
+                    {
+                        case ELoaiHopDong.Camdo:
+                            hd.HD_Status = (byte)EHopDong_CamDoStatusFilter.DangCam;
+                            break;
+                        case ELoaiHopDong.Vaylai:
+                            break;
+                        case ELoaiHopDong.GopVon:
+                            hd.HD_HinhThucLai = model.HD_HinhThucLai;
+                            hd.HD_Status = (byte)EHopDong_GopVonStatusFilter.DungHen;
+                            break;
+                        default:
+                            break;
+                    }
+                    hd.HD_NgayDaoHan = await TinhNgayDaoHan(hd.HD_HinhThucLai, hd.HD_NgayVay, hd.HD_TongThoiGianVay, hd.HD_KyLai);
+                    hd.TongTienLai = await TinhLaiHD(hd.HD_HinhThucLai, hd.HD_TongThoiGianVay, hd.HD_LaiSuat, hd.TongTienVayHienTai);
+                    _db.HopDongs.Add(hd);
+                    await _db.SaveChangesAsync();
+
+                    if (model.HD_HinhThucLai != 0)
+                    {
+                        await TaoKyDongLai(hd.Id);
+                    }
+                    //commit transaction
+                    await transaction.CommitAsync();
+                    return new KeyValuePair<bool, string>(true, hd.Id.ToString());
+                }
+
+                catch (Exception ex)
+                {
+                    return new KeyValuePair<bool, string>(false, $"Tạo hợp đồng không thành công :[{ex.Message}]");
+                }
+            }
+        }
+
+        private async Task<int> AddOrUpDateCustomer(KhachHang model)
+        {
+            using var _db = _serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<BaseSourceDbContext>();
+            int khachHangId = 0;
+            var khachHang = await _db.KhachHangs.FindAsync(model.Id);
+            if (khachHang == null)
+            {
+                _db.KhachHangs.Add(model);
+                await _db.SaveChangesAsync();
+                khachHangId = model.Id;
+            }
+            else
+            {
+                khachHang.Ten = model.Ten;
+                khachHang.CMND = model.CMND;
+                khachHang.SDT = model.SDT;
+                khachHang.DiaChi = model.DiaChi;
+                await _db.SaveChangesAsync();
+                khachHangId = khachHang.Id;
+            }
+
+            return khachHangId;
         }
 
         public async Task TinhLaiToiNgayHienTai()

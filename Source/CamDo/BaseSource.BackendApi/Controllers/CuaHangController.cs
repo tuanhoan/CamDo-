@@ -1,7 +1,12 @@
-﻿using BaseSource.Data.EF;
+﻿using BaseSource.BackendApi.Services.Serivce.CuaHang_TransactionLog;
+using BaseSource.BackendApi.Services.Serivce.HopDong;
+using BaseSource.Data.EF;
 using BaseSource.Data.Entities;
+using BaseSource.Shared.Enums;
 using BaseSource.ViewModels.Common;
 using BaseSource.ViewModels.CuaHang;
+using BaseSource.ViewModels.CuaHang_TransactionLog;
+using BaseSource.ViewModels.HopDong;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -26,13 +31,18 @@ namespace BaseSource.BackendApi.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly IConfiguration _configuration;
         private readonly IServiceScopeFactory _serviceScopeFactory;
+        private readonly IHopDongService _hopDongService;
+         private readonly ICuaHang_TransactionLogService _cuaHang_TransactionLogService;
         public CuaHangController(BaseSourceDbContext db, UserManager<AppUser> userManager,
-            IServiceScopeFactory serviceScopeFactory, IConfiguration configuration)
+            IServiceScopeFactory serviceScopeFactory, IConfiguration configuration, IHopDongService hopDongService,
+            ICuaHang_TransactionLogService cuaHang_TransactionLogService)
         {
             _db = db;
             _userManager = userManager;
             _serviceScopeFactory = serviceScopeFactory;
             _configuration = configuration;
+            _hopDongService = hopDongService;
+            _cuaHang_TransactionLogService = cuaHang_TransactionLogService;
         }
         #region đăng ký cửa hàng
 
@@ -67,6 +77,7 @@ namespace BaseSource.BackendApi.Controllers
                     UserId = newUser.Id
                 };
                 _db.CuaHangs.Add(cuaHang);
+
                 await _db.SaveChangesAsync();
 
                 _db.UserProfiles.Add(new UserProfile
@@ -175,8 +186,35 @@ namespace BaseSource.BackendApi.Controllers
             cuaHang.IsActive = model.IsActive;
             cuaHang.UserId = UserId;
             _db.CuaHangs.Add(cuaHang);
+
             await _db.SaveChangesAsync();
 
+            //add vốn đầu tư
+            var resultHopDong = await _hopDongService.CreateHopDongAsync(new CreateHopDongVm
+            {
+                SDT = model.SDT,
+                TenKhachHang = "Vốn Khởi Tạo",
+                DiaChi = model.DiaChi,
+                LoaiHopDong = ELoaiHopDong.GopVon,
+                UserIdAssigned = UserId,
+                HD_NgayVay = DateTime.Now,
+                HD_TongTienVayBanDau = model.VonDauTu,
+                HD_Ma = Guid.NewGuid().ToString(),
+                TenTaiSan="Vốn Khởi Tạo"
+            }, cuaHang.Id, UserId);
+
+            if (resultHopDong.Key)
+            {
+                //add log cuahang
+              await  _cuaHang_TransactionLogService.CreateTransactionLog(new CreateCuaHang_TransactionLogVm
+                {
+                    HopDongId = int.Parse(resultHopDong.Value),
+                    ActionType = EHopDong_ActionType.TaoMoiHD,
+                    FeatureType = EFeatureType.GopVon,
+                    UserId = UserId,
+                    TotalMoneyLoan = model.VonDauTu
+                });
+            }
             var rs = Task.Run(() => KhoiTaoHangHoa(cuaHang.Id));
             return Ok(new ApiSuccessResult<string>(cuaHang.Id.ToString()));
         }

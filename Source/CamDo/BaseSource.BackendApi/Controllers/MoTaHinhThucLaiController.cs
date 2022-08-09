@@ -30,6 +30,10 @@ namespace BaseSource.BackendApi.Controllers
                 model = model.Where(x => x.HinhThucLai == lai);
             }
 
+            else
+            {
+                model = model.Where(x => x.HinhThucLai == null);
+            }
             var data = await model.Select(x => new MoTaHinhThucLaiVm()
             {
                 Id = x.Id,

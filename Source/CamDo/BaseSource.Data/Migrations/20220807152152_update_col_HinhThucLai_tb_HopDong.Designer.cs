@@ -4,14 +4,16 @@ using BaseSource.Data.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BaseSource.Data.Migrations
 {
     [DbContext(typeof(BaseSourceDbContext))]
-    partial class BaseSourceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220807152152_update_col_HinhThucLai_tb_HopDong")]
+    partial class update_col_HinhThucLai_tb_HopDong
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,7 +57,7 @@ namespace BaseSource.Data.Migrations
                         new
                         {
                             Id = "c1105ce5-9dbc-49a9-a7d5-c963b6daa62a",
-                            ConcurrencyStamp = "f1597967-354f-49c0-9271-f2e9211fec04",
+                            ConcurrencyStamp = "f39896ac-ec0c-4010-8a8f-b07c7f1ece03",
                             Description = "Administrator role",
                             Name = "Admin",
                             NormalizedName = "Admin"
@@ -133,13 +135,13 @@ namespace BaseSource.Data.Migrations
                         {
                             Id = "ffded6b0-3769-4976-841b-69459049a62d",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b97d0bb2-91bc-42b5-b41d-252a8751944a",
+                            ConcurrencyStamp = "8b3c96ea-64af-4222-bcf9-cb973fe08aca",
                             Email = "doangiau2006@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "doangiau2006@gmail.com",
                             NormalizedUserName = "superadmin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJPGbcP0pUM3cDylvNICADkKE21UoMrK325XIF6lvVCSlVw0y0DlxpwZ2fT5aE+pog==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEKnq/HQwMEcXZ+dZbGhXKGi8v4FolMG35xmjRItSYKx1I7YBXc1PZp7LyK+KaDt3jw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -611,20 +613,13 @@ namespace BaseSource.Data.Migrations
                     b.Property<DateTime?>("NgayThanhLy")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("SoNgayLaiToiHienTai")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
-
                     b.Property<string>("TenTaiSan")
                         .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<double>("TienLaiToiNgayHienTai")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("float")
-                        .HasDefaultValue(0.0);
+                        .HasColumnType("float");
 
                     b.Property<double>("TongTienChuoc")
                         .HasColumnType("float");
@@ -970,7 +965,7 @@ namespace BaseSource.Data.Migrations
                         .HasColumnType("int")
                         .UseIdentityColumn();
 
-                    b.Property<byte?>("HinhThucLai")
+                    b.Property<byte>("HinhThucLai")
                         .HasColumnType("tinyint");
 
                     b.Property<string>("MoTaKyLai")
@@ -989,15 +984,6 @@ namespace BaseSource.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MoTaHinhThucLais");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 99,
-                            MoTaKyLai = "Đầu tư",
-                            ThoiGian = (byte)0,
-                            TyLeLai = "Không tính lãi"
-                        });
                 });
 
             modelBuilder.Entity("BaseSource.Data.Entities.NotifySystem", b =>
