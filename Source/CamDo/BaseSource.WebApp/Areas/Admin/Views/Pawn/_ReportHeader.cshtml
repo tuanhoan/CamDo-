@@ -1,0 +1,34 @@
+﻿@model HopDong_ReportVm
+
+<div class="row clearfix">
+    <div class="m--margin-top-10 col-md-6" id="dvMoneyEndDate">
+        <div class="body-box">
+            <div> QUỸ TIỀN MẶT <a style="cursor:pointer;"><i class="flaticon-share m--font-danger" title="Reload dữ liệu"></i></a>  </div>
+            <h4 id="lbl_LoanPawn_MoneyEndDate">@Model.QuyTienMat.ToString("N0")</h4>
+        </div>
+    </div>
+    <div class="m--margin-top-10 col-md-6" id="dvMoneyInvestment">
+        <div class="body-box">
+            <span>TIỀN CHO VAY</span>
+            <h4 id="lbl_LoanPawn_MoneyInvestment">@Model.TienChoVay.ToString("N0")</h4>
+        </div>
+    </div>
+    <div class="m--margin-top-10 col-md-4" id="dvMoneyDebtor">
+        <div class="body-box">
+            <span>TIỀN NỢ</span>
+            <h4 id="lbl_LoanPawn_MoneyDebtor">@Model.TienNo.ToString("N0")</h4>
+        </div>
+    </div>
+    <div class="m--margin-top-10 col-md-4" id="dvInterestExpected">
+        <div class="body-box m--bg-brand">
+            <span id="lbl_interestToDay">LÃI DỰ KIẾN </span>
+            <h4 id="lbl_LoanPawn_InterestExpected">@Model.LaiDuKien.ToString("N0")</h4>
+        </div>
+    </div>
+    <div class="m--margin-top-10 col-md-4" id="dvInterestEarned">
+        <div class="body-box" data-html="true" data-bs-toggle="m-tooltip" title="" data-placement="top" data-original-title="Tổng tiền lãi trong tháng 8 năm 2022 ">
+            <span>LÃI ĐÃ THU</span>
+            <h4 id="lbl_LoanPawn_InterestEarned">@Model.LaiDaThu.ToString("N0")</h4>
+        </div>
+    </div>
+</div>

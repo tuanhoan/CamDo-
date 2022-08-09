@@ -508,7 +508,41 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         }
         #endregion
 
+        #region Thanh lý
+        public async Task<IActionResult> ChuyenTTChoThanhLy(int hopDongId)
+        {
+            var result = await _hopDongApiClient.ChuyenTrangThaiChoThanhLy(hopDongId);
+            if (!result.IsSuccessed)
+            {
+                return Json(new ApiErrorResult<string>(result.Message));
+            }
+            return Json(new ApiSuccessResult<string>(Url.Action("Index")));
+        }
+        public async Task<IActionResult> ChuyenTTVeDangVay(int hopDongId)
+        {
+            var result = await _hopDongApiClient.ChuyenTrangThaiVeDangVay(hopDongId);
+            if (!result.IsSuccessed)
+            {
+                return Json(new ApiErrorResult<string>(result.Message));
+            }
+            return Json(new ApiSuccessResult<string>(Url.Action("Index")));
+        }
+        public async Task<IActionResult> ThanhLy(int hopDongId)
+        {
+            var result = await _hopDongApiClient.ThanhLyHopDong(hopDongId);
+            if (!result.IsSuccessed)
+            {
+                return Json(new ApiErrorResult<string>(result.Message));
+            }
+            return Json(new ApiSuccessResult<string>(Url.Action("Index")));
+        }
+        #endregion
 
-
+        #region Chọn mẫu hợp đồng
+        public IActionResult ChonMauHopDong(ELoaiHopDong type)
+        {
+            return View();
+        }
+        #endregion
     }
 }

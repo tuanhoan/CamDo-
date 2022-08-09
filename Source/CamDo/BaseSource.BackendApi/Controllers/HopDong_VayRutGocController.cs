@@ -38,7 +38,8 @@ namespace BaseSource.BackendApi.Controllers
                        TotalMoney = x.TotalMoney,
                        ExtraDate = x.ExtraDate,
                        Note = x.Note,
-                       ActionType = x.ActionType
+                       ActionType = x.ActionType,
+                       HopDongId = x.HopDongId
                    }).ToListAsync();
 
             return Ok(new ApiSuccessResult<List<HopDong_VayRutGocVm>>(result));
@@ -54,6 +55,12 @@ namespace BaseSource.BackendApi.Controllers
             var hd = await _db.HopDongs.FindAsync(model.HopDongId);
             if (hd != null)
             {
+                var isKetThuc = await _hopDongService.CheckHopDongKetThuc(hd.HD_Status, hd.HD_Loai);
+                if (isKetThuc)
+                {
+                    return Ok(new ApiErrorResult<string>("Hợp đồng này đã kết thúc"));
+                }
+
                 if (hd.NgayDongLaiGanNhat != null)
                 {
                     if (model.NgayTraGoc < hd.NgayDongLaiGanNhat)
@@ -106,6 +113,12 @@ namespace BaseSource.BackendApi.Controllers
             {
                 var hd = await _db.HopDongs.FindAsync(tran.HopDongId);
 
+                var isKetThuc = await _hopDongService.CheckHopDongKetThuc(hd.HD_Status, hd.HD_Loai);
+                if (isKetThuc)
+                {
+                    return Ok(new ApiErrorResult<string>("Hợp đồng này đã kết thúc"));
+                }
+
                 if (hd.NgayDongLaiGanNhat != null)
                 {
                     if (hd.NgayDongLaiGanNhat > tran.CreatedDate)
@@ -149,6 +162,11 @@ namespace BaseSource.BackendApi.Controllers
             var hd = await _db.HopDongs.FindAsync(model.HopDongId);
             if (hd != null)
             {
+                var isKetThuc = await _hopDongService.CheckHopDongKetThuc(hd.HD_Status, hd.HD_Loai);
+                if (isKetThuc)
+                {
+                    return Ok(new ApiErrorResult<string>("Hợp đồng này đã kết thúc"));
+                }
 
                 if (model.NgayVayThem < hd.HD_NgayVay)
                 {

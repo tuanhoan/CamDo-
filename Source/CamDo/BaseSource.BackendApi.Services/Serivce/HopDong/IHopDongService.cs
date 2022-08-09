@@ -17,5 +17,6 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
         Task<DateTime> TinhNgayDaoHan(EHinhThucLai? hinhThucLai, DateTime hd_NgayVay, int hd_TongThoiGianVay, int kyLai);
         Task TinhLaiToiNgayHienTai();
         Task<KeyValuePair<bool, string>> CreateHopDongAsync(CreateHopDongVm model, int cuahangId, string userId);
+        Task<bool> CheckHopDongKetThuc(byte hdStatus, ELoaiHopDong type);
     }
 }

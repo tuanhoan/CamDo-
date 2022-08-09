@@ -61,7 +61,6 @@ namespace BaseSource.BackendApi.Controllers
             if (!string.IsNullOrEmpty(request.Info))
             {
                 model = model.Where(x => x.HD_Ma.Contains(request.Info.Trim()));
-
             }
 
             if (request.FormDate != null)
@@ -139,6 +138,12 @@ namespace BaseSource.BackendApi.Controllers
             }
             else
             {
+                var tongTienCam = await model.SumAsync(x => x.HD_TongTienVayBanDau);
+                var tongLaiDaDong = await model.SumAsync(x => x.TongTienLaiDaThanhToan);
+                var tongGhiNo = await model.SumAsync(x => x.TongTienGhiNo);
+                var tongDaThanhToan = await model.SumAsync(x => x.TongTienDaThanhToan);
+                var tongLaiDenHomNay = await model.SumAsync(x => x.TienLaiToiNgayHienTai);
+
                 var data = await (from hd in model
                                   join kh in _db.KhachHangs on hd.KhachHangId equals kh.Id
                                   join hh in _db.CauHinhHangHoas on hd.HangHoaId equals hh.Id
@@ -167,6 +172,7 @@ namespace BaseSource.BackendApi.Controllers
                                       TongTienVayHienTai = hd.TongTienVayHienTai,
                                       HD_Loai = hd.HD_Loai,
                                       HD_Status = hd.HD_Status,
+                                      TienLaiToiNgayHienTai = hd.TienLaiToiNgayHienTai
 
                                   }).OrderByDescending(x => x.Id).ToPagedListAsync(request.Page, request.PageSize);
 
@@ -182,6 +188,16 @@ namespace BaseSource.BackendApi.Controllers
                     PageNumber = data.PageNumber,
                     Items = data.ToList()
                 };
+
+                //add record total
+                pagedResult.Items.Add(new HopDongVm
+                {
+                    HD_TongTienVayBanDau = tongTienCam,
+                    TongTienLaiDaThanhToan = tongLaiDaDong,
+                    TienNo = tongDaThanhToan - tongGhiNo,
+                    TienLaiToiNgayHienTai = tongLaiDenHomNay
+                });
+
                 return Ok(new ApiSuccessResult<PagedResult<HopDongVm>>(pagedResult));
             }
         }
@@ -373,6 +389,11 @@ namespace BaseSource.BackendApi.Controllers
             {
                 return Ok(new ApiErrorResult<string>("Not found"));
             }
+            var isKetThuc = await _hopDongService.CheckHopDongKetThuc(hd.HD_Status, hd.HD_Loai);
+            if (isKetThuc)
+            {
+                return Ok(new ApiErrorResult<string>("Hợp đồng này đã kết thúc"));
+            }
 
             if (model.SoTienNoLai > hd.TongTienDaThanhToan)
             {
@@ -409,6 +430,11 @@ namespace BaseSource.BackendApi.Controllers
             if (hd == null)
             {
                 return Ok(new ApiErrorResult<string>("Not found"));
+            }
+            var isKetThuc = await _hopDongService.CheckHopDongKetThuc(hd.HD_Status, hd.HD_Loai);
+            if (isKetThuc)
+            {
+                return Ok(new ApiErrorResult<string>("Hợp đồng này đã kết thúc"));
             }
             hd.TongTienDaThanhToan += model.SoTienTraNo ?? 0;
             await _db.SaveChangesAsync();
@@ -623,6 +649,11 @@ namespace BaseSource.BackendApi.Controllers
             {
                 return Ok(new ApiErrorResult<string>("Not Found"));
             }
+            var isKetThuc = await _hopDongService.CheckHopDongKetThuc(hd.HD_Status, hd.HD_Loai);
+            if (isKetThuc)
+            {
+                return Ok(new ApiErrorResult<string>("Hợp đồng này đã kết thúc"));
+            }
             switch (hd.HD_Loai)
             {
                 case ELoaiHopDong.Camdo:
@@ -666,6 +697,11 @@ namespace BaseSource.BackendApi.Controllers
             {
                 return Ok(new ApiErrorResult<string>("Not Found"));
             }
+            var isKetThuc = await _hopDongService.CheckHopDongKetThuc(hd.HD_Status, hd.HD_Loai);
+            if (isKetThuc)
+            {
+                return Ok(new ApiErrorResult<string>("Hợp đồng này đã kết thúc"));
+            }
             switch (hd.HD_Loai)
             {
                 case ELoaiHopDong.Camdo:
@@ -708,6 +744,11 @@ namespace BaseSource.BackendApi.Controllers
             {
                 return Ok(new ApiErrorResult<string>("Not Found"));
             }
+            var isKetThuc = await _hopDongService.CheckHopDongKetThuc(hd.HD_Status, hd.HD_Loai);
+            if (isKetThuc)
+            {
+                return Ok(new ApiErrorResult<string>("Hợp đồng này đã kết thúc"));
+            }
             switch (hd.HD_Loai)
             {
                 case ELoaiHopDong.Camdo:
@@ -732,6 +773,44 @@ namespace BaseSource.BackendApi.Controllers
 
             await _db.SaveChangesAsync();
             return Ok(new ApiSuccessResult<string>("Xóa hợp đồng thành công"));
+        }
+        #endregion
+
+        #region Report 
+        [HttpGet("GetReportHeader")]
+        public async Task<IActionResult> GetReportHeader(ELoaiHopDong type)
+        {
+            var response = new HopDong_ReportVm();
+            var cuaHang = await _db.CuaHangs.FindAsync(CuaHangId);
+            //gắn tạm chưa biết công thức
+            response.QuyTienMat = cuaHang.VonDauTu;
+            var listHopDong = _db.HopDongs.AsQueryable();
+            listHopDong = listHopDong.Where(x => x.CuaHangId == CuaHangId && x.HD_Loai == type);
+            switch (type)
+            {
+                case ELoaiHopDong.Camdo:
+                    listHopDong = listHopDong.Where(x => x.HD_Status != (byte)EHopDong_CamDoStatusFilter.DaThanhLy && x.HD_Status != (byte)EHopDong_CamDoStatusFilter.DaXoa && x.HD_Status != (byte)EHopDong_CamDoStatusFilter.KetThuc);
+                    break;
+                case ELoaiHopDong.Vaylai:
+                    listHopDong = listHopDong.Where(x => x.HD_Status != (byte)EHopDong_VayLaiStatusFilter.DaXoa && x.HD_Status != (byte)EHopDong_CamDoStatusFilter.KetThuc);
+                    break;
+                case ELoaiHopDong.GopVon:
+                    listHopDong = listHopDong.Where(x => x.HD_Status != (byte)EHopDong_GopVonStatusFilter.KetThuc);
+                    break;
+                default:
+                    break;
+            }
+            var tienChoVay = await listHopDong.SumAsync(x => x.TongTienVayHienTai);
+            var tienGhiNo = await listHopDong.SumAsync(x => x.TongTienGhiNo);
+            var tienDaThanhToan = await listHopDong.SumAsync(x => x.TongTienDaThanhToan);
+            var laiDuKien = await listHopDong.SumAsync(x => x.TienLaiToiNgayHienTai);
+            var laiDaThu = await listHopDong.SumAsync(x => x.TongTienLaiDaThanhToan);
+
+            response.TienChoVay = tienChoVay;
+            response.TienNo = tienDaThanhToan - tienGhiNo;
+            response.LaiDuKien = laiDuKien;
+            response.LaiDaThu = laiDaThu;
+            return Ok(new ApiSuccessResult<HopDong_ReportVm>(response));
         }
         #endregion
 

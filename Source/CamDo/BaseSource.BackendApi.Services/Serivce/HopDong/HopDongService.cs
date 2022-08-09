@@ -392,6 +392,36 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
                 var payment = await _db.HopDong_PaymentLogs.Where(x => x.PaidDate == null).OrderBy(x => x.CreatedDate).FirstOrDefaultAsync();
                 if (payment != null)
                 {
+                    var ngayDonglai = new DateTime(payment.ToDate.Year, payment.ToDate.Month, payment.ToDate.Day);
+                    var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+
+                    var checkNgayDongLaiCuoiCung = await _db.HopDong_PaymentLogs.AnyAsync(x => x.HopDongId == item.Id && x.PaidDate == null);
+
+                    switch (item.HD_Loai)
+                    {
+                        case ELoaiHopDong.Camdo:
+                            if (ngayDonglai == currentDate)
+                            {
+                                item.HD_Status = (byte)EHopDong_CamDoStatusFilter.HomNayDongTien;
+                            }
+                            else if (ngayDonglai >= currentDate && checkNgayDongLaiCuoiCung)
+                            {
+                                item.HD_Status = (byte)EHopDong_CamDoStatusFilter.DenNgayChuocDo;
+                            }
+                            else if (ngayDonglai >= currentDate)
+                            {
+                                item.HD_Status = (byte)EHopDong_CamDoStatusFilter.QuaHan;
+                            }
+
+
+                            break;
+                        case ELoaiHopDong.Vaylai:
+                            break;
+                        case ELoaiHopDong.GopVon:
+                            break;
+                        default:
+                            break;
+                    }
                     var laiNgay = payment.MoneyInterest / payment.CountDay;
                     var totalDay = (DateTime.Now - payment.FromDate).Days + 1;
                     var tongLai = laiNgay * totalDay;
@@ -401,6 +431,28 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
                 }
             }
 
+        }
+
+
+        Task<bool> IHopDongService.CheckHopDongKetThuc(byte hdStatus, ELoaiHopDong type)
+        {
+            bool result = false;
+            switch (type)
+            {
+                case ELoaiHopDong.Camdo:
+                    if (hdStatus == (byte)EHopDong_CamDoStatusFilter.KetThuc)
+                    {
+                        result = true;
+                    }
+                    break;
+                case ELoaiHopDong.Vaylai:
+                    break;
+                case ELoaiHopDong.GopVon:
+                    break;
+                default:
+                    break;
+            }
+            return Task.FromResult(result);
         }
     }
 }

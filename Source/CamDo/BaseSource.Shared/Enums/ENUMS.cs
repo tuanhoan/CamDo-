@@ -218,7 +218,13 @@ namespace BaseSource.Shared.Enums
         [Display(Name = "Chờ thanh lý")]
         ChoThanhLy = EHopDong_CommonStatusFilter.ChoThanhLy,
         [Display(Name = "Đang cầm")]
-        DangCam
+        DangCam,
+        [Display(Name = "Đến ngày chuộc đồ")]
+        DenNgayChuocDo,
+        [Display(Name = "Hôm nay đóng tiền")]
+        HomNayDongTien,
+
+
 
     }
 

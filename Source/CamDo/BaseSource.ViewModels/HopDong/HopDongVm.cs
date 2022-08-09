@@ -62,6 +62,7 @@ namespace BaseSource.ViewModels.HopDong
         public bool IsDebit { get; set; }
         public string StatusName { get; set; }
         public byte HD_Status { get; set; }
+        public double TienLaiToiNgayHienTai { get; set; }
 
     }
     public class CreateHopDongVm : IValidatableObject

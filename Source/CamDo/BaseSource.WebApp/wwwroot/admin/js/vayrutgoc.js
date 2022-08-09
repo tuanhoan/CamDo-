@@ -110,11 +110,11 @@ $("body").on("submit", 'form[id="frmVayThem"]', function (e) {
                 var hopDongId = $form.find('input[name=HopDongId]').val();
                 toastr.info(res.message);
                 $form[0].reset();
+               
                 setTimeout(getHistoryLoanExtra("tab-vaythem", hopDongId), 2000);
                 $('.lblTongTienVayHienTai').text(format(res.resultObj));
             } else if (res.validationErrors != null && res.validationErrors.length) {
                 $.each(res.validationErrors, function (i, v) {
-                    console.log(v);
                     $form.find("span[data-valmsg-for='" + v.pos + "']").html(v.error);
                 });
 
@@ -144,7 +144,7 @@ $("body").on("click", '.btn-xoavaythem', function (e) {
             success: function (res) {
                 if (res.isSuccessed == true) {
                     toastr.info(res.message);
-                    getHistoryLoanExtra("tab-vaythem", hopdongId);
+                    setTimeout(getHistoryLoanExtra("tab-vaythem", hopdongId), 2000);
                     $('.lblTongTienVayHienTai').text(format(res.resultObj));
                 } else {
                     toastr.error(res.message);

@@ -12,38 +12,8 @@
 
             </div>
             <div class="card-body">
-                <div class="row clearfix">
-                    <div class="m--margin-top-10 col-md-6" id="dvMoneyEndDate">
-                        <div class="body-box">
-                            <div> QUỸ TIỀN MẶT <a style="cursor:pointer;" onclick="ReloadMoneyDataShop()"><i class="flaticon-share m--font-danger" title="Reload dữ liệu"></i></a>  </div>
-                            <h4 id="lbl_LoanPawn_MoneyEndDate">1,000,407,050</h4>
-                        </div>
-                    </div>
-                    <div class="m--margin-top-10 col-md-6" id="dvMoneyInvestment">
-                        <div class="body-box">
-                            <span>TIỀN CHO VAY</span>
-                            <h4 id="lbl_LoanPawn_MoneyInvestment">0</h4>
-                        </div>
-                    </div>
-                    <div class="m--margin-top-10 col-md-4" id="dvMoneyDebtor">
-                        <div class="body-box">
-                            <span>TIỀN NỢ</span>
-                            <h4 id="lbl_LoanPawn_MoneyDebtor">0</h4>
-                        </div>
-                    </div>
-                    <div class="m--margin-top-10 col-md-4" id="dvInterestExpected">
-                        <div class="body-box m--bg-brand">
-                            <span id="lbl_interestToDay">LÃI DỰ KIẾN </span>
-                            <h4 id="lbl_LoanPawn_InterestExpected">0</h4>
-                        </div>
-                    </div>
-                    <div class="m--margin-top-10 col-md-4" id="dvInterestEarned">
-                        <div class="body-box" data-html="true" data-bs-toggle="m-tooltip" title="" data-placement="top" data-original-title="Tổng tiền lãi trong tháng 8 năm 2022 ">
-                            <span>LÃI ĐÃ THU</span>
-                            <h4 id="lbl_LoanPawn_InterestEarned">0</h4>
-                        </div>
-                    </div>
-                </div>
+                <div class="asyncPartial" data-url="@Url.Action("ReportHeader")"></div>
+
                 <div class="row mb-2">
                     <div class="col-md-12 d-flex">
                         <button type="button" class="btn btn-primary btn-sm addEditHD" data-id="0" data-url="@Url.Action("Create","HopDong")">Thêm mới</button>
@@ -131,58 +101,74 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @if (Model.Items.Count > 0)
+                            @if (Model.Items.Count > 1)
                             {
-                                int idx = 1;
+                                int idx = ((Model.PageNumber - 1) * Model.PageSize + 1);
+                                var index = 1;
                                 foreach (var item in Model.Items)
                                 {
-                                    <tr>
-                                        <td>@idx</td>
-                                        <td>@item.HD_Ma</td>
-                                        <td>
-                                            <p class="addEditHD hd_tenkhachang" data-id="@item.Id" data-url="@Url.Action("Edit","HopDong")">@item.TenKhachHang</p>
-                                            <p class="font-12"><i class="fas fa-phone-alt"></i> @item.SDT</p>
-                                        </td>
-                                        <td>@item.MaTaiSan</td>
-                                        <td>@item.TenTaiSan</td>
-                                        <td>
-                                            @item.HD_TongTienVayBanDau.ToString("N0")
-                                            <p class="hd_laisuat">@item.TyLeLai</p>
-                                        </td>
-                                        <td>
-                                            @item.HD_NgayVay.ToString("dd/MM/yyyy")
-                                            <p>(@item.TongSoNgayVay ngày)</p>
-                                        </td>
-                                        <td>@item.TongTienLaiDaThanhToan.ToString("N0")</td>
-                                        <td>@((item.TongTienGhiNo-item.TongTienDaThanhToan).ToString("N0"))</td>
-                                        <td>0</td>
-                                        <td>@item.HD_NgayVay.ToString("dd/MM/yyyy")</td>
-                                        <td><span class="m-badge m-badge--info m-badge--wide">@item.StatusName</span></td>
-                                        <td width="140" class="text-center">
-                                            <button class="btn btn-sm btn-secondary detaileHD m-1" type="button" data-id="@item.Id" data-url="@Url.Action("Detail","HopDong")" title="Đóng lãi">
-                                                <i class="fas fa-coins"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-danger m-1" type="button" data-bs-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn xóa hợp đồng?" data-href="@Url.Action("Delete","HopDong", new { id = item.Id })" title="Xóa hợp đồng">
-                                                <i class="fas fa-trash-alt fa-fw"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-info detaileHD m-1" data-tab="tab-chuocdo" type="button" data-id="@item.Id" data-url="@Url.Action("Detail","HopDong")" title="Chuộc đồ">
-                                                <i class="fas fa-anchor"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-success detaileHD m-1" data-tab="tab-hengio" type="button" data-id="@item.Id" data-url="@Url.Action("Detail","HopDong")" title="Hẹn giờ khoản vay">
-                                                <i class="fas fa-clock"></i>
-                                            </button>
-                                            <button class="btn btn-sm btn-warning m-1" type="button" data-bs-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn chuyển sang trạng thái chờ thanh lý?" data-href="@Url.Action("ChuyenTTChoThanhLy", new { hopDongId = item.Id })" title="Chuyển HĐ qua trạng thái chờ thanh lý">
-                                                <i class="fas fa-radiation fa-fw"></i>
-                                            </button>
-                                            @if (item.HD_Status == (byte)EHopDong_CamDoStatusFilter.ChoThanhLy)
-                                            {
-                                                <button class="btn btn-sm btn-secondary m-1" type="button" data-bs-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn chuyển sang trạng thái đang vay?" data-href="@Url.Action("ChuyenTTVeDangVay", new { hopDongId = item.Id })" title="Chuyển HĐ từ chờ thanh lý về đang vay">
-                                                    <i class="fas fa-heart fa-fw"></i>
+                                    if (index <= Model.TotalItemCount)
+                                    {
+                                        <tr>
+                                            <td>@idx</td>
+                                            <td>@item.HD_Ma</td>
+                                            <td>
+                                                <p class="addEditHD hd_tenkhachang" data-id="@item.Id" data-url="@Url.Action("Edit", "HopDong")">@item.TenKhachHang</p>
+                                                <p class="font-12"><i class="fas fa-phone-alt"></i> @item.SDT</p>
+                                            </td>
+                                            <td>@item.MaTaiSan</td>
+                                            <td>@item.TenTaiSan</td>
+                                            <td>
+                                                @item.HD_TongTienVayBanDau.ToString("N0")
+                                                <p class="hd_laisuat">@item.TyLeLai</p>
+                                            </td>
+                                            <td>
+                                                @item.HD_NgayVay.ToString("dd/MM/yyyy")
+                                                <p>(@item.TongSoNgayVay ngày)</p>
+                                            </td>
+                                            <td class="text-right">@item.TongTienLaiDaThanhToan.ToString("N0")</td>
+                                            <td class="text-right">@((item.TongTienGhiNo - item.TongTienDaThanhToan).ToString("N0"))</td>
+                                            <td class="text-right">@item.TienLaiToiNgayHienTai.ToString("N0")</td>
+                                            <td>@item.HD_NgayVay.ToString("dd/MM/yyyy")</td>
+                                            <td>
+                                                @if (item.HD_Status == (byte)EHopDong_CamDoStatusFilter.QuaHan || item.HD_Status == (byte)EHopDong_CamDoStatusFilter.DenNgayChuocDo)
+                                                {
+                                                    <span class="badge badge-red">@item.StatusName</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge badge-info">@item.StatusName</span>
+                                                }
+
+                                            </td>
+                                            <td width="140" class="text-center">
+                                                <button class="btn btn-sm btn-secondary detaileHD m-1" type="button" data-id="@item.Id" data-url="@Url.Action("Detail", "HopDong")" title="Đóng lãi">
+                                                    <i class="fas fa-coins"></i>
                                                 </button>
-                                            }
-                                        </td>
-                                    </tr>
+                                                <button class="btn btn-sm btn-danger m-1" type="button" data-bs-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn xóa hợp đồng?" data-href="@Url.Action("Delete", "HopDong", new { id = item.Id })" title="Xóa hợp đồng">
+                                                    <i class="fas fa-trash-alt fa-fw"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-info detaileHD m-1" data-tab="tab-chuocdo" type="button" data-id="@item.Id" data-url="@Url.Action("Detail", "HopDong")" title="Chuộc đồ">
+                                                    <i class="fas fa-anchor"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-success detaileHD m-1" data-tab="tab-hengio" type="button" data-id="@item.Id" data-url="@Url.Action("Detail", "HopDong")" title="Hẹn giờ khoản vay">
+                                                    <i class="fas fa-clock"></i>
+                                                </button>
+                                                <button class="btn btn-sm btn-warning m-1" type="button" data-bs-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn chuyển sang trạng thái chờ thanh lý?" data-href="@Url.Action("ChuyenTTChoThanhLy", "HopDong", new { hopDongId = item.Id })" title="Chuyển HĐ qua trạng thái chờ thanh lý">
+                                                    <i class="fas fa-radiation fa-fw"></i>
+                                                </button>
+                                                @if (item.HD_Status == (byte)EHopDong_CamDoStatusFilter.ChoThanhLy)
+                                                {
+                                                    <button class="btn btn-sm btn-secondary m-1" type="button" data-bs-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn chuyển sang trạng thái đang vay?" data-href="@Url.Action("ChuyenTTVeDangVay", "HopDong", new { hopDongId = item.Id })" title="Chuyển HĐ từ chờ thanh lý về đang vay">
+                                                        <i class="fas fa-heart fa-fw"></i>
+                                                    </button>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+
                                     idx++;
+                                    index++;
                                 }
 
                             }
@@ -193,9 +179,32 @@
                                 </tr>
                             }
                         </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="5" class="text-right text-danger font-weight-600">
+                                    Tổng tiền
+                                </td>
+                                <td class="text-right text-danger font-weight-600">@Model.Items.LastOrDefault()?.HD_TongTienVayBanDau.ToString("N0")</td>
+                                <td class="text-right text-danger"></td>
+                                <td class="text-right text-danger font-weight-600">@Model.Items.LastOrDefault()?.TongTienLaiDaThanhToan.ToString("N0")</td>
+                                <td class="text-right text-danger font-weight-600">@Model.Items.LastOrDefault()?.TienNo.ToString("N0")</td>
+                                <td class="text-right text-danger font-weight-600">@Model.Items.LastOrDefault()?.TienLaiToiNgayHienTai.ToString("N0")</td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
-
+                @if (Model.PageCount > 1)
+                {
+                    <div>
+                        @await Html.PartialAsync("_Pager", new PagedResultBase()
+                   {
+                       PageNumber = Model.PageNumber,
+                       PageSize = Model.PageSize,
+                       TotalItemCount = Model.TotalItemCount,
+                       PageUrl = Url.Action("Index")
+                   })
+                    </div>
+                }
             </div>
         </div>
     </div>

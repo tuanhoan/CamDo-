@@ -55,6 +55,11 @@ namespace BaseSource.BackendApi.Controllers
             var hd = await _db.HopDongs.FindAsync(model.HopDongId);
             if (hd != null)
             {
+                var isKetThuc = await _hopDongService.CheckHopDongKetThuc(hd.HD_Status, hd.HD_Loai);
+                if (isKetThuc)
+                {
+                    return Ok(new ApiErrorResult<string>("Hợp đồng này đã kết thúc"));
+                }
                 var ngayDaoHanOld = hd.HD_NgayDaoHan;
                 hd.HD_TongThoiGianVay += model.SoNgayGiaHan ?? 0;
                 hd.HD_NgayDaoHan = await _hopDongService.TinhNgayDaoHan(hd.HD_HinhThucLai, hd.HD_NgayVay, hd.HD_TongThoiGianVay, hd.HD_KyLai);

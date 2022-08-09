@@ -34,7 +34,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
                 Info = info,
                 LoaiHangHoa = loaihanghoa,
                 Status = status
-                
+
             };
             var requestHH = new GetCauHinhHangHoaPagingRequest()
             {
@@ -47,35 +47,12 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             ViewData["ListHangHoa"] = new SelectList(resultHH.Result.ResultObj.Items, "Id", "Ten");
             return View(result.Result.ResultObj);
         }
+        public async Task<IActionResult> ReportHeader()
+        {
+            var result = await _hopDongApiClient.GetReportHeader(ELoaiHopDong.Camdo);
+            return PartialView("_ReportHeader", result.ResultObj);
+        }
 
-        #region Thanh lý
-        public async Task<IActionResult> ChuyenTTChoThanhLy(int hopDongId)
-        {
-            var result = await _hopDongApiClient.ChuyenTrangThaiChoThanhLy(hopDongId);
-            if (!result.IsSuccessed)
-            {
-                return Json(new ApiErrorResult<string>(result.Message));
-            }
-            return Json(new ApiSuccessResult<string>(Url.Action("Index")));
-        }
-        public async Task<IActionResult> ChuyenTTVeDangVay(int hopDongId)
-        {
-            var result = await _hopDongApiClient.ChuyenTrangThaiVeDangVay(hopDongId);
-            if (!result.IsSuccessed)
-            {
-                return Json(new ApiErrorResult<string>(result.Message));
-            }
-            return Json(new ApiSuccessResult<string>(Url.Action("Index")));
-        }
-        public async Task<IActionResult> ThanhLy(int hopDongId)
-        {
-            var result = await _hopDongApiClient.ThanhLyHopDong(hopDongId);
-            if (!result.IsSuccessed)
-            {
-                return Json(new ApiErrorResult<string>(result.Message));
-            }
-            return Json(new ApiSuccessResult<string>(Url.Action("Index")));
-        }
-        #endregion
+
     }
 }

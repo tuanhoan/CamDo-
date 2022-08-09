@@ -23,7 +23,7 @@
                 @foreach (var item in Model)
                 {
                     string clss = "";
-                    <tr>
+                    <tr id="vaythem-@item.Id">
                         <td>@idx</td>
                         <td>@item.ExtraDate.ToString("dd/MM/yyyy")</td>
                         <td>@EnumExtensions.GetEnumDisplayName(((EHopDong_ActionType)item.ActionType))</td>
@@ -42,7 +42,7 @@
 
                         </td>
                         <td class="text-center">
-                            <button class="btn btn-red btn-icon btn-sm @clss" type="button" data-hopdongId="@item.HopDongId" data-title="Bạn có chắc chắn muốn xóa trả gốc?" data-href="@Url.Action("XoaTraBotGoc", new { tranLogId = item.Id })" title="Xóa trả gốc">
+                            <button class="btn btn-red btn-icon btn-sm @clss" type="button" data-id="@item.Id" data-hopdongId="@item.HopDongId" data-title="Bạn có chắc chắn muốn xóa trả gốc?" data-href="@Url.Action("XoaTraBotGoc", new { tranLogId = item.Id })" title="Xóa trả gốc">
                                 <i class="fas fa-times"></i>
                             </button>
                         </td>

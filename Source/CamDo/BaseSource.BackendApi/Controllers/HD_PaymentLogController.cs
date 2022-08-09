@@ -31,25 +31,21 @@ namespace BaseSource.BackendApi.Controllers
         public async Task<IActionResult> GetPaymentLogByHD(int hdId)
         {
             var result = new HD_PaymentLogVm();
-            var lstPayment = await _db.HopDong_PaymentLogs.Where(x => x.HopDongId == hdId).ToListAsync();
-            var lsPaymentResult = new List<HD_PaymentLogItemVm>();
-            foreach (var item in lstPayment)
+            var lstPayment = await _db.HopDong_PaymentLogs.Where(x => x.HopDongId == hdId).Select(x => new HD_PaymentLogItemVm()
             {
-                lsPaymentResult.Add(new HD_PaymentLogItemVm()
-                {
-                    CountDay = item.CountDay,
-                    FromDate = item.FromDate,
-                    ToDate = item.ToDate,
-                    MoneyInterest = item.MoneyInterest,
-                    MoneyOther = item.MoneyOther,
-                    MoneyPay = item.MoneyPay,
-                    MoneyPayNeed = item.MoneyPayNeed,
-                    PaidDate = item.PaidDate,
-                    Id = item.Id,
-                    HopDongId = item.HopDongId
-                });
-            }
-            result.ListPaymentLog = lsPaymentResult;
+                CountDay = x.CountDay,
+                FromDate = x.FromDate,
+                ToDate = x.ToDate,
+                MoneyInterest = x.MoneyInterest,
+                MoneyOther = x.MoneyOther,
+                MoneyPay = x.MoneyPay,
+                MoneyPayNeed = x.MoneyPayNeed,
+                PaidDate = x.PaidDate,
+                Id = x.Id,
+                HopDongId = x.HopDongId
+            }).ToListAsync();
+
+            result.ListPaymentLog = lstPayment;
             result.HdId = hdId;
             return Ok(new ApiSuccessResult<HD_PaymentLogVm>(result));
         }
@@ -64,6 +60,11 @@ namespace BaseSource.BackendApi.Controllers
             if (hd == null)
             {
                 return Ok(new ApiErrorResult<string>("Not found"));
+            }
+            var isKetThuc = await _hopDongService.CheckHopDongKetThuc(hd.HD_Status, hd.HD_Loai);
+            if (isKetThuc)
+            {
+                return Ok(new ApiErrorResult<string>("Hợp đồng này đã kết thúc"));
             }
             var payment = await _db.HopDong_PaymentLogs.FirstOrDefaultAsync(x => x.HopDongId == model.HDId && x.Id == model.PaymentID);
             if (payment == null)
@@ -105,6 +106,11 @@ namespace BaseSource.BackendApi.Controllers
             if (payment != null)
             {
                 var hd = await _db.HopDongs.FindAsync(payment.HopDongId);
+                var isKetThuc = await _hopDongService.CheckHopDongKetThuc(hd.HD_Status, hd.HD_Loai);
+                if (isKetThuc)
+                {
+                    return Ok(new ApiErrorResult<string>("Hợp đồng này đã kết thúc"));
+                }
                 var checkPayment = await _db.HopDong_PaymentLogs.AnyAsync(x => x.Id > payment.Id && x.PaidDate != null);
                 if (checkPayment)
                 {
@@ -170,6 +176,15 @@ namespace BaseSource.BackendApi.Controllers
         {
 
             var hd = await _db.HopDongs.FindAsync(model.HdId);
+            if (hd == null)
+            {
+                return Ok(new ApiErrorResult<string>("Bạn phải xóa đóng lãi sau đó"));
+            }
+            var isKetThuc = await _hopDongService.CheckHopDongKetThuc(hd.HD_Status, hd.HD_Loai);
+            if (isKetThuc)
+            {
+                return Ok(new ApiErrorResult<string>("Hợp đồng này đã kết thúc"));
+            }
             var lstPaymentOld = await _db.HopDong_PaymentLogs.Where(x => x.HopDongId == model.HdId).ToListAsync();
 
             if (hd.NgayDongLaiGanNhat == null)

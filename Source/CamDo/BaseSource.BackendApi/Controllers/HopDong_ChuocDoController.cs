@@ -1,4 +1,5 @@
 ﻿using BaseSource.BackendApi.Services.Serivce.CuaHang_TransactionLog;
+using BaseSource.BackendApi.Services.Serivce.HopDong;
 using BaseSource.Data.EF;
 using BaseSource.Data.Entities;
 using BaseSource.Shared.Enums;
@@ -20,10 +21,13 @@ namespace BaseSource.BackendApi.Controllers
     {
         private readonly BaseSourceDbContext _db;
         private readonly ICuaHang_TransactionLogService _cuaHang_TransactionLogService;
-        public HopDong_ChuocDoController(BaseSourceDbContext db, ICuaHang_TransactionLogService cuaHang_TransactionLogService)
+        private readonly IHopDongService _hopDongService;
+        public HopDong_ChuocDoController(BaseSourceDbContext db, ICuaHang_TransactionLogService cuaHang_TransactionLogService,
+            IHopDongService hopDongService)
         {
             _db = db;
             _cuaHang_TransactionLogService = cuaHang_TransactionLogService;
+            _hopDongService = hopDongService;
         }
         [HttpGet("GetInfoChuocDo")]
         public async Task<IActionResult> GetInfoChuocDo([FromQuery] HopDong_ChuocDoRequestVm model)
@@ -88,8 +92,8 @@ namespace BaseSource.BackendApi.Controllers
             {
                 return Ok(new ApiErrorResult<string>("Not Found"));
             }
-            //xử lý tạm cho cầm đồ
-            if (hd.HD_Status == (byte)EHopDong_CamDoStatusFilter.KetThuc)
+            var isKetThuc = await _hopDongService.CheckHopDongKetThuc(hd.HD_Status, hd.HD_Loai);
+            if (isKetThuc)
             {
                 return Ok(new ApiErrorResult<string>("Hợp đồng này đã kết thúc"));
             }
