@@ -61,7 +61,7 @@ namespace BaseSource.BackendApi.Controllers
             if (!string.IsNullOrEmpty(request.Info))
             {
                 model = model.Where(x => x.HD_Ma.Contains(request.Info.Trim()));
-               
+
             }
 
             if (request.FormDate != null)
@@ -158,10 +158,10 @@ namespace BaseSource.BackendApi.Controllers
                                       TenKhachHang = kh.Ten,
                                       SDT = kh.SDT,
                                       TenTaiSan = hd.TenTaiSan,
-                                  TongTienGhiNo = hd.TongTienGhiNo,
+                                      TongTienGhiNo = hd.TongTienGhiNo,
                                       TongTienDaThanhToan = hd.TongTienDaThanhToan,
                                       TyLeLai = hd.HD_LaiSuat + htl.TyLeLai,
-                                      ThoiGian = htl.ThoiGian,2fa
+                                      ThoiGian = htl.ThoiGian,
                                       NgayDongLaiTiepTheo = hd.NgayDongLaiTiepTheo,
                                       HD_NgayDaoHan = hd.HD_NgayDaoHan,
                                       TongTienVayHienTai = hd.TongTienVayHienTai,
@@ -300,7 +300,7 @@ namespace BaseSource.BackendApi.Controllers
                 },
                 Formatting = Newtonsoft.Json.Formatting.Indented
             };
-        
+
             hd.ListThuocTinhHangHoa = JsonConvert.SerializeObject(hd.ListThuocTinhHangHoa, settings);
             await _db.SaveChangesAsync();
 
