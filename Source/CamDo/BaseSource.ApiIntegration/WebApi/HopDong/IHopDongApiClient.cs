@@ -30,5 +30,9 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
         Task<ApiResult<InDongLaiResponseVm>> InKyDongLai(long paymentId);
         Task<ApiResult<InChuocDoResponseVm>> InChuocDo(int hopDongId);
         Task<ApiResult<HopDong_ReportVm>> GetReportHeader(ELoaiHopDong type);
+        Task<ApiResult<string>> MoLaiHopDong(int hopDongId);
+        Task<ApiResult<string>> AnHopDong(int hopDongId);
+        Task<ApiResult<int>> GetPrintDefault(ELoaiHopDong type);
+
     }
 }

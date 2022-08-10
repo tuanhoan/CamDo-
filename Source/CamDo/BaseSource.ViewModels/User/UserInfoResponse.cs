@@ -15,6 +15,7 @@ namespace BaseSource.ViewModels.User
         public string PhoneNumber { get; set; }
         public List<string> Roles { get; set; }
         public DateTime? JoinedDate { get; set; }
-        
+        public double Blance { get; set; }
+
     }
 }

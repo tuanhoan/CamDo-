@@ -24,7 +24,7 @@ namespace BaseSource.BackendApi.Controllers
         {
             var model = _db.CuaHang_TransactionLogs.AsQueryable();
             model = model.Where(x => x.HopDongId == hopDongId);
-            
+
             if (actionType != 0)
             {
                 if (actionType == EHopDong_ActionType.TraGoc || actionType == EHopDong_ActionType.VayThemGoc)
@@ -55,6 +55,7 @@ namespace BaseSource.BackendApi.Controllers
                     ToDate = trans.ToDate,
                     CreatedDate = trans.CreatedDate,
                     Note = trans.Note,
+                    TotalMoneyLoan = trans.TotalMoneyLoan
                 }).OrderByDescending(x => x.CreatedDate).ToListAsync();
             return Ok(new ApiSuccessResult<List<CuaHang_TransactionLogVm>>(result));
         }

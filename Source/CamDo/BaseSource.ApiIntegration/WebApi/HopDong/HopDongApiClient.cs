@@ -24,6 +24,17 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
             _httpClientFactory = httpClientFactory;
         }
 
+        public async Task<ApiResult<string>> AnHopDong(int hopDongId)
+        {
+            var dic = new Dictionary<string, string>()
+            {
+                { "hopDongId", hopDongId.ToString() }
+            };
+
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.PostAsyncFormUrl<ApiResult<string>>("/api/HopDong/AnHopDong", dic);
+        }
+
         public async Task<ApiResult<string>> ChuyenTrangThaiChoThanhLy(int hopDongId)
         {
             var dic = new Dictionary<string, string>()
@@ -113,6 +124,16 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
             return await client.GetAsync<ApiResult<PagedResult<HopDongVm>>>("/api/HopDong/GetPagings", model);
         }
 
+        public async Task<ApiResult<int>> GetPrintDefault(ELoaiHopDong type)
+        {
+            var obj = new
+            {
+                type = type
+            };
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.GetAsync<ApiResult<int>>("/api/HopDong/GetPrintDefault", obj);
+        }
+
         public async Task<ApiResult<HopDong_ReportVm>> GetReportHeader(ELoaiHopDong type)
         {
             var obj = new
@@ -141,6 +162,17 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
             };
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.GetAsync<ApiResult<InDongLaiResponseVm>>("/api/HopDong/InKyDongLai", obj);
+        }
+
+        public async Task<ApiResult<string>> MoLaiHopDong(int hopDongId)
+        {
+            var dic = new Dictionary<string, string>()
+            {
+                { "hopDongId", hopDongId.ToString() }
+            };
+
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.PostAsyncFormUrl<ApiResult<string>>("/api/HopDong/MoLaiHopDong", dic);
         }
 
         public async Task<ApiResult<string>> NoLai(HopDongNoLaiVm model)

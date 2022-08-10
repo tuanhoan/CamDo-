@@ -537,12 +537,29 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             return Json(new ApiSuccessResult<string>(Url.Action("Index")));
         }
         #endregion
-
-        #region Chọn mẫu hợp đồng
-        public IActionResult ChonMauHopDong(ELoaiHopDong type)
+        #region Mở lại hợp đồng
+        public async Task<IActionResult> MoLaiHopDong(int id)
         {
-            return View();
+            var result = await _hopDongApiClient.MoLaiHopDong(id);
+            if (!result.IsSuccessed)
+            {
+                return Json(new ApiErrorResult<string>(result.Message));
+            }
+            return Json(new ApiSuccessResult<string>(result.Message));
         }
         #endregion
+
+        #region Ẩn hợp đồng
+        public async Task<IActionResult> AnHopDong(int id)
+        {
+            var result = await _hopDongApiClient.AnHopDong(id);
+            if (!result.IsSuccessed)
+            {
+                return Json(new ApiErrorResult<string>(result.Message));
+            }
+            return Json(new ApiSuccessResult<string>(result.Message));
+        }
+        #endregion
+
     }
 }

@@ -104,11 +104,7 @@ namespace BaseSource.BackendApi.Services.Serivce.CuaHang_TransactionLog
                 case EHopDong_ActionType.HuyVayThemGoc:
                     break;
                 case EHopDong_ActionType.DongHD:
-                    var paymentDongHD = await _db.HopDong_PaymentLogs.FindAsync(model.PaymentId);
-                    transaction.MoneyAdd = paymentDongHD.MoneyPayNeed;
-                    transaction.MoneyPay = paymentDongHD.MoneyPayNeed;
-                    transaction.MoneyPayNeed = paymentDongHD.MoneyPayNeed;
-                    transaction.CreatedDate = paymentDongHD.CreatedDate;
+                    transaction.TotalMoneyLoan = model.TotalMoneyLoan;
                     break;
                 case EHopDong_ActionType.NoLai:
                     transaction.MoneyDebit = model.TienGhiNo;
@@ -121,6 +117,7 @@ namespace BaseSource.BackendApi.Services.Serivce.CuaHang_TransactionLog
                     transaction.ToDate = model.ToDate;
                     break;
                 case EHopDong_ActionType.MoLaiHD:
+                    transaction.TotalMoneyLoan = model.TotalMoneyLoan;
                     break;
                 case EHopDong_ActionType.ThanhLyDo:
                     break;

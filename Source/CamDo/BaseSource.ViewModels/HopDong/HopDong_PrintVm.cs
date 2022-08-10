@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BaseSource.Shared.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,5 +27,10 @@ namespace BaseSource.ViewModels.HopDong
         public DateTime? NgayChuoc { get; set; }
         public double TienVay { get; set; }
         public double TienChuoc { get; set; }
+    }
+
+    public class CamDo_HopDongPrintDefaulVm
+    {
+        public ECamDo_HopDongPrintTemplate Type { get; set; }
     }
 }

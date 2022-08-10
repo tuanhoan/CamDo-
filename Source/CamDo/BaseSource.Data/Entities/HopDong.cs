@@ -47,6 +47,7 @@ namespace BaseSource.Data.Entities
         public double TienLaiToiNgayHienTai { get; set; }
         public int SoNgayLaiToiHienTai { get; set; }
         public double TongTienChuoc { get; set; }
+        public bool IsHidden { get; set; }
 
         public virtual CuaHang CuaHang { get; set; }
         public virtual List<HopDong_VayRutGoc> HopDong_VayRutGocs { get; set; }

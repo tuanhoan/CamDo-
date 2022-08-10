@@ -222,10 +222,7 @@ namespace BaseSource.Shared.Enums
         [Display(Name = "Đến ngày chuộc đồ")]
         DenNgayChuocDo,
         [Display(Name = "Hôm nay đóng tiền")]
-        HomNayDongTien,
-
-
-
+        HomNayDongTien
     }
 
     public enum EHopDong_VayLaiStatusFilter : byte

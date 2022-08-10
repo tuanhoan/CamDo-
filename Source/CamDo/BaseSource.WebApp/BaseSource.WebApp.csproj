@@ -39,4 +39,8 @@
     <None Include="wwwroot\lib\owl-carousuel\README.md" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\mauhopdong\" />
+  </ItemGroup>
+
 </Project>

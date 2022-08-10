@@ -53,6 +53,11 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             return PartialView("_ReportHeader", result.ResultObj);
         }
 
-
+        #region Chọn mẫu hợp đồng
+        public IActionResult ChonMauHopDong()
+        {
+            return PartialView("_ChonMauHopDong");
+        }
+        #endregion
     }
 }

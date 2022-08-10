@@ -177,11 +177,15 @@ $("body").on("click", '.detaileHD', function (e) {
 
             setMoneyTextBox(".money-textbox");
             saveHopDong();
+            $("#hd-modal").on("hidden.bs.modal", function () {
+                location.reload();
+            });
         }, error: function (error) {
             alert("Error!");
         }
     });
 })
+
 function saveHopDong() {
     $('form[data-name="ajaxFormHopDong"]').on("submit", function (e) {
         e.preventDefault();

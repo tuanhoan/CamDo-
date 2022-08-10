@@ -56,7 +56,7 @@ namespace BaseSource.BackendApi.Controllers
         public async Task<IActionResult> GetPagings([FromQuery] GetHopDongPagingRequest request)
         {
             var model = _db.HopDongs.AsQueryable();
-            model = model.Where(x => x.CuaHangId == CuaHangId && x.HD_Loai == request.LoaiHopDong);
+            model = model.Where(x => x.CuaHangId == CuaHangId && x.HD_Loai == request.LoaiHopDong && x.IsHidden == false);
 
             if (!string.IsNullOrEmpty(request.Info))
             {
@@ -103,7 +103,7 @@ namespace BaseSource.BackendApi.Controllers
                                             TenKhachHang = kh.Ten,
                                             SDT = kh.SDT,
                                             TenTaiSan = hd.TenTaiSan,
-                                            TienNo = 0,
+                                            TienNo = hd.TongTienDaThanhToan - hd.TongTienGhiNo,
                                             TongTienDaThanhToan = hd.TongTienDaThanhToan,
                                             TyLeLai = xhtl != null ? hd.HD_LaiSuat + xhtl.TyLeLai : "Không tính lãi",
                                             ThoiGian = xhtl != null ? xhtl.ThoiGian : EThoiGianVay.Ngay,
@@ -159,6 +159,7 @@ namespace BaseSource.BackendApi.Controllers
                                       HD_HinhThucLai = hd.HD_HinhThucLai,
                                       HD_KyLai = hd.HD_KyLai,
                                       TongTienLaiDaThanhToan = hd.TongTienLaiDaThanhToan,
+                                      TienNo = hd.TongTienDaThanhToan - hd.TongTienGhiNo,
                                       MaTaiSan = hh.MaTS,
                                       TenKhachHang = kh.Ten,
                                       SDT = kh.SDT,
@@ -756,7 +757,6 @@ namespace BaseSource.BackendApi.Controllers
                     if (currentStatus == EHopDong_CamDoStatusFilter.ChoThanhLy)
                     {
                         hd.HD_Status = (byte)EHopDong_CamDoStatusFilter.DangCam;
-
                     }
                     else
                     {
@@ -814,6 +814,76 @@ namespace BaseSource.BackendApi.Controllers
         }
         #endregion
 
+        #region Mở lại hợp đồng
+        [HttpPost("MoLaiHopDong")]
+        public async Task<IActionResult> MoLaiHopDong([FromForm] int hopDongId)
+        {
+            var hd = await _db.HopDongs.FindAsync(hopDongId);
+            if (hd == null)
+            {
+                return Ok(new ApiErrorResult<string>("Not Found"));
+            }
+            var isKetThuc = await _hopDongService.CheckHopDongKetThuc(hd.HD_Status, hd.HD_Loai);
+            if (!isKetThuc)
+            {
+                return Ok(new ApiErrorResult<string>("Bạn không thể mở lại hợp đồng"));
+            }
+            switch (hd.HD_Loai)
+            {
+                case ELoaiHopDong.Camdo:
+                    hd.HD_Status = (byte)EHopDong_CamDoStatusFilter.DangCam;
+                    break;
+                case ELoaiHopDong.Vaylai:
+                    break;
+                case ELoaiHopDong.GopVon:
+                    break;
+                default:
+                    break;
+            }
+            hd.NgayTatToan = null;
+            await _db.SaveChangesAsync();
+            var tranLog = new CreateCuaHang_TransactionLogVm()
+            {
+                HopDongId = hd.Id,
+                ActionType = EHopDong_ActionType.MoLaiHD,
+                FeatureType = EFeatureType.Camdo,
+                UserId = UserId,
+                TotalMoneyLoan = hd.TongTienChuoc
+
+            };
+            var result = Task.Run(() => CreateCuaHang_TransactionLog(tranLog));
+            return Ok(new ApiSuccessResult<string>("Xóa hợp đồng thành công"));
+        }
+        #endregion
+        #region Ẩn lại hợp đồng
+        [HttpPost("AnHopDong")]
+        public async Task<IActionResult> AnHopDong([FromForm] int hopDongId)
+        {
+            var hd = await _db.HopDongs.FindAsync(hopDongId);
+            if (hd == null)
+            {
+                return Ok(new ApiErrorResult<string>("Not Found"));
+            }
+            switch (hd.HD_Loai)
+            {
+                case ELoaiHopDong.Camdo:
+                    if (hd.HD_Status != (byte)EHopDong_CamDoStatusFilter.DaThanhLy && hd.HD_Status != (byte)EHopDong_CamDoStatusFilter.KetThuc)
+                    {
+                        return Ok(new ApiErrorResult<string>("Bạn không thể ẩn hợp đồng"));
+                    }
+                    break;
+                case ELoaiHopDong.Vaylai:
+                    break;
+                case ELoaiHopDong.GopVon:
+                    break;
+                default:
+                    break;
+            }
+            hd.IsHidden = true;
+            await _db.SaveChangesAsync();
+            return Ok(new ApiSuccessResult<string>("Ẩn hợp đồng thành công"));
+        }
+        #endregion
         #region helper
         private string GetTrangThaiHopDong(ELoaiHopDong type, byte status)
         {

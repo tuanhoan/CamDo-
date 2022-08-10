@@ -124,7 +124,20 @@ namespace BaseSource.BackendApi.Controllers
                 noCu = (hd.TongTienDaThanhToan - hd.TongTienGhiNo);
             }
             var tongTienChuoc = hd.TongTienVayHienTai + noCu + tienLai + model.TienKhac;
+            hd.TongTienChuoc = tongTienChuoc;
             hd.NgayTatToan = DateTime.Now;
+            switch (hd.HD_Loai)
+            {
+                case ELoaiHopDong.Camdo:
+                    hd.HD_Status = (byte)EHopDong_CommonStatusFilter.KetThuc;
+                    break;
+                case ELoaiHopDong.Vaylai:
+                    break;
+                case ELoaiHopDong.GopVon:
+                    break;
+                default:
+                    break;
+            }
             await _db.SaveChangesAsync();
 
             //xóa log cũ
@@ -155,7 +168,8 @@ namespace BaseSource.BackendApi.Controllers
                 ActionType = EHopDong_ActionType.DongHD,
                 FeatureType = EFeatureType.Camdo,
                 UserId = UserId,
-                PaymentId = paymetLogNew.Id
+                PaymentId = paymetLogNew.Id,
+                TotalMoneyLoan = tongTienChuoc
             };
             var rs = Task.Run(() => CreateCuaHang_TransactionLog(tranLog));
             return Ok(new ApiSuccessResult<string>("Bạn đã chuộc đồ thành công"));

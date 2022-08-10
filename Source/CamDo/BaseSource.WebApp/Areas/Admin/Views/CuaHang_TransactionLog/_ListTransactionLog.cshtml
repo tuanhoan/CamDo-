@@ -27,6 +27,7 @@
                     <td>@idx</td>
                     <td>@item.CreatedDate.ToString("HH:mm dd/MM/yyyy")</td>
                     <td>@item.FullName</td>
+
                     @if (item.ActionType == (byte)EHopDong_ActionType.TraNo || item.ActionType == (byte)EHopDong_ActionType.NoLai)
                     {
                         if (item.MoneyDebit < 0)
@@ -40,20 +41,29 @@
                             <td class="text-right">0</td>
                         }
                     }
-                    @if (item.MoneyAdd != 0)
+                    @if (item.ActionType == (byte)EHopDong_ActionType.DongTienLai || item.ActionType == (byte)EHopDong_ActionType.HuyDongTienLai)
                     {
-                        <td class="text-right">0</td>
-                        <td class="text-right">@item.MoneyPay.ToString("N0")</td>
+                        @if (item.MoneyAdd != 0)
+                        {
+                            <td class="text-right">0</td>
+                            <td class="text-right">@item.MoneyPay.ToString("N0")</td>
+                        }
+                        else
+                        {
+                            <td class="text-right">@item.MoneyPay.ToString("N0")</td>
+                            <td class="text-right">0</td>
+                        }
                     }
-                    else
-                    {
-                        <td class="text-right">@item.MoneyPay.ToString("N0")</td>
-                        <td class="text-right">0</td>
-                    }
-                    @if (item.ActionType == (byte)EHopDong_ActionType.XoaHD)
+
+                    @if (item.ActionType == (byte)EHopDong_ActionType.DongHD)
                     {
                         <td class="text-right">0</td>
                         <td class="text-right">@item.TotalMoneyLoan.ToString("N0")</td>
+                    }
+                    @if (item.ActionType == (byte)EHopDong_ActionType.MoLaiHD)
+                    {
+                        <td class="text-right">@item.TotalMoneyLoan.ToString("N0")</td>
+                        <td class="text-right">0</td>
                     }
                     <td style="border-right:none !important">
                         @EnumExtensions.GetEnumDisplayName(((EHopDong_ActionType)item.ActionType))
