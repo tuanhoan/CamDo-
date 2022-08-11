@@ -25,6 +25,7 @@ using AutoMapper;
 using BaseSource.BackendApi.Services.Serivce;
 using BaseSource.BackendApi.Services.Serivce.HopDong;
 using BaseSource.BackendApi.Services.Serivce.CuaHang_TransactionLog;
+using BaseSource.BackendApi.Services.Serivce.CronJob;
 
 namespace BaseSource.BackendApi
 {
@@ -149,6 +150,11 @@ namespace BaseSource.BackendApi
 
             IMapper mapper = mapperConfig.CreateMapper();
             services.AddSingleton(mapper);
+            services.AddCronJob<HopDong_ScheduleJob>(c =>
+            {
+                c.TimeZoneInfo = TimeZoneInfo.Local;
+                c.CronExpression = @"*/5 * * * *";  
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

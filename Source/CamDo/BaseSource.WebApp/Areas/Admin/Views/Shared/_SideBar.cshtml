@@ -50,20 +50,24 @@
                 </nav>
             </div>
             @*<a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseNhanvien" aria-expanded="false" aria-controls="collapseCTLQ">
-                    <div class="nav-link-icon"><i data-feather="file-text"></i></div>
-                    Quản lý nhân viên
-                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                </a>
-                <div class="collapse" id="collapseNhanvien" data-parent="#accordionSidenav">
-                    <nav class="sidenav-menu-nested nav">
-                        <a class="nav-link expense-nav" href="@Url.Action("Expense", "QuanLyThuChi")">Danh sách nhân viên</a>
-                        <a class="nav-link income-nav" href="@Url.Action("Income", "QuanLyThuChi")">Phân quyền nhân viên</a>
-                    </nav>
-                </div>*@
+            <div class="nav-link-icon"><i data-feather="file-text"></i></div>
+            Quản lý nhân viên
+            <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+        </a>
+        <div class="collapse" id="collapseNhanvien" data-parent="#accordionSidenav">
+            <nav class="sidenav-menu-nested nav">
+                <a class="nav-link expense-nav" href="@Url.Action("Expense", "QuanLyThuChi")">Danh sách nhân viên</a>
+                <a class="nav-link income-nav" href="@Url.Action("Income", "QuanLyThuChi")">Phân quyền nhân viên</a>
+            </nav>
+        </div>*@
 
             <a class="nav-link user-nav" href="@Url.Action("Index", "Pawn")">
                 <div class="nav-link-icon"><i data-feather="briefcase"></i></div>
                 Cầm đồ
+            </a>
+            <a class="nav-link loan-nav" href="@Url.Action("Index", "Loan")">
+                <div class="nav-link-icon"><i data-feather="trello"></i></div>
+                Vay lãi
             </a>
             <a class="nav-link user-nav" href="@Url.Action("Index", "User")">
                 <div class="nav-link-icon"><i data-feather="users"></i></div>
@@ -113,9 +117,9 @@
                 </nav>
             </div>
             @*<a class="nav-link setting-nav" href="#">
-                    <div class="nav-link-icon"><i data-feather="settings"></i></div>
-                    Tính năng t
-                </a>*@
+            <div class="nav-link-icon"><i data-feather="settings"></i></div>
+            Tính năng t
+        </a>*@
         </div>
     </div>
 </nav>

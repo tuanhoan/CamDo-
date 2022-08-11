@@ -5,6 +5,7 @@ using BaseSource.Shared.Enums;
 using BaseSource.ViewModels.HopDong;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,10 +18,12 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IMapper _mapper;
-        public HopDongService(IServiceScopeFactory serviceScopeFactory, IMapper mapper)
+        private readonly ILogger<HopDongService> _logger;
+        public HopDongService(IServiceScopeFactory serviceScopeFactory, IMapper mapper, ILogger<HopDongService> logger)
         {
             _serviceScopeFactory = serviceScopeFactory;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task TaoKyDongLai(int hopdongId)
@@ -317,7 +320,7 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
                     hd.TongTienVayHienTai = hd.HD_TongTienVayBanDau;
 
                     //set  type HD
-                    hd.HD_Loai = model.LoaiHopDong;
+                    //hd.HD_Loai = model.LoaiHopDong;
 
                     switch (hd.HD_Loai)
                     {
@@ -354,7 +357,7 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
             }
         }
 
-        private async Task<int> AddOrUpDateCustomer(KhachHang model)
+        public async Task<int> AddOrUpDateCustomer(KhachHang model)
         {
             using var _db = _serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<BaseSourceDbContext>();
             int khachHangId = 0;
@@ -380,40 +383,64 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
 
         public async Task TinhLaiToiNgayHienTai()
         {
+            _logger.LogInformation("TinhLaiToiNgayHienTai starts.");
             using var _db = _serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<BaseSourceDbContext>();
             var lstHopDong = _db.HopDongs.AsQueryable();
             lstHopDong = lstHopDong.Where(x => x.HD_Status != (byte)EHopDong_CamDoStatusFilter.DaThanhLy && x.HD_Status != (byte)EHopDong_CamDoStatusFilter.DaXoa && x.HD_Status != (byte)EHopDong_CamDoStatusFilter.KetThuc);
             lstHopDong = lstHopDong.Where(x => x.HD_Status != (byte)EHopDong_VayLaiStatusFilter.DaXoa && x.HD_Status != (byte)EHopDong_CamDoStatusFilter.KetThuc);
             lstHopDong = lstHopDong.Where(x => x.HD_Status != (byte)EHopDong_GopVonStatusFilter.KetThuc);
-
+            var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
             var data = await lstHopDong.ToListAsync();
             foreach (var item in data)
             {
-                var payment = await _db.HopDong_PaymentLogs.Where(x => x.PaidDate == null).OrderBy(x => x.CreatedDate).FirstOrDefaultAsync();
-                if (payment != null)
-                {
-                    var ngayDonglai = new DateTime(payment.ToDate.Year, payment.ToDate.Month, payment.ToDate.Day);
-                    var currentDate = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
 
-                    var checkNgayDongLaiCuoiCung = await _db.HopDong_PaymentLogs.AnyAsync(x => x.HopDongId == item.Id && x.PaidDate == null);
+                var payment = await _db.HopDong_PaymentLogs.Where(x => x.PaidDate == null && x.HopDongId == item.Id).OrderBy(x => x.CreatedDate).ToListAsync();
+                if (payment.Count > 0)
+                {
+                    var laiNgay = payment.FirstOrDefault().MoneyInterest / payment.FirstOrDefault().CountDay;
+                    //lấy danh sách payment nhỏ hơn ngày hiện tại
+                    double totalInterest = 0;
+                    int totalDayPayment = 0;
+                    var lstPaymetOutOfDate = payment.Where(x => x.ToDate <= currentDate).ToList();
+                    if (lstPaymetOutOfDate.Count > 0)
+                    {
+                        foreach (var p in payment)
+                        {
+                            totalInterest += p.MoneyInterest;
+                            totalDayPayment += p.CountDay;
+                        }
+
+                    }
+                    //kỳ đóng lãi hiện tại
+                    var itemInPayment = payment.FirstOrDefault(x => x.FromDate <= currentDate && x.ToDate >= currentDate);
+                    if (itemInPayment != null)
+                    {
+                        totalDayPayment += (DateTime.Now - itemInPayment.FromDate).Days + 1;
+                        totalInterest += (laiNgay * totalDayPayment);
+                    }
+
+                    item.TienLaiToiNgayHienTai = totalInterest;
+                    item.SoNgayLaiToiHienTai = totalDayPayment;
 
                     switch (item.HD_Loai)
                     {
                         case ELoaiHopDong.Camdo:
-                            if (ngayDonglai == currentDate)
+                            if (itemInPayment != null)
                             {
-                                item.HD_Status = (byte)EHopDong_CamDoStatusFilter.HomNayDongTien;
+                                if (itemInPayment.ToDate == currentDate)
+                                {
+                                    item.HD_Status = (byte)EHopDong_CamDoStatusFilter.HomNayDongTien;
+                                }
                             }
-                            else if (ngayDonglai >= currentDate && checkNgayDongLaiCuoiCung)
+                            else if (payment.Count == 1 && itemInPayment.ToDate == currentDate)
                             {
                                 item.HD_Status = (byte)EHopDong_CamDoStatusFilter.DenNgayChuocDo;
                             }
-                            else if (ngayDonglai >= currentDate)
+                            else
                             {
                                 item.HD_Status = (byte)EHopDong_CamDoStatusFilter.QuaHan;
+
                             }
-
-
                             break;
                         case ELoaiHopDong.Vaylai:
                             break;
@@ -422,16 +449,23 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
                         default:
                             break;
                     }
-                    var laiNgay = payment.MoneyInterest / payment.CountDay;
-                    var totalDay = (DateTime.Now - payment.FromDate).Days + 1;
-                    var tongLai = laiNgay * totalDay;
-                    item.TienLaiToiNgayHienTai = tongLai;
-                    item.SoNgayLaiToiHienTai = totalDay;
-                    await _db.SaveChangesAsync();
-                }
-            }
+                    try
+                    {
+                        await _db.SaveChangesAsync();
+                    }
+                    catch (Exception ex)
+                    {
 
+                        throw;
+                    }
+
+                }
+
+
+            }
         }
+
+
 
 
         Task<bool> IHopDongService.CheckHopDongKetThuc(byte hdStatus, ELoaiHopDong type)
@@ -454,6 +488,8 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
             }
             return Task.FromResult(result);
         }
+
+       
     }
 }
 

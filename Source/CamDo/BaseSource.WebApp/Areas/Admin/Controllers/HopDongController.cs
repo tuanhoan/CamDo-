@@ -65,7 +65,9 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
 
             var model = new CreateHopDongVm()
             {
-                HD_NgayVay = DateTime.Now.Date
+                HD_NgayVay = DateTime.Now.Date,
+                HD_Loai = ELoaiHopDong.Camdo
+
             };
 
             return PartialView("_Create", model);

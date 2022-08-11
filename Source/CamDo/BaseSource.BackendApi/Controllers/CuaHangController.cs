@@ -32,7 +32,7 @@ namespace BaseSource.BackendApi.Controllers
         private readonly IConfiguration _configuration;
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly IHopDongService _hopDongService;
-         private readonly ICuaHang_TransactionLogService _cuaHang_TransactionLogService;
+        private readonly ICuaHang_TransactionLogService _cuaHang_TransactionLogService;
         public CuaHangController(BaseSourceDbContext db, UserManager<AppUser> userManager,
             IServiceScopeFactory serviceScopeFactory, IConfiguration configuration, IHopDongService hopDongService,
             ICuaHang_TransactionLogService cuaHang_TransactionLogService)
@@ -195,18 +195,18 @@ namespace BaseSource.BackendApi.Controllers
                 SDT = model.SDT,
                 TenKhachHang = "Vốn Khởi Tạo",
                 DiaChi = model.DiaChi,
-                LoaiHopDong = ELoaiHopDong.GopVon,
+                HD_Loai = ELoaiHopDong.GopVon,
                 UserIdAssigned = UserId,
                 HD_NgayVay = DateTime.Now,
                 HD_TongTienVayBanDau = model.VonDauTu,
                 HD_Ma = Guid.NewGuid().ToString(),
-                TenTaiSan="Vốn Khởi Tạo"
+                TenTaiSan = "Vốn Khởi Tạo"
             }, cuaHang.Id, UserId);
 
             if (resultHopDong.Key)
             {
                 //add log cuahang
-              await  _cuaHang_TransactionLogService.CreateTransactionLog(new CreateCuaHang_TransactionLogVm
+                await _cuaHang_TransactionLogService.CreateTransactionLog(new CreateCuaHang_TransactionLogVm
                 {
                     HopDongId = int.Parse(resultHopDong.Value),
                     ActionType = EHopDong_ActionType.TaoMoiHD,

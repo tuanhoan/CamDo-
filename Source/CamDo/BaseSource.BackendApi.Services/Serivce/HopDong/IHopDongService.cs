@@ -1,4 +1,5 @@
-﻿using BaseSource.Shared.Enums;
+﻿using BaseSource.Data.Entities;
+using BaseSource.Shared.Enums;
 using BaseSource.ViewModels.HopDong;
 using System;
 using System.Collections.Generic;
@@ -18,5 +19,6 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
         Task TinhLaiToiNgayHienTai();
         Task<KeyValuePair<bool, string>> CreateHopDongAsync(CreateHopDongVm model, int cuahangId, string userId);
         Task<bool> CheckHopDongKetThuc(byte hdStatus, ELoaiHopDong type);
+        Task<int> AddOrUpDateCustomer(KhachHang model);
     }
 }

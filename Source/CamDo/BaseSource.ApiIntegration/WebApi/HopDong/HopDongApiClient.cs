@@ -69,6 +69,12 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
             return await client.PostAsync<ApiResult<string>>("/api/HopDongGopVon/Create", model);
         }
 
+        public async Task<ApiResult<string>> CreateHopDongVayLai(CreateHopDongVayLaiVm model)
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.PostAsync<ApiResult<string>>("/api/HopDongVayLai/Create", model);
+        }
+
         public async Task<ApiResult<string>> DeleteChungTu(DeleteChungTu_Vm model)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
@@ -98,6 +104,12 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
             return await client.PostAsync<ApiResult<string>>("/api/HopDongGopVon/Edit", model);
         }
 
+        public async Task<ApiResult<string>> EditHopDongVayLain(EditHopDongVayLaiVm model)
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.PostAsync<ApiResult<string>>("/api/HopDongVayLai/Edit", model);
+        }
+
         public async Task<ApiResult<HopDongVm>> GetById(int id)
         {
             var obj = new
@@ -124,14 +136,14 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
             return await client.GetAsync<ApiResult<PagedResult<HopDongVm>>>("/api/HopDong/GetPagings", model);
         }
 
-        public async Task<ApiResult<int>> GetPrintDefault(ELoaiHopDong type)
+        public async Task<ApiResult<HopDongPrintDefaulVm>> GetPrintDefault(ELoaiHopDong type)
         {
             var obj = new
             {
                 type = type
             };
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
-            return await client.GetAsync<ApiResult<int>>("/api/HopDong/GetPrintDefault", obj);
+            return await client.GetAsync<ApiResult<HopDongPrintDefaulVm>>("/api/HopDong/GetPrintDefault", obj);
         }
 
         public async Task<ApiResult<HopDong_ReportVm>> GetReportHeader(ELoaiHopDong type)
@@ -179,6 +191,12 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.PostAsync<ApiResult<string>>("/api/HopDong/NoLai", model);
+        }
+
+        public async Task<ApiResult<string>> SavePrintDefault(HopDongPrintDefaulVm model)
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.PostAsync<ApiResult<string>>("/api/HopDong/SavePrintDefault", model);
         }
 
         public async Task<ApiResult<string>> ThanhLyHopDong(int hopDongId)

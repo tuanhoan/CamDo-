@@ -29,8 +29,10 @@ namespace BaseSource.ViewModels.HopDong
         public double TienChuoc { get; set; }
     }
 
-    public class CamDo_HopDongPrintDefaulVm
+    public class HopDongPrintDefaulVm
     {
-        public ECamDo_HopDongPrintTemplate Type { get; set; }
+        public ELoaiHopDong LoaiHopDong { get; set; }
+        public ECamDo_HopDongPrintTemplate CamDo_HopDongPrintTemplate { get; set; }
+        public EVayLai_HopDongPrintTemplate VayLai_HopDongPrintTemplate { get; set; }
     }
 }

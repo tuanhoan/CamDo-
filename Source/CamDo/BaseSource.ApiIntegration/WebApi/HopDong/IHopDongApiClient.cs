@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+ 
 
 namespace BaseSource.ApiIntegration.WebApi.HopDong
 {
@@ -32,7 +33,14 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
         Task<ApiResult<HopDong_ReportVm>> GetReportHeader(ELoaiHopDong type);
         Task<ApiResult<string>> MoLaiHopDong(int hopDongId);
         Task<ApiResult<string>> AnHopDong(int hopDongId);
-        Task<ApiResult<int>> GetPrintDefault(ELoaiHopDong type);
+        Task<ApiResult<HopDongPrintDefaulVm>> GetPrintDefault(ELoaiHopDong type);
+        Task<ApiResult<string>> SavePrintDefault(HopDongPrintDefaulVm model);
+
+        #region vay lãi
+        Task<ApiResult<string>> CreateHopDongVayLai(CreateHopDongVayLaiVm model);
+        Task<ApiResult<string>> EditHopDongVayLain(EditHopDongVayLaiVm model);
+        #endregion
+
 
     }
 }

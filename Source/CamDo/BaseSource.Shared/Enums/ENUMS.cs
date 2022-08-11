@@ -222,7 +222,8 @@ namespace BaseSource.Shared.Enums
         [Display(Name = "Đến ngày chuộc đồ")]
         DenNgayChuocDo,
         [Display(Name = "Hôm nay đóng tiền")]
-        HomNayDongTien
+        HomNayDongTien,
+     
     }
 
     public enum EHopDong_VayLaiStatusFilter : byte
@@ -238,7 +239,9 @@ namespace BaseSource.Shared.Enums
         [Display(Name = "Đã xóa")]
         DaXoa = EHopDong_CommonStatusFilter.DaXoa,
         [Display(Name = "Nợ xấu")]
-        NoXau = EHopDong_CommonStatusFilter.ChoThanhLy
+        NoXau = EHopDong_CommonStatusFilter.ChoThanhLy,
+        [Display(Name = "Đang vay")]
+        DangVay
     }
 
     public enum EHopDong_GopVonStatusFilter : byte

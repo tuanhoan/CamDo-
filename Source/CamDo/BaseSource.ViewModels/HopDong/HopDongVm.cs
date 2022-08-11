@@ -67,7 +67,7 @@ namespace BaseSource.ViewModels.HopDong
     }
     public class CreateHopDongVm : IValidatableObject
     {
-        public ELoaiHopDong LoaiHopDong { get; set; } = ELoaiHopDong.Camdo;
+        public ELoaiHopDong HD_Loai { get; set; }
 
         [Display(Name = "Mã hợp đồng")]
         [Required(ErrorMessage = "Vui lòng nhập mã hợp đồng")]

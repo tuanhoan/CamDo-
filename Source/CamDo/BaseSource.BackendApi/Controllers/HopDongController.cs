@@ -146,7 +146,8 @@ namespace BaseSource.BackendApi.Controllers
 
                 var data = await (from hd in model
                                   join kh in _db.KhachHangs on hd.KhachHangId equals kh.Id
-                                  join hh in _db.CauHinhHangHoas on hd.HangHoaId equals hh.Id
+                                  join hh in _db.CauHinhHangHoas on hd.HangHoaId equals hh.Id into chhh
+                                  from hh in chhh.DefaultIfEmpty()
                                   join htl in _db.MoTaHinhThucLais on hd.HD_HinhThucLai equals htl.HinhThucLai
                                   select new HopDongVm()
                                   {
@@ -882,6 +883,55 @@ namespace BaseSource.BackendApi.Controllers
             hd.IsHidden = true;
             await _db.SaveChangesAsync();
             return Ok(new ApiSuccessResult<string>("Ẩn hợp đồng thành công"));
+        }
+        #endregion
+
+        #region mẫu hợp đồng
+        [HttpGet("GetPrintDefault")]
+        public async Task<IActionResult> GetPrintDefault(ELoaiHopDong type)
+        {
+            var response = new HopDongPrintDefaulVm();
+            response.LoaiHopDong = type;
+            switch (type)
+            {
+                case ELoaiHopDong.Camdo:
+                    var cuaHang = await _db.CuaHangs.FirstOrDefaultAsync(x => x.Id == CuaHangId);
+                    if (cuaHang != null)
+                    {
+                        response.CamDo_HopDongPrintTemplate = cuaHang.CamDo_HopDongPrintTemplate;
+                        response.CamDo_HopDongPrintTemplate = cuaHang.CamDo_HopDongPrintTemplate;
+                    }
+                    break;
+                case ELoaiHopDong.Vaylai:
+                    break;
+                case ELoaiHopDong.GopVon:
+                    break;
+                default:
+                    break;
+            }
+            return Ok(new ApiSuccessResult<HopDongPrintDefaulVm>(response));
+        }
+        [HttpPost("SavePrintDefault")]
+        public async Task<IActionResult> SavePrintDefault(HopDongPrintDefaulVm model)
+        {
+            switch (model.LoaiHopDong)
+            {
+                case ELoaiHopDong.Camdo:
+                    var cuaHang = await _db.CuaHangs.FirstOrDefaultAsync(x => x.Id == CuaHangId);
+                    if (cuaHang != null)
+                    {
+                        cuaHang.CamDo_HopDongPrintTemplate = model.CamDo_HopDongPrintTemplate;
+                    }
+                    break;
+                case ELoaiHopDong.Vaylai:
+                    break;
+                case ELoaiHopDong.GopVon:
+                    break;
+                default:
+                    break;
+            }
+            await _db.SaveChangesAsync();
+            return Ok(new ApiSuccessResult<string>());
         }
         #endregion
         #region helper
