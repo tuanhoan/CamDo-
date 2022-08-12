@@ -116,7 +116,7 @@ namespace BaseSource.WebApp
             services.AddTransient<IKhachHangApiClient, KhachHangApiClient>();
             services.AddTransient<ILienHeApiClient, LienHeApiClient>();
             services.AddTransient<IGoiSanPhamApiClient, GoiSanPhamApiClient>();
-            services.AddTransient<IHD_PaymentLogApiClient, HD_PaymentLogApiClient>();
+            services.AddTransient<IHopDong_PaymentLogApiClient, HopDong_PaymentLogApiClient>();
             services.AddTransient<IHD_PaymentLogNote, HD_PaymentLogNote>();
             services.AddTransient<ICuaHang_TransactionLogApiClient, CuaHang_TransactionLogApiClient>();
             services.AddTransient<IHopDong_DebtNoteApiClient, HopDong_DebtNoteApiClient>();

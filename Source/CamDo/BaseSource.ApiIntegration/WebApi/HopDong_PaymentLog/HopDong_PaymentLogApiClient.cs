@@ -11,10 +11,10 @@ using BaseSource.Utilities.Helper;
 
 namespace BaseSource.ApiIntegration.WebApi.HD_PaymentLog
 {
-    public class HD_PaymentLogApiClient : IHD_PaymentLogApiClient
+    public class HopDong_PaymentLogApiClient : IHopDong_PaymentLogApiClient
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        public HD_PaymentLogApiClient(IHttpClientFactory httpClientFactory)
+        public HopDong_PaymentLogApiClient(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
         }

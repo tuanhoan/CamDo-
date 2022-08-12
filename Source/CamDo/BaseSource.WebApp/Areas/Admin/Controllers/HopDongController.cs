@@ -32,13 +32,13 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         private readonly ICauHinhHangHoaApiClient _cauHinhHangHoaApiClient;
         private readonly IHopDongApiClient _hopDongApiClient;
         private readonly IUserApiClient _userApiClient;
-        private readonly IHD_PaymentLogApiClient _hdPaymentLogApiClient;
+        private readonly IHopDong_PaymentLogApiClient _hdPaymentLogApiClient;
         private readonly ICuaHang_TransactionLogApiClient _cuaHang_TransactionLog;
         private readonly IWebHostEnvironment _appEnvironment;
         public HopDongController(ICauHinhHangHoaApiClient cauHinhHangHoaApiClient,
-            IHopDongApiClient hopDongApiClient, IUserApiClient userApiClient,
-            IHD_PaymentLogApiClient hdPaymentLogApiClient, ICuaHang_TransactionLogApiClient cuaHang_TransactionLog,
-            IWebHostEnvironment appEnvironment)
+            IHopDongApiClient hopDongApiClient, IUserApiClient userApiClient
+            , ICuaHang_TransactionLogApiClient cuaHang_TransactionLog,
+            IWebHostEnvironment appEnvironment, IHopDong_PaymentLogApiClient hdPaymentLogApiClient)
         {
             _cauHinhHangHoaApiClient = cauHinhHangHoaApiClient;
             _hopDongApiClient = hopDongApiClient;
@@ -53,7 +53,8 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             var requestCauHinhHH = new GetCauHinhHangHoaPagingRequest()
             {
                 Page = 1,
-                PageSize = int.MaxValue
+                PageSize = int.MaxValue,
+                LinhVuc = ELinhVucHangHoa.Camdo
             };
             var requestUser = _userApiClient.GetUserByCuaHang();
             var resultCuaHinhHH = _cauHinhHangHoaApiClient.GetPagings(requestCauHinhHH);
@@ -117,11 +118,13 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
                 HangHoaId = result.ResultObj.HangHoaId,
                 ListThuocTinhHangHoa = result.ResultObj.ListThuocTinhHangHoa,
                 UserIdAssigned = result.ResultObj.UserIdAssigned,
+                HD_MaTemp = result.ResultObj.HD_MaTemp,
             };
             var requestCauHinhHH = new GetCauHinhHangHoaPagingRequest()
             {
                 Page = 1,
-                PageSize = int.MaxValue
+                PageSize = int.MaxValue,
+                LinhVuc = ELinhVucHangHoa.Camdo
             };
             var requestUser = _userApiClient.GetUserByCuaHang();
             var resultCuaHinhHH = _cauHinhHangHoaApiClient.GetPagings(requestCauHinhHH);
@@ -289,68 +292,6 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
                 return Json(new ApiSuccessResult<string>(source));
             }
 
-        }
-        #endregion
-
-
-        #region Thanh toán lãi
-        public async Task<IActionResult> GetListPaymentLog(int hdId)
-        {
-            var result = await _hdPaymentLogApiClient.GetPaymentLogByHD(hdId);
-            return PartialView("_HD_PaymentLog", result.ResultObj);
-        }
-        public async Task<IActionResult> GetInfoPaymentByDate(int hdId)
-        {
-            var result = await _hdPaymentLogApiClient.GetPaymentByDate(hdId);
-            return PartialView("_DongLaiTheoNgay", result.ResultObj);
-        }
-        [HttpPost]
-        public async Task<IActionResult> CreatePayment(int paymentId, int hdId, double customerPay)
-        {
-            var model = new CreateHDPaymentLogVm()
-            {
-                PaymentID = paymentId,
-                HDId = hdId,
-                CustomerPay = customerPay
-            };
-            var result = await _hdPaymentLogApiClient.Create(model);
-            if (!result.IsSuccessed)
-            {
-                return Json(new ApiErrorResult<string>(result.ValidationErrors));
-            }
-            return Json(new ApiSuccessResult<HD_PaymentLogReponse>(result.ResultObj, result.Message));
-        }
-        public async Task<IActionResult> DeletePayment(long paymentId)
-        {
-            var result = await _hdPaymentLogApiClient.Delete(paymentId);
-            if (!result.IsSuccessed)
-            {
-                return Json(new ApiErrorResult<string>(result.Message));
-            }
-            return Json(new ApiSuccessResult<HD_PaymentLogReponse>(result.ResultObj, result.Message));
-        }
-        public async Task<IActionResult> ChangePaymentDate(int hdId, string dateChange)
-        {
-            var model = new ChangePaymentDateRequestVm()
-            {
-                HdId = hdId,
-                DateChange = Convert.ToDateTime(dateChange)
-            };
-            var result = await _hdPaymentLogApiClient.ChangePaymentDate(model);
-            if (!result.IsSuccessed)
-            {
-                return Json(new ApiErrorResult<string>(result.Message));
-            }
-            return Json(new ApiSuccessResult<ChangePaymentDateResponseVm>(result.ResultObj));
-        }
-        public async Task<IActionResult> CreateHDPaymentByDate(HDPaymentByDateVm model)
-        {
-            var result = await _hdPaymentLogApiClient.CreatePaymentByDate(model);
-            if (!result.IsSuccessed)
-            {
-                return Json(new ApiErrorResult<string>(result.Message));
-            }
-            return Json(new ApiSuccessResult<HD_PaymentLogReponse>(result.ResultObj, result.Message));
         }
         #endregion
 

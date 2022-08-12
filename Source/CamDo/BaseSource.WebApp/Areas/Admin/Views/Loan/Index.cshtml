@@ -125,7 +125,7 @@
                                                 }
                                                 else
                                                 {
-                                                    <span class="badge badge-info">@item.StatusName</span>
+                                                    <span class="badge badge-primary">@item.StatusName</span>
                                                 }
 
                                             </td>
@@ -154,16 +154,16 @@
                                                 }
                                                 else
                                                 {
-                                                    <button class="btn btn-sm btn-secondary detaileHD m-1" type="button" data-id="@item.Id" data-url="@Url.Action("Detail", "HopDong")" title="Đóng lãi">
+                                                    <button class="btn btn-sm btn-secondary detaileHD m-1" type="button" data-id="@item.Id" data-url="@Url.Action("Detail", "Loan")" title="Đóng lãi">
                                                         <i class="fas fa-coins"></i>
                                                     </button>
-                                                    <button class="btn btn-sm btn-danger m-1" type="button" data-bs-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn xóa hợp đồng?" data-href="@Url.Action("Delete", "HopDong", new { id = item.Id })" title="Xóa hợp đồng">
+                                                    <button class="btn btn-sm btn-danger m-1" type="button" data-bs-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn xóa hợp đồng?" data-href="@Url.Action("Delete", "Loan", new { id = item.Id })" title="Xóa hợp đồng">
                                                         <i class="fas fa-trash-alt fa-fw"></i>
                                                     </button>
-                                                    <button class="btn btn-sm btn-info detaileHD m-1" data-tab="tab-chuocdo" type="button" data-id="@item.Id" data-url="@Url.Action("Detail", "HopDong")" title="Chuộc đồ">
+                                                    <button class="btn btn-sm btn-info detaileHD m-1" data-tab="tab-chuocdo" type="button" data-id="@item.Id" data-url="@Url.Action("Detail", "Loan")" title="Chuộc đồ">
                                                         <i class="fas fa-anchor"></i>
                                                     </button>
-                                                    <button class="btn btn-sm btn-success detaileHD m-1" data-tab="tab-hengio" type="button" data-id="@item.Id" data-url="@Url.Action("Detail", "HopDong")" title="Hẹn giờ khoản vay">
+                                                    <button class="btn btn-sm btn-success detaileHD m-1" data-tab="tab-hengio" type="button" data-id="@item.Id" data-url="@Url.Action("Detail", "Loan")" title="Hẹn giờ khoản vay">
                                                         <i class="fas fa-clock"></i>
                                                     </button>
                                                     <button class="btn btn-sm btn-warning m-1" type="button" data-bs-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn chuyển sang trạng thái chờ thanh lý?" data-href="@Url.Action("ChuyenTTChoThanhLy", "HopDong", new { hopDongId = item.Id })" title="Chuyển HĐ qua trạng thái chờ thanh lý">
@@ -195,7 +195,7 @@
                         </tbody>
                         <tfoot>
                             <tr>
-                                <td colspan="5" class="text-right text-danger font-weight-600">
+                                <td colspan="4" class="text-right text-danger font-weight-600">
                                     Tổng tiền
                                 </td>
                                 <td class="text-right text-danger font-weight-600">@Model.Items.LastOrDefault()?.HD_TongTienVayBanDau.ToString("N0")</td>

@@ -1,4 +1,5 @@
 ﻿using BaseSource.ApiIntegration.WebApi;
+using BaseSource.ApiIntegration.WebApi.CauHinhHangHoa;
 using BaseSource.ApiIntegration.WebApi.HopDong;
 using BaseSource.Shared.Enums;
 using BaseSource.ViewModels.CauHinhHangHoa;
@@ -17,10 +18,13 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
     {
         private readonly IHopDongApiClient _hopDongApiClient;
         private readonly IUserApiClient _userApiClient;
-        public LoanController(IHopDongApiClient hopDongApiClient, IUserApiClient userApiClient)
+        private readonly ICauHinhHangHoaApiClient _cauHinhHangHoaApiClient;
+        public LoanController(IHopDongApiClient hopDongApiClient, IUserApiClient userApiClient,
+            ICauHinhHangHoaApiClient cauHinhHangHoaApiClient)
         {
             _hopDongApiClient = hopDongApiClient;
             _userApiClient = userApiClient;
+            _cauHinhHangHoaApiClient = cauHinhHangHoaApiClient;
         }
         public async Task<IActionResult> Index(string info, DateTime? from, DateTime? to, int? status, int page = 1)
         {
@@ -46,24 +50,35 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         }
         public async Task<IActionResult> Create()
         {
-            var model = new CreateHopDongVayLaiVm()
+            var requestCauHinhHH = new GetCauHinhHangHoaPagingRequest()
+            {
+                Page = 1,
+                PageSize = int.MaxValue,
+                LinhVuc = ELinhVucHangHoa.Vaylai
+            };
+            var requestUser = _userApiClient.GetUserByCuaHang();
+            var resultCuaHinhHH = _cauHinhHangHoaApiClient.GetPagings(requestCauHinhHH);
+            var maxIDHD = _hopDongApiClient.GetMaxID(ELoaiHopDong.Vaylai);
+            await Task.WhenAll(requestUser, resultCuaHinhHH, maxIDHD);
+
+            ViewData["ListHangHoa"] = new SelectList(resultCuaHinhHH.Result.ResultObj.Items, "Id", "Ten");
+            ViewData["ListUser"] = new SelectList(requestUser.Result.ResultObj, "Id", "FullName");
+            var model = new CreateHopDongVm()
             {
                 HD_NgayVay = DateTime.Now.Date,
-                HD_Loai = ELoaiHopDong.Vaylai
+                HD_Loai = ELoaiHopDong.Vaylai,
+                HD_MaTemp = maxIDHD.Result.ResultObj
             };
-            var requestUser = await _userApiClient.GetUserByCuaHang();
-            ViewData["ListUser"] = new SelectList(requestUser.ResultObj, "Id", "FullName");
-
             return PartialView("_Create", model);
         }
         [HttpPost]
-        public async Task<IActionResult> Create(CreateHopDongVayLaiVm model)
+        public async Task<IActionResult> Create(CreateHopDongVm model)
         {
             if (!ModelState.IsValid)
             {
                 return Json(new ApiErrorResult<string>(ModelState.GetListErrors()));
             }
-            var result = await _hopDongApiClient.CreateHopDongVayLai(model);
+            var result = await _hopDongApiClient.Create(model);
             if (!result.IsSuccessed)
             {
                 return Json(new ApiErrorResult<string>(result.ValidationErrors));
@@ -78,7 +93,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            var model = new EditHopDongVayLaiVm()
+            var model = new EditHopDongVm()
             {
                 Id = result.ResultObj.Id,
                 HD_Loai = result.ResultObj.HD_Loai,
@@ -99,9 +114,21 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
                 HD_IsThuLaiTruoc = result.ResultObj.HD_IsThuLaiTruoc,
                 HD_KyLai = result.ResultObj.HD_KyLai,
                 UserIdAssigned = result.ResultObj.UserIdAssigned,
+                HD_MaTemp = result.ResultObj.HD_MaTemp,
             };
 
+            var requestCauHinhHH = new GetCauHinhHangHoaPagingRequest()
+            {
+                Page = 1,
+                PageSize = int.MaxValue,
+                LinhVuc = ELinhVucHangHoa.Vaylai
+            };
             var requestUser = _userApiClient.GetUserByCuaHang();
+            var resultCuaHinhHH = _cauHinhHangHoaApiClient.GetPagings(requestCauHinhHH);
+
+            await Task.WhenAll(requestUser, resultCuaHinhHH);
+
+            ViewData["ListHangHoa"] = new SelectList(resultCuaHinhHH.Result.ResultObj.Items, "Id", "Ten");
             ViewData["ListUser"] = new SelectList(requestUser.Result.ResultObj, "Id", "FullName");
             return PartialView("_Edit", model);
         }
@@ -120,6 +147,12 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             }
 
             return Json(new ApiSuccessResult<string>(result.ResultObj));
+        }
+        public async Task<IActionResult> Detail(int id, string tabActive)
+        {
+            var hd = await _hopDongApiClient.GetById(id);
+            ViewData["TabActive"] = tabActive;
+            return PartialView("_Detail", hd.ResultObj);
         }
 
     }

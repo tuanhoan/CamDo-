@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BaseSource.ApiIntegration.WebApi.HD_PaymentLog
 {
-    public interface IHD_PaymentLogApiClient
+    public interface IHopDong_PaymentLogApiClient
     {
         Task<ApiResult<HD_PaymentLogVm>> GetPaymentLogByHD(int hdId);
         Task<ApiResult<HD_PaymentLogReponse>> Create(CreateHDPaymentLogVm model);

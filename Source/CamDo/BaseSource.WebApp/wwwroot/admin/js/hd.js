@@ -1,58 +1,74 @@
 ﻿var lstThuocTinh = [];
 
+function initAutocomplete() {
+    var typeCustomer = $('input[name=CustomerType]:checked').val();
+    if (typeCustomer == "OldCustomer") {
+        $("#TenKhachHang").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: '/Admin/KhachHang/GetByName',
+                    data: { "info": request.term },
+                    dataType: "json",
+                    success: function (data) {
+                        if (data.length > 0) {
+                            response($.map(data, function (item) {
+                                console.log(item);
+                                return {
+                                    label: item.ten,
+                                    value: item.ten,
+                                    id: item.id,
+                                    cmnd: item.cmnd,
+                                    diaChi: item.diaChi,
+                                    sdt: item.sdt,
+                                    ngaycap: item.cmnD_NgayCap,
+                                    noicap: item.cmnD_NoiCap
+                                };
+                            }))
+                        }
+                        else {
+                            response([{ label: 'No results found.', val: -1 }]);
+                        }
 
-function getKhachHangByName() {
-    $("#TenKhachHang").autocomplete({
-        source: function (request, response) {
-            $.ajax({
-                url: '/Admin/KhachHang/GetByName',
-                data: { "info": request.term },
-                dataType: "json",
-                success: function (data) {
-                    if (data.length > 0) {
-                        response($.map(data, function (item) {
-                            return {
-                                label: item.ten,
-                                value: item.ten,
-                                id: item.id,
-                                cmnd: item.cmnd,
-                                diaChi: item.diaChi,
-                                sdt: item.sdt
-                            };
-                        }))
+                    },
+                    error: function (xhr, textStatus, error) {
+                        alert(xhr.statusText);
+                    },
+                    failure: function (response) {
+                        alert("failure " + response.responseText);
                     }
-                    else {
-                        response([{ label: 'No results found.', val: -1 }]);
-                    }
-
-                },
-                error: function (xhr, textStatus, error) {
-                    alert(xhr.statusText);
-                },
-                failure: function (response) {
-                    alert("failure " + response.responseText);
+                });
+            },
+            select: function (e, i) {
+                if (i.item.val == -1) {
+                    //Clear the AutoComplete TextBox.
+                    $("#TenKhachHang").val("");
+                    $("#KhachHangId").val(0);
+                    // $('.clear-info-customer').css("display", "none");
+                    return false;
                 }
-            });
-        },
-        select: function (e, i) {
-            if (i.item.val == -1) {
-                //Clear the AutoComplete TextBox.
-                $("#TenKhachHang").val("");
-                $("#KhacHangId").val(0);
-                $('.clear-info-customer').css("display", "none");
-                return false;
-            }
-            else {
-                $('.clear-info-customer').css("display", "block");
-                $('.frmHD #CMND').val(i.item.cmnd);
-                $('.frmHD #DiaChi').val(i.item.diaChi);
-                $('.frmHD #SDT').val(i.item.sdt);
-                $("#KhacHangId").val(i.item.id);
-            }
+                else {
+                    //$('.clear-info-customer').css("display", "block");
+                    $('.frmHD #CMND').val(i.item.cmnd);
+                    $('.frmHD #DiaChi').val(i.item.diaChi);
+                    $('.frmHD #SDT').val(i.item.sdt);
+                    $("#KhachHangId").val(i.item.id);
+                    if (i.item.ngaycap != null && i.item.ngaycap != "") {
+                        var ngaycap = i.item.ngaycap.split('T')[0];
+                        $("#CMND_NgayCap").val(ngaycap).trigger("change");
+                    }
+                    $("#CMND_NoiCap").val(i.item.noicap);
+                }
 
-        },
-        minLength: 3
-    })
+            },
+            minLength: 1
+        })
+    }
+    else {
+        if ($("#TenKhachHang").hasClass("ui-autocomplete-input")) {
+            $("#TenKhachHang").autocomplete("destroy")
+        }
+    }
+
 }
 $("body").on("click", '.clear-info-customer', function (e) {
     $(this).css("display", "none");
@@ -123,6 +139,8 @@ function getMoTaHinhThucLai() {
                 $('.motaKyLai').html(data[0].moTaKyLai);
                 $('.thoiGianVay').html(data[0].thoiGianDisplay);
                 $('.moTaKyLai').html(data[0].moTaKyLai);
+                var soNgayVay = "Số " + data[0].thoiGianDisplay.toLowerCase() + " vay";
+                $('.lblThoiGianVay').text(soNgayVay);
             }
         }
     })
@@ -143,9 +161,17 @@ $("body").on("click", '.addEditHD', function (e) {
             $("#hd-modal .modal-body").html(res);
             setMoneyTextBox(".money-textbox");
             getMoTaHinhThucLai();
-            getKhachHangByName();
+            initAutocomplete();
             getThuocTinhByTaiSan();
             saveHopDong();
+
+            $('input[name=CustomerType]').change(function () {
+                if ($(this).val() == "NewCustomer") {
+                    $('#KhachHangId').val(0);
+                }
+                initAutocomplete();
+            });
+
         }, error: function (error) {
             alert("Error!");
         }

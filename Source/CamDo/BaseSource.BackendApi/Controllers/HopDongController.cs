@@ -52,6 +52,14 @@ namespace BaseSource.BackendApi.Controllers
             baseAddressUploadApi = _configuration["BaseAddressUploadApi"];
         }
         #region Hợp đồng
+        [HttpGet("GetMaxID")]
+        public async Task<IActionResult> GetMaxID([FromQuery] ELoaiHopDong type)
+        {
+            var maxHd = (await _db.HopDongs.Where(x => x.HD_Loai == type)
+                .MaxAsync(x => (int?)x.Id)) ?? 1;
+            return Ok(new ApiSuccessResult<int>(maxHd));
+        }
+
         [HttpGet("GetPagings")]
         public async Task<IActionResult> GetPagings([FromQuery] GetHopDongPagingRequest request)
         {
@@ -212,17 +220,40 @@ namespace BaseSource.BackendApi.Controllers
             }
             var kh = new KhachHang()
             {
-                Id = model.KhachHangId,
                 Ten = model.TenKhachHang,
                 CMND = model.CMND,
                 SDT = model.SDT,
                 DiaChi = model.DiaChi,
-                CuaHangId = CuaHangId
+                CuaHangId = CuaHangId,
+                CMND_NgayCap = model.CMND_NgayCap,
+                CMND_NoiCap = model.CMND_NoiCap
             };
 
-            int khachHangId = await AddOrUpDateCustomer(kh);
+            int khachHangId = await AddOrUpDateCustomer(model.KhachHangId, kh);
 
             var hd = _mapper.Map<HopDong>(model);
+            string prefix = "";
+            switch (model.HD_Loai)
+            {
+                case ELoaiHopDong.Camdo:
+                    prefix = "CĐ";
+                    break;
+                case ELoaiHopDong.Vaylai:
+                    prefix = "TC";
+                    break;
+                case ELoaiHopDong.GopVon:
+                    break;
+                default:
+                    break;
+            }
+            if (model.HD_Loai == ELoaiHopDong.GopVon)
+            {
+                hd.HD_Ma = "0";
+            }
+            else
+            {
+                hd.HD_Ma = $"{prefix}-{model.HD_MaTemp}";
+            }
             hd.TongTienVayHienTai = hd.HD_TongTienVayBanDau;
             hd.KhachHangId = khachHangId;
             hd.CuaHangId = CuaHangId;
@@ -230,14 +261,14 @@ namespace BaseSource.BackendApi.Controllers
             hd.UserIdAssigned = UserId;
             hd.TongTienVayHienTai = hd.HD_TongTienVayBanDau;
             hd.ListThuocTinhHangHoa = JsonConvert.SerializeObject(hd.ListThuocTinhHangHoa, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
-            //gán tạm
-            hd.HD_Loai = ELoaiHopDong.Camdo;
+
             switch (hd.HD_Loai)
             {
                 case ELoaiHopDong.Camdo:
                     hd.HD_Status = (byte)EHopDong_CamDoStatusFilter.DangCam;
                     break;
                 case ELoaiHopDong.Vaylai:
+                    hd.HD_Status = (byte)EHopDong_VayLaiStatusFilter.DangVay;
                     break;
                 case ELoaiHopDong.GopVon:
                     break;
@@ -273,6 +304,11 @@ namespace BaseSource.BackendApi.Controllers
             result.CMND_NoiCap = kh.CMND_NoiCap;
             result.TyLeLai = hd.HD_LaiSuat + htl.TyLeLai;
             result.ThoiGian = htl.ThoiGian;
+            if (hd.HD_Loai != ELoaiHopDong.GopVon)
+            {
+                result.HD_MaTemp = int.Parse(result.HD_Ma.Split("-")[1]);
+            }
+
             result.StatusName = GetTrangThaiHopDong(result.HD_Loai, result.HD_Status);
 
             return Ok(new ApiSuccessResult<HopDongVm>(result));
@@ -296,18 +332,30 @@ namespace BaseSource.BackendApi.Controllers
                 isChangeKyLai = true;
             }
 
-            var kh = new KhachHang()
-            {
-                Id = hd.KhachHangId,
-                Ten = model.TenKhachHang,
-                CMND = model.CMND,
-                SDT = model.SDT,
-                DiaChi = model.DiaChi,
-                CuaHangId = CuaHangId
-            };
-            await AddOrUpDateCustomer(kh);
-            model.KhachHangId = kh.Id;
             _mapper.Map(model, hd);
+
+            string prefix = "";
+            switch (model.HD_Loai)
+            {
+                case ELoaiHopDong.Camdo:
+                    prefix = "CĐ";
+                    break;
+                case ELoaiHopDong.Vaylai:
+                    prefix = "TC";
+                    break;
+                case ELoaiHopDong.GopVon:
+                    break;
+                default:
+                    break;
+            }
+            if (model.HD_Loai == ELoaiHopDong.GopVon)
+            {
+                hd.HD_Ma = "0";
+            }
+            else
+            {
+                hd.HD_Ma = $"{prefix}-{model.HD_MaTemp}";
+            }
             hd.HD_NgayDaoHan = await _hopDongService.TinhNgayDaoHan(hd.HD_HinhThucLai, hd.HD_NgayVay, hd.HD_TongThoiGianVay, hd.HD_KyLai);
             hd.TongTienLai = await _hopDongService.TinhLaiHD(hd.HD_HinhThucLai, hd.HD_TongThoiGianVay, hd.HD_LaiSuat, hd.TongTienVayHienTai);
             var settings = new JsonSerializerSettings
@@ -954,15 +1002,15 @@ namespace BaseSource.BackendApi.Controllers
             }
             return statusName;
         }
-        private async Task<int> AddOrUpDateCustomer(KhachHang model)
+        private async Task<int> AddOrUpDateCustomer(int id, KhachHang model)
         {
             int khachHangId = 0;
-            var khachHang = await _db.KhachHangs.FindAsync(model.Id);
+            var khachHang = await _db.KhachHangs.FindAsync(id);
             if (khachHang == null)
             {
                 _db.KhachHangs.Add(model);
                 await _db.SaveChangesAsync();
-                khachHangId = model.Id;
+                khachHangId = id;
             }
             else
             {
@@ -970,6 +1018,8 @@ namespace BaseSource.BackendApi.Controllers
                 khachHang.CMND = model.CMND;
                 khachHang.SDT = model.SDT;
                 khachHang.DiaChi = model.DiaChi;
+                khachHang.CMND_NgayCap = model.CMND_NgayCap;
+                khachHang.CMND_NoiCap = model.CMND_NoiCap;
                 await _db.SaveChangesAsync();
                 khachHangId = khachHang.Id;
             }

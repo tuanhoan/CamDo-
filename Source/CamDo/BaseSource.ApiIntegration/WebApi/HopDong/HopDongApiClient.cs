@@ -68,13 +68,7 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.PostAsync<ApiResult<string>>("/api/HopDongGopVon/Create", model);
         }
-
-        public async Task<ApiResult<string>> CreateHopDongVayLai(CreateHopDongVayLaiVm model)
-        {
-            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
-            return await client.PostAsync<ApiResult<string>>("/api/HopDongVayLai/Create", model);
-        }
-
+         
         public async Task<ApiResult<string>> DeleteChungTu(DeleteChungTu_Vm model)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
@@ -103,13 +97,7 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.PostAsync<ApiResult<string>>("/api/HopDongGopVon/Edit", model);
         }
-
-        public async Task<ApiResult<string>> EditHopDongVayLain(EditHopDongVayLaiVm model)
-        {
-            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
-            return await client.PostAsync<ApiResult<string>>("/api/HopDongVayLai/Edit", model);
-        }
-
+         
         public async Task<ApiResult<HopDongVm>> GetById(int id)
         {
             var obj = new
@@ -128,6 +116,16 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
             };
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.GetAsync<ApiResult<HopDong_ChungTuResponseVm>>("/api/HopDong/GetChungTuByHopDong", obj);
+        }
+
+        public async Task<ApiResult<int>> GetMaxID(ELoaiHopDong type)
+        {
+            var obj = new
+            {
+                type = type
+            };
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.GetAsync<ApiResult<int>>("/api/HopDong/GetMaxID", obj);
         }
 
         public async Task<ApiResult<PagedResult<HopDongVm>>> GetPagings(GetHopDongPagingRequest model)

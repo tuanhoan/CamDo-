@@ -7,12 +7,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
- 
+
 
 namespace BaseSource.ApiIntegration.WebApi.HopDong
 {
     public interface IHopDongApiClient
     {
+        Task<ApiResult<int>> GetMaxID(ELoaiHopDong type);
         Task<ApiResult<PagedResult<HopDongVm>>> GetPagings(GetHopDongPagingRequest model);
         Task<ApiResult<string>> Create(CreateHopDongVm model);
         Task<ApiResult<string>> CreateHopDongGopVon(CreateHopDongGopVonVm model);
@@ -35,12 +36,5 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
         Task<ApiResult<string>> AnHopDong(int hopDongId);
         Task<ApiResult<HopDongPrintDefaulVm>> GetPrintDefault(ELoaiHopDong type);
         Task<ApiResult<string>> SavePrintDefault(HopDongPrintDefaulVm model);
-
-        #region vay lãi
-        Task<ApiResult<string>> CreateHopDongVayLai(CreateHopDongVayLaiVm model);
-        Task<ApiResult<string>> EditHopDongVayLain(EditHopDongVayLaiVm model);
-        #endregion
-
-
     }
 }

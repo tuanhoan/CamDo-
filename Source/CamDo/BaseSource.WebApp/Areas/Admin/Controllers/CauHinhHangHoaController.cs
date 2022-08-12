@@ -1,5 +1,6 @@
 ﻿using BaseSource.ApiIntegration.AdminApi.CauHinhHangHoa;
 using BaseSource.ApiIntegration.WebApi.CauHinhHangHoa;
+using BaseSource.Shared.Enums;
 using BaseSource.ViewModels.Admin;
 using BaseSource.ViewModels.CauHinhHangHoa;
 using BaseSource.ViewModels.Common;
@@ -18,7 +19,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         {
             _apiClient = apiClient;
         }
-        public async Task<IActionResult> Index(string ten, int linhvuc, int? status, int page = 1)
+        public async Task<IActionResult> Index(string ten, ELinhVucHangHoa linhvuc, int? status, int page = 1)
         {
             var request = new GetCauHinhHangHoaPagingRequest()
             {

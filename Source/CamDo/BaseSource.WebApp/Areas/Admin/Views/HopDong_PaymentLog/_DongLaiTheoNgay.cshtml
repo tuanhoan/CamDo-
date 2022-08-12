@@ -75,8 +75,8 @@
             </label>
             <div class="col-lg-3">
                 <div class="input-group">
-                    <input class="form-control money-textbox" name="CustomerPay" id="CustomerPay" asp-for="CustomerPay">
-                    <input type="hidden" />
+                    <input class="form-control money-textbox"  id="CustomerPayDisplay" value="@Model.CustomerPay">
+                    <input type="hidden" asp-for="CustomerPay" />
                     <div class="input-group-append">
                         <span class="input-group-text">VNĐ</span>
                     </div>

@@ -12,7 +12,7 @@ namespace BaseSource.ViewModels.CauHinhHangHoa
     public class GetCauHinhHangHoaPagingRequest : PageQuery
     {
         public string Ten { get; set; }
-        public int LinhVuc { get; set; }
+        public ELinhVucHangHoa LinhVuc { get; set; }
         public int? Status { get; set; }
     }
     public class CauHinhHangHoaVm

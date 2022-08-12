@@ -63,14 +63,14 @@ namespace BaseSource.ViewModels.HopDong
         public string StatusName { get; set; }
         public byte HD_Status { get; set; }
         public double TienLaiToiNgayHienTai { get; set; }
+        public int HD_MaTemp { get; set; }
 
     }
     public class CreateHopDongVm : IValidatableObject
     {
         public ELoaiHopDong HD_Loai { get; set; }
 
-        [Display(Name = "Mã hợp đồng")]
-        [Required(ErrorMessage = "Vui lòng nhập mã hợp đồng")]
+
         public string HD_Ma { get; set; }
         [Display(Name = "Loại tài sản")]
         public int HangHoaId { get; set; }
@@ -116,6 +116,9 @@ namespace BaseSource.ViewModels.HopDong
         public string DiaChi { get; set; }
 
         public string ListThuocTinhHangHoa { get; set; }
+        [Display(Name = "Mã hợp đồng")]
+        [Required(ErrorMessage = "Vui lòng nhập mã hợp đồng")]
+        public int? HD_MaTemp { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {

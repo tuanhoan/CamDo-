@@ -80,8 +80,12 @@ namespace BaseSource.BackendApi.Controllers
             string lstThuocTinh = "";
             if (hdId != 0)
             {
-                var hd = await _db.HopDongs.FirstOrDefaultAsync(x => x.Id == hdId && x.HangHoaId == id);
-                lstThuocTinh = hd.ListThuocTinhHangHoa;
+                var hd = await _db.HopDongs.FirstOrDefaultAsync(x => x.Id == hdId);
+                if (hd != null && !string.IsNullOrEmpty(hd.ListThuocTinhHangHoa))
+                {
+                    lstThuocTinh = hd.ListThuocTinhHangHoa;
+                }
+               
             }
 
             var result = new CauHinhHangHoaVm()

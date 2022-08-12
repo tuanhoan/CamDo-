@@ -1,7 +1,7 @@
 ﻿function getListPaymentLog(hdId) {
     $.ajax({
         type: "GET",
-        url: "/Admin/HopDong/GetListPaymentLog",
+        url: "/Admin/HopDong_PaymentLog/GetListPaymentLog",
         data: { hdId: hdId },
         success: function (data) {
             $('#divContent-ListPayment').html(data);
@@ -11,10 +11,11 @@
 function getInfoPaymentByDate(hdId) {
     $.ajax({
         type: "GET",
-        url: "/Admin/HopDong/GetInfoPaymentByDate",
+        url: "/Admin/HopDong_PaymentLog/GetInfoPaymentByDate",
         data: { hdId: hdId },
         success: function (data) {
             $('#divContent-Tralaitheongay').html(data);
+            setMoneyTextBox('#CustomerPayDisplay');
         }
     })
 }
@@ -27,7 +28,7 @@ function createPayment(id, hdId) {
     }
     $.ajax({
         type: "POST",
-        url: "/Admin/HopDong/CreatePayment",
+        url: "/Admin/HopDong_PaymentLog/CreatePayment",
         data: { paymentId: id, hdId: hdId, customerPay: customerPay },
         success: function (res) {
             console.log(res);
@@ -58,7 +59,7 @@ function loadInfoWhenChangePayment(result, hdId) {
 function deletePayment(id, hdId) {
     $.ajax({
         type: "POST",
-        url: "/Admin/HopDong/DeletePayment",
+        url: "/Admin/HopDong_PaymentLog/DeletePayment",
         data: { paymentId: id },
         success: function (res) {
             if (res.isSuccessed == true) {
@@ -93,7 +94,7 @@ function changePaymentDate(thiz, hdId) {
     var date = $(thiz).val();
     $.ajax({
         type: "POST",
-        url: "/Admin/HopDong/ChangePaymentDate",
+        url: "/Admin/HopDong_PaymentLog/ChangePaymentDate",
         data: { hdId: hdId, dateChange: date },
         success: function (res) {
             if (res.isSuccessed == true) {

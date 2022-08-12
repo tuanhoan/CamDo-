@@ -1,0 +1,525 @@
+﻿@model HopDongVm
+@{
+    Layout = null;
+    string lblDisplayDebitOrOverMoney = "";
+    string lblDisplayLoanDebit = "";
+    var tienthuaHD = Model.TongTienDaThanhToan - Model.TongTienGhiNo;
+    var tabActive = ViewData["TabActive"] as string;
+    if (string.IsNullOrEmpty(tabActive))
+    {
+        tabActive = "tab-dongtienlai";
+    }
+}
+<style>
+    fieldset {
+        display: none;
+    }
+
+        fieldset.show {
+            display: block;
+        }
+
+
+    .tabs {
+        margin: 2px 5px 0px 5px;
+        padding-bottom: 10px;
+        cursor: pointer;
+    }
+
+        .tabs:hover, .tabs.active {
+            border-bottom: 4px solid #5867dd;
+        }
+
+    a:hover {
+        text-decoration: none;
+        color: #1565C0;
+    }
+
+
+    .line {
+        background-color: #CFD8DC;
+        height: 1px;
+        width: 100%;
+    }
+</style>
+<div class="row">
+    <div class="col-md-6">
+        <table class="table table-hover table-bordered table-detail-hd">
+            <tbody>
+                <tr id="trCusName">
+                    <td colspan="3">
+                        <span class="text-danger font-weight-bold" id="lblCusName">@Model.TenKhachHang</span>
+                        <label id="lblCusPhone"> - <i class="fas fa-phone-alt" style="font-size:10px"></i><small> <i> @Model.SDT </i></small></label>
+                        <span><i class="fas fas fa-map-marker-alt" style="font-size:10px"></i> @Model.DiaChi</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="font-weight-bold">Tiền cầm</span></td>
+                    <td colspan="2" align="right"><span id="lblTotalMoney" class="lblTongTienVayHienTai">@Model.TongTienVayHienTai.ToString("N0")</span> VND</td>
+                </tr>
+                <tr>
+                    <td><span class="font-weight-bold">Vay từ ngày</span></td>
+                    <td align="right"><span id="lblFromDate">@Model.HD_NgayVay.ToString("dd/MM/yyyy")</span> </td>
+                    <td align="right"><span id="lblToDate">@Model.HD_NgayDaoHan.ToString("dd/MM/yyyy")</span></td>
+                </tr>
+                <tr>
+                    <td><span class="font-weight-bold">Ngày trả lãi gần nhất</span></td>
+                    <td colspan="2" align="center"><span id="lblLastDateOfPay">@Model.NgayDongLaiGanNhat?.ToString("dd/MM/yyyy")</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-6">
+        <table class="table table-hover table-bordered table-detail-hd">
+            <tbody>
+                <tr>
+                    <td><span class="font-weight-bold">Lãi suất</span></td>
+                    <td colspan="2" align="right"><span id="lblStrRate">@Model.TyLeLai</span></td>
+                </tr>
+                <tr>
+                    <td><span class="font-weight-bold">Tiền lãi đã đóng</span></td>
+                    <td colspan="2" align="right">
+                        <span id="lblPaymentMoney">@Model.TongTienLaiDaThanhToan.ToString("N0")</span> VNĐ
+                    </td>
+                </tr>
+                <tr>
+                    @if (tienthuaHD <= 0)
+                    {
+                        lblDisplayDebitOrOverMoney = "Nợ cũ KH";
+                        lblDisplayLoanDebit = "Nợ cũ HĐ";
+                    }
+                    else
+                    {
+                        lblDisplayDebitOrOverMoney = "Tiền thừa KH";
+                        lblDisplayLoanDebit = "Tiền thừa HĐ";
+                    }
+                    <td>
+                        <span class="font-weight-bold" id="lblDisplayDebitOrOverMoney">@lblDisplayDebitOrOverMoney: </span>
+                        <span class="@(tienthuaHD <= 0?"text-danger":"text-success") font-weight-bold" id="lblCustomerDebitMoney">
+                            @if (tienthuaHD < 0)
+                            {
+                                tienthuaHD = tienthuaHD * -1;
+                                <span>@(tienthuaHD.ToString("N0")) VNĐ</span>
+                            }
+                            else
+                            {
+                                <span>@(tienthuaHD.ToString("N0")) VNĐ</span>
+                            }
+                        </span>
+                    </td>
+                    <td align="right">
+                        <span class="font-weight-bold" id="lblDisplayLoanDebit">@lblDisplayLoanDebit: </span>
+                        <span class="@(tienthuaHD <= 0?"text-danger":"text-success") font-weight-bold" id="lblLoanDebitMoney">
+                            @if (tienthuaHD < 0)
+                            {
+                                tienthuaHD = tienthuaHD * -1;
+                                <span>@(tienthuaHD.ToString("N0")) VNĐ</span>
+                            }
+                            else
+                            {
+                                <span>@(tienthuaHD.ToString("N0")) VNĐ</span>
+                            }
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td><span class="font-weight-bold">@Model.StatusName</span></td>
+                    <td colspan="2" align="right" class=""><span id="lblStatus"><span class="m-badge m-badge--info m-badge--wide" style="font-size:12px">Hôm nay đóng tiền</span></span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="d-flex justify-content-between">
+    <div class="tabs tab-dongtienlai" data-type="tab-dongtienlai">
+        <h6><i class="fas fa-money-bill"></i> Đóng tiền lãi</h6>
+    </div>
+    <div class="tabs tab-trabotgoc" data-type="tab-trabotgoc">
+        <h6 class="font-weight-bold"><i class="fas fa-money-bill"></i> Trả bớt gốc</h6>
+    </div>
+    <div class="tabs" data-type="tab-vaythem">
+        <h6><i class="fas fa-address-card"></i> Vay thêm</h6>
+    </div>
+    <div class="tabs tab-giahan" data-type="tab-giahan">
+        <h6><i class="fas fa-retweet"></i> Gia hạn</h6>
+    </div>
+    <div class="tabs tab-chuocdo" data-type="tab-chuocdo">
+        <h6><i class="fas fa-motorcycle"></i> Chuộc đồ</h6>
+    </div>
+    <div class="tabs" data-type="tab-no">
+        <h6><i class="fas fa-tag" style="transform: rotateY(180deg);"></i> Nợ</h6>
+    </div>
+    <div class="tabs" data-type="tab-chungtu">
+        <h6><i class="fas fa-image"></i> Chứng từ</h6>
+    </div>
+    <div class="tabs tab-history" data-type="tab-history">
+        <h6 class="font-weight-bold"><i class="fas fa-clipboard-list"></i> Lịch sử</h6>
+    </div>
+    <div class="tabs" id="tab09">
+        <h6>Lịch sử trả chậm</h6>
+    </div>
+    <div class="tabs tab-hengio" data-type="tab-hengio">
+        <h6><i class="fas fa-clock"></i> Hẹn giờ</h6>
+    </div>
+</div>
+<div class="line"></div>
+<div class="mt-3">
+    <fieldset id="tab-dongtienlai">
+        <div id="divContent-Tralaitheongay">
+
+        </div>
+        <div id="divContent-ListPayment">
+
+        </div>
+    </fieldset>
+    <fieldset id="tab-trabotgoc">
+        <div class="d-flex justify-content-center">
+            <div class="col-md-6">
+                <form id="frmTraBotGoc" asp-action="TraBotGoc" asp-controller="HopDong_VayRutGoc" method="post">
+                    <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.Id" />
+                    <div class="form-group row">
+                        <label class="col-4 text-right">Ngày trả trước gốc</label>
+                        <div class="col-8">
+                            <input type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" name="NgayTraGoc" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4 text-right">Số tiền gốc trả trước</label>
+                        <div class="col-8">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="SoTienTraGocDisplay" />
+                                <input type="hidden" name="SoTienTraGoc" />
+                                <div class="input-group-append">
+                                    <span class="input-group-text">VNĐ</span>
+                                </div>
+                            </div>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="SoTienTraGoc" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4 text-right">Ghi chú</label>
+                        <div class="col-8">
+                            <textarea class="form-control" name="Note" rows="4"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4"></label>
+                        <div class="col-8">
+                            <button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-thumbs-up"></i> Đồng ý</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="divContent-ListTraGoc">
+
+        </div>
+    </fieldset>
+    <fieldset id="tab-vaythem">
+        <div class="d-flex justify-content-center">
+            <div class="col-md-6">
+                <form id="frmVayThem" asp-action="VayThem" asp-controller="HopDong_VayRutGoc" method="post">
+                    <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.Id" />
+                    <div class="form-group row">
+                        <label class="col-4 text-right">Ngày vay thêm gốc</label>
+                        <div class="col-8">
+                            <input type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" name="NgayVayThem" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4 text-right">Số tiền gốc vay thêm</label>
+                        <div class="col-8">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="SoTienVayThemDisplay" />
+                                <input type="hidden" name="SoTienVayThem" />
+                                <div class="input-group-append">
+                                    <span class="input-group-text">VNĐ</span>
+                                </div>
+                            </div>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="SoTienVayThem" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4 text-right">Ghi chú</label>
+                        <div class="col-8">
+                            <textarea class="form-control" name="Note" rows="4"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4 text-right"></label>
+                        <div class="col-8">
+                            <button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-thumbs-up"></i> Đồng ý</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="divContent-ListVayThem">
+
+        </div>
+    </fieldset>
+    <fieldset id="tab-giahan">
+        <div class="d-flex justify-content-center">
+            <div class="col-md-6">
+                <form id="frmGiaHan" asp-action="GiaHan" asp-controller="HopDong_GiaHan" method="post">
+                    <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.Id" />
+                    <div class="form-group row">
+                        <label class="col-4 text-right">Khách Hàng</label>
+                        <div class="col-8">
+                            <span>@Model.TenKhachHang</span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4 text-right">Gia hạn thêm</label>
+                        <div class="col-8">
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="SoNgayGiaHan" />
+                                <div class="input-group-append">
+                                    <span class="input-group-text">@Model.ThoiGian.GetEnumDisplayName()</span>
+                                </div>
+                            </div>
+                            <span class="text-danger field-validation-valid" data-valmsg-for="SoNgayGiaHan" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4 text-right">Ghi chú</label>
+                        <div class="col-8">
+                            <textarea class="form-control" name="Note" rows="4"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4"></label>
+                        <div class="col-8">
+                            <button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-thumbs-up"></i> Đồng ý</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="divContent-GiaHan">
+
+        </div>
+    </fieldset>
+    <fieldset id="tab-history">
+        <div>
+            <div class="d-flex justify-content-center">
+                <div class="col-md-6">
+                    <form id="frmNhacNo" method="post" asp-action="Create" asp-controller="HopDong_DebtNote">
+                        <input type="hidden" name="HopDongId" value="@Model.Id" />
+                        <div class="form-group row">
+                            <label class="col-2 text-right">Ghi chú</label>
+                            <div class="col-10">
+                                <textarea class="form-control" name="Note" rows="5"></textarea>
+                                <span class="text-danger field-validation-valid" data-valmsg-for="Note" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-2"></label>
+                            <div class="col-10">
+                                <button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-save"></i> Lưu lại</button>
+                            </div>
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+            <div id="divContent-CommentDebt">
+
+            </div>
+        </div>
+
+        <div id="divContent-CuaHang_TransactionLog">
+
+        </div>
+    </fieldset>
+
+    <fieldset id="tab-hengio">
+        <div class="d-flex justify-content-center">
+            <div class="col-md-6">
+                <form id="frmHenGio" asp-action="Create" asp-controller="HopDong_AlarmLog" method="post">
+                    <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.Id" />
+                    <input type="hidden" name="IsDisable" id="IsDisable" />
+                    <div class="form-group row">
+                        <label class="col-4 text-right">Ngày hẹn</label>
+                        <div class="col-8">
+                            <input type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" name="AlarmDate" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4 text-right">Ghi chú</label>
+                        <div class="col-8">
+                            <textarea class="form-control" name="Note" rows="4"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-4"></label>
+                        <div class="col-8">
+                            <button class="btn btn-primary btn-sm" type="button" onclick="saveHenGio(false)"> Tạo hẹn giờ</button>
+                            <button class="btn btn-danger btn-sm" type="button" onclick="saveHenGio(true)"> Dừng hẹn giờ</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="divContent-HenGio">
+
+        </div>
+    </fieldset>
+    <fieldset id="tab-chungtu">
+        <div id="chungTuContent">
+
+        </div>
+    </fieldset>
+    <fieldset id="tab-no">
+        <div class="row">
+            <div class="col-6">
+                <div class="card shadow h-100 mb-4 ">
+                    <div class="card-header">
+                        <h5 class="m-0 font-weight-bold"><i class="fa fa-coins"></i> Khách hàng nợ lãi - Trả tiền thừa</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" asp-action="NoLai" data-name="frmGhiNo">
+                            <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.Id">
+                            <input type="hidden" name="Type" value="@((int)EHopDong_ActionType.NoLai)">
+                            <div class="form-group row">
+                                <label class="col-3 text-right">Số tiền nợ lại</label>
+                                <div class="col-9">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="SoTienNoLaiDisplay" value="">
+                                        <input type="hidden" name="SoTienNoLai">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">VNĐ</span>
+                                        </div>
+                                    </div>
+                                    <span class="text-danger field-validation-valid" data-valmsg-for="SoTienVayThem" data-valmsg-replace="true"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-3"></label>
+                                <div class="col-9">
+                                    <button class="btn btn-danger btn-sm" type="submit"><i class="fas fa-thumbs-down"></i> Ghi nợ</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card shadow h-100 mb-4 ">
+                    <div class="card-header">
+                        <h5 class="m-0 font-weight-bold"><i class="fa fa-money-bill"></i> Khách hàng trả nợ</h5>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" asp-action="TraNo" data-name="frmTraNo">
+                            <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.Id">
+                            <input type="hidden" name="Type" value="@((int)EHopDong_ActionType.TraNo)">
+                            <div class="form-group row">
+                                <label class="col-3">Số tiền trả nợ</label>
+                                <div class="col-9">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="SoTienTraNoDisplay" value="">
+                                        <input type="hidden" name="SoTienTraNo">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text">VNĐ</span>
+                                        </div>
+                                    </div>
+                                    <span class="text-danger field-validation-valid" data-valmsg-for="SoTienVayThem" data-valmsg-replace="true"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-3"></label>
+                                <div class="col-9">
+                                    <button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-thumbs-up"></i> Thanh toán</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset id="tab-chuocdo">
+        <div class="d-flex justify-content-center">
+            <div class="col-md-5">
+                <div id="divContent-chuocdo">
+
+                </div>
+            </div>
+        </div>
+
+    </fieldset>
+</div>
+
+<script>
+    $(document).ready(function () {
+        setMoneyTextBox("#SoTienTraNoDisplay");
+        setMoneyTextBox('#SoTienNoLaiDisplay');
+       getListPaymentLog(@Model.Id);
+        getInfoPaymentByDate(@Model.Id);
+        var tab = '@tabActive';
+        $('.' + tab).click();
+    })
+
+
+    $(".tabs").click(function () {
+        var tabType = $(this).data("type");
+        loadDataTab(tabType);
+        $(".tabs").removeClass("active");
+        $(this).children("h6").addClass("font-weight-bold");
+        $(this).addClass("active");
+
+        current_fs = $(".active");
+         next_fs = "#" + tabType;
+
+        $("fieldset").removeClass("show");
+        $(next_fs).addClass("show");
+
+         current_fs.animate({}, {
+           step: function () {
+              current_fs.css({
+               'display': 'none',
+                'position': 'relative'
+              });
+             next_fs.css({
+              'display': 'block'
+             });
+         }
+         });
+
+
+     });
+    function loadDataTab(type) {
+        switch (type) {
+            case "tab-history":
+                getCuahang_TransactionLog(@Model.Id,'@Model.HD_Loai');
+                 geHopDong_DebtNote(@Model.Id);
+                break;
+            case "tab-dongtienlai":
+                getListPaymentLog(@Model.Id);
+                getInfoPaymentByDate(@Model.Id);
+                break;
+            case "tab-trabotgoc":
+            case "tab-vaythem":
+                getHistoryLoanExtra(type,@Model.Id);
+                break;
+            case "tab-giahan":
+                getListGiaHan(@Model.Id);
+                break;
+            case "tab-hengio":
+                getListAlarmLog(@Model.Id);
+                break;
+             case "tab-chungtu":
+                getChungTu(@Model.Id);
+                break;
+             case "tab-chuocdo":
+                getInfoChuocDo(@Model.Id);
+                break;
+            default:
+                break;
+            // code block
+        }
+    }
+
+</script>
