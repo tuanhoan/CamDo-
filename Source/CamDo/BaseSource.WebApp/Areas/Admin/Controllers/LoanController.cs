@@ -154,6 +154,17 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             ViewData["TabActive"] = tabActive;
             return PartialView("_Detail", hd.ResultObj);
         }
-
+        #region Chọn mẫu hợp đồng
+        public async Task<IActionResult> ChonMauHopDong()
+        {
+            var result = await _hopDongApiClient.GetPrintDefault(ELoaiHopDong.Vaylai);
+            return PartialView("_ChonMauHopDong", result.ResultObj);
+        }
+        public async Task<IActionResult> SavePrintDefault(HopDongPrintDefaulVm model)
+        {
+            var result = await _hopDongApiClient.SavePrintDefault(model);
+            return Ok(new ApiSuccessResult<string>("Lưu file default thành công"));
+        }
+        #endregion
     }
 }

@@ -1,0 +1,34 @@
+﻿@model HopDongPrintDefaulVm
+
+
+<form asp-action="SavePrintDefault" method="post" data-name="ajaxFormPrintTemplate">
+    @Html.HiddenFor(x => x.LoaiHopDong)
+    <div class="row">
+        <div class="col-lg-6">
+            <h2>Hợp đồng mẫu lãi suất</h2>
+            <div>
+                <img src="/images/mauhopdong/VayLai_Mau1.png" style="cursor:pointer;width:88%" onclick="setPrintViewVayLai('@EVayLai_HopDongPrintTemplate.LaiSuat')">
+            </div>
+
+            <label class="radio-inline">
+                <input class="rdPrintVayLai" type="radio" asp-for="VayLai_HopDongPrintTemplate" value="@EVayLai_HopDongPrintTemplate.LaiSuat">
+                Chọn mẫu này
+            </label>
+        </div>
+        <div class="col-lg-6">
+            <h2>Hợp đồng mẫu lãi thỏa thuận</h2>
+            <div>
+                <img src="/images/mauhopdong/VayLai_Mau2.png" style="cursor:pointer" onclick="setPrintViewVayLai('@EVayLai_HopDongPrintTemplate.LaiThoaThuan')">
+            </div>
+            <label class="radio-inline">
+                <input class="rdPrintVayLai" type="radio" asp-for="VayLai_HopDongPrintTemplate" value="@EVayLai_HopDongPrintTemplate.LaiThoaThuan">
+                Chọn mẫu này
+            </label>
+        </div>
+        <div class="form-group text-right">
+            <button class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+            <button type="submit" class="btn btn-primary">Lưu</button>
+        </div>
+    </div>
+</form>
+
