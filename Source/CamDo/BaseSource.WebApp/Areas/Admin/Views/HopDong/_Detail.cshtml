@@ -380,7 +380,7 @@
                         <h5 class="m-0 font-weight-bold"><i class="fa fa-coins"></i> Khách hàng nợ lãi - Trả tiền thừa</h5>
                     </div>
                     <div class="card-body">
-                        <form method="post" asp-action="NoLai" data-name="frmGhiNo">
+                        <form method="post" asp-action="NoLai" asp-controller="HopDong" data-name="frmGhiNo">
                             <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.Id">
                             <input type="hidden" name="Type" value="@((int)EHopDong_ActionType.NoLai)">
                             <div class="form-group row">

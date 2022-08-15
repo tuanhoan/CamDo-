@@ -32,7 +32,7 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong_VayRutGoc
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.PostAsync<ApiResult<string>>("/api/HopDong_VayRutGoc/TraBotGoc", model);
         }
-        public async Task<ApiResult<string>> XoaTraBotGoc(int tranLogId)
+        public async Task<ApiResult<string>> XoaVayRutGoc(int tranLogId)
         {
             var dic = new Dictionary<string, string>()
             {
@@ -40,7 +40,7 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong_VayRutGoc
             };
 
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
-            return await client.PostAsyncFormUrl<ApiResult<string>>("/api/HopDong_VayRutGoc/XoaTraBotGoc", dic);
+            return await client.PostAsyncFormUrl<ApiResult<string>>("/api/HopDong_VayRutGoc/XoaVayRutGoc", dic);
         }
         public async Task<ApiResult<string>> VayThem(VayThemRequestVm model)
         {

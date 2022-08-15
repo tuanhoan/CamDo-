@@ -45,9 +45,9 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             }
             return Json(new ApiSuccessResult<string>(result.ResultObj, result.Message));
         }
-        public async Task<IActionResult> XoaTraBotGoc(int tranLogId)
+        public async Task<IActionResult> XoaVayRutGoc(int tranLogId)
         {
-            var result = await _apiClient.XoaTraBotGoc(tranLogId);
+            var result = await _apiClient.XoaVayRutGoc(tranLogId);
             if (!result.IsSuccessed)
             {
                 return Json(new ApiErrorResult<string>(result.Message));

@@ -72,7 +72,7 @@ namespace BaseSource.BackendApi.Controllers
                 {
                     return Ok(new ApiErrorResult<string>($"Tiền [Trả gốc] phải <= tiền đang có của hợp đồng"));
                 }
-                hd.TongTienDaThanhToan += model.SoTienTraGoc ?? 0;
+                
                 hd.TongTienVayHienTai -= model.SoTienTraGoc ?? 0;
                 hd.TongTienLai = await _hopDongService.TinhLaiHD(hd.HD_HinhThucLai, hd.HD_TongThoiGianVay, hd.HD_LaiSuat, hd.TongTienVayHienTai);
                 await _db.SaveChangesAsync();
@@ -105,8 +105,8 @@ namespace BaseSource.BackendApi.Controllers
             }
             return Ok(new ApiErrorResult<string>("Not Found!"));
         }
-        [HttpPost("XoaTraBotGoc")]
-        public async Task<IActionResult> XoaTraBotGoc([FromForm] int tranLogId)
+        [HttpPost("XoaVayRutGoc")]
+        public async Task<IActionResult> XoaVayRutGoc([FromForm] int tranLogId)
         {
             var tran = await _db.HopDong_VayRutGocs.FindAsync(tranLogId);
             if (tran != null)
@@ -127,7 +127,7 @@ namespace BaseSource.BackendApi.Controllers
                     }
                 }
 
-                hd.TongTienDaThanhToan -= tran.TotalMoney;
+              
                 hd.TongTienVayHienTai += tran.TotalMoney;
                 hd.TongTienLai = await _hopDongService.TinhLaiHD(hd.HD_HinhThucLai, hd.HD_TongThoiGianVay, hd.HD_LaiSuat, hd.TongTienVayHienTai);
                 _db.HopDong_VayRutGocs.Remove(tran);

@@ -41,7 +41,7 @@
                 Tiền lãi
             </label>
             <div class="col-lg-3">
-                <span class="tienlai">@Model.MoneyInterest.ToString("N0") VNĐ</span>
+                <span class="tienlai text-success font-weight-bold">@Model.MoneyInterest.ToString("N0") VNĐ</span>
                 <input type="hidden" asp-for="MoneyInterest" />
                 <input type="hidden" asp-for="MoneyPay" />
             </div>
@@ -65,7 +65,7 @@
                 Tổng tiền lãi
             </label>
             <div class="col-lg-3">
-                <span class="tongtienlai">@Model.MoneyPayNeed.ToString("N0") VNĐ</span>
+                <span class="tongtienlai text-danger font-weight-bold">@Model.MoneyPayNeed.ToString("N0") VNĐ</span>
                 <input type="hidden" asp-for="MoneyPayNeed" />
             </div>
         </div>

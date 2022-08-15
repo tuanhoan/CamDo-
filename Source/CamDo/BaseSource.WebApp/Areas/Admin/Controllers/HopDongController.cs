@@ -58,8 +58,8 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             };
             var requestUser = _userApiClient.GetUserByCuaHang();
             var resultCuaHinhHH = _cauHinhHangHoaApiClient.GetPagings(requestCauHinhHH);
-
-            await Task.WhenAll(requestUser, resultCuaHinhHH);
+            var maxIDHD = _hopDongApiClient.GetMaxID(ELoaiHopDong.Vaylai);
+            await Task.WhenAll(requestUser, resultCuaHinhHH, maxIDHD);
 
             ViewData["ListHangHoa"] = new SelectList(resultCuaHinhHH.Result.ResultObj.Items, "Id", "Ten");
             ViewData["ListUser"] = new SelectList(requestUser.Result.ResultObj, "Id", "FullName");
@@ -67,8 +67,8 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             var model = new CreateHopDongVm()
             {
                 HD_NgayVay = DateTime.Now.Date,
-                HD_Loai = ELoaiHopDong.Camdo
-
+                HD_Loai = ELoaiHopDong.Camdo,
+                HD_MaTemp = maxIDHD.Result.ResultObj
             };
 
             return PartialView("_Create", model);
@@ -197,77 +197,12 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         public async Task<IActionResult> InKyDongLai(long paymentId)
         {
             var result = await _hopDongApiClient.InKyDongLai(paymentId);
-            if (!result.IsSuccessed)
-            {
-                return Json(new ApiErrorResult<string>(result.Message));
-            }
-            var pathToFile = System.IO.Path.Combine(_appEnvironment.WebRootPath, "PrintTemplate", "InPhieuDongLai.html");
-            using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
-            {
-                var source = await SourceReader.ReadToEndAsync();
-                source = source.Replace("{mahopdong}", result.ResultObj.MaHD);
-                source = source.Replace("{ngay}", DateTime.Now.Day.ToString());
-                source = source.Replace("{thang}", DateTime.Now.Month.ToString());
-                source = source.Replace("{nam}", DateTime.Now.Year.ToString());
-                source = source.Replace("{tenkhachhang}", result.ResultObj.TenKhachHang);
-                source = source.Replace("{tennhanvien}", result.ResultObj.TenNhanVien);
-                source = source.Replace("{fromdate}", result.ResultObj.FromDate.ToString("dd/MM/yyyy"));
-                source = source.Replace("{todate}", result.ResultObj.ToDate.ToString("dd/MM/yyyy"));
-                source = source.Replace("{tienlai}", result.ResultObj.TienLai.ToString("N0"));
-                source = source.Replace("{ngaydonglaitieptheo}", result.ResultObj.NgayDongLaiTiepTheo?.ToString("dd/MM/yyyy"));
-                return Json(new ApiSuccessResult<string>(source));
-            }
-
+            return PartialView("_InKyDongLai", result.ResultObj);
         }
-        public async Task<IActionResult> InLichDongTien(int hopDongId)
+        public async Task<IActionResult> InDanhSachDongTien(int hopDongId)
         {
             var result = await _hdPaymentLogApiClient.GetPaymentLogByHD(hopDongId);
-            if (!result.IsSuccessed)
-            {
-                return Json(new ApiErrorResult<string>(result.Message));
-            }
-            var pathToFile = System.IO.Path.Combine(_appEnvironment.WebRootPath, "PrintTemplate", "InLichDongLai.html");
-            string strData = "";
-            int i = 1;
-            foreach (var item in result.ResultObj.ListPaymentLog)
-            {
-                var template = "<tr>" +
-                                 "<td class='text-center'>{stt}</td>" +
-                                 "<td class='text-center'>{fromDate} - {toDate}</td>" +
-                                 "<td class='text-center'>{countday}</td>" +
-                                 "<td class='text-right'>{tienlai}</td>" +
-                                 "<td class='text-right'>{tienkhac}</td>" +
-                                 "<td class='text-right'>{tonglai}</td>" +
-                                 "<td class='text-right'>{tienkhachtra}</td>" +
-                                 "<td class='text-center'><input type ='checkbox' {checked} /></td></tr>";
-
-                template = template.Replace("{stt}", i.ToString());
-                template = template.Replace("{fromDate}", item.FromDate.ToString("dd/MM/yyyy"));
-                template = template.Replace("{toDate}", item.ToDate.ToString("dd/MM/yyyy"));
-                template = template.Replace("{countday}", item.CountDay.ToString());
-                template = template.Replace("{tienlai}", item.MoneyInterest.ToString("N0"));
-                template = template.Replace("{tienkhac}", item.MoneyOther.ToString("N0"));
-                template = template.Replace("{tonglai}", ((item.MoneyInterest + item.MoneyOther).ToString("N0")));
-                template = template.Replace("{tienkhachtra}", item.MoneyPay.ToString("N0"));
-                if (item.PaidDate != null)
-                {
-                    template = template.Replace("{checked}", "checked");
-                }
-                else
-                {
-                    template = template.Replace("{checked}", "");
-                }
-                strData += template;
-                i++;
-
-            }
-            using (StreamReader SourceReader = System.IO.File.OpenText(pathToFile))
-            {
-                var source = await SourceReader.ReadToEndAsync();
-                source = source.Replace("{body}", strData);
-                return Json(new ApiSuccessResult<string>(source));
-            }
-
+            return PartialView("_InDanhSachDongTien", result.ResultObj);
         }
         public async Task<IActionResult> InHDChuocDo(int hopDongId)
         {

@@ -124,7 +124,20 @@
                 </tr>
                 <tr>
                     <td><span class="font-weight-bold">@Model.StatusName</span></td>
-                    <td colspan="2" align="right" class=""><span id="lblStatus"><span class="m-badge m-badge--info m-badge--wide" style="font-size:12px">Hôm nay đóng tiền</span></span></td>
+                    <td colspan="2" align="right" class="">
+                        <span id="lblStatus">
+                          
+                                @if (Model.HD_Status == (byte)EHopDong_CamDoStatusFilter.QuaHan || Model.HD_Status == (byte)EHopDong_CamDoStatusFilter.DenNgayChuocDo)
+                                {
+                                    <span class="badge badge-red">@Model.StatusName</span>
+                                }
+                                else
+                                {
+                                    <span class="badge badge-primary">@Model.StatusName</span>
+                                }
+                          
+                        </span>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -380,7 +393,7 @@
                         <h5 class="m-0 font-weight-bold"><i class="fa fa-coins"></i> Khách hàng nợ lãi - Trả tiền thừa</h5>
                     </div>
                     <div class="card-body">
-                        <form method="post" asp-action="NoLai" data-name="frmGhiNo">
+                        <form method="post" asp-action="NoLai" asp-controller="HopDong" data-name="frmGhiNo">
                             <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.Id">
                             <input type="hidden" name="Type" value="@((int)EHopDong_ActionType.NoLai)">
                             <div class="form-group row">
@@ -412,7 +425,7 @@
                         <h5 class="m-0 font-weight-bold"><i class="fa fa-money-bill"></i> Khách hàng trả nợ</h5>
                     </div>
                     <div class="card-body">
-                        <form method="post" asp-action="TraNo" data-name="frmTraNo">
+                        <form method="post" asp-action="TraNo" asp-controller="HopDong" data-name="frmTraNo">
                             <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.Id">
                             <input type="hidden" name="Type" value="@((int)EHopDong_ActionType.TraNo)">
                             <div class="form-group row">

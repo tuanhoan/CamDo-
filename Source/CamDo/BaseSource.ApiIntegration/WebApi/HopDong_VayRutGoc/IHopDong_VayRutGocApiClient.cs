@@ -12,7 +12,7 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong_VayRutGoc
     {
         Task<ApiResult<List<HopDong_VayRutGocVm>>> GetByHopDong(int hopDongId);
         Task<ApiResult<string>> TraBotGoc(TraBotGocRequestVm model);
-        Task<ApiResult<string>> XoaTraBotGoc(int tranLogId);
+        Task<ApiResult<string>> XoaVayRutGoc(int tranLogId);
         Task<ApiResult<string>> VayThem(VayThemRequestVm model);
     }
 }

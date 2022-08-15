@@ -1,0 +1,76 @@
+﻿@model HD_PaymentLogVm
+<!DOCTYPE html>
+<head>
+    <title>Danh sách đóng lãi</title>
+</head>
+<body>
+    <style>
+
+        .table-bordered th, .table-bordered td {
+            border: 1px solid #e0e5ec;
+            padding: 0.5rem;
+        }
+
+        .table {
+            width: 100%;
+            margin-bottom: 1rem;
+            color: #69707a;
+            border-collapse: collapse;
+        }
+
+        .head-bg-gray thead {
+            background: #f2f0f7;
+            font-weight: 600;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+    </style>
+    <table class="table table-bordered head-bg-gray table-hover">
+        <thead>
+            <tr>
+                <th class="text-center">STT</th>
+                <th class="text-center">Ngày</th>
+                <th class="text-center">Số ngày</th>
+                <th class="text-center">Tiền lãi</th>
+                <th class="text-center">Tiền khác</th>
+                <th class="text-center">Tổng lãi</th>
+                <th class="text-center">Tiền khách trả</th>
+                <th class="text-center"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int idx = 1;
+            }
+            @foreach (var item in Model.ListPaymentLog)
+            {
+                <tr>
+                    <td>@idx</td>
+                    <td>@item.FromDate.ToString("dd/MM/yyyy") - @item.ToDate.ToString("dd/MM/yyyy")</td>
+                    <td class="text-center">@item.CountDay</td>
+                    <td class="text-right">@item.MoneyInterest.ToString("N0")</td>
+                    <td class="text-right">@item.MoneyOther.ToString("N0")</td>
+                    <td class="text-right">@((item.MoneyInterest + item.MoneyOther).ToString("N0"))</td>
+                    <td class="text-right">@item.MoneyPayNeed.ToString("N0")</td>
+                    <td class='text-center'>
+                        @if (item.PaidDate != null)
+                        {
+                            <input type='checkbox' checked />
+                        }
+                        else
+                        {
+                            <input type='checkbox' />
+                        }
+                    </td>
+                </tr>
+                idx++;
+            }
+        </tbody>
+    </table>
+</body>

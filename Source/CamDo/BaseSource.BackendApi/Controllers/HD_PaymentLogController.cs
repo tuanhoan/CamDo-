@@ -174,7 +174,6 @@ namespace BaseSource.BackendApi.Controllers
         [HttpPost("CreatePaymentByDate")]
         public async Task<IActionResult> CreatePaymentByDate(HDPaymentByDateVm model)
         {
-
             var hd = await _db.HopDongs.FindAsync(model.HdId);
             if (hd == null)
             {
@@ -252,7 +251,7 @@ namespace BaseSource.BackendApi.Controllers
             {
                 itemPayment = lstPayment.Where(x => x.PaidDate != null).OrderByDescending(x => x.PaidDate).FirstOrDefault();
 
-                paymentByDate.FromDate = itemPayment != null ? itemPayment.FromDate : DateTime.Now;
+                paymentByDate.FromDate = itemPayment != null ? itemPayment.ToDate : DateTime.Now;
                 paymentByDate.ToDate = itemPayment != null ? itemPayment.ToDate : DateTime.Now;
             }
 

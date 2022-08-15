@@ -185,44 +185,37 @@ function printPayment(id) {
         method: "GET",
         url: "/Admin/HopDong/InKyDongLai",
         data: { paymentId: id },
-        success: function (res) {
-            if (res.isSuccessed == true) {
-                var mywindow = window.open('', "Phiếu đóng lãi", 'height=' + $(window).height() + ',width=' + $(window).width());
-                mywindow.document.write(res.resultObj);
+        success: function (data) {
+            var mywindow = window.open('', "Phiếu đóng lãi", 'height=' + $(window).height() + ',width=' + $(window).width());
+            mywindow.document.write(data);
 
-                mywindow.document.close(); // necessary for IE >= 10
-                mywindow.focus(); // necessary for IE >= 10
+            mywindow.document.close(); // necessary for IE >= 10
+            mywindow.focus(); // necessary for IE >= 10
 
-                setTimeout(function () {
-                    mywindow.print();
-                    mywindow.close();
-                }, 500);
-            } else if (res.message != null) {
-                toastr.error(res.message);
-            }
+            setTimeout(function () {
+                mywindow.print();
+                mywindow.close();
+            }, 500);
         }
     });
 }
 function printListPayment(id) {
     $.ajax({
         method: "GET",
-        url: "/Admin/HopDong/InLichDongTien",
+        url: "/Admin/HopDong/InDanhSachDongTien",
         data: { hopDongId: id },
-        success: function (res) {
-            if (res.isSuccessed == true) {
-                var mywindow = window.open('', "Lịch đóng tiền", 'height=' + $(window).height() + ',width=' + $(window).width());
-                mywindow.document.write(res.resultObj);
+        success: function (data) {
+            var mywindow = window.open('', "Lịch đóng tiền", 'height=' + $(window).height() + ',width=' + $(window).width());
+            mywindow.document.write(data);
 
-                mywindow.document.close(); // necessary for IE >= 10
-                mywindow.focus(); // necessary for IE >= 10
+            mywindow.document.close(); // necessary for IE >= 10
+            mywindow.focus(); // necessary for IE >= 10
 
-                setTimeout(function () {
-                    mywindow.print();
-                    mywindow.close();
-                }, 500);
-            } else if (res.message != null) {
-                toastr.error(res.message);
-            }
+            setTimeout(function () {
+                mywindow.print();
+                mywindow.close();
+            }, 500);
+
         }
     });
 }

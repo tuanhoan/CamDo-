@@ -1,4 +1,8 @@
+﻿@model InDongLaiResponseVm
 <!DOCTYPE html>
+<head>
+    <title>Kỳ đóng lãi</title>
+</head>
 <body>
     <style>
         body {
@@ -100,7 +104,6 @@
         .daidienky {
             margin: 0 0 5px;
             text-transform: uppercase;
-            font-size: 19px;
         }
     </style>
     <div style="width:700px;">
@@ -114,31 +117,38 @@
             </tr>
         </table>
 
-        <p class="title_hd">BIÊN NHẬN CHUỘC ĐỒ</p>
-        <p class="after_title_hd">HĐ Số: {mahopdong} </p>
+        <p class="title_hd">Biên nhận đóng lãi</p>
+        <p class="after_title_hd">HĐ Số: @Model.MaHD</p>
         <p class="date">
-            Hôm nay, ngày: <b>{ngay}</b>
+            @{
+                var currenDate = DateTime.Now;
+            }
+            Hôm nay, ngày: <b>@currenDate.Day tháng @currenDate.Month năm @currenDate.Year</b>
         </p>
-        <p class="p_shopname p_normal">{tennhanvien}</p>
-        <p class="p_normal">Đã hoàn trả tài sản thế chấp <b> {tentaisan} </b> cho </p>
-        <p class="p_normal">Ông (Bà): <span class="p_shopname">{tenkhachhang}</span></p>
-        <p class="p_normal">Theo hợp đồng cầm đồ Số:  <b>{mahopdong}</b></p>
-        <p class="p_normal" style="width:50%;float:left">Ngày cầm: <b> {ngayvay} </b></p>
-        <p class="p_normal" style="width:50%;float:right" >Ngày chuộc: <b> {ngaychuoc} </b></p>
-        <p class="p_normal">Số tiền cầm : <b>{tiencam} VNĐ</b></p>
-        <p class="p_normal">Tiền lãi phí là : <b>{tienchuoc}</b> VNĐ</p>
-        <p class="P_normal">* Tài sản thế chấp khi hoàn trả như hiện trạng ban đầu lúc cầm cố, không hư hỏng, mất mát</p>
+        <p class="p_shopname p_normal">@Model.TenNhanVien</p>
+        <p class="p_normal">Đã nhận tiền lãi của</p>
+        <p class="p_normal">Ông (Bà): <span class="p_shopname">@Model.TenKhachHang</span></p>
+        <div>
+
+
+        </div>
+        <div style="clear:both">
+
+        </div>
+        <p class="p_normal">Theo hợp đồng cầm đồ Số:  <b>@Model.MaHD</b></p>
+        <p class="p_normal">Kỳ lãi : từ ngày <b>@Model.FromDate.ToString("dd/MM/yyyy")</b> đến ngày <b>@Model.ToDate.ToString("dd/MM/yyyy")</b></p>
+        <p class="p_normal">Số tiền lãi : <b>@Model.TienLai.ToString("N0") VNĐ</b></p>
+        <p class="p_normal">Theo đó, HĐ số : @Model.MaHD ngày đóng lãi tiếp theo là : <b>@Model.NgayDongLaiTiepTheo?.ToString("dd/MM/yyyy")</b></p>
         <table class="tbl_ky">
             <tr>
                 <td>
-                    <p class="daidienky">Đại Diện Cửa Hàng</p>
+                    <p class="daidienky">Khách hàng</p>
                 </td>
                 <td>
-                    <p class="daidienky" style="margin-left:50px;">Người Chuộc Đồ</p>
+                    <p class="daidienky">Chủ cầm đồ</p>
                 </td>
             </tr>
         </table>
 
     </div>
 </body>
-</html>

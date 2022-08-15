@@ -43,11 +43,11 @@ function initAutocomplete() {
                     //Clear the AutoComplete TextBox.
                     $("#TenKhachHang").val("");
                     $("#KhachHangId").val(0);
-                    // $('.clear-info-customer').css("display", "none");
+                    $('.clear-info-customer').css("display", "none");
                     return false;
                 }
                 else {
-                    //$('.clear-info-customer').css("display", "block");
+                    $('.clear-info-customer').css("display", "block");
                     $('.frmHD #CMND').val(i.item.cmnd);
                     $('.frmHD #DiaChi').val(i.item.diaChi);
                     $('.frmHD #SDT').val(i.item.sdt);
@@ -76,7 +76,9 @@ $("body").on("click", '.clear-info-customer', function (e) {
     $('.frmHD #CMND').val("");
     $('.frmHD #DiaChi').val("");
     $('.frmHD #SDT').val("");
-    $("#KhacHangId").val(0);
+    $("#KhachHangId").val(0);
+    $("#CMND_NoiCap").val('');
+    $("#CMND_NgayCap").val('').trigger("change");
 });
 
 
@@ -120,13 +122,11 @@ function loadListThuocTinh() {
 
 function getMoTaHinhThucLai() {
     var type = $('#HD_HinhThucLai').val();
-    console.log(type);
     $.ajax({
         type: "GET",
         url: "/Admin/MoTaHinhThucLai/GetMoTaHinhThucLai",
         data: { hinhThucLai: type },
         success: function (data) {
-
             if (data && data.length > 0) {
 
                 if (type === 0 || type === "") {

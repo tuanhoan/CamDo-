@@ -41,7 +41,7 @@
                             <td class="text-right">0</td>
                         }
                     }
-                    @if (item.ActionType == (byte)EHopDong_ActionType.DongTienLai || item.ActionType == (byte)EHopDong_ActionType.HuyDongTienLai)
+                    else if (item.ActionType == (byte)EHopDong_ActionType.DongTienLai || item.ActionType == (byte)EHopDong_ActionType.HuyDongTienLai)
                     {
                         @if (item.MoneyAdd != 0)
                         {
@@ -55,16 +55,31 @@
                         }
                     }
 
-                    @if (item.ActionType == (byte)EHopDong_ActionType.DongHD)
+                    else if (item.ActionType == (byte)EHopDong_ActionType.DongHD)
                     {
                         <td class="text-right">0</td>
                         <td class="text-right">@item.TotalMoneyLoan.ToString("N0")</td>
                     }
-                    @if (item.ActionType == (byte)EHopDong_ActionType.MoLaiHD)
+                    else if (item.ActionType == (byte)EHopDong_ActionType.MoLaiHD)
                     {
                         <td class="text-right">@item.TotalMoneyLoan.ToString("N0")</td>
                         <td class="text-right">0</td>
                     }
+                    else
+                    {
+                        @if (item.MoneyAdd != 0)
+                        {
+                            <td class="text-right">0</td>
+                            <td class="text-right">@item.MoneyAdd.ToString("N0")</td>
+                        }
+                        else
+                        {
+                            <td class="text-right">@item.MoneySub.ToString("N0")</td>
+                            <td class="text-right">0</td>
+                        }
+                    }
+
+
                     <td style="border-right:none !important">
                         @EnumExtensions.GetEnumDisplayName(((EHopDong_ActionType)item.ActionType))
                     </td>
