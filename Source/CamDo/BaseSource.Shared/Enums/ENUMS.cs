@@ -59,17 +59,17 @@ namespace BaseSource.Shared.Enums
     public enum ECamDo_HopDongPrintTemplate : byte
     {
         [Display(Name = "Lãi suất")]
-        LaiSuat = 1,
+        LaiSuat = 0,
         [Display(Name = "Lãi thỏa thuận")]
-        LaiThoaThuan = 2,
+        LaiThoaThuan
     }
 
     public enum EVayLai_HopDongPrintTemplate : byte
     {
         [Display(Name = "Lãi suất")]
-        LaiSuat = 1,
+        LaiSuat = 0,
         [Display(Name = "Lãi thỏa thuận")]
-        LaiThoaThuan = 2,
+        LaiThoaThuan
     }
 
     public enum EHopDong_ActionType : byte

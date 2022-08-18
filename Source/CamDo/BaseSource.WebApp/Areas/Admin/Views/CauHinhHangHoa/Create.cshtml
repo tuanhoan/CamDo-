@@ -12,7 +12,7 @@
         <div class="card-body">
             <form asp-action="Create" data-name="ajaxFormHangHoa" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="form-group row">
+                <div class="row mb-3">
                     <label asp-for="LinhVuc" class="control-label col-md-2"></label>
                     <div class="col-md-10">
                         <select class="form-control" asp-for="LinhVuc" asp-items="@Html.GetEnumSelectList<ELinhVucHangHoa>()">
@@ -21,27 +21,27 @@
                         <span asp-validation-for="LinhVuc" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="form-group row">
+                <div class="row mb-3">
                     <label asp-for="MaTS" class="control-label col-md-2"></label>
                     <div class="col-md-10">
                         <input asp-for="MaTS" class="form-control " />
                         <span asp-validation-for="MaTS" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="form-group row">
+                <div class="row mb-3">
                     <label asp-for="Ten" class="control-label col-md-2"></label>
                     <div class="col-md-10">
                         <input asp-for="Ten" class="form-control " />
                         <span asp-validation-for="Ten" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="form-group row">
+                <div class="row mb-3">
                     <label asp-for="IsPublish" class="control-label col-md-2"></label>
                     <div class="col-md-10">
                         <input asp-for="IsPublish" />
                     </div>
                 </div>
-                <div class="form-group row">
+                <div class="row mb-3">
                     <label asp-for="HinhThucLai" class="control-label col-md-2"></label>
                     <div class="col-md-10">
                         <select class="form-control" asp-for="HinhThucLai" asp-items="@Html.GetEnumSelectList<EHinhThucLai>()" onchange="getMoTaHinhThucLai()">
@@ -49,84 +49,74 @@
                         <span asp-validation-for="HinhThucLai" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="form-group row">
+                <div class="row mb-3">
                     <label asp-for="IsThuLaiTruoc" class="control-label col-md-2"></label>
                     <div class="col-md-10">
                         <input asp-for="IsThuLaiTruoc" />
                     </div>
                 </div>
-                <div class="form-group row">
+                <div class="row mb-3">
 
                     <label asp-for="TongTien" class="control-label col-md-2"></label>
                     <div class="col-md-10">
                         <div class="input-group">
                             <input type="text" class="form-control money-textbox" value="@Model.TongTien">
                             <input type="hidden" asp-for="TongTien" />
-                            <div class="input-group-append">
-                                <span class="input-group-text" id="basic-addon2">VNĐ</span>
-                            </div>
+                            <span class="input-group-text" id="basic-addon2">VNĐ</span>
                         </div>
                         <span asp-validation-for="TongTien" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="form-group row">
+                <div class="row mb-3">
                     <label asp-for="LaiSuat" class="control-label col-md-2"></label>
                     <div class="col-md-10">
                         <div class="input-group">
                             <input type="text" class="form-control money-textbox" value="@Model.LaiSuat">
                             <input type="hidden" asp-for="LaiSuat" />
-                            <div class="input-group-append">
-                                <span class="input-group-text tyLeLai" id="basic-addon2"></span>
-                            </div>
+                            <span class="input-group-text tyLeLai" id="basic-addon2"></span>
                         </div>
                         <span asp-validation-for="LaiSuat" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="form-group row">
+                <div class="row mb-3">
                     <label asp-for="KyLai" class="control-label col-md-2"></label>
                     <div class="col-md-10">
                         <div class="input-group">
                             <input asp-for="KyLai" min="0" class="form-control " />
-                            <div class="input-group-append">
-                                <span class="input-group-text motaKyLai" id="basic-addon2"></span>
-                            </div>
+                            <span class="input-group-text motaKyLai" id="basic-addon2"></span>
                         </div>
                         <span asp-validation-for="KyLai" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="form-group row">
+                <div class="row mb-3">
                     <label asp-for="TongThoiGianVay" class="control-label col-md-2"></label>
                     <div class="col-md-10">
                         <div class="input-group">
                             <input asp-for="TongThoiGianVay" min="0" class="form-control " />
-                            <div class="input-group-append">
-                                <span class="input-group-text thoigianvay" id="basic-addon2"></span>
-                            </div>
+                            <span class="input-group-text thoigianvay" id="basic-addon2"></span>
                         </div>
                         <span asp-validation-for="TongThoiGianVay" class="text-danger"></span>
                     </div>
                 </div>
 
-                <div class="form-group row">
+                <div class="row mb-3">
                     <label asp-for="SoNgayQuaHan" class="control-label col-md-2"></label>
                     <div class="col-md-10">
                         <div class="input-group">
                             <input asp-for="SoNgayQuaHan" class="form-control " />
-                            <div class="input-group-append">
-                                <span class="input-group-text" id="basic-addon2">ngày quá hạn</span>
-                            </div>
+                            <span class="input-group-text" id="basic-addon2">ngày quá hạn</span>
                         </div>
                         <span asp-validation-for="SoNgayQuaHan" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="form-group row">
+                <div class="row mb-3">
                     <label asp-for="ListThuocTinh" class="control-label col-md-2"></label>
                     <div class="col-md-10">
                         <div class="repeatThuocTinh">
                             <button data-repeater-create type="button" class="btn btn-sm btn-success mb-3" value=""><i data-feather="plus"></i> Thêm thuộc tính</button>
                             <div data-repeater-list="groupthuoctinh" class="col-md-6 p-0">
-                                <div data-repeater-item class="form-group d-flex">
-                                    <input type="text" class="form-control mr-3 group-thuoctinh-item" placeholder="Thuộc tính hàng hóa" name="thuoctinh" value="" />
+                                <div data-repeater-item class="mb-3 d-flex">
+                                    <input type="text" class="form-control me-3 group-thuoctinh-item" placeholder="Thuộc tính hàng hóa" name="thuoctinh" value="" />
                                     <button data-repeater-delete type="button" class="btn btn-sm btn-danger"><i data-feather="minus"></i></button>
                                 </div>
                             </div>
@@ -137,7 +127,7 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <div>
                     <button type="submit" class="btn btn-primary">Create</button>
                 </div>
             </form>

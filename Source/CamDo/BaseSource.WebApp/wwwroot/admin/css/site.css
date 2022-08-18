@@ -35,7 +35,8 @@ a.btn-icon i {
 }
 
 .menu-item {
-    padding: 10px;
+    padding: 5px;
+    margin: 0 10px;
 }
 
 .menu-item a {
@@ -43,10 +44,6 @@ a.btn-icon i {
     align-items: center;
     color: #676c7b;
     text-decoration: none;
-}
-
-.menu-item a svg {
-    margin-right: 5px;
 }
 
 .list-shop {
@@ -78,10 +75,6 @@ a.btn-icon i {
     position: relative;
 }
 
-select.form-control {
-    padding: 0.575rem 1.125rem !important;
-}
-
 .modal-lager {
     width: 90% !important;
     max-width: 90% !important;
@@ -93,11 +86,11 @@ select.form-control {
     padding-bottom: 5px;
 }
 
-.frmHD .form-group label {
+.frmHD .mb-3 label {
     text-align: right;
 }
 
-.frmHD .form-group {
+.frmHD .mb-3 {
     align-items: center;
 }
 
@@ -174,7 +167,7 @@ select.form-control {
     margin: 20px 0px;
 }
 
-    #dvInfoDongLaiTheoNgay .form-group label {
+    #dvInfoDongLaiTheoNgay .mb-3 label {
         text-align: right;
         align-items: center;
         font-weight: bold;
@@ -252,4 +245,30 @@ select.form-control {
     font-size: 0.7rem !important;
     border-radius: 0.35rem;
     line-height: 1 !important;
+}
+
+.tab-container fieldset {
+    display: none;
+}
+
+    .tab-container fieldset.show {
+        display: block;
+    }
+
+
+.tab-container .tabs {
+    margin-right: 20px;
+    padding-bottom: 10px;
+    cursor: pointer;
+    border-bottom: 4px solid transparent;
+}
+
+    .tab-container .tabs:hover, .tab-container .tabs.active {
+        border-bottom: 4px solid #5867dd;
+    }
+
+.tab-container .line {
+    background-color: #CFD8DC;
+    height: 1px;
+    width: 100%;
 }

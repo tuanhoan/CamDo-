@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BaseSource.AdminApp.Controllers
 {
-    public class ReportCustomerController : Controller
+    public class ReportCustomerController : BaseController
     {
         private readonly IReportCustomerAdminApiClient _apiClient;
         public ReportCustomerController(IReportCustomerAdminApiClient apiClient)

@@ -1,61 +1,68 @@
-﻿<!-- Navbar Brand-->
+﻿@{
+    var currentShop = User.Claims.FirstOrDefault(x => x.Type == "TenCuaHang")?.Value ?? "Chọn cửa hàng";
+}
+<!-- Sidenav Toggle Button-->
+<button class="btn btn-icon btn-transparent-dark order-1 order-lg-0 me-2 ms-lg-2 me-lg-0" id="sidebarToggle"><i data-feather="menu"></i></button>
+<!-- Navbar Brand-->
 <!-- * * Tip * * You can use text or an image for your navbar brand.-->
 <!-- * * * * * * When using an image, we recommend the SVG format.-->
 <!-- * * * * * * Dimensions: Maximum height: 32px, maximum width: 240px-->
-@{
-    var currentShop = User.Claims.FirstOrDefault(x => x.Type == "TenCuaHang")?.Value ?? "Chọn cửa hàng";
-}
-<a class="navbar-brand" href="@Url.Action("Index", "Home")">
-    Admin Dashboard
-</a>
+<a class="navbar-brand pe-3 ps-4 ps-lg-2" href="@Url.Action("Index", "Home")">Admin Dashboard</a>
 
-<!-- Sidenav Toggle Button-->
-<button class="btn btn-icon btn-transparent-dark order-1 order-lg-0 mr-lg-2" id="sidebarToggle"><i data-feather="menu"></i></button>
 <div class="menu-item" id="choose-shop">
-    <a href="#"><i data-feather="airplay"></i> @currentShop</a>
+    <a href="#"><i data-feather="airplay" class="me-2"></i> @currentShop</a>
     <div class="list-shop asyncPartial" data-url="@Url.Action("GetShopByUser","CuaHang")"></div>
 </div>
-<div class="menu-item ">
-    <a href="@Url.Action("Index","FeedBack")"><i data-feather="message-square"></i> Góp ý</a>
+<div class="menu-item">
+    <a href="@Url.Action("Index","FeedBack")"><i data-feather="message-square"  class="me-2"></i> Góp ý</a>
 
 </div>
 
-
-<ul class="navbar-nav align-items-center ml-auto">
-    <div class="menu-item  ">
+<ul class="navbar-nav align-items-center ms-auto">
+    <li class="menu-item">
         <a href="@Url.Action("ReportCustomer","Baocao")">
             <i class="fa fa-user fa-lg" aria-hidden="true"></i>
         </a>
-    </div>
-    <div class="menu-item">
+    </li>
+    <li class="menu-item position-relative">
         <a href="@Url.Action("AlarmDate","CanhBao")">
             <i class="fa fa-clock fa-lg" aria-hidden="true"></i>
-            <span class="badge badge-red">4</span>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                99+
+            </span>
         </a>
-    </div>
-    <div class="menu-item">
+    </li>
+    <li class="menu-item position-relative">
         <a href="@Url.Action("Capital","CanhBao")">
             <i class="fa fa-gem"></i>
-            <span class="badge badge-red">4</span>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                99+
+            </span>
         </a>
-    </div>
-    <div class="menu-item ">
+    </li>
+    <li class="menu-item position-relative ">
         <a href="@Url.Action("Pawn","CanhBao")">
             <i class="fa fa-motorcycle fa-lg" aria-hidden="true"></i>
-            <span class="badge badge-red">4</span>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                99+
+            </span>
         </a>
-    </div>
-    <div class="menu-item ">
+    </li>
+    <li class="menu-item position-relative ">
         <a href="@Url.Action("Loan","CanhBao")">
             <i class="fa fa-money-bill fa-lg"></i>
-            <span class="badge badge-red">4</span>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                99+
+            </span>
         </a>
-    </div>
-    <div class="menu-item ">
+    </li>
+    <li class="menu-item position-relative me-4">
         <a href="@Url.Action("Installment","CanhBao")">
             <i class="fab fa-bitbucket fa-lg"></i>
-            <span class="badge badge-red">4</span>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                99+
+            </span>
         </a>
-    </div>
+    </li>
     @await Component.InvokeAsync("UserInfoTopBar")
 </ul>

@@ -19,7 +19,7 @@
                         <form asp-action="CreateIncome" id="frmIncome">
                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                            <div class="form-group row">
+                            <div class="row mb-3">
                                 <label for="Customer" class="col-sm-5 col-form-label ">Người nhận <span class="text-danger">*</span></label>
                                 <div class="col-sm-7">
                                     <div class="input-group">
@@ -28,19 +28,17 @@
                                     <span asp-validation-for="Customer" class="text-danger"></span>
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            <div class="row mb-3">
                                 <label for="inputEmail3" class="col-sm-5 col-form-label">Số tiền <span class="text-danger">*</span></label>
                                 <div class="col-sm-7">
                                     <div class="input-group ">
+                                        <div class="input-group-text">VNĐ</div>
                                         <input asp-for="Amount" type="number" value="0" class="form-control " placeholder="0">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text">VNĐ</div>
-                                        </div>
                                     </div>
                                     <span asp-validation-for="Amount" class="text-danger"></span>
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            <div class="row mb-3">
                                 <label for="inputEmail3" class="col-sm-5 col-form-label">Loại phiếu <span class="text-danger">*</span></label>
                                 <div class="col-sm-7">
                                     <select class="form-control selectpicker" name="type" data-live-search="true" required>
@@ -56,7 +54,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            <div class="row mb-3">
                                 <label for="inputEmail3" class="col-sm-5 col-form-label">Lý do chi tiền <span class="text-danger">*</span></label>
                                 <div class="col-sm-7">
                                     <div class="input-group ">
@@ -66,7 +64,7 @@
                                 </div>
 
                             </div>
-                            <div class="form-group row">
+                            <div class="row mb-3">
                                 <label for="inputEmail3" class="col-sm-5 col-form-label"></label>
                                 <div class="col-sm-7">
                                     <button type="submit" class="btn btn-primary btn-sm my-1"><i data-feather="file-text"></i> Thu tiền</button>
@@ -79,16 +77,16 @@
                         <hr />
                         <div class="">
                             <form class="form-inline" action="/admin/QuanlyThuChi/PageFilterIncome" id="form-Search" method="get">
-                                <div class="form-group mb-2">
+                                <div class="row mb-3">
                                     <input type="text" class="form-control" name="customer" placeholder="Tìm kiếm">
                                 </div>
-                                <div class="form-group mx-sm-3 mb-2">
+                                <div class="row mb-3">
                                     <input type="date" class="form-control" name="from">
                                 </div>
-                                <div class="form-group mx-sm-3 mb-2">
+                                <div class="row mb-3">
                                     <input type="date" class="form-control" name="to">
                                 </div>
-                                <div class="form-group mx-sm-3 mb-2">
+                                <div class="row mb-3">
                                     <select class=" selectpicker form-control" data-live-search="true" name="type">
                                         <option value="" data-tokens="Tất cả loại phiếu">Tất cả loại phiếu</option>
                                         @foreach (EPhieuThu_ActionType item in Enum.GetValues<EPhieuThu_ActionType>())
@@ -121,7 +119,7 @@
                 <input name="id" hidden value="" />
                 <div class="modal-header">
                     <h5 class="modal-title" id="deleteModalLabel">Xóa Phiếu thu</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>

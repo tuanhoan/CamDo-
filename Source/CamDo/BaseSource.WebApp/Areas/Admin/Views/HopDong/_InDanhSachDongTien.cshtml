@@ -23,7 +23,7 @@
             font-weight: 600;
         }
 
-        .text-right {
+        .text-end {
             text-align: right;
         }
 
@@ -54,10 +54,10 @@
                     <td>@idx</td>
                     <td>@item.FromDate.ToString("dd/MM/yyyy") - @item.ToDate.ToString("dd/MM/yyyy")</td>
                     <td class="text-center">@item.CountDay</td>
-                    <td class="text-right">@item.MoneyInterest.ToString("N0")</td>
-                    <td class="text-right">@item.MoneyOther.ToString("N0")</td>
-                    <td class="text-right">@((item.MoneyInterest + item.MoneyOther).ToString("N0"))</td>
-                    <td class="text-right">@item.MoneyPayNeed.ToString("N0")</td>
+                    <td class="text-end">@item.MoneyInterest.ToString("N0")</td>
+                    <td class="text-end">@item.MoneyOther.ToString("N0")</td>
+                    <td class="text-end">@((item.MoneyInterest + item.MoneyOther).ToString("N0"))</td>
+                    <td class="text-end">@item.MoneyPayNeed.ToString("N0")</td>
                     <td class='text-center'>
                         @if (item.PaidDate != null)
                         {

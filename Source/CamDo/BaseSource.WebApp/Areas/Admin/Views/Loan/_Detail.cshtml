@@ -10,38 +10,7 @@
         tabActive = "tab-dongtienlai";
     }
 }
-<style>
-    fieldset {
-        display: none;
-    }
 
-        fieldset.show {
-            display: block;
-        }
-
-
-    .tabs {
-        margin: 2px 5px 0px 5px;
-        padding-bottom: 10px;
-        cursor: pointer;
-    }
-
-        .tabs:hover, .tabs.active {
-            border-bottom: 4px solid #5867dd;
-        }
-
-    a:hover {
-        text-decoration: none;
-        color: #1565C0;
-    }
-
-
-    .line {
-        background-color: #CFD8DC;
-        height: 1px;
-        width: 100%;
-    }
-</style>
 <div class="row">
     <div class="col-md-6">
         <table class="table table-hover table-bordered table-detail-hd">
@@ -191,32 +160,30 @@
             <div class="col-md-6">
                 <form id="frmTraBotGoc" asp-action="TraBotGoc" asp-controller="HopDong_VayRutGoc" method="post">
                     <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.Id" />
-                    <div class="form-group row">
-                        <label class="col-4 text-right">Ngày trả trước gốc</label>
+                    <div class="row mb-3">
+                        <label class="col-4 text-end">Ngày trả trước gốc</label>
                         <div class="col-8">
                             <input type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" name="NgayTraGoc" class="form-control" />
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-4 text-right">Số tiền gốc trả trước</label>
+                    <div class="row mb-3">
+                        <label class="col-4 text-end">Số tiền gốc trả trước</label>
                         <div class="col-8">
                             <div class="input-group">
                                 <input type="text" class="form-control" id="SoTienTraGocDisplay" />
                                 <input type="hidden" name="SoTienTraGoc" />
-                                <div class="input-group-append">
-                                    <span class="input-group-text">VNĐ</span>
-                                </div>
+                                <span class="input-group-text">VNĐ</span>
                             </div>
                             <span class="text-danger field-validation-valid" data-valmsg-for="SoTienTraGoc" data-valmsg-replace="true"></span>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-4 text-right">Ghi chú</label>
+                    <div class="row mb-3">
+                        <label class="col-4 text-end">Ghi chú</label>
                         <div class="col-8">
                             <textarea class="form-control" name="Note" rows="4"></textarea>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="row mb-3">
                         <label class="col-4"></label>
                         <div class="col-8">
                             <button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-thumbs-up"></i> Đồng ý</button>
@@ -234,33 +201,31 @@
             <div class="col-md-6">
                 <form id="frmVayThem" asp-action="VayThem" asp-controller="HopDong_VayRutGoc" method="post">
                     <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.Id" />
-                    <div class="form-group row">
-                        <label class="col-4 text-right">Ngày vay thêm gốc</label>
+                    <div class="row mb-3">
+                        <label class="col-4 text-end">Ngày vay thêm gốc</label>
                         <div class="col-8">
                             <input type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" name="NgayVayThem" class="form-control" />
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-4 text-right">Số tiền gốc vay thêm</label>
+                    <div class="row mb-3">
+                        <label class="col-4 text-end">Số tiền gốc vay thêm</label>
                         <div class="col-8">
                             <div class="input-group">
                                 <input type="text" class="form-control" id="SoTienVayThemDisplay" />
                                 <input type="hidden" name="SoTienVayThem" />
-                                <div class="input-group-append">
-                                    <span class="input-group-text">VNĐ</span>
-                                </div>
+                                <span class="input-group-text">VNĐ</span>
                             </div>
                             <span class="text-danger field-validation-valid" data-valmsg-for="SoTienVayThem" data-valmsg-replace="true"></span>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-4 text-right">Ghi chú</label>
+                    <div class="row mb-3">
+                        <label class="col-4 text-end">Ghi chú</label>
                         <div class="col-8">
                             <textarea class="form-control" name="Note" rows="4"></textarea>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-4 text-right"></label>
+                    <div class="row mb-3">
+                        <label class="col-4 text-end"></label>
                         <div class="col-8">
                             <button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-thumbs-up"></i> Đồng ý</button>
                         </div>
@@ -277,31 +242,29 @@
             <div class="col-md-6">
                 <form id="frmGiaHan" asp-action="GiaHan" asp-controller="HopDong_GiaHan" method="post">
                     <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.Id" />
-                    <div class="form-group row">
-                        <label class="col-4 text-right">Khách Hàng</label>
+                    <div class="row mb-3">
+                        <label class="col-4 text-end">Khách Hàng</label>
                         <div class="col-8">
                             <span>@Model.TenKhachHang</span>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-4 text-right">Gia hạn thêm</label>
+                    <div class="row mb-3">
+                        <label class="col-4 text-end">Gia hạn thêm</label>
                         <div class="col-8">
                             <div class="input-group">
                                 <input type="number" class="form-control" name="SoNgayGiaHan" />
-                                <div class="input-group-append">
-                                    <span class="input-group-text">@Model.ThoiGian.GetEnumDisplayName()</span>
-                                </div>
+                                <span class="input-group-text">@Model.ThoiGian.GetEnumDisplayName()</span>
                             </div>
                             <span class="text-danger field-validation-valid" data-valmsg-for="SoNgayGiaHan" data-valmsg-replace="true"></span>
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-4 text-right">Ghi chú</label>
+                    <div class="row mb-3">
+                        <label class="col-4 text-end">Ghi chú</label>
                         <div class="col-8">
                             <textarea class="form-control" name="Note" rows="4"></textarea>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="row mb-3">
                         <label class="col-4"></label>
                         <div class="col-8">
                             <button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-thumbs-up"></i> Đồng ý</button>
@@ -320,14 +283,14 @@
                 <div class="col-md-6">
                     <form id="frmNhacNo" method="post" asp-action="Create" asp-controller="HopDong_DebtNote">
                         <input type="hidden" name="HopDongId" value="@Model.Id" />
-                        <div class="form-group row">
-                            <label class="col-2 text-right">Ghi chú</label>
+                        <div class="row mb-3">
+                            <label class="col-2 text-end">Ghi chú</label>
                             <div class="col-10">
                                 <textarea class="form-control" name="Note" rows="5"></textarea>
                                 <span class="text-danger field-validation-valid" data-valmsg-for="Note" data-valmsg-replace="true"></span>
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="row mb-3">
                             <label class="col-2"></label>
                             <div class="col-10">
                                 <button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-save"></i> Lưu lại</button>
@@ -354,19 +317,19 @@
                 <form id="frmHenGio" asp-action="Create" asp-controller="HopDong_AlarmLog" method="post">
                     <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.Id" />
                     <input type="hidden" name="IsDisable" id="IsDisable" />
-                    <div class="form-group row">
-                        <label class="col-4 text-right">Ngày hẹn</label>
+                    <div class="row mb-3">
+                        <label class="col-4 text-end">Ngày hẹn</label>
                         <div class="col-8">
                             <input type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" name="AlarmDate" class="form-control" />
                         </div>
                     </div>
-                    <div class="form-group row">
-                        <label class="col-4 text-right">Ghi chú</label>
+                    <div class="row mb-3">
+                        <label class="col-4 text-end">Ghi chú</label>
                         <div class="col-8">
                             <textarea class="form-control" name="Note" rows="4"></textarea>
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="row mb-3">
                         <label class="col-4"></label>
                         <div class="col-8">
                             <button class="btn btn-primary btn-sm" type="button" onclick="saveHenGio(false)"> Tạo hẹn giờ</button>
@@ -396,20 +359,18 @@
                         <form method="post" asp-action="NoLai" asp-controller="HopDong" data-name="frmGhiNo">
                             <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.Id">
                             <input type="hidden" name="Type" value="@((int)EHopDong_ActionType.NoLai)">
-                            <div class="form-group row">
-                                <label class="col-3 text-right">Số tiền nợ lại</label>
+                            <div class="row mb-3">
+                                <label class="col-3 text-end">Số tiền nợ lại</label>
                                 <div class="col-9">
                                     <div class="input-group">
                                         <input type="text" class="form-control" id="SoTienNoLaiDisplay" value="">
                                         <input type="hidden" name="SoTienNoLai">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">VNĐ</span>
-                                        </div>
+                                        <span class="input-group-text">VNĐ</span>
                                     </div>
                                     <span class="text-danger field-validation-valid" data-valmsg-for="SoTienVayThem" data-valmsg-replace="true"></span>
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            <div class="row mb-3">
                                 <label class="col-3"></label>
                                 <div class="col-9">
                                     <button class="btn btn-danger btn-sm" type="submit"><i class="fas fa-thumbs-down"></i> Ghi nợ</button>
@@ -428,20 +389,18 @@
                         <form method="post" asp-action="TraNo" asp-controller="HopDong" data-name="frmTraNo">
                             <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.Id">
                             <input type="hidden" name="Type" value="@((int)EHopDong_ActionType.TraNo)">
-                            <div class="form-group row">
+                            <div class="row mb-3">
                                 <label class="col-3">Số tiền trả nợ</label>
                                 <div class="col-9">
                                     <div class="input-group">
                                         <input type="text" class="form-control" id="SoTienTraNoDisplay" value="">
                                         <input type="hidden" name="SoTienTraNo">
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">VNĐ</span>
-                                        </div>
+                                        <span class="input-group-text">VNĐ</span>
                                     </div>
                                     <span class="text-danger field-validation-valid" data-valmsg-for="SoTienVayThem" data-valmsg-replace="true"></span>
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            <div class="row mb-3">
                                 <label class="col-3"></label>
                                 <div class="col-9">
                                     <button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-thumbs-up"></i> Thanh toán</button>
@@ -476,33 +435,7 @@
     })
 
 
-    $(".tabs").click(function () {
-        var tabType = $(this).data("type");
-        loadDataTab(tabType);
-        $(".tabs").removeClass("active");
-        $(this).children("h6").addClass("font-weight-bold");
-        $(this).addClass("active");
-
-        current_fs = $(".active");
-         next_fs = "#" + tabType;
-
-        $("fieldset").removeClass("show");
-        $(next_fs).addClass("show");
-
-         current_fs.animate({}, {
-           step: function () {
-              current_fs.css({
-               'display': 'none',
-                'position': 'relative'
-              });
-             next_fs.css({
-              'display': 'block'
-             });
-         }
-         });
-
-
-     });
+    
     function loadDataTab(type) {
         switch (type) {
             case "tab-history":

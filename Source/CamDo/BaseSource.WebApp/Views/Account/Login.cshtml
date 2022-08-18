@@ -14,11 +14,11 @@
 
         <form action="/Account/Login?returnUrl=@ViewBag.ReturnUrl" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group mt-3">
+            <div class="mb-3">
                 <input type="text" asp-for="UserName" class="account-input-field" placeholder="Tên đăng nhập">
                 <span asp-validation-for="UserName" class="text-danger"></span>
             </div>
-            <div class="form-group mt-3">
+            <div class="mb-3">
                 <input type="password" asp-for="Password" class="account-input-field" placeholder="Mật khẩu">
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
@@ -36,7 +36,7 @@
             <center><button type="submit">Đăng nhập</button></center>
 
             <div class="d-flex justify-content-center align-items-center mt-3">
-                <div class="mini-label ms-2 mr-2">Bạn chưa có tài khoản? </div>
+                <div class="mini-label ms-2 me-2">Bạn chưa có tài khoản? </div>
 
                 <a class="register" asp-controller="CuaHang" asp-action="Register">Đăng ký</a>
             </div>

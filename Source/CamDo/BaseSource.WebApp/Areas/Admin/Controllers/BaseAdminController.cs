@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BaseSource.WebApp.Areas.Admin.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "ShopManager")]
     [Area("Admin")]
     public class BaseAdminController : BaseController
     {

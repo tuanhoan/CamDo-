@@ -32,50 +32,50 @@
                     {
                         if (item.MoneyDebit < 0)
                         {
-                            <td class="text-right">0</td>
-                            <td class="text-right">@((item.MoneyDebit*-1).ToString("N0"))</td>
+                            <td class="text-end">0</td>
+                            <td class="text-end">@((item.MoneyDebit*-1).ToString("N0"))</td>
                         }
                         else
                         {
-                            <td class="text-right">@item.MoneyDebit.ToString("N0")</td>
-                            <td class="text-right">0</td>
+                            <td class="text-end">@item.MoneyDebit.ToString("N0")</td>
+                            <td class="text-end">0</td>
                         }
                     }
                     else if (item.ActionType == (byte)EHopDong_ActionType.DongTienLai || item.ActionType == (byte)EHopDong_ActionType.HuyDongTienLai)
                     {
                         @if (item.MoneyAdd != 0)
                         {
-                            <td class="text-right">0</td>
-                            <td class="text-right">@item.MoneyPay.ToString("N0")</td>
+                            <td class="text-end">0</td>
+                            <td class="text-end">@item.MoneyPay.ToString("N0")</td>
                         }
                         else
                         {
-                            <td class="text-right">@item.MoneyPay.ToString("N0")</td>
-                            <td class="text-right">0</td>
+                            <td class="text-end">@item.MoneyPay.ToString("N0")</td>
+                            <td class="text-end">0</td>
                         }
                     }
 
                     else if (item.ActionType == (byte)EHopDong_ActionType.DongHD)
                     {
-                        <td class="text-right">0</td>
-                        <td class="text-right">@item.TotalMoneyLoan.ToString("N0")</td>
+                        <td class="text-end">0</td>
+                        <td class="text-end">@item.TotalMoneyLoan.ToString("N0")</td>
                     }
                     else if (item.ActionType == (byte)EHopDong_ActionType.MoLaiHD)
                     {
-                        <td class="text-right">@item.TotalMoneyLoan.ToString("N0")</td>
-                        <td class="text-right">0</td>
+                        <td class="text-end">@item.TotalMoneyLoan.ToString("N0")</td>
+                        <td class="text-end">0</td>
                     }
                     else
                     {
                         @if (item.MoneyAdd != 0)
                         {
-                            <td class="text-right">0</td>
-                            <td class="text-right">@item.MoneyAdd.ToString("N0")</td>
+                            <td class="text-end">0</td>
+                            <td class="text-end">@item.MoneyAdd.ToString("N0")</td>
                         }
                         else
                         {
-                            <td class="text-right">@item.MoneySub.ToString("N0")</td>
-                            <td class="text-right">0</td>
+                            <td class="text-end">@item.MoneySub.ToString("N0")</td>
+                            <td class="text-end">0</td>
                         }
                     }
 
@@ -90,7 +90,7 @@
                         }
                     </td>
                     <td></td>
-                    <td class="text-right">@item.MoneyOther.ToString("N0")</td>
+                    <td class="text-end">@item.MoneyOther.ToString("N0")</td>
                 </tr>
 
                 idx++;

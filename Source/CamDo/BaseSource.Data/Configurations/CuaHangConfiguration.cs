@@ -28,7 +28,7 @@ namespace BaseSource.Data.Configurations
             builder.Property(x => x.CamDo_HopDongPrintTemplate).IsRequired();
             builder.Property(x => x.VayLai_HopDongPrintTemplate).IsRequired();
 
-            builder.HasOne(x => x.UserProfile).WithMany(x => x.CuaHangs).HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
+            builder.HasOne(x => x.UserProfileQuanLy).WithMany(x => x.CuaHangQuanLys).HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

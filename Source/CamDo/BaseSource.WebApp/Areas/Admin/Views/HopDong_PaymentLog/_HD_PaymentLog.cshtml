@@ -32,16 +32,16 @@
                     <td><i class="fas fa-arrow-right"></i></td>
                     <td>@item.ToDate.ToString("dd/MM/yyyy")</td>
                     <td class="text-center">@item.CountDay</td>
-                    <td class="text-right">@item.MoneyInterest.ToString("N0")</td>
-                    <td class="text-right">@item.MoneyOther.ToString("N0")</td>
-                    <td class="text-right">@((item.MoneyInterest + item.MoneyOther).ToString("N0"))</td>
+                    <td class="text-end">@item.MoneyInterest.ToString("N0")</td>
+                    <td class="text-end">@item.MoneyOther.ToString("N0")</td>
+                    <td class="text-end">@((item.MoneyInterest + item.MoneyOther).ToString("N0"))</td>
                     @if (item.PaidDate != null)
                     {
-                        <td class="text-right">@item.MoneyPay.ToString("N0")</td>
+                        <td class="text-end">@item.MoneyPay.ToString("N0")</td>
                     }
                     else
                     {
-                        <td class="text-right"><input type="text" class="form-control money-textbox text-right" id="input-customer-pay-@item.Id" value="@item.MoneyPay"></td>
+                        <td class="text-end"><input type="text" class="form-control money-textbox text-end" id="input-customer-pay-@item.Id" value="@item.MoneyPay"></td>
                     }
                     <td>
                         @if (item.PaidDate != null)
@@ -64,7 +64,7 @@
                 </tr>
                 <tr class="note-payment-@item.Id" style="display:none">
                     <td colspan="6" style="border:none !important">
-                        <div class="form-group row">
+                        <div class="row mb-3">
                             <label class="control-label col-md-2">Ghi chú </label>
                             <div class="col-md-10">
                                 <form id="frmPaymentNote-@item.Id">
@@ -74,7 +74,7 @@
 
                             </div>
                         </div>
-                        <div class="form-group row">
+                        <div class="row mb-3">
                             <div class="col-md-10 offset-md-2">
                                 <button class="btn btn-primary btn-sm" type="button" onclick="createPaymentNote(@item.Id)">Lưu ghi chú</button>
                             </div>

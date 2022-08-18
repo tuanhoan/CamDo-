@@ -55,10 +55,18 @@ namespace BaseSource.Data.Migrations
                         new
                         {
                             Id = "c1105ce5-9dbc-49a9-a7d5-c963b6daa62a",
-                            ConcurrencyStamp = "2e493f25-be1d-4256-b664-a229d7cf8f48",
+                            ConcurrencyStamp = "24e19144-9be1-4799-9209-28bba334d58e",
                             Description = "Administrator role",
                             Name = "Admin",
                             NormalizedName = "Admin"
+                        },
+                        new
+                        {
+                            Id = "3a1cf1ce-83be-44ed-a5fe-6b2f25ffae32",
+                            ConcurrencyStamp = "fc5e07dd-e54c-4e10-baf7-30238c9bd8bd",
+                            Description = "Shop Manager role",
+                            Name = "ShopManager",
+                            NormalizedName = "ShopManager"
                         });
                 });
 
@@ -133,13 +141,13 @@ namespace BaseSource.Data.Migrations
                         {
                             Id = "ffded6b0-3769-4976-841b-69459049a62d",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "e4581a31-51ad-44d0-8505-79b5598793e3",
+                            ConcurrencyStamp = "abe7e34d-11ea-4520-b12a-d2fb213935bb",
                             Email = "doangiau2006@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "doangiau2006@gmail.com",
                             NormalizedUserName = "superadmin",
-                            PasswordHash = "AQAAAAEAACcQAAAAENGZcmJNvmThAQdrp6G4mKIFJNt06p7u1uwk1+1vXI5058PI5J6Qc5RDGuQGQLp36Q==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEDzTXNE3QhsAGt2Or/p1YcOfrJVec0JWc+immJ6Y0gesejTTEcKnRghl2c2SLwX8rQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -1299,13 +1307,13 @@ namespace BaseSource.Data.Migrations
 
             modelBuilder.Entity("BaseSource.Data.Entities.CuaHang", b =>
                 {
-                    b.HasOne("BaseSource.Data.Entities.UserProfile", "UserProfile")
-                        .WithMany("CuaHangs")
+                    b.HasOne("BaseSource.Data.Entities.UserProfile", "UserProfileQuanLy")
+                        .WithMany("CuaHangQuanLys")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("UserProfile");
+                    b.Navigation("UserProfileQuanLy");
                 });
 
             modelBuilder.Entity("BaseSource.Data.Entities.CuaHang_QuyTienLog", b =>
@@ -1532,7 +1540,7 @@ namespace BaseSource.Data.Migrations
 
             modelBuilder.Entity("BaseSource.Data.Entities.UserProfile", b =>
                 {
-                    b.Navigation("CuaHangs");
+                    b.Navigation("CuaHangQuanLys");
                 });
 #pragma warning restore 612, 618
         }

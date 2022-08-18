@@ -1,73 +1,62 @@
 /*!
-    * Start Bootstrap - SB Admin Pro v1.3.0 (https://shop.startbootstrap.com/product/sb-admin-pro)
-    * Copyright 2013-2020 Start Bootstrap
+    * Start Bootstrap - SB Admin Pro v2.0.4 (https://shop.startbootstrap.com/product/sb-admin-pro)
+    * Copyright 2013-2022 Start Bootstrap
     * Licensed under SEE_LICENSE (https://github.com/StartBootstrap/sb-admin-pro/blob/master/LICENSE)
     */
-
-$(document).ready(function () {
-    $('[data-bs-toggle="tooltip"]').tooltip();
-
-    $('[data-bs-toggle="popover"]').popover();
-
-    $(".popover-dismiss").popover({
-        trigger: "focus"
-    });
-
-    //// Add active state to sidbar nav links
-    //var path = window.location.href; // because the 'href' property of the DOM element is the absolute path
-    //$("#layoutSidenav_nav .sidenav a.nav-link").each(function () {
-    //    if (this.href === path) {
-    //        $(this).addClass("active");
-    //    }
-    //});
-
-    // Toggle the side navigation
-    $("#sidebarToggle").on("click", function (e) {
-        e.preventDefault();
-        $("body").toggleClass("sidenav-toggled");
-    });
-
-    // Activate Feather icons
+    window.addEventListener('DOMContentLoaded', event => {
+    // Activate feather
     feather.replace();
 
+    // Enable tooltips globally
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+
+    // Enable popovers globally
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+        return new bootstrap.Popover(popoverTriggerEl);
+    });
+
     // Activate Bootstrap scrollspy for the sticky nav component
-    $("body").scrollspy({
-        target: "#stickyNav",
-        offset: 82
-    });
+    const stickyNav = document.body.querySelector('#stickyNav');
+    if (stickyNav) {
+        new bootstrap.ScrollSpy(document.body, {
+            target: '#stickyNav',
+            offset: 82,
+        });
+    }
 
-    // Scrolls to an offset anchor when a sticky nav link is clicked
-    $('.nav-sticky a.nav-link[href*="#"]:not([href="#"])').click(function () {
-        if (
-            location.pathname.replace(/^\//, "") ==
-            this.pathname.replace(/^\//, "") &&
-            location.hostname == this.hostname
-        ) {
-            var target = $(this.hash);
-            target = target.length ? target : $("[name=" + this.hash.slice(1) + "]");
-            if (target.length) {
-                $("html, body").animate({
-                    scrollTop: target.offset().top - 81
-                },
-                    200
-                );
-                return false;
+    // Toggle the side navigation
+    const sidebarToggle = document.body.querySelector('#sidebarToggle');
+    if (sidebarToggle) {
+        // Uncomment Below to persist sidebar toggle between refreshes
+        // if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
+        //     document.body.classList.toggle('sidenav-toggled');
+        // }
+        sidebarToggle.addEventListener('click', event => {
+            event.preventDefault();
+            document.body.classList.toggle('sidenav-toggled');
+            localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sidenav-toggled'));
+        });
+    }
+
+    // Close side navigation when width < LG
+    const sidenavContent = document.body.querySelector('#layoutSidenav_content');
+    if (sidenavContent) {
+        sidenavContent.addEventListener('click', event => {
+            const BOOTSTRAP_LG_WIDTH = 992;
+            if (window.innerWidth >= 992) {
+                return;
             }
-        }
-    });
+            if (document.body.classList.contains("sidenav-toggled")) {
+                document.body.classList.toggle("sidenav-toggled");
+            }
+        });
+    }
 
-    // Click to collapse responsive sidebar
-    $("#layoutSidenav_content").click(function () {
-        const BOOTSTRAP_LG_WIDTH = 992;
-        if (window.innerWidth >= 992) {
-            return;
-        }
-        if ($("body").hasClass("sidenav-toggled")) {
-            $("body").toggleClass("sidenav-toggled");
-        }
-    });
-
-    // Init sidebar
+    // Add active state to sidbar nav links
     let activatedPath = window.location.pathname.match(/([\w-]+\.html)/, '$1');
 
     if (activatedPath) {
@@ -76,14 +65,55 @@ $(document).ready(function () {
         activatedPath = 'index.html';
     }
 
-    let targetAnchor = $('[href="' + activatedPath + '"]');
-    let collapseAncestors = targetAnchor.parents('.collapse');
+    const targetAnchors = document.body.querySelectorAll('[href="' + activatedPath + '"].nav-link');
 
-    targetAnchor.addClass('active');
+    targetAnchors.forEach(targetAnchor => {
+        let parentNode = targetAnchor.parentNode;
+        while (parentNode !== null && parentNode !== document.documentElement) {
+            if (parentNode.classList.contains('collapse')) {
+                parentNode.classList.add('show');
+                const parentNavLink = document.body.querySelector(
+                    '[data-bs-target="#' + parentNode.id + '"]'
+                );
+                parentNavLink.classList.remove('collapsed');
+                parentNavLink.classList.add('active');
+            }
+            parentNode = parentNode.parentNode;
+        }
+        targetAnchor.classList.add('active');
+    });
+    });
 
-    collapseAncestors.each(function () {
-        $(this).addClass('show');
-        $('[data-target="#' + this.id + '"]').removeClass('collapsed');
+$(document).ready(() => {
+    $('#choose-permission').click(() => {
+        $('#available-permission option:selected').each(function () {
+            $(this).removeAttr("selected");
+            $('#chosen-permission').append($(this).clone());
+            $(this).remove();
+        });
+    });
 
-    })
+    $('#remove-permission').click(() => {
+        $('#chosen-permission option:selected').each(function () {
+            $(this).removeAttr("selected");
+            $('#available-permission').append($(this).clone());
+            $(this).remove();
+        });
+    });
+
+    $("#choose-all-permissions").click(() => {
+        $('#available-permission option').each(function () {
+            $(this).removeAttr("selected");
+            $('#chosen-permission').append($(this).clone());
+            $(this).remove();
+        });
+    });
+
+    $("#remove-all-permissions").click(() => {
+        $('#chosen-permission option').each(function () {
+            $(this).removeAttr("selected");
+            $('#available-permission').append($(this).clone());
+            $(this).remove();
+        });
+    });
 });

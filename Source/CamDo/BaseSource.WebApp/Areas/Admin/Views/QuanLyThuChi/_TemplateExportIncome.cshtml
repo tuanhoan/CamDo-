@@ -115,7 +115,7 @@
             float: left;
         }
 
-        .text-right {
+        .text-end {
             float: right;
         }
 
@@ -178,8 +178,8 @@
         <p class="p_normal">Họ tên người nộp tiền: <b>@Model.Customer</b></p>
         <p class="p_normal">Địa chỉ: <b>@Model.Address</b></p>
         <p class="p_normal">Lý do nộp: <b>@Model.Note</b></p>
-        <p class="p_normal">Số tiền : <b>@(Model.Amount.ToString("N0")) vnđ</b> <span class="text-right">(Số tiền bằng chữ: @(Model.AmountString) đồng)</span></p>
-        <p class="p_normal">Kèm theo: <span class="text-right">chứng từ gốc</span></p>
+        <p class="p_normal">Số tiền : <b>@(Model.Amount.ToString("N0")) vnđ</b> <span class="text-end">(Số tiền bằng chữ: @(Model.AmountString) đồng)</span></p>
+        <p class="p_normal">Kèm theo: <span class="text-end">chứng từ gốc</span></p>
 
         <table class="tbl_ky">
             <tr>

@@ -65,6 +65,17 @@ namespace BaseSource.BackendApi.Controllers
             var result = await _userManager.CreateAsync(newUser, model.Password);
             if (result.Succeeded)
             {
+                var lstRole = new List<string>(new string[] { "ShopManager" });
+                await _userManager.AddToRolesAsync(newUser, lstRole);
+
+                var userProfile = new UserProfile()
+                {
+                    CustomId = newUser.Id,
+                    FullName = model.FullName,
+                    JoinedDate = DateTime.Now,
+                    UserId = newUser.Id
+                };
+
                 var cuaHang = new CuaHang()
                 {
                     Ten = model.TenCuaHang,
@@ -74,26 +85,17 @@ namespace BaseSource.BackendApi.Controllers
                     VonDauTu = model.VonDauTu,
                     IsActive = true,
                     CreatedDate = DateTime.Now,
-                    UserId = newUser.Id
+                    UserId = newUser.Id,
+                    UserProfileQuanLy = userProfile
                 };
                 _db.CuaHangs.Add(cuaHang);
 
                 await _db.SaveChangesAsync();
 
-                _db.UserProfiles.Add(new UserProfile
-                {
-                    CustomId = newUser.Id,
-                    FullName = model.FullName,
-                    JoinedDate = DateTime.Now,
-                    UserId = newUser.Id,
-                    CuaHangId = cuaHang.Id
-                });
+                //add vốn đầu tư
+                await KhoiTaoNguonVon(cuaHang.SDT, cuaHang.DiaChi, cuaHang.VonDauTu, cuaHang.Id);
 
-                await _db.SaveChangesAsync();
-                var lstRole = new List<string>(new string[] { "Admin" });
-                await _userManager.AddToRolesAsync(newUser, lstRole);
-
-                var rs = Task.Run(() => KhoiTaoHangHoa(cuaHang.Id));
+                await KhoiTaoHangHoa(cuaHang.Id);
                 return Ok(new ApiSuccessResult<string>());
             }
 
@@ -190,34 +192,12 @@ namespace BaseSource.BackendApi.Controllers
             await _db.SaveChangesAsync();
 
             //add vốn đầu tư
-            var resultHopDong = await _hopDongService.CreateHopDongAsync(new CreateHopDongVm
-            {
-                SDT = model.SDT,
-                TenKhachHang = "Vốn Khởi Tạo",
-                DiaChi = model.DiaChi,
-                HD_Loai = ELoaiHopDong.GopVon,
-                UserIdAssigned = UserId,
-                HD_NgayVay = DateTime.Now,
-                HD_TongTienVayBanDau = model.VonDauTu,
-                HD_Ma = Guid.NewGuid().ToString(),
-                TenTaiSan = "Vốn Khởi Tạo"
-            }, cuaHang.Id, UserId);
+            await KhoiTaoNguonVon(cuaHang.SDT, cuaHang.DiaChi, cuaHang.VonDauTu, cuaHang.Id);
 
-            if (resultHopDong.Key)
-            {
-                //add log cuahang
-                await _cuaHang_TransactionLogService.CreateTransactionLog(new CreateCuaHang_TransactionLogVm
-                {
-                    HopDongId = int.Parse(resultHopDong.Value),
-                    ActionType = EHopDong_ActionType.TaoMoiHD,
-                    FeatureType = EFeatureType.GopVon,
-                    UserId = UserId,
-                    TotalMoneyLoan = model.VonDauTu
-                });
-            }
-            var rs = Task.Run(() => KhoiTaoHangHoa(cuaHang.Id));
+            await KhoiTaoHangHoa(cuaHang.Id);
             return Ok(new ApiSuccessResult<string>(cuaHang.Id.ToString()));
         }
+
         [HttpPost("Edit")]
         public async Task<IActionResult> Edit(EditCuaHangVm model)
         {
@@ -309,9 +289,38 @@ namespace BaseSource.BackendApi.Controllers
         #endregion
 
         #region helper
+
+        private async Task KhoiTaoNguonVon(string sdt, string diaChi, long vonDauTu, int cuaHangId)
+        {
+            var resultHopDong = await _hopDongService.CreateHopDongAsync(new CreateHopDongVm
+            {
+                SDT = sdt,
+                TenKhachHang = "Vốn Khởi Tạo",
+                DiaChi = diaChi,
+                HD_Loai = ELoaiHopDong.GopVon,
+                UserIdAssigned = UserId,
+                HD_NgayVay = DateTime.Now,
+                HD_TongTienVayBanDau = vonDauTu,
+                HD_Ma = Guid.NewGuid().ToString(),
+                TenTaiSan = "Vốn Khởi Tạo"
+            }, cuaHangId, UserId);
+
+            if (resultHopDong.Key)
+            {
+                //add log cuahang
+                await _cuaHang_TransactionLogService.CreateTransactionLog(new CreateCuaHang_TransactionLogVm
+                {
+                    HopDongId = int.Parse(resultHopDong.Value),
+                    ActionType = EHopDong_ActionType.TaoMoiHD,
+                    FeatureType = EFeatureType.GopVon,
+                    UserId = UserId,
+                    TotalMoneyLoan = vonDauTu
+                });
+            }
+        }
+
         private async Task KhoiTaoHangHoa(int cuahangId)
         {
-            using var _db = _serviceScopeFactory.CreateScope().ServiceProvider.GetRequiredService<BaseSourceDbContext>();
             var lstHangHoaDefault = await _db.CauHinhHangHoas.Where(x => x.CuaHangId == null && x.IsPublish == true).ToListAsync();
             if (lstHangHoaDefault.Count > 0)
             {

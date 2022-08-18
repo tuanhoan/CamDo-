@@ -14,14 +14,14 @@
         <div class="info-hd-header">
             <i class="fa fa-user"></i> Thông tin khách hàng
         </div>
-        <div class="form-group row">
+        <div class="row mb-3">
             <label class="control-label col-md-2">Khách hàng </label>
             <div class="col-md-10">
                 <label><input type="radio" name="CustomerType" value="NewCustomer" /> Khách hàng mới</label>
                 <label><input type="radio" name="CustomerType" checked value="OldCustomer" /> Khách hàng cũ</label>
             </div>
         </div>
-        <div class="form-group row">
+        <div class="row mb-3">
             <label asp-for="TenKhachHang" class="control-label col-md-2"></label>
             <div class="col-md-3">
                 <input asp-for="TenKhachHang" class="form-control" />
@@ -33,7 +33,7 @@
                 <span asp-validation-for="HD_MaTemp" class="text-danger"></span>
             </div>
         </div>
-        <div class="form-group row">
+        <div class="row mb-3">
             <label asp-for="CMND" class="control-label col-md-2"></label>
             <div class="col-md-3">
                 <input asp-for="CMND" class="form-control" />
@@ -43,7 +43,7 @@
                 <input asp-for="SDT" class="form-control" />
             </div>
         </div>
-        <div class="form-group row">
+        <div class="row mb-3">
             <label asp-for="CMND_NgayCap" class="control-label col-md-2"></label>
             <div class="col-md-3">
                 <input asp-for="CMND_NgayCap" type="date" class="form-control" />
@@ -53,7 +53,7 @@
                 <input asp-for="CMND_NoiCap" class="form-control" />
             </div>
         </div>
-        <div class="form-group row">
+        <div class="row mb-3">
             <label asp-for="DiaChi" class="control-label col-md-2"></label>
             <div class="col-md-3">
                 <textarea asp-for="DiaChi" class="form-control" rows="3"></textarea>
@@ -63,7 +63,7 @@
         <div class="info-hd-header">
             <i class="fas fa-money-bill-alt"></i> Thông tin khoản vay
         </div>
-        <div class="form-group row">
+        <div class="row mb-3">
             <label asp-for="HangHoaId" class="control-label col-md-2"></label>
             <div class="col-md-3">
                 <select class="form-control" asp-for="HangHoaId" asp-items="@listHangHoa" onchange="getThuocTinhByTaiSan()">
@@ -75,22 +75,20 @@
                 <span asp-validation-for="TenTaiSan" class="text-danger"></span>
             </div>
         </div>
-        <div class="form-group row">
+        <div class="row mb-3">
 
             <label asp-for="HD_TongTienVayBanDau" class="control-label col-md-2"></label>
             <div class="col-md-3">
                 <div class="input-group">
                     <input type="text" class="form-control money-textbox" value="@Model.HD_TongTienVayBanDau">
                     <input type="hidden" asp-for="HD_TongTienVayBanDau" />
-                    <div class="input-group-append">
-                        <span class="input-group-text">VNĐ</span>
-                    </div>
+                    <span class="input-group-text">VNĐ</span>
                 </div>
                 <span asp-validation-for="HD_TongTienVayBanDau" class="text-danger"></span>
             </div>
 
         </div>
-        <div class="form-group row">
+        <div class="row mb-3">
             <label asp-for="HD_HinhThucLai" class="control-label col-md-2"></label>
             <div class="col-md-3">
                 <select class="form-control" asp-for="HD_HinhThucLai" asp-items="@Html.GetEnumSelectList<EHinhThucLai>()" onchange="getMoTaHinhThucLai()">
@@ -101,58 +99,52 @@
                 <label><input asp-for="HD_IsThuLaiTruoc" /> Thu lãi trước</label>
             </div>
         </div>
-        <div class="form-group row">
+        <div class="row mb-3">
             <label asp-for="HD_TongThoiGianVay" class="control-label col-md-2 lblThoiGianVay"></label>
             <div class="col-md-3">
                 <div class="input-group">
                     <input asp-for="HD_TongThoiGianVay" class="form-control">
                     <input type="hidden" asp-for="HD_TongTienVayBanDau" />
-                    <div class="input-group-append">
-                        <span class="input-group-text thoiGianVay"></span>
-                    </div>
+                    <span class="input-group-text thoiGianVay"></span>
                 </div>
                 <span asp-validation-for="HD_TongThoiGianVay" class="text-danger"></span>
             </div>
         </div>
-        <div class="form-group row">
+        <div class="row mb-3">
             <label asp-for="HD_KyLai" class="control-label col-md-2"></label>
             <div class="col-md-3">
                 <div class="input-group">
                     <input asp-for="HD_KyLai" class="form-control">
-                    <div class="input-group-append">
-                        <span class="input-group-text thoiGianVay"></span>
-                    </div>
+                    <span class="input-group-text thoiGianVay"></span>
                 </div>
                 <span asp-validation-for="HD_KyLai" class="text-danger"></span>
             </div>
             <div class="col-md-5 moTaKyLai">
             </div>
         </div>
-        <div class="form-group row">
+        <div class="row mb-3">
             <label asp-for="HD_LaiSuat" class="control-label col-md-2"></label>
             <div class="col-md-3">
                 <div class="input-group">
                     <input asp-for="HD_LaiSuat" class="form-control">
-                    <div class="input-group-append">
-                        <span class="input-group-text tyLeLai"></span>
-                    </div>
+                    <span class="input-group-text tyLeLai"></span>
                 </div>
                 <span asp-validation-for="HD_LaiSuat" class="text-danger"></span>
             </div>
         </div>
-        <div class="form-group row">
+        <div class="row mb-3">
             <label asp-for="HD_NgayVay" class="control-label col-md-2"></label>
             <div class="col-md-3">
                 <input asp-for="HD_NgayVay" class="form-control" />
             </div>
         </div>
-        <div class="form-group row">
+        <div class="row mb-3">
             <label asp-for="HD_GhiChu" class="control-label col-md-2"></label>
             <div class="col-md-3">
                 <textarea asp-for="HD_GhiChu" rows="3" class="form-control"></textarea>
             </div>
         </div>
-        <div class="form-group row">
+        <div class="row mb-3">
             <label asp-for="UserIdAssigned" class="control-label col-md-2"></label>
             <div class="col-md-3">
                 <select class="form-control" asp-for="UserIdAssigned" asp-items="@lstUser">
@@ -168,7 +160,7 @@
 
         </div>
         <input type="hidden" name="ListThuocTinhHangHoa" id="ListThuocTinhHangHoa" />
-        <div class="form-group row">
+        <div class="row mb-3">
             <label class="control-label col-md-2">&nbsp;</label>
             <div class="col-md-5">
                 <button type="submit" class="btn btn-primary" data-modal="hd-modal">Lưu</button>

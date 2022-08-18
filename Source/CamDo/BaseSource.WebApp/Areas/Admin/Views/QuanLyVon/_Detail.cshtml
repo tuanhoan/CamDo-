@@ -10,38 +10,7 @@
         tabActive = "tab-dongtienlai";
     }
 }
-<style>
-    fieldset {
-        display: none;
-    }
 
-        fieldset.show {
-            display: block;
-        }
-
-
-    .tabs {
-        margin: 2px 5px 0px 5px;
-        padding-bottom: 10px;
-        cursor: pointer;
-    }
-
-        .tabs:hover, .tabs.active {
-            border-bottom: 4px solid #5867dd;
-        }
-
-    a:hover {
-        text-decoration: none;
-        color: #1565C0;
-    }
-
-
-    .line {
-        background-color: #CFD8DC;
-        height: 1px;
-        width: 100%;
-    }
-</style>
 <div class="row">
     <div class="col-md-6">
         <table class="table table-hover table-bordered table-detail-hd">
@@ -146,46 +115,48 @@
 </div>
 </div>
 
-<div class="d-flex justify-content-between">
-    <div class="tabs tab-tratienlai" data-type="tab-tratienlai">
-        <h6><i class="fas fa-money-bill"></i> Trả tiền lãi</h6>
-    </div>
-    <div class="tabs tab-rutbotgoc" data-type="tab-rutbotgoc">
-        <h6 class="font-weight-bold"><i class="fas fa-money-bill"></i> Rút bớt gốc</h6>
-    </div>
-    <div class="tabs" data-type="tab-vaythem">
-        <h6><i class="fas fa-address-card"></i> Vay thêm</h6>
-    </div>
-    <div class="tabs tab-giahan" data-type="tab-giahan">
-        <h6><i class="fas fa-retweet"></i> Gia hạn</h6>
-    </div>
-    <div class="tabs tab-rutvon" data-type="tab-rutvon">
-        <h6><i class="fas fa-retweet"></i> Rút vốn</h6>
-    </div>
-    <div class="tabs tab-lichsu" data-type="tab-lichsu">
-        <h6><i class="fas fa-retweet"></i> Lịch sử</h6>
-    </div>
-
-
-</div>
-<div class="line"></div>
-<div class="mt-3">
-    <fieldset id="tab-dongtienlai">
-        <div id="divContent-Tralaitheongay">
-
+<div class="tab-container">
+    <div class="d-flex">
+        <div class="tabs tab-tratienlai" data-type="tab-tratienlai">
+            <h6><i class="fas fa-money-bill"></i> Trả tiền lãi</h6>
         </div>
-        <div id="divContent-ListPayment">
-
+        <div class="tabs tab-rutbotgoc" data-type="tab-rutbotgoc">
+            <h6 class="font-weight-bold"><i class="fas fa-money-bill"></i> Rút bớt gốc</h6>
         </div>
-    </fieldset>
-    <fieldset id="tab-trabotgoc">
-    </fieldset>
-    <fieldset id="tab-vaythem">
-    </fieldset>
-    <fieldset id="tab-giahan">
-    </fieldset>
-    <fieldset id="tab-history">
-    </fieldset>
+        <div class="tabs" data-type="tab-vaythem">
+            <h6><i class="fas fa-address-card"></i> Vay thêm</h6>
+        </div>
+        <div class="tabs tab-giahan" data-type="tab-giahan">
+            <h6><i class="fas fa-retweet"></i> Gia hạn</h6>
+        </div>
+        <div class="tabs tab-rutvon" data-type="tab-rutvon">
+            <h6><i class="fas fa-retweet"></i> Rút vốn</h6>
+        </div>
+        <div class="tabs tab-lichsu" data-type="tab-lichsu">
+            <h6><i class="fas fa-retweet"></i> Lịch sử</h6>
+        </div>
+
+
+    </div>
+    <div class="line"></div>
+    <div class="mt-3">
+        <fieldset id="tab-dongtienlai">
+            <div id="divContent-Tralaitheongay">
+
+            </div>
+            <div id="divContent-ListPayment">
+
+            </div>
+        </fieldset>
+        <fieldset id="tab-trabotgoc">
+        </fieldset>
+        <fieldset id="tab-vaythem">
+        </fieldset>
+        <fieldset id="tab-giahan">
+        </fieldset>
+        <fieldset id="tab-history">
+        </fieldset>
+    </div>
 </div>
 
 <script>
@@ -199,33 +170,6 @@
     })
 
 
-    $(".tabs").click(function () {
-        var tabType = $(this).data("type");
-        loadDataTab(tabType);
-        $(".tabs").removeClass("active");
-        $(this).children("h6").addClass("font-weight-bold");
-        $(this).addClass("active");
-
-        current_fs = $(".active");
-         next_fs = "#" + tabType;
-
-        $("fieldset").removeClass("show");
-        $(next_fs).addClass("show");
-
-         current_fs.animate({}, {
-           step: function () {
-              current_fs.css({
-               'display': 'none',
-                'position': 'relative'
-              });
-             next_fs.css({
-              'display': 'block'
-             });
-         }
-         });
-
-
-     });
     function loadDataTab(type) {
         switch (type) {
             case "tab-history":

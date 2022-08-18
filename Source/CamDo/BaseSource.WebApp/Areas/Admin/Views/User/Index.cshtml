@@ -13,28 +13,28 @@
             </div>
             <div class="card-body">
                 <form asp-action="Index" method="get" class="mb-4">
-                    <div class="form-group row">
+                    <div class="row mb-3">
                         <label for="username" class="col-sm-3 font-weight-bolder text-dark col-form-label">UserName</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" name="username" value="@Context.Request.Query["username"]">
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="row mb-3">
                         <label for="email" class="col-sm-3 font-weight-bolder text-dark col-form-label">Email</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" name="email" value="@Context.Request.Query["email"]">
                         </div>
                     </div>
-                    <div class="form-group row">
+                    <div class="row mb-3">
                         <div class="col-sm-3"></div>
                         <div class="col-sm-9">
                             <button type="submit" class="btn btn-primary btn-sm">
-                                <i class="fas fa-search"></i>
-                                <span class="ml-1">Search</span>
+                                <i class="fas fa-search me-2"></i>
+                                <span class="ms-1">Search</span>
                             </button>
-                            <a asp-action="Index" class="btn btn-success btn-sm ml-2">
+                            <a asp-action="Index" class="btn btn-success btn-sm ms-2">
                                 <i class="fas fa-sync-alt"></i>
-                                <span class="ml-1">Reset</span>
+                                <span class="ms-1">Reset</span>
                             </a>
                         </div>
                     </div>
@@ -110,9 +110,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Set role</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
             </div>

@@ -21,7 +21,7 @@ namespace BaseSource.Data.Entities
         public ECamDo_HopDongPrintTemplate CamDo_HopDongPrintTemplate { get; set; }
         public EVayLai_HopDongPrintTemplate VayLai_HopDongPrintTemplate { get; set; }
 
-        public virtual UserProfile UserProfile { get; set; }
+        public virtual UserProfile UserProfileQuanLy { get; set; }
         public virtual List<KhachHang> KhachHangs { get; set; }
         public virtual List<CauHinhHangHoa> CauHinhHangHoas { get; set; }
         public virtual List<CuaHang_TransactionLog> CuaHang_TransactionLogs { get; set; }

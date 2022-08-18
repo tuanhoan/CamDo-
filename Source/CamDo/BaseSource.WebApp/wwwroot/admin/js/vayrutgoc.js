@@ -67,7 +67,7 @@ $("body").on("click", '.btn-xoatragoc', function (e) {
             url: $btnSubmit.attr("data-href"),
             method: 'POST',
             beforeSend: function () {
-                $btnSubmit.append(`<i class="fas fa-sync-alt fa-fw fa-spin ml-2"></i>`);
+                $btnSubmit.append(`<i class="fas fa-sync-alt fa-fw fa-spin ms-2"></i>`);
             },
             complete: function () {
                 $btnSubmit.find("i").remove();
@@ -136,7 +136,7 @@ $("body").on("click", '.btn-xoavaythem', function (e) {
             url: $btnSubmit.attr("data-href"),
             method: 'POST',
             beforeSend: function () {
-                $btnSubmit.append(`<i class="fas fa-sync-alt fa-fw fa-spin ml-2"></i>`);
+                $btnSubmit.append(`<i class="fas fa-sync-alt fa-fw fa-spin ms-2"></i>`);
             },
             complete: function () {
                 $btnSubmit.find("i").remove();

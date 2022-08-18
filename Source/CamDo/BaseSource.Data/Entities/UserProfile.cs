@@ -20,6 +20,6 @@ namespace BaseSource.Data.Entities
 
         // object
         public virtual AppUser AppUser { get; set; }
-        public virtual List<CuaHang> CuaHangs { get; set; }
+        public virtual List<CuaHang> CuaHangQuanLys { get; set; }
     }
 }

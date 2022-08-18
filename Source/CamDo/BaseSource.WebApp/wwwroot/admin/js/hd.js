@@ -110,7 +110,7 @@ function loadListThuocTinh() {
     var html = "";
     if (lstThuocTinh.length > 0) {
         for (var i = 0; i < lstThuocTinh.length; i++) {
-            html += '<div class="form-group row">' +
+            html += '<div class="mb-3">' +
                 '<label class="control-label col-md-2">' + lstThuocTinh[i].name + '</label>' +
                 '<div class="col-md-3">' +
                 '<input type="text" class="form-control" onchange="setValueThuocTinh(this)" data-idx="' + i + '" value="' + lstThuocTinh[i].value + '" placeholder="Nhập ' + lstThuocTinh[i].name + '"/>' +

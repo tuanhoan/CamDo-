@@ -28,7 +28,7 @@
                         <td>@item.ExtraDate.ToString("dd/MM/yyyy")</td>
                         <td>@EnumExtensions.GetEnumDisplayName(((EHopDong_ActionType)item.ActionType))</td>
                         <td>@item.Note</td>
-                        <td class="text-right">
+                        <td class="text-end">
                             @if ((EHopDong_ActionType)item.ActionType == EHopDong_ActionType.VayThemGoc)
                             {
                                 <span> @item.TotalMoney.ToString("N0") VND</span>
@@ -57,8 +57,8 @@
                 </tr>
             }
             <tr>
-                <td colspan="4" class="text-danger text-right">Tổng gốc còn lại:</td>
-                <td class="text-danger text-right lblTongTienVayHienTai">0</td>
+                <td colspan="4" class="text-danger text-end">Tổng gốc còn lại:</td>
+                <td class="text-danger text-end lblTongTienVayHienTai">0</td>
             </tr>
 
 

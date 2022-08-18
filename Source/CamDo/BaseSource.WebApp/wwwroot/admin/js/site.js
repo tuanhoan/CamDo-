@@ -77,7 +77,7 @@ $("#page-top").on("click", 'button[data-bs-toggle="btn-confirm"]', function (e) 
             url: $btnSubmit.attr("data-href"),
             method: 'POST',
             beforeSend: function () {
-                $btnSubmit.append(`<i class="fas fa-sync-alt fa-fw fa-spin ml-2"></i>`);
+                $btnSubmit.append(`<i class="fas fa-sync-alt fa-fw fa-spin ms-2"></i>`);
             },
             complete: function () {
                 $btnSubmit.find("i").remove();
@@ -397,3 +397,29 @@ function getPaging(url, data, element) {
     });
 }
 /*=======End PageAjax========*/
+
+$(document).on('click', ".tabs", function () {
+    var tabType = $(this).data("type");
+    loadDataTab(tabType);
+    $(".tabs").removeClass("active");
+    $(this).children("h6").addClass("font-weight-bold");
+    $(this).addClass("active");
+
+    current_fs = $(".active");
+    next_fs = "#" + tabType;
+
+    $("fieldset").removeClass("show");
+    $(next_fs).addClass("show");
+
+    current_fs.animate({}, {
+        step: function () {
+            current_fs.css({
+                'display': 'none',
+                'position': 'relative'
+            });
+            next_fs.css({
+                'display': 'block'
+            });
+        }
+    });
+});
