@@ -56,13 +56,14 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
                 PageSize = int.MaxValue,
                 LinhVuc = ELinhVucHangHoa.Camdo
             };
-            var requestUser = _userApiClient.GetUserByCuaHang();
+            var requestUser = await _userApiClient.GetUserByCuaHang();
+            requestUser.ResultObj.Add(new ViewModels.User.UserInfoResponse { Id = "1", UserName = "Tuấn Hoàn", Blance = 1000 });
             var resultCuaHinhHH = _cauHinhHangHoaApiClient.GetPagings(requestCauHinhHH);
             var maxIDHD = _hopDongApiClient.GetMaxID(ELoaiHopDong.Vaylai);
-            await Task.WhenAll(requestUser, resultCuaHinhHH, maxIDHD);
+            await Task.WhenAll(resultCuaHinhHH, maxIDHD);
 
             ViewData["ListHangHoa"] = new SelectList(resultCuaHinhHH.Result.ResultObj.Items, "Id", "Ten");
-            ViewData["ListUser"] = new SelectList(requestUser.Result.ResultObj, "Id", "FullName");
+            ViewData["ListUser"] = new SelectList(requestUser.ResultObj, "Id", "UserName");
 
             var model = new CreateHopDongVm()
             {
@@ -119,6 +120,8 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
                 ListThuocTinhHangHoa = result.ResultObj.ListThuocTinhHangHoa,
                 UserIdAssigned = result.ResultObj.UserIdAssigned,
                 HD_MaTemp = result.ResultObj.HD_MaTemp,
+                HD_Loai = result.ResultObj.HD_Loai,
+                KhachHangId = result.ResultObj.KhachHangId,
             };
             var requestCauHinhHH = new GetCauHinhHangHoaPagingRequest()
             {
@@ -126,13 +129,13 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
                 PageSize = int.MaxValue,
                 LinhVuc = ELinhVucHangHoa.Camdo
             };
-            var requestUser = _userApiClient.GetUserByCuaHang();
+            var requestUser = await _userApiClient.GetUserByCuaHang();
             var resultCuaHinhHH = _cauHinhHangHoaApiClient.GetPagings(requestCauHinhHH);
 
-            await Task.WhenAll(requestUser, resultCuaHinhHH);
+            await Task.WhenAll(resultCuaHinhHH);
 
             ViewData["ListHangHoa"] = new SelectList(resultCuaHinhHH.Result.ResultObj.Items, "Id", "Ten");
-            ViewData["ListUser"] = new SelectList(requestUser.Result.ResultObj, "Id", "FullName");
+            ViewData["ListUser"] = new SelectList(requestUser.ResultObj, "Id", "FullName");
 
 
             return PartialView("_Edit", model);
@@ -143,6 +146,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         {
             if (!ModelState.IsValid)
             {
+                var x = Json(new ApiErrorResult<string>(ModelState.GetListErrors()));
                 return Json(new ApiErrorResult<string>(ModelState.GetListErrors()));
             }
             var result = await _hopDongApiClient.Edit(model);
@@ -415,6 +419,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             return Json(new ApiSuccessResult<string>(Url.Action("Index")));
         }
         #endregion
+
         #region Mở lại hợp đồng
         public async Task<IActionResult> MoLaiHopDong(int id)
         {

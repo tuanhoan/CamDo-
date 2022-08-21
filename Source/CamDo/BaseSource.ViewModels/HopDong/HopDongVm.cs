@@ -69,8 +69,6 @@ namespace BaseSource.ViewModels.HopDong
     public class CreateHopDongVm : IValidatableObject
     {
         public ELoaiHopDong HD_Loai { get; set; }
-
-
         public string HD_Ma { get; set; }
         [Display(Name = "Loại tài sản")]
         public int HangHoaId { get; set; }

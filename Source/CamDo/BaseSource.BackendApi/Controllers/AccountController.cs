@@ -403,6 +403,24 @@ namespace BaseSource.BackendApi.Controllers
             return Ok(new ApiSuccessResult<List<UserInfoResponse>>(result));
         }
 
+        [HttpGet("GetKHByCuaHang")]
+        public async Task<IActionResult> GetKHByCuaHang()
+        {
+            var lst = await _db.KhachHangs.Where(i => i.CuaHangId == CuaHangId).ToListAsync();
+            var result = new List<UserInfoResponse>();
+            foreach (var item in lst)
+            {
+                result.Add(new UserInfoResponse
+                {
+                    Id = item.Id.ToString(),
+                    Email = null,
+                    FullName = item.Ten,
+                    UserName = null,
+                });
+            }
+            return Ok(new ApiSuccessResult<List<UserInfoResponse>>(result));
+        }
+
 
         #region helper
         private void AddErrors(IdentityResult result, string Property)
