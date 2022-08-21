@@ -20,5 +20,6 @@ namespace BaseSource.ApiIntegration.WebApi
         Task<ApiResult<string>> ChangePassword(ChangePasswordVm model);
         Task<ApiResult<string>> AuthenticateExternalAsync(UserClaimRequest model);
         Task<ApiResult<List<UserInfoResponse>>> GetUserByCuaHang();
+        Task<ApiResult<List<UserInfoResponse>>> GetKHByCuaHang();
     }
 }

@@ -99,5 +99,10 @@ namespace BaseSource.ApiIntegration.WebApi
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.GetAsync<ApiResult<List<UserInfoResponse>>>("/api/Account/GetUserByCuaHang");
         }
+        public async Task<ApiResult<List<UserInfoResponse>>> GetKHByCuaHang()
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.GetAsync<ApiResult<List<UserInfoResponse>>>("/api/Account/GetKHByCuaHang");
+        }
     }
 }

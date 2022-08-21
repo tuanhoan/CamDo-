@@ -152,6 +152,9 @@ namespace BaseSource.BackendApi.Controllers
                 var tongDaThanhToan = await model.SumAsync(x => x.TongTienDaThanhToan);
                 var tongLaiDenHomNay = await model.SumAsync(x => x.TienLaiToiNgayHienTai);
 
+                var khs = await _db.KhachHangs.Select(x=>x.Id).ToListAsync();
+                var hhs = await _db.CauHinhHangHoas.Select(x=>x.Id).ToListAsync();
+
                 var data = await (from hd in model
                                   join kh in _db.KhachHangs on hd.KhachHangId equals kh.Id
                                   join hh in _db.CauHinhHangHoas on hd.HangHoaId equals hh.Id into chhh
@@ -184,7 +187,8 @@ namespace BaseSource.BackendApi.Controllers
                                       HD_Status = hd.HD_Status,
                                       TienLaiToiNgayHienTai = hd.TienLaiToiNgayHienTai
 
-                                  }).OrderByDescending(x => x.Id).ToPagedListAsync(request.Page, request.PageSize);
+                                  }).OrderByDescending(x => x.Id)
+                                  .ToPagedListAsync(request.Page, request.PageSize);
 
                 foreach (var item in data)
                 {
