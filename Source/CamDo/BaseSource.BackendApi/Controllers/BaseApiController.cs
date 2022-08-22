@@ -12,7 +12,7 @@ namespace BaseSource.BackendApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
     public class BaseApiController : ControllerBase
     {
         private string _userId;
