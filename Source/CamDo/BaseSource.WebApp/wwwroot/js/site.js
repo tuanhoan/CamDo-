@@ -62,3 +62,10 @@ function setMoneyTextBox(selector) {
     });
 
 }
+function ajaxGet(url, data = {}) {
+    return $.ajax({
+        url: url,
+        type: 'GET',
+        data : data
+    });
+}

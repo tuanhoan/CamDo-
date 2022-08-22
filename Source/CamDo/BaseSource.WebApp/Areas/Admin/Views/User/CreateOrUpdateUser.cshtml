@@ -1,0 +1,95 @@
+﻿@model EditUserShop
+@{
+    if (ViewBag.Mode == "Create")
+    {
+        ViewData["Title"] = "Thêm mới user";
+    }
+    else if (ViewBag.Mode == "Update")
+    {
+        ViewData["Title"] = "Cập nhật user";
+    }
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+<div>
+    <div class="card shadow h-100">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h3 class="m-0 font-weight-bold">@ViewData["Title"]</h3>
+            <a class="btn btn-sm btn-secondary shadow-sm" asp-action="Index"><i class="fas fa-arrow-left fa-fw fa-sm text-white-50"></i> Back</a>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="Create" data-name="ajaxForm" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                @Html.HiddenFor(x => x.Id)
+                <div class="form-group row">
+                    <label asp-for="CuaHangId" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <select name="CuaHangId" id="btnAddCuaHang" class="form-select ">
+                            @foreach (var item in ViewBag.CuaHangItems)
+                            {
+                                <option value="@item.Value"> @item.Text</option>
+                            }
+                            <option value="AddCuaHang">Thêm cửa hàng mới</option>
+                        </select>
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="UserName" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="UserName" class="form-control " />
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                    </div>
+                </div>
+                @if (ViewBag.Mode == "Create")
+                {
+                    <div class="form-group row">
+                        <label asp-for="Password" class="control-label col-md-2"></label>
+                        <div class="col-md-10">
+                            <input asp-for="Password" class="form-control " />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                    </div>
+                }
+
+                <div class="form-group row">
+                    <label asp-for="FullName" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="FullName" class="form-control " />
+                        <span asp-validation-for="FullName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="PhoneNumber" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="PhoneNumber" class="form-control " />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="Email" class="control-label col-md-2"></label>
+                    <div class="col-md-10">
+                        <input asp-for="Email" class="form-control " />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Save Change</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+<div id="_modalAddCuahang"></div>
+@section Scripts{
+<script>
+    var UrlCreate ={
+         OpenModal : "@Url.Action("_ModalCreateCuaHang","User")",
+     };
+</script>
+<script src="~/js/site.js" asp-append-version=true></script>
+<script src="~/js/User/createOrUpdate.js" asp-append-version=true></script>
+
+<script>
+    $(".user-nav").addClass("active");
+</script>
+}   

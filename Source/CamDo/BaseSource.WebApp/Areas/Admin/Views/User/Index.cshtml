@@ -1,4 +1,4 @@
-﻿@model PagedResult<UserVm>
+﻿@model PagedResult<UserShop>
 @{
     ViewData["Title"] = "User";
 }
@@ -12,6 +12,10 @@
                 <h3 class="m-0 font-weight-bold">@ViewData["Title"]</h3>
             </div>
             <div class="card-body">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="m-0 font-weight-bold">@ViewData["Title"]</h3>
+                    <a class="btn btn-primary btn-sm" asp-action="CreateOrUpdateUser">Thêm mới</a>
+                </div>
                 <form asp-action="Index" method="get" class="mb-4">
                     <div class="row mb-3">
                         <label for="username" class="col-sm-3 font-weight-bolder text-dark col-form-label">UserName</label>
@@ -91,12 +95,12 @@
                 {
                     <div>
                         @await Html.PartialAsync("_Pager", new PagedResultBase()
-                   {
-                       PageNumber = Model.PageNumber,
-                       PageSize = Model.PageSize,
-                       TotalItemCount = Model.TotalItemCount,
-                       PageUrl = Url.Action("Index")
-                   })
+                    {
+                    PageNumber = Model.PageNumber,
+                    PageSize = Model.PageSize,
+                    TotalItemCount = Model.TotalItemCount,
+                    PageUrl = Url.Action("Index")
+                    })
                     </div>
                 }
             </div>
@@ -119,35 +123,35 @@
 </div>
 
 @section Scripts{
-    <script>
-        $(".user-nav").addClass("active");
+<script>
+    $(".user-nav").addClass("active");
+  
+    function editUserRole(id) {
+        $("#set-role .modal-body").html('<i class="fas fa-fw fa-spin fa-spinner"></i>');
+        $("#set-role").modal('show');
 
-        function editUserRole(id) {
-            $("#set-role .modal-body").html('<i class="fas fa-fw fa-spin fa-spinner"></i>');
-            $("#set-role").modal('show');
+        $.ajax({
+            method: "GET",
+            url: '@Url.Action("EditUserRole", "User")',
+            data: { id: id },
+            success: function (res) {
+                $("#set-role .modal-body").html(res);
 
-            $.ajax({
-                method: "GET",
-                url: '@Url.Action("EditUserRole", "User")',
-                data: { id: id },
-                success: function (res) {
-                    $("#set-role .modal-body").html(res);
-
-                    $('#form-edit-role').submit(function (e) {
-                        e.preventDefault();
-                        $.ajax({
-                            method: $('#form-edit-role').attr('method'),
-                            url: $('#form-edit-role').attr('action'),
-                            data: $('#form-edit-role').serializeArray(),
-                            success: function (res) {
-                                location.reload();
-                            }
-                        });
+                $('#form-edit-role').submit(function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        method: $('#form-edit-role').attr('method'),
+                        url: $('#form-edit-role').attr('action'),
+                        data: $('#form-edit-role').serializeArray(),
+                        success: function (res) {
+                            location.reload();
+                        }
                     });
-                }, error: function (error) {
-                    alert("Error!");
-                }
-            });
-        }
-    </script>
+                });
+            }, error: function (error) {
+                alert("Error!");
+            }
+        });
+    }
+</script>
 }

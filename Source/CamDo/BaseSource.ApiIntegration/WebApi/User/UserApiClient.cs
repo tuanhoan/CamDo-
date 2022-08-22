@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BaseSource.Utilities.Helper;
 using Microsoft.AspNetCore.Identity;
+using BaseSource.ViewModels.Admin;
 
 namespace BaseSource.ApiIntegration.WebApi
 {
@@ -99,5 +100,17 @@ namespace BaseSource.ApiIntegration.WebApi
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.GetAsync<ApiResult<List<UserInfoResponse>>>("/api/Account/GetUserByCuaHang");
         }
+
+        public async Task<ApiResult<UserShop>> GetUserById(string userId = default)
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.GetAsync<ApiResult<UserShop>>("/api/User/GetUserById");
+        }
+        public async Task<ApiResult<PagedResult<UserShop>>> GetPagings(GetUserPagingRequest_Admin model)
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.GetAsync<ApiResult<PagedResult<UserShop>>>("/api/User/GetPagings", model);
+        }
+
     }
 }

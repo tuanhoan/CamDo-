@@ -1,4 +1,5 @@
 ﻿
+using BaseSource.ViewModels.Admin;
 using BaseSource.ViewModels.Common;
 using BaseSource.ViewModels.User;
 using System;
@@ -10,6 +11,7 @@ namespace BaseSource.ApiIntegration.WebApi
 {
     public interface IUserApiClient
     {
+        Task<ApiResult<PagedResult<UserShop>>> GetPagings(GetUserPagingRequest_Admin model);
         Task<ApiResult<string>> Register(RegisterRequestVm model);
         Task<ApiResult<string>> Authenticate(LoginRequestVm model);
         Task<ApiResult<string>> ConfirmEmail(ConfirmEmailVm model);
@@ -20,5 +22,7 @@ namespace BaseSource.ApiIntegration.WebApi
         Task<ApiResult<string>> ChangePassword(ChangePasswordVm model);
         Task<ApiResult<string>> AuthenticateExternalAsync(UserClaimRequest model);
         Task<ApiResult<List<UserInfoResponse>>> GetUserByCuaHang();
+        Task<ApiResult<UserShop>> GetUserById(string userId = default);
+        
     }
 }
