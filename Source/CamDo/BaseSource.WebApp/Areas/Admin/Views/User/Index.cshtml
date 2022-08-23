@@ -84,6 +84,7 @@
                                     </td>
                                     <td>
                                         <a class="btn btn-sm btn-primary" href="#" onclick="editUserRole('@item.Id'); return false;">Role</a>
+                                        <a class="btn btn-sm btn-primary" href="@Url.Action("CreateOrUpdateUser","User" , new {id = item.Id})">Edit</a>
                                     </td>
                                 </tr>
                             }

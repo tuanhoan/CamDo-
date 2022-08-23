@@ -100,11 +100,15 @@ namespace BaseSource.ApiIntegration.WebApi
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.GetAsync<ApiResult<List<UserInfoResponse>>>("/api/Account/GetUserByCuaHang");
         }
-
-        public async Task<ApiResult<UserShop>> GetUserById(string userId = default)
+        public async Task<ApiResult<string>> CreateOrUpdate(EditUserShop model)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
-            return await client.GetAsync<ApiResult<UserShop>>("/api/User/GetUserById");
+            return await client.PostAsync<ApiResult<string>>("/api/User/CreateOrUpdate", model);
+        }
+        public async Task<ApiResult<EditUserShop>> GetUserById(string userId = default)
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.GetAsync<ApiResult<EditUserShop>>($"/api/User/GetUserById/{userId}");
         }
         public async Task<ApiResult<PagedResult<UserShop>>> GetPagings(GetUserPagingRequest_Admin model)
         {

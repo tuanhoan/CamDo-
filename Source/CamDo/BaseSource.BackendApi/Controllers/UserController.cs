@@ -34,7 +34,7 @@ namespace BaseSource.BackendApi.Controllers
         public async Task<IActionResult> GetPagings([FromQuery] GetUserPagingRequest_Admin request)
         {
             
-            var model = _db.Users.Where(x=> x.Id == UserId  || x.UserProfile.CustomId == UserId).AsQueryable();
+            var model = _db.Users.Where(x=> x.Id == UserId  || x.UserProfile.SubUserId == UserId).AsQueryable();
 
             if (!string.IsNullOrEmpty(request.UserName))
             {
@@ -70,7 +70,7 @@ namespace BaseSource.BackendApi.Controllers
             return Ok(new ApiSuccessResult<PagedResult<UserShop>>(pagedResult));
         }
 
-        [HttpGet("GetUserById")]
+        [HttpGet("GetUserById/{id?}")]
         public async Task<IActionResult> GetById(string id)
         {
             var user = await _db.Users.FindAsync(id);
@@ -81,8 +81,8 @@ namespace BaseSource.BackendApi.Controllers
             }
             var roles = await _userManager.GetRolesAsync(user);
             var profile = await _db.UserProfiles.FindAsync(UserId);
-
-            var result = new UserShop()
+            var cuahang = _db.UserProfiles.FirstOrDefault(x => x.UserId == user.Id);
+            var result = new EditUserShop()
             {
                 Id = user.Id.ToString(),
                 Email = user.Email,
@@ -91,10 +91,11 @@ namespace BaseSource.BackendApi.Controllers
                 JoinedDate = profile.JoinedDate,
                 PhoneNumber = user.PhoneNumber,
                 Roles = roles.ToList(),
-                ShopId = user.UserProfile.CuaHangId
+                CuaHangId = cuahang.CuaHangId,
+                Password = user.PasswordHash
             };
 
-            return Ok(new ApiSuccessResult<UserShop>(result));
+            return Ok(new ApiSuccessResult<EditUserShop>(result));
         }
 
         [HttpGet("GetUserRoles")]
@@ -147,62 +148,66 @@ namespace BaseSource.BackendApi.Controllers
             }
             return Ok(new ApiErrorResult<string>());
         }
-        [HttpPost("Create")]
-        public async Task<IActionResult> Create(CreateUserAdminVm model)
+        [HttpPost("CreateOrUpdate")]
+        public async Task<IActionResult> CreateOrUpdate(EditUserShop model)
         {
             if (!ModelState.IsValid)
             {
                 return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
             }
-            var newUser = new AppUser()
-            {
-                UserName = model.UserName,
-                EmailConfirmed = true,
-                LockoutEnabled = false,
-                PhoneNumber = model.PhoneNumber,
-                Email = model.Email,
-                NormalizedEmail = model.Email
-            };
-            var result = await _userManager.CreateAsync(newUser, model.Password);
-            if (result.Succeeded)
-            {
-                _db.UserProfiles.Add(new UserProfile
-                {
-                    CustomId = UserId,
-                    FullName = model.FullName,
-                    JoinedDate = DateTime.Now,
-                    UserId = newUser.Id,
-                });
-                await _db.SaveChangesAsync();
-                return Ok(new ApiSuccessResult<string>());
-            }
-            AddErrors(result, nameof(model.UserName));
-            return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
-        }
-        [HttpPost("Edit")]
-        public async Task<IActionResult> Edit(EditUserAdminVm model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
-            }
+
             var user = await _db.Users.Include(x => x.UserProfile).Where(x => x.Id == model.Id).FirstOrDefaultAsync();
             if (user == null)
             {
-                return Ok(new ApiErrorResult<string>("Not found"));
+                var newUser = new AppUser()
+                {
+                    UserName = model.UserName,
+                    EmailConfirmed = true,
+                    LockoutEnabled = false,
+                    PhoneNumber = model.PhoneNumber,
+                    Email = model.Email,
+                    NormalizedEmail = model.Email
+                };
+                var result = await _userManager.CreateAsync(newUser, model.Password);
+                if (result.Succeeded)
+                {
+                    await _db.UserProfiles.AddAsync(new UserProfile
+                    {
+                        CustomId = newUser.Id,
+                        FullName = model.FullName,
+                        JoinedDate = DateTime.Now,
+                        UserId = newUser.Id,
+                        CuaHangId = model.CuaHangId,
+                        SubUserId = UserId,
+                    });
+                    await _db.SaveChangesAsync();
+                    return Ok(new ApiSuccessResult<string>());
+                }
+                AddErrors(result, nameof(model.UserName));
             }
-            user.Email = model.Email;
-            user.NormalizedEmail = model.Email;
-            user.PhoneNumber = model.Email;
-            user.UserProfile.FullName = model.FullName;
-            if (!string.IsNullOrEmpty(model.Password))
-            {
-                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                await _userManager.ResetPasswordAsync(user, token, model.Password);
+            else {
+                user.Email = model.Email;
+                user.NormalizedEmail = model.Email;
+                user.PhoneNumber = model.Email;
+                user.UserProfile.FullName = model.FullName;
+                if (!string.IsNullOrEmpty(model.Password))
+                {
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    await _userManager.ResetPasswordAsync(user, token, model.Password);
+                }
+                var userProfile = _db.UserProfiles.FirstOrDefault(x=> x.UserId == user.Id);
+                if (userProfile != null)
+                {
+                    userProfile.FullName = model.FullName;
+                    userProfile.CustomId = UserId;
+                    userProfile.CuaHangId = model.CuaHangId;
+                    _db.Update(userProfile);
+                    await _db.SaveChangesAsync();
+                    return Ok(new ApiSuccessResult<string>());
+                }
+               
             }
-
-            await _db.SaveChangesAsync();
-            return Ok(new ApiSuccessResult<string>());
+            return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
         }
         [HttpPost("LockUnLockUser")]
         public async Task<IActionResult> LockUnLockUser([FromForm] string id)

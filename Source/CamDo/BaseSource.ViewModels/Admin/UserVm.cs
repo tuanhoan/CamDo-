@@ -66,6 +66,10 @@ namespace BaseSource.ViewModels.Admin
         public string Id { get; set; }
         [Display(Name = "Cửa Hàng")]
         public int CuaHangId { get; set; }
+
+        public IList<string> Roles { get; set; }
+
+        public DateTime JoinedDate { get; set; }
     }
 
 }

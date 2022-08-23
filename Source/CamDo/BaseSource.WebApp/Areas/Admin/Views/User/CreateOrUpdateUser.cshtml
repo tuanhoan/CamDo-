@@ -18,15 +18,19 @@
         </div>
 
         <div class="card-body">
-            <form asp-action="Create" data-name="ajaxForm" enctype="multipart/form-data">
+            <form asp-action="CreateOrUpdate" data-name="ajaxForm" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 @Html.HiddenFor(x => x.Id)
                 <div class="form-group row">
                     <label asp-for="CuaHangId" class="control-label col-md-2"></label>
                     <div class="col-md-10">
-                        <select name="CuaHangId" id="btnAddCuaHang" class="form-select ">
+                        <select name="CuaHangId" id="btnAddCuaHang" class="form-select">
                             @foreach (var item in ViewBag.CuaHangItems)
                             {
+                                @if(item.Value == @Model.CuaHangId.ToString())
+                                {
+                                     <option value="@item.Value" selected> @item.Text</option>
+                                }
                                 <option value="@item.Value"> @item.Text</option>
                             }
                             <option value="AddCuaHang">Thêm cửa hàng mới</option>
@@ -46,10 +50,18 @@
                     <div class="form-group row">
                         <label asp-for="Password" class="control-label col-md-2"></label>
                         <div class="col-md-10">
-                            <input asp-for="Password" class="form-control " />
+                            <input asp-for="Password" class="form-control "  value="@Model.Password"/>
                             <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
                     </div>
+                }
+                else
+                {
+                     <div class="col-md-10">
+                            <input asp-for="Password" class="form-control " type="hidden"/>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                
                 }
 
                 <div class="form-group row">
@@ -86,7 +98,6 @@
          OpenModal : "@Url.Action("_ModalCreateCuaHang","User")",
      };
 </script>
-<script src="~/js/site.js" asp-append-version=true></script>
 <script src="~/js/User/createOrUpdate.js" asp-append-version=true></script>
 
 <script>

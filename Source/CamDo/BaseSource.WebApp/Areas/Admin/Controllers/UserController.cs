@@ -88,6 +88,8 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
                 model.FullName = result.ResultObj.FullName;
                 model.UserName = result.ResultObj.UserName;
                 model.PhoneNumber = result.ResultObj.PhoneNumber;
+                model.CuaHangId = result.ResultObj.CuaHangId;
+                model.Password = result.ResultObj.Password;
                 mode = "Update";
             }
             var selectList = new List<SelectListItem>() { new SelectListItem { Text = "Vui lòng chọn cửa hàng ...", Value = "" } };
@@ -100,6 +102,16 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             ViewBag.CuaHangItems = selectList;
             ViewBag.Mode = mode;
             return PartialView("CreateOrUpdateUser", model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateOrUpdate(EditUserShop model)
+        {
+            var result = await _apiClientUser.CreateOrUpdate(model);
+            if (!result.IsSuccessed)
+            {
+                return Json(new ApiErrorResult<string>(result.ValidationErrors));
+            }
+            return Json(new ApiSuccessResult<string>(Url.Action("Index")));
         }
         public IActionResult _ModalCreateCuaHang()
         {  
