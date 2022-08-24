@@ -9,6 +9,7 @@ using BaseSource.Utilities.Helper;
 using BaseSource.ViewModels.Common;
 using BaseSource.ViewModels.CuaHang_TransactionLog;
 using BaseSource.ViewModels.HopDong;
+using GemBox.Document;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -152,6 +153,9 @@ namespace BaseSource.BackendApi.Controllers
                 var tongDaThanhToan = await model.SumAsync(x => x.TongTienDaThanhToan);
                 var tongLaiDenHomNay = await model.SumAsync(x => x.TienLaiToiNgayHienTai);
 
+                var khs = await _db.KhachHangs.Select(x=>x.Id).ToListAsync();
+                var hhs = await _db.CauHinhHangHoas.Select(x=>x.Id).ToListAsync();
+
                 var data = await (from hd in model
                                   join kh in _db.KhachHangs on hd.KhachHangId equals kh.Id
                                   join hh in _db.CauHinhHangHoas on hd.HangHoaId equals hh.Id into chhh
@@ -184,7 +188,8 @@ namespace BaseSource.BackendApi.Controllers
                                       HD_Status = hd.HD_Status,
                                       TienLaiToiNgayHienTai = hd.TienLaiToiNgayHienTai
 
-                                  }).OrderByDescending(x => x.Id).ToPagedListAsync(request.Page, request.PageSize);
+                                  }).OrderByDescending(x => x.Id)
+                                  .ToPagedListAsync(request.Page, request.PageSize);
 
                 foreach (var item in data)
                 {
@@ -687,6 +692,33 @@ namespace BaseSource.BackendApi.Controllers
                 TienVay = hd.TongTienVayHienTai
             };
             return Ok(new ApiSuccessResult<InChuocDoResponseVm>(response));
+        }
+
+
+        [HttpGet("InHopDong")]
+        public async Task<IActionResult> InHopDong(int hopDongId)
+        {
+            var hd = await _db.HopDongs.FindAsync(hopDongId);
+            if (hd == null)
+            {
+                return Ok(new ApiErrorResult<string>("Not Found"));
+            }
+            var kh = await _db.KhachHangs.FindAsync(hd.KhachHangId);
+            var user = await _db.UserProfiles.FindAsync(UserId);
+            // If using Professional version, put your serial key below.
+            ComponentInfo.SetLicense("FREE-LIMITED-KEY");
+
+            var document = DocumentModel.Load(@"E:\OutSource\camdo\Source\CamDo\BaseSource.BackendApi\wwwroot\Resource\HopDong_Template.docx");
+
+            // The easiest way how you can find and replace text is with "Replace" method.
+            document.Content.Replace("{FullName}", user.FullName);
+            document.Content.Replace("{NguoiCamDo}", kh.Ten);
+            document.Content.Replace("{MaGD}", hd.HD_Ma);
+
+
+            document.Save("FoundAndReplacedText.docx");
+
+            return Ok();
         }
         #endregion
 

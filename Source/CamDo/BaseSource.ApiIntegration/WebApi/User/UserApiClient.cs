@@ -116,5 +116,10 @@ namespace BaseSource.ApiIntegration.WebApi
             return await client.GetAsync<ApiResult<PagedResult<UserShop>>>("/api/User/GetPagings", model);
         }
 
+        public async Task<ApiResult<List<UserInfoResponse>>> GetKHByCuaHang()
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.GetAsync<ApiResult<List<UserInfoResponse>>>("/api/Account/GetKHByCuaHang");
+        }
     }
 }
