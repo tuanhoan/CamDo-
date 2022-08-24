@@ -110,6 +110,15 @@ namespace BaseSource.ApiIntegration.WebApi
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.GetAsync<ApiResult<EditUserShop>>($"/api/User/GetUserById/{userId}");
         }
+        public async Task<ApiResult<string>> DeleteUser(string userId = default)
+        {
+            var dic = new Dictionary<string, string>()
+            {
+                { "userId", userId.ToString() }
+            };
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.PostAsyncFormUrl<ApiResult<string>>($"/api/User/DeleteUser", dic);
+        } 
         public async Task<ApiResult<PagedResult<UserShop>>> GetPagings(GetUserPagingRequest_Admin model)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);

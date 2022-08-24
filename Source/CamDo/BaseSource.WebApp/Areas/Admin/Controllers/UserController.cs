@@ -132,5 +132,20 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             }
             return Json(new ApiSuccessResult<string>(Url.Action("CreateOrUpdateUser")));
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteUser(string userId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Json(new ApiErrorResult<string>(ModelState.GetListErrors()));
+            }
+            var result = await _apiClientUser.DeleteUser(userId);
+            if (!result.IsSuccessed)
+            {
+                return Json(new ApiErrorResult<string>(result.ValidationErrors));
+            }
+            return Json(new ApiSuccessResult<string>(Url.Action("Index")));
+        }
     }
 }

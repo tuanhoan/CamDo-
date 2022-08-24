@@ -83,8 +83,10 @@
                                         }
                                     </td>
                                     <td>
-                                        <a class="btn btn-sm btn-primary" href="#" onclick="editUserRole('@item.Id'); return false;">Role</a>
+                                        <a class="btn btn-sm btn-primary" href="#" onclick="editUserRole(@item.Id); return false;">Role</a>
                                         <a class="btn btn-sm btn-primary" href="@Url.Action("CreateOrUpdateUser","User" , new {id = item.Id})">Edit</a>
+                                        <button class="btn btn-sm btn-primary" onclick="deleteUser()" >Delete</button>
+                                        <input id="txtUserId" value="@item.Id" type="hidden">
                                     </td>
                                 </tr>
                             }
@@ -126,7 +128,7 @@
 @section Scripts{
 <script>
     $(".user-nav").addClass("active");
-  
+
     function editUserRole(id) {
         $("#set-role .modal-body").html('<i class="fas fa-fw fa-spin fa-spinner"></i>');
         $("#set-role").modal('show');
@@ -134,7 +136,7 @@
         $.ajax({
             method: "GET",
             url: '@Url.Action("EditUserRole", "User")',
-            data: { id: id },
+            data: { id:id },
             success: function (res) {
                 $("#set-role .modal-body").html(res);
 
@@ -149,6 +151,18 @@
                         }
                     });
                 });
+            }, error: function (error) {
+                alert("Error!");
+            }
+        });
+    }
+     function deleteUser() {
+        $.ajax({
+            method: "POST",
+            url: '@Url.Action("DeleteUser", "User")',
+            data: { userId:  $("#txtUserId").val() },
+            success: function (res) {
+               alert("Success!");
             }, error: function (error) {
                 alert("Error!");
             }

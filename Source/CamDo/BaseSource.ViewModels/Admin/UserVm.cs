@@ -42,7 +42,7 @@ namespace BaseSource.ViewModels.Admin
         [Required(ErrorMessage = "Vui lòng nhập họ tên")]
         public string FullName { get; set; }
         [Display(Name = "Mật khẩu")]
-        [Required(ErrorMessage = "Vui lòng nhập mật khẩu")]
+        //[Required(ErrorMessage = "Vui lòng nhập mật khẩu")]
         [MinLength(6, ErrorMessage = "Mật khẩu tối thiểu 6 ký tự")]
         public string Password { get; set; }
         [Display(Name = "Số điện thoại")]
@@ -70,6 +70,7 @@ namespace BaseSource.ViewModels.Admin
         public IList<string> Roles { get; set; }
 
         public DateTime JoinedDate { get; set; }
+        public string Mode { get; set; }
     }
 
 }
