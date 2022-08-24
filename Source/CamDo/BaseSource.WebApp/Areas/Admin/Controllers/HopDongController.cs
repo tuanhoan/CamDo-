@@ -57,13 +57,12 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
                 LinhVuc = ELinhVucHangHoa.Camdo
             };
             var requestUser = await _userApiClient.GetUserByCuaHang();
-            requestUser.ResultObj.Add(new ViewModels.User.UserInfoResponse { Id = "1", UserName = "Tuấn Hoàn", Blance = 1000 });
             var resultCuaHinhHH = _cauHinhHangHoaApiClient.GetPagings(requestCauHinhHH);
             var maxIDHD = _hopDongApiClient.GetMaxID(ELoaiHopDong.Vaylai);
             await Task.WhenAll(resultCuaHinhHH, maxIDHD);
 
             ViewData["ListHangHoa"] = new SelectList(resultCuaHinhHH.Result.ResultObj.Items, "Id", "Ten");
-            ViewData["ListUser"] = new SelectList(requestUser.ResultObj, "Id", "UserName");
+            ViewData["ListUser"] = new SelectList(requestUser.ResultObj, "Id", "FullName");
 
             var model = new CreateHopDongVm()
             {

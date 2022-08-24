@@ -432,7 +432,7 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
                                     item.HD_Status = (byte)EHopDong_CamDoStatusFilter.HomNayDongTien;
                                 }
                             }
-                            else if (payment.Count == 1 && itemInPayment.ToDate == currentDate)
+                            else if (payment.Count == 1 && itemInPayment?.ToDate == currentDate)
                             {
                                 item.HD_Status = (byte)EHopDong_CamDoStatusFilter.DenNgayChuocDo;
                             }
