@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BaseSource.Utilities.Helper;
 using BaseSource.Shared.Constants;
+using Newtonsoft.Json;
 
 namespace BaseSource.ApiIntegration.WebApi.HopDong_ChuocDo
 {
@@ -28,7 +29,12 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong_ChuocDo
         public async Task<ApiResult<HopDong_ChuocDoVm>> GetInfoChuocDo(HopDong_ChuocDoRequestVm model)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
-            return await client.GetAsync<ApiResult<HopDong_ChuocDoVm>>("/api/HopDong_ChuocDo/GetInfoChuocDo", model);
+            var newModel = new
+            {
+                HopDongId = model.HopDongId,
+                NgayChuocDo = model.NgayChuocDo.ToString("yyyy-MM-dd"),
+            };
+            return await client.GetAsync<ApiResult<HopDong_ChuocDoVm>>("/api/HopDong_ChuocDo/GetInfoChuocDo", newModel);
         }
     }
 }

@@ -1042,7 +1042,7 @@ namespace BaseSource.BackendApi.Controllers
             {
                 _db.KhachHangs.Add(model);
                 await _db.SaveChangesAsync();
-                khachHangId = id;
+                khachHangId = model.Id;
             }
             else
             {
