@@ -37,6 +37,15 @@ namespace BaseSource.BackendApi.Controllers
             {
                 return Ok(new ApiErrorResult<string>("Not Found"));
             }
+
+            var isKetThuc = await _hopDongService.CheckHopDongKetThuc(hd.HD_Status, hd.HD_Loai);
+            if (isKetThuc)
+            {
+                return Ok(new ApiSuccessResult<HopDong_ChuocDoVm>(new HopDong_ChuocDoVm()
+                {
+                    NgayTatToan = hd.NgayTatToan
+                }));
+            }
             double tienLai = 0;
             double tongSoNgayLai = 0;
             double noCu = 0;
@@ -132,6 +141,7 @@ namespace BaseSource.BackendApi.Controllers
                     hd.HD_Status = (byte)EHopDong_CommonStatusFilter.KetThuc;
                     break;
                 case ELoaiHopDong.Vaylai:
+                    hd.HD_Status = (byte)EHopDong_CommonStatusFilter.KetThuc;
                     break;
                 case ELoaiHopDong.GopVon:
                     break;
@@ -161,18 +171,28 @@ namespace BaseSource.BackendApi.Controllers
             _db.HopDong_PaymentLogs.Add(paymetLogNew);
             await _db.SaveChangesAsync();
 
+            var FeatureType = EFeatureType.Camdo;
+            var successMessage = "Bạn đã trả khoản vay thành công";
+
+            if (hd.HD_Loai == ELoaiHopDong.Vaylai)
+            {
+                FeatureType = EFeatureType.Vaylai;
+                successMessage = "Bạn đã trả khoản vay thành công";
+            }
+
             //tạo lịch sử giao dịch
             var tranLog = new CreateCuaHang_TransactionLogVm()
             {
                 HopDongId = hd.Id,
                 ActionType = EHopDong_ActionType.DongHD,
-                FeatureType = EFeatureType.Camdo,
+                FeatureType = FeatureType,
                 UserId = UserId,
                 PaymentId = paymetLogNew.Id,
                 TotalMoneyLoan = tongTienChuoc
             };
+
             var rs = Task.Run(() => CreateCuaHang_TransactionLog(tranLog));
-            return Ok(new ApiSuccessResult<string>("Bạn đã chuộc đồ thành công"));
+            return Ok(new ApiSuccessResult<string>(successMessage));
 
         }
         #region helper
