@@ -36,5 +36,6 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
         Task<ApiResult<string>> AnHopDong(int hopDongId);
         Task<ApiResult<HopDongPrintDefaulVm>> GetPrintDefault(ELoaiHopDong type);
         Task<ApiResult<string>> SavePrintDefault(HopDongPrintDefaulVm model);
+        Task<string> InHopDong(int hopDongId);
     }
 }

@@ -1,7 +1,9 @@
 ﻿@model PagedResult<HopDongVm>
 @{
     ViewData["Title"] = "Quản lý vay lãi";
+    var data = ViewData["Print"];
 }
+
 <div class="row">
     <!-- table  Lastest Tickets -->
     <div class="col-12 ">
@@ -211,12 +213,12 @@
                 {
                     <div>
                         @await Html.PartialAsync("_Pager", new PagedResultBase()
-                   {
-                       PageNumber = Model.PageNumber,
-                       PageSize = Model.PageSize,
-                       TotalItemCount = Model.TotalItemCount,
-                       PageUrl = Url.Action("Index")
-                   })
+                    {
+                    PageNumber = Model.PageNumber,
+                    PageSize = Model.PageSize,
+                    TotalItemCount = Model.TotalItemCount,
+                    PageUrl = Url.Action("Index")
+                    })
                     </div>
                 }
             </div>
@@ -229,27 +231,27 @@
         $(".loan-nav").addClass("active");
     </script>
 }
-<div class="modal fade" id="hd-modal" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lager" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade" id="print-loan-modal" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lager" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
+    <div class="modal fade" id="hd-modal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lager" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                </div>
             </div>
         </div>
     </div>
-</div>
+    <div class="modal fade" id="print-loan-modal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lager" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                </div>
+            </div>
+        </div>
+    </div>

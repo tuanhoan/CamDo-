@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Antlr3.ST;
+using AutoMapper;
 using BaseSource.BackendApi.Services.Serivce.CuaHang_TransactionLog;
 using BaseSource.BackendApi.Services.Serivce.HopDong;
 using BaseSource.Data.EF;
@@ -9,10 +10,9 @@ using BaseSource.Utilities.Helper;
 using BaseSource.ViewModels.Common;
 using BaseSource.ViewModels.CuaHang_TransactionLog;
 using BaseSource.ViewModels.HopDong;
-using GemBox.Document;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing.Template;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +20,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using X.PagedList;
@@ -153,8 +154,8 @@ namespace BaseSource.BackendApi.Controllers
                 var tongDaThanhToan = await model.SumAsync(x => x.TongTienDaThanhToan);
                 var tongLaiDenHomNay = await model.SumAsync(x => x.TienLaiToiNgayHienTai);
 
-                var khs = await _db.KhachHangs.Select(x=>x.Id).ToListAsync();
-                var hhs = await _db.CauHinhHangHoas.Select(x=>x.Id).ToListAsync();
+                var khs = await _db.KhachHangs.Select(x => x.Id).ToListAsync();
+                var hhs = await _db.CauHinhHangHoas.Select(x => x.Id).ToListAsync();
 
                 var data = await (from hd in model
                                   join kh in _db.KhachHangs on hd.KhachHangId equals kh.Id
@@ -683,10 +684,10 @@ namespace BaseSource.BackendApi.Controllers
             var response = new InChuocDoResponseVm()
             {
                 MaHD = hd.HD_Ma,
-                NgayChuoc = hd.NgayTatToan,
+                NgayChuoc = hd?.NgayTatToan,
                 NgayVay = hd.HD_NgayVay,
                 TenKhachHang = kh.Ten,
-                TenNhanVien = user.FullName,
+                TenNhanVien = user?.FullName,
                 TenTaiSan = hd.TenTaiSan,
                 TienChuoc = hd.TongTienChuoc,
                 TienVay = hd.TongTienVayHienTai
@@ -698,27 +699,53 @@ namespace BaseSource.BackendApi.Controllers
         [HttpGet("InHopDong")]
         public async Task<IActionResult> InHopDong(int hopDongId)
         {
-            var hd = await _db.HopDongs.FindAsync(hopDongId);
+            var hd = await _db.HopDongs.AsNoTracking()
+                .Include(x => x.CuaHang)
+                .FirstOrDefaultAsync(x => x.Id == hopDongId);
             if (hd == null)
             {
                 return Ok(new ApiErrorResult<string>("Not Found"));
             }
             var kh = await _db.KhachHangs.FindAsync(hd.KhachHangId);
-            var user = await _db.UserProfiles.FindAsync(UserId);
+            var user = await _db.UserProfiles.AsNoTracking().Include(x=>x.AppUser).FirstOrDefaultAsync(x=>x.UserId == hd.UserIdAssigned);
             // If using Professional version, put your serial key below.
-            ComponentInfo.SetLicense("FREE-LIMITED-KEY");
 
-            var document = DocumentModel.Load(@"E:\OutSource\camdo\Source\CamDo\BaseSource.BackendApi\wwwroot\Resource\HopDong_Template.docx");
+            string body = string.Empty;
+            //using streamreader for reading my htmltemplate   
 
-            // The easiest way how you can find and replace text is with "Replace" method.
-            document.Content.Replace("{FullName}", user.FullName);
-            document.Content.Replace("{NguoiCamDo}", kh.Ten);
-            document.Content.Replace("{MaGD}", hd.HD_Ma);
+            //using (StreamReader reader = new StreamReader(Server.MapPath(@"C:\Users\Nino\Downloads\HD cầm đồ 1.docx")))
 
+            var template = new StringTemplate();
 
-            document.Save("FoundAndReplacedText.docx");
+            var text = System.IO.File.ReadAllText(_appEnvironment.ContentRootPath + "\\wwwroot\\Resource\\" + "HD cầm đồ 1.html");
 
-            return Ok();
+            //remove all tabs - it used only to format template code, not output code
+            template.Template = text.Replace("\t", "");
+
+            template.SetAttribute("UserName", user.FullName);
+            template.SetAttribute("TenCuaHang", hd.CuaHang.Ten);
+            template.SetAttribute("SDTCuaHang", hd.CuaHang.SDT);
+            template.SetAttribute("MGD", hd.HD_Ma);
+            template.SetAttribute("NgayKiHD", hd.HD_NgayVay);
+            template.SetAttribute("TenCuaHang", hd.CuaHang.Ten);
+            template.SetAttribute("TenNhanVien", user.FullName);
+            template.SetAttribute("SDTNhanVien", user.AppUser.PhoneNumber);
+            template.SetAttribute("DiaChiCuaHang", hd.CuaHang.DiaChi);
+            template.SetAttribute("TenKhachHang", kh.Ten);
+            template.SetAttribute("SDTKhachHang", kh.SDT);
+            template.SetAttribute("DiaChiKhachHang", kh.SDT);
+            template.SetAttribute("CMND", kh.CMND);
+            template.SetAttribute("NgayCap", kh.CMND_NgayCap?.ToString("dd-MM-yyyy"));
+            template.SetAttribute("NoiCap", kh.CMND_NoiCap);
+            template.SetAttribute("LoaiTaiSan", kh.CMND_NoiCap);
+            template.SetAttribute("TenTaiSan", hd.TenTaiSan);
+            template.SetAttribute("SoTienVay", hd.HD_TongTienVayBanDau);
+            template.SetAttribute("NgayVay", hd.HD_NgayVay);
+            template.SetAttribute("NgayTra", hd.NgayTatToan);
+
+            var output = template.ToString();
+
+            return Ok(output);
         }
         #endregion
 
@@ -1042,7 +1069,7 @@ namespace BaseSource.BackendApi.Controllers
             {
                 _db.KhachHangs.Add(model);
                 await _db.SaveChangesAsync();
-                khachHangId = id;
+                khachHangId = model.Id;
             }
             else
             {

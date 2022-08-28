@@ -39,9 +39,21 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
                 Status = status
             };
 
-            var result = await _hopDongApiClient.GetPagings(request);
+            var requestHH = new GetCauHinhHangHoaPagingRequest()
+            {
+                Page = 1,
+                PageSize = int.MaxValue,
+            };
+            var result = _hopDongApiClient.GetPagings(request);
+            var resultHH = _cauHinhHangHoaApiClient.GetPagings(requestHH);
+            await Task.WhenAll(result, resultHH);
+            ViewData["ListHangHoa"] = new SelectList(resultHH.Result.ResultObj.Items, "Id", "Ten");
 
-            return View(result.ResultObj);
+            var data = await _hopDongApiClient.InHopDong(2);
+            ViewData["Print"] = data;
+
+
+            return View(result.Result.ResultObj);
         }
         public async Task<IActionResult> ReportHeader()
         {
@@ -132,6 +144,14 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             ViewData["ListUser"] = new SelectList(requestUser.Result.ResultObj, "Id", "FullName");
             return PartialView("_Edit", model);
         }
+
+
+        public async Task<IActionResult> InHopDong()
+        {
+            var model = await _hopDongApiClient.InHopDong(2);
+            return PartialView("_InHopDong", model);
+        }
+        
 
         [HttpPost]
         public async Task<IActionResult> Edit(EditHopDongVm model)

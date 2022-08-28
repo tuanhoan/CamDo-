@@ -51,5 +51,21 @@ namespace BaseSource.Utilities.Helper
                 return result;
             }
         }
+
+        public static async Task<string> GetAsyncNew(this HttpClient client, string url, object data = null)
+        {
+            if (data != null)
+            {
+                string queryString = UrlHelper.GetQueryString(data);
+                url += "?" + queryString;
+            }
+
+            using (var response = await client.GetAsync(url))
+            {
+                var responseString = await response.Content.ReadAsStringAsync();
+                var result = responseString;
+                return result;
+            }
+        }
     }
 }

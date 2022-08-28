@@ -157,12 +157,13 @@
             <i class="fa fa-motorcycle"></i> Thông tin tài sản <b>cấu hình tại đây</b>
         </div>
         <div class="collapse" id="collapseTaiSan">
-
         </div>
         <input type="hidden" name="ListThuocTinhHangHoa" id="ListThuocTinhHangHoa" />
         <div class="row mb-3">
             <label class="control-label col-md-2">&nbsp;</label>
             <div class="col-md-5">
+                <button type="submit" class="btn btn-primary" data-modal="hd-modal">Mưa bảo hiểm</button>
+                <button id="printdiv" type="button" value="Print" onclick="printContent('dvmismatch')" class="btn btn-primary">In Hợp Đồng</button>
                 <button type="submit" class="btn btn-primary" data-modal="hd-modal">Lưu</button>
                 <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn btn-warning">Đóng</button>
             </div>
@@ -170,3 +171,29 @@
     </form>
 
 </div>
+
+<div id="dvmismatch" style="display :none;">
+    @Html.Partial("_InHopDong", "abc")
+</div>
+<script>
+    function printContent(el) {
+        var restorepage = document.body.innerHTML;
+        var printcontent = document.getElementById(el).innerHTML;
+        document.body.innerHTML = printcontent;
+        window.print();
+        document.body.innerHTML = restorepage;
+    }
+
+    $.ajax({
+        url: '/Loan/Index',
+        type: 'GET',
+        success: function(response) {
+            alert(response);
+        },
+        error: function(error) {
+            $(this).remove();
+            DisplayError(error.statusText);
+        }
+    });
+</script>
+

@@ -68,7 +68,7 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.PostAsync<ApiResult<string>>("/api/HopDongGopVon/Create", model);
         }
-         
+
         public async Task<ApiResult<string>> DeleteChungTu(DeleteChungTu_Vm model)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
@@ -97,7 +97,7 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.PostAsync<ApiResult<string>>("/api/HopDongGopVon/Edit", model);
         }
-         
+
         public async Task<ApiResult<HopDongVm>> GetById(int id)
         {
             var obj = new
@@ -130,7 +130,7 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
 
         public async Task<ApiResult<PagedResult<HopDongVm>>> GetPagings(GetHopDongPagingRequest model)
         {
-            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient); 
             return await client.GetAsync<ApiResult<PagedResult<HopDongVm>>>("/api/HopDong/GetPagings", model);
         }
 
@@ -242,6 +242,11 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
                 var result = JsonConvert.DeserializeObject<ApiResult<string>>(responseString);
                 return result;
             }
+        }
+        public async Task<string> InHopDong(int hopDongId)
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.GetAsyncNew("/api/HopDong/InHopDong?hopDongId="+ hopDongId);
         }
     }
 }
