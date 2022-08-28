@@ -166,7 +166,25 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         #region MoneyNewDate
         public async Task<IActionResult> MoneyNewDate()
         {
+            
             return View();
+        }
+
+        public async Task<IActionResult> CreateQuyDauNgay()
+        {
+
+            return View();
+        }
+        public async Task<IActionResult> CreateTienDauNgay()
+        {
+
+            return View();
+        }
+        public async Task<IActionResult> GetData()
+        {
+            var data = _service.GetData();
+
+            return Json(data);
         }
         #endregion
     }

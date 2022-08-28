@@ -423,3 +423,68 @@ $(document).on('click', ".tabs", function () {
         }
     });
 });
+
+
+//#region ajax
+function ajaxTypePost(url, param = "") {
+    return new Promise((resolve, reject) => {
+        $.post(url, param, (response) => { resolve(response); })
+            .fail((xhr, status, error) => {
+                console.log(error);
+                //writeError(error);
+                //reject(error);
+            });
+    });
+
+}
+
+
+function ajaxTypeGet(url, param = "") {
+    return new Promise((resolve, reject) => {
+        $.get(url, param, (response) => { resolve(response); })
+            .fail(function (xhr, status, error) {
+                //writeError(error);
+                //reject(error);
+            });
+    });
+
+}
+
+function ajaxFormData(url, param = "") {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: url,
+            type: "POST",
+            data: param,
+            processData: false,
+            enctype: "multipart/form-data",
+            contentType: false,
+            cache: false,
+            success: (response) => { resolve(response); },
+            error: (error) => {
+                //writeError(error);
+                //reject(error);
+            }
+        });
+    });
+}
+//#endregion
+
+$(document).on("ajaxStart", function () {
+    $("body").loading({
+        message: "Loading..."
+        //theme: "dark"
+    });
+})
+    .on("ajaxStop", function () {
+        $("body").loading('stop');
+    })
+    .on("ajaxError", function (event, jqxhr, settings, thrownError) {
+        $("body").loading('stop');
+        if (jqxhr.status == "401") {
+            window.location.reload();
+        }
+        else if (jqxhr.status == "403") {
+            //window.location.href = "/Common/AccessDenied";
+        }
+    });

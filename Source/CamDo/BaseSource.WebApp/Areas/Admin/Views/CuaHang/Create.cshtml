@@ -73,4 +73,12 @@
     <script>
         $(".cuahang-nav").addClass("active");
     </script>
+    <script>
+        var id = $("#idbatki").val();
+        ajaxGet("@Url.Action("GetData", "Cuahang")",id).then(res=> function(){
+            if(res == ""){
+                $("#_result").val(res);
+            }
+        })
+    </script>
 }   
