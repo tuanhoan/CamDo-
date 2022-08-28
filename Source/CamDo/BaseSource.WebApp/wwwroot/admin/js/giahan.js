@@ -31,7 +31,7 @@ $("body").on("submit", 'form[id="frmGiaHan"]', function (e) {
                 var hopDongId = $form.find('input[name=HopDongId]').val();
                 toastr.info(res.message);
                 setTimeout(getListGiaHan(hopDongId), 2000);
-                $('.lblTongTienVayHienTai').text(format(res.resultObj));
+                //$('.lblTongTienVayHienTai').text(format(res.resultObj)); remove because res not allow Total Current Loan Amount and res.resultObj is date for extend
             } else if (res.validationErrors != null && res.validationErrors.length) {
                 $.each(res.validationErrors, function (i, v) {
                     console.log(v);

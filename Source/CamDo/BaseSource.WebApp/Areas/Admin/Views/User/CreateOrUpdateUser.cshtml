@@ -63,7 +63,7 @@
                         </div>
                 
                 }
-
+                <input asp-for="Mode" class="form-control " type="hidden" value ="@ViewBag.Mode"/>
                 <div class="form-group row">
                     <label asp-for="FullName" class="control-label col-md-2"></label>
                     <div class="col-md-10">
@@ -98,7 +98,7 @@
          OpenModal : "@Url.Action("_ModalCreateCuaHang","User")",
      };
 </script>
-<script src="~/js/User/createOrUpdate.js" asp-append-version=true></script>
+<script src="~/admin/js/User/createOrUpdate.js" asp-append-version=true></script>
 
 <script>
     $(".user-nav").addClass("active");

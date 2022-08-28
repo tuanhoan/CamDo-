@@ -32,20 +32,20 @@
                         <h5><i data-feather="dollar-sign"></i> Nhập quỹ tiền mặt</h5>
 
                         <hr />
-                        <form class="">
+                        <form id="frmQuytien">
                             <div class="row mb-3">
                                 <label for="inputEmail3" class="col-sm-2 col-form-label">Số tiền <span class="text-danger">*</span></label>
                                 <div class="col-sm-5">
                                     <div class="input-group ">
                                         <div class="input-group-text">VNĐ</div>
-                                        <input type="text" class="form-control " placeholder="inputAmount">
+                                        <input type="text" class="form-control " placeholder="inputAmount" id="txtMoney">
                                     </div>
                                 </div>
                             </div>
                             <div class="row mb-3">
                                 <label for="inputEmail3" class="col-sm-2 col-form-label"></label>
                                 <div class="col-sm-5">
-                                    <button type="submit" class="btn btn-primary btn-sm my-1"><i data-feather="file-text"></i> Lưu lại</button>
+                                    <button id="btnSaveQuyDauNgay" class="btn btn-primary btn-sm my-1"><i data-feather="file-text"></i> Lưu lại</button>
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -127,8 +127,13 @@
     </div>
 </div>
 
+<div id="_resultInhondong"></div>
+
 @section Scripts{
     <script>
         $(".moneynewdate-nav").addClass("active");
+
+
+        
     </script>
 }

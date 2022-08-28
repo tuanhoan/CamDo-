@@ -34,7 +34,7 @@ namespace BaseSource.BackendApi.Controllers
         public async Task<IActionResult> GetPagings([FromQuery] GetUserPagingRequest_Admin request)
         {
             
-            var model = _db.Users.Where(x=> x.Id == UserId  || x.UserProfile.SubUserId == UserId).AsQueryable();
+            var model = _db.Users.Where(x=> (x.Id == UserId  || x.UserProfile.SubUserId == UserId) && x.UserProfile.IsDelete !=true).AsQueryable();
 
             if (!string.IsNullOrEmpty(request.UserName))
             {
@@ -155,7 +155,6 @@ namespace BaseSource.BackendApi.Controllers
             {
                 return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
             }
-
             var user = await _db.Users.Include(x => x.UserProfile).Where(x => x.Id == model.Id).FirstOrDefaultAsync();
             if (user == null)
             {
@@ -188,7 +187,7 @@ namespace BaseSource.BackendApi.Controllers
             else {
                 user.Email = model.Email;
                 user.NormalizedEmail = model.Email;
-                user.PhoneNumber = model.Email;
+                user.PhoneNumber = model.PhoneNumber;
                 user.UserProfile.FullName = model.FullName;
                 if (!string.IsNullOrEmpty(model.Password))
                 {
@@ -199,7 +198,7 @@ namespace BaseSource.BackendApi.Controllers
                 if (userProfile != null)
                 {
                     userProfile.FullName = model.FullName;
-                    userProfile.CustomId = UserId;
+                    userProfile.CustomId = user.Id;
                     userProfile.CuaHangId = model.CuaHangId;
                     _db.Update(userProfile);
                     await _db.SaveChangesAsync();
@@ -209,6 +208,24 @@ namespace BaseSource.BackendApi.Controllers
             }
             return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
         }
+
+        [HttpPost("DeleteUser")]
+        public async Task<IActionResult> DeleteUser([FromForm] string userId)
+        {
+            var user = await _db.UserProfiles.FirstOrDefaultAsync(x=> x.UserId == userId && x.IsDelete == false);
+            if (user != null)
+            {
+                user.IsDelete = true;
+                _db.Update(user);
+                await _db.SaveChangesAsync();
+                return Ok(new ApiSuccessResult<string>("Xóa nhân viên thành công"));
+            }
+            return Ok(new ApiErrorResult<string>("User is not exits !"));
+           
+
+        }
+
+
         [HttpPost("LockUnLockUser")]
         public async Task<IActionResult> LockUnLockUser([FromForm] string id)
         {

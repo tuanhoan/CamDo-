@@ -20,6 +20,7 @@ namespace BaseSource.Data.Configurations
             builder.Property(x => x.CustomId).IsRequired().HasMaxLength(128);
             builder.Property(x => x.SubUserId).HasMaxLength(128);
             builder.Property(x => x.FullName).IsRequired().HasMaxLength(256);
+            builder.Property(x => x.IsDelete).IsRequired().HasDefaultValue(false);
             builder.Property(x => x.JoinedDate).IsRequired().HasDefaultValueSql("GetDate()");
 
 
