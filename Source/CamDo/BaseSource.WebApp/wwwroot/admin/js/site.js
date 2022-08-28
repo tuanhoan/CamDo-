@@ -469,22 +469,3 @@ function ajaxFormData(url, param = "") {
     });
 }
 //#endregion
-
-$(document).on("ajaxStart", function () {
-    $("body").loading({
-        message: "Loading..."
-        //theme: "dark"
-    });
-})
-    .on("ajaxStop", function () {
-        $("body").loading('stop');
-    })
-    .on("ajaxError", function (event, jqxhr, settings, thrownError) {
-        $("body").loading('stop');
-        if (jqxhr.status == "401") {
-            window.location.reload();
-        }
-        else if (jqxhr.status == "403") {
-            //window.location.href = "/Common/AccessDenied";
-        }
-    });

@@ -182,9 +182,9 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         }
         public async Task<IActionResult> GetData()
         {
-            var data = _service.GetData();
+            
 
-            return Json(data);
+            return Json("");
         }
         #endregion
     }
