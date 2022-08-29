@@ -7,6 +7,8 @@
     var strTTHH = JsonConvert.SerializeObject(lsThuocTinhHH);
 }
 <div>
+    <input type="text" id="hopdongid" hidden value="@Model.Id">
+
     <form asp-action="Edit" asp-controller="Loan" class="frmHD" data-name="ajaxFormHopDong">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         @Html.HiddenFor(x => x.Id)
@@ -162,27 +164,19 @@
         <div class="row mb-3">
             <label class="control-label col-md-2">&nbsp;</label>
             <div class="col-md-5">
-                <button type="submit" class="btn btn-primary" data-modal="hd-modal">Mưa bảo hiểm</button>
-                <button id="printdiv" type="button" value="Print" onclick="printContent('dvmismatch')" class="btn btn-primary">In Hợp Đồng</button>
                 <button type="submit" class="btn btn-primary" data-modal="hd-modal">Lưu</button>
                 <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn btn-warning">Đóng</button>
             </div>
         </div>
     </form>
+    <button id="inhopdong" class="btn btn-primary">In hợp đồng</button>
+    <button id="muabaohiem" class="btn btn-primary">Mua bảo hiểm</button>
 
 </div>
+<div id="_modalMuaBaoHiem"></div>
 
-<div id="dvmismatch" style="display :none;">
-    @Html.Partial("_InHopDong", "abc")
-</div>
-<script>
-    function printContent(el) {
-        var restorepage = document.body.innerHTML;
-        var printcontent = document.getElementById(el).innerHTML;
-        document.body.innerHTML = printcontent;
-        window.print();
-        document.body.innerHTML = restorepage;
-    }
+<script src="~/admin//js/HopDong/inhopdong.js" asp-append-version="true"> </script>
+    @*<script>
 
     $.ajax({
         url: '/Loan/Index',
@@ -196,4 +190,4 @@
         }
     });
 </script>
-
+*@

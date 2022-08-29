@@ -139,6 +139,11 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
 
             return PartialView("_Edit", model);
         }
+        public async Task<IActionResult> InHopDong(int hopdongid)
+        {
+            var model = await _hopDongApiClient.InHopDong(hopdongid);
+            return PartialView("_InHopDong", model);
+        }
 
         [HttpPost]
         public async Task<IActionResult> Edit(EditHopDongVm model)
@@ -443,5 +448,9 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         }
         #endregion
 
+        public IActionResult MuaHopDong()
+        {
+            return PartialView("_MuaHopDong");
+        }
     }
 }

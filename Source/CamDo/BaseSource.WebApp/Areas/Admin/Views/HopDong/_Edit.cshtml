@@ -6,10 +6,11 @@
     var lsThuocTinhHH = ViewData["ListThuocTinh"] as List<ThuocTinhHangHoaVm>;
     var strTTHH = JsonConvert.SerializeObject(lsThuocTinhHH);
 }
+<input type="text" id="hopdongid" hidden value="@Model.Id">
 <div>
     <form asp-action="Edit" asp-controller="HopDong" class="frmHD" data-name="ajaxFormHopDong">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        @Html.HiddenFor(x => x.Id)
+        @*@Html.HiddenFor(x => x.Id)*@
         @Html.HiddenFor(x => x.HD_Loai)
         @Html.HiddenFor(x=>x.KhachHangId)
         <div class="info-hd-header">
@@ -158,7 +159,6 @@
             <i class="fa fa-motorcycle"></i> Thông tin tài sản <b>cấu hình tại đây</b>
         </div>
         <div class="collapse" id="collapseTaiSan">
-
         </div>
         <input type="hidden" name="ListThuocTinhHangHoa" id="ListThuocTinhHangHoa" />
         <div class="row mb-3">
@@ -169,7 +169,7 @@
             </div>
         </div>
     </form>
-
+    <button id="inhopdong" class="btn btn-primary">In hợp đồng</button>
 </div>
 @*@section Scripts{
         <script>
@@ -185,5 +185,7 @@
 
 
     }*@
+
+<script src="~/admin//js/HopDong/inhopdong.js" asp-append-version="true"></script>
 
 

@@ -3,7 +3,6 @@
         ajaxTypeGet(UrlCreate.OpenModal).then(res => {
             $("#_modalAddCuahang").html(res);
             $("#modalCuahang").modal("show");
-
         })
  
     }
