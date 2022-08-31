@@ -121,18 +121,18 @@
                                             <td>
                                                 @if (item.HD_Status == (byte)EHopDong_CamDoStatusFilter.QuaHan || item.HD_Status == (byte)EHopDong_CamDoStatusFilter.DenNgayChuocDo)
                                                 {
-                                                    <span class="badge badge-red">@item.StatusName</span>
+                                                    <span class="badge badge-red" style="color: red; font-weight: bold;">@item.StatusName</span>
                                                 }
                                                 else
                                                 {
-                                                    <span class="badge badge-primary">@item.StatusName</span>
+                                                    <span class="badge badge-primary" style="color: #0061f2; font-weight: bold;">@item.StatusName</span>
                                                 }
 
                                             </td>
                                             <td width="140" class="text-center">
                                                 @if (item.HD_Status == (byte)EHopDong_CommonStatusFilter.DaXoa || item.HD_Status == (byte)EHopDong_CommonStatusFilter.DaThanhLy || item.HD_Status == (byte)EHopDong_CommonStatusFilter.KetThuc)
                                                 {
-                                                    <button class="btn btn-sm btn-info m-1 detaileHD" type="button" data-tab="tab-history" data-id="@item.Id" data-url="@Url.Action("Detail", "HopDong")" title="Lịch sử">
+                                                    <button class="btn btn-sm btn-info m-1 detaileHD" type="button" data-tab="tab-history" data-id="@item.Id" data-url="@Url.Action("Detail", "Loan")" title="Lịch sử">
                                                         <i class="fas fa-chart-line"></i>
                                                     </button>
                                                     if (item.HD_Status == (byte)EHopDong_CommonStatusFilter.DaThanhLy)
