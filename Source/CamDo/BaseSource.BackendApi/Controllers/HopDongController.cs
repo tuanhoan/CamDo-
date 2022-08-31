@@ -407,6 +407,15 @@ namespace BaseSource.BackendApi.Controllers
                     }
                     break;
                 case ELoaiHopDong.Vaylai:
+                    var currentStatusVL = (EHopDong_VayLaiStatusFilter)hd.HD_Status;
+                    if (currentStatusVL == EHopDong_VayLaiStatusFilter.DaXoa)
+                    {
+                        return Ok(new ApiErrorResult<string>("Hợp đồng này đã bị xóa trước đó"));
+                    }
+                    else
+                    {
+                        hd.HD_Status = (byte)EHopDong_VayLaiStatusFilter.DaXoa;
+                    }
                     break;
                 case ELoaiHopDong.GopVon:
                     break;
@@ -419,7 +428,7 @@ namespace BaseSource.BackendApi.Controllers
             {
                 HopDongId = hd.Id,
                 ActionType = EHopDong_ActionType.XoaHD,
-                FeatureType = EFeatureType.Camdo,
+                FeatureType = eFeatureType(hd.HD_Loai),
                 UserId = UserId,
                 TotalMoneyLoan = hd.TongTienVayHienTai
 
@@ -464,7 +473,7 @@ namespace BaseSource.BackendApi.Controllers
                 {
                     HopDongId = hd.Id,
                     ActionType = EHopDong_ActionType.NoLai,
-                    FeatureType = EFeatureType.Camdo,
+                    FeatureType = eFeatureType(hd.HD_Loai),
                     UserId = UserId,
                     TienGhiNo = model.SoTienNoLai ?? 0
 
@@ -498,7 +507,7 @@ namespace BaseSource.BackendApi.Controllers
             {
                 HopDongId = hd.Id,
                 ActionType = EHopDong_ActionType.TraNo,
-                FeatureType = EFeatureType.Camdo,
+                FeatureType = eFeatureType(hd.HD_Loai),
                 UserId = UserId,
                 TienTraNo = model.SoTienTraNo ?? 0
             };
@@ -915,6 +924,7 @@ namespace BaseSource.BackendApi.Controllers
                     hd.HD_Status = (byte)EHopDong_CamDoStatusFilter.DangCam;
                     break;
                 case ELoaiHopDong.Vaylai:
+                    hd.HD_Status = (byte)EHopDong_VayLaiStatusFilter.DangVay;
                     break;
                 case ELoaiHopDong.GopVon:
                     break;
@@ -927,7 +937,7 @@ namespace BaseSource.BackendApi.Controllers
             {
                 HopDongId = hd.Id,
                 ActionType = EHopDong_ActionType.MoLaiHD,
-                FeatureType = EFeatureType.Camdo,
+                FeatureType = eFeatureType(hd.HD_Loai),
                 UserId = UserId,
                 TotalMoneyLoan = hd.TongTienChuoc
 
@@ -954,6 +964,10 @@ namespace BaseSource.BackendApi.Controllers
                     }
                     break;
                 case ELoaiHopDong.Vaylai:
+                    if (hd.HD_Status != (byte)EHopDong_VayLaiStatusFilter.ChamLai && hd.HD_Status != (byte)EHopDong_VayLaiStatusFilter.KetThuc)
+                    {
+                        return Ok(new ApiErrorResult<string>("Bạn không thể ẩn hợp đồng"));
+                    }
                     break;
                 case ELoaiHopDong.GopVon:
                     break;
@@ -972,10 +986,10 @@ namespace BaseSource.BackendApi.Controllers
         {
             var response = new HopDongPrintDefaulVm();
             response.LoaiHopDong = type;
+            var cuaHang = await _db.CuaHangs.FirstOrDefaultAsync(x => x.Id == CuaHangId);
             switch (type)
             {
                 case ELoaiHopDong.Camdo:
-                    var cuaHang = await _db.CuaHangs.FirstOrDefaultAsync(x => x.Id == CuaHangId);
                     if (cuaHang != null)
                     {
                         response.CamDo_HopDongPrintTemplate = cuaHang.CamDo_HopDongPrintTemplate;
@@ -983,6 +997,11 @@ namespace BaseSource.BackendApi.Controllers
                     }
                     break;
                 case ELoaiHopDong.Vaylai:
+                    if (cuaHang != null)
+                    {
+                        response.VayLai_HopDongPrintTemplate = cuaHang.VayLai_HopDongPrintTemplate;
+                        response.VayLai_HopDongPrintTemplate = cuaHang.VayLai_HopDongPrintTemplate;
+                    }
                     break;
                 case ELoaiHopDong.GopVon:
                     break;
@@ -994,16 +1013,20 @@ namespace BaseSource.BackendApi.Controllers
         [HttpPost("SavePrintDefault")]
         public async Task<IActionResult> SavePrintDefault(HopDongPrintDefaulVm model)
         {
+            var cuaHang = await _db.CuaHangs.FirstOrDefaultAsync(x => x.Id == CuaHangId);
             switch (model.LoaiHopDong)
             {
                 case ELoaiHopDong.Camdo:
-                    var cuaHang = await _db.CuaHangs.FirstOrDefaultAsync(x => x.Id == CuaHangId);
                     if (cuaHang != null)
                     {
                         cuaHang.CamDo_HopDongPrintTemplate = model.CamDo_HopDongPrintTemplate;
                     }
                     break;
                 case ELoaiHopDong.Vaylai:
+                    if (cuaHang != null)
+                    {
+                        cuaHang.VayLai_HopDongPrintTemplate = model.VayLai_HopDongPrintTemplate;
+                    }
                     break;
                 case ELoaiHopDong.GopVon:
                     break;
@@ -1065,6 +1088,23 @@ namespace BaseSource.BackendApi.Controllers
         private async Task CreateCuaHang_TransactionLog(CreateCuaHang_TransactionLogVm model)
         {
             await _cuaHang_TransactionLogService.CreateTransactionLog(model);
+        }
+        private EFeatureType eFeatureType(ELoaiHopDong loaiHd)
+        {
+            var featureType = EFeatureType.Camdo;
+            switch (loaiHd)
+            {
+                case ELoaiHopDong.Camdo:
+                    featureType = EFeatureType.Camdo;
+                    break;
+                case ELoaiHopDong.Vaylai:
+                    featureType = EFeatureType.Vaylai;
+                    break;
+                case ELoaiHopDong.GopVon:
+                    featureType = EFeatureType.GopVon;
+                    break;
+            }
+            return featureType;
         }
         #endregion
 
