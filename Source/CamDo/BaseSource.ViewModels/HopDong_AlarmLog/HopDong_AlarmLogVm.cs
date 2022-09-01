@@ -1,4 +1,5 @@
-﻿using BaseSource.ViewModels.Common;
+﻿using BaseSource.Shared.Enums;
+using BaseSource.ViewModels.Common;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,11 +13,16 @@ namespace BaseSource.ViewModels.HopDong_AlarmLog
     {
         public int Id { get; set; }
         public int HopDongId { get; set; }
+        public string MaHopDong { get; set; }
+        public string CuaHang { get; set; }
+        public ELoaiHopDong Loai { get; set; }
+
         public DateTime? AlarmDate { get; set; }
         public string Note { get; set; }
         public bool IsDisable { get; set; }
         public string UserId { get; set; }
         public DateTime CreatedDate { get; set; }
+
     }
     public class CreateHopDong_AlarmLogVm
     {

@@ -28,7 +28,9 @@ namespace BaseSource.Shared.Enums
         [Display(Name = "Vay lãi")]
         Vaylai = EFeatureType.Vaylai,
         [Display(Name = "Góp vốn")]
-        GopVon = EFeatureType.GopVon
+        GopVon = EFeatureType.GopVon,
+        [Display(Name = "Vay Họ")]
+        VayHo = 4
     }
 
     public enum ELinhVucHangHoa : byte

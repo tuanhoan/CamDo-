@@ -1,4 +1,6 @@
-﻿@{
+﻿@using BaseSource.Shared.Enums
+@model PagedResult<HopDong_AlarmLogVm>
+@{
     ViewData["Title"] = "Thông báo hẹn giờ";
 }
 
@@ -17,10 +19,11 @@
                         <div class="mb-3">
                             <form class="form-inline">
                                 <div class="mb-3">
-                                    <select class="form-control">
-                                        <option>Tất cả</option>
-                                        <option>Tất cả</option>
-                                        <option>Tất cả</option>
+                                    <select class="form-control" id="ddlTypeAlam">
+                                        <option value="">Tất cả</option>
+                                        <option value="@ELoaiHopDong.Camdo">Cầm Đồ</option>
+                                        <option value="@ELoaiHopDong.Vaylai">Vay Lãi</option>
+                                        <option value="@ELoaiHopDong.VayHo">Bát Họ</option>
                                     </select>
                                 </div>
                             </form>
@@ -51,6 +54,24 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @if (Model != null)
+                                    {
+                                        var count = 1;
+                                        @foreach (var item in Model.Items)
+                                        {
+                                            
+                                            <tr>
+                                                <td>@count</td>
+                                                <td>@item.CuaHang</td>
+                                                <td>@item.MaHopDong</td>
+                                                <td>@item.Loai.GetDisplayName()</td>
+                                                <td>@item.AlarmDate</td>
+                                                <td>@item.Note</td>
+                                            </tr>
+                                           
+                                        }
+                                    }
+
                                 </tbody>
                             </table>
                         </div>
@@ -63,7 +84,7 @@
 
 @section Scripts{
 
-    <script>
+<script>
 
-    </script>
+</script>
 }

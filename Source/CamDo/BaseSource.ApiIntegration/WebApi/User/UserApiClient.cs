@@ -130,5 +130,10 @@ namespace BaseSource.ApiIntegration.WebApi
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.GetAsync<ApiResult<List<UserInfoResponse>>>("/api/Account/GetKHByCuaHang");
         }
+        public async Task<ApiResult<ThongBaoResponse>> ThongBaoResponse()
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.GetAsync<ApiResult<ThongBaoResponse>>("/api/User/ThongBaoNoti");
+        }
     }
 }

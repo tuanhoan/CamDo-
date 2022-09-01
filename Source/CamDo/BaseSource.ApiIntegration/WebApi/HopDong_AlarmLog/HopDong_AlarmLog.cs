@@ -33,5 +33,10 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong_AlarmLog
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.GetAsync<ApiResult<List<HopDong_AlarmLogVm>>>("/api/HopDong_AlarmLog/GetHopDong_AlarmLog", obj);
         }
+        public async Task<ApiResult<PagedResult<HopDong_AlarmLogVm>>> GetPagings(HopDong_AlarmLogRQ model)
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.GetAsync<ApiResult<PagedResult<HopDong_AlarmLogVm>>>("/api/HopDong_AlarmLog/GetPagings", model);
+        }
     }
 }

@@ -12,6 +12,7 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong_AlarmLog
     {
         Task<ApiResult<List<HopDong_AlarmLogVm>>> GetHopDong_AlarmLog(int hopDongId);
         Task<ApiResult<string>> Create(CreateHopDong_AlarmLogVm model);
+        Task<ApiResult<PagedResult<HopDong_AlarmLogVm>>> GetPagings(HopDong_AlarmLogRQ model);
     }
 }
 
