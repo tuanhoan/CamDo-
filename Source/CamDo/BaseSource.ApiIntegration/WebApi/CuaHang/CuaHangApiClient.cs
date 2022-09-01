@@ -12,7 +12,7 @@ using BaseSource.Shared.Constants;
 
 namespace BaseSource.ApiIntegration.WebApi.CuaHang
 {
-    public class CuaHangApiClient : ICuaHangApiClient
+    public partial class CuaHangApiClient : ICuaHangApiClient
     {
         private readonly IHttpClientFactory _httpClientFactory;
         public CuaHangApiClient(IHttpClientFactory httpClientFactory)

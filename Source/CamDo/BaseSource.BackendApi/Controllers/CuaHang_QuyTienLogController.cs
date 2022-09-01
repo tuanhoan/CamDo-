@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using X.PagedList;
 
 namespace BaseSource.BackendApi.Controllers
 {
@@ -27,16 +30,33 @@ namespace BaseSource.BackendApi.Controllers
         }
 
         [HttpGet("GetPagings")]
-        public async Task<IActionResult> GetPagings()
+        public async Task<IActionResult> GetPagings([FromBody] PageQuery query)
         {
             if (!ModelState.IsValid)
             {
                 return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
             }
-            var model = _db.CuaHang_QuyTienLogs.AsQueryable();
+            var model =await (from quy in _db.CuaHang_QuyTienLogs.AsQueryable()
+                         join user in _db.UserProfiles.AsQueryable() on quy.UserId equals user.UserId
+                         where quy.CuaHangId == CuaHangId
+                         select new QuyCuaHangVm()
+                         {
+                             Id = quy.Id,
+                             CreatedDate =  quy.CreatedDate,
+                             CreatedBy =  user.FullName,
+                             Money= quy.Money,
+                             LogType = (byte)quy.LogType,
+                             ActionType = quy.ActionType
+                         }).OrderByDescending(x => x.CreatedDate).ToPagedListAsync( query.Page , query.PageSize);
 
-          
-            return Ok();
+            var pagedResult = new PagedResult<QuyCuaHangVm>()
+            {
+                TotalItemCount = model.TotalItemCount,
+                PageSize = model.PageSize,
+                PageNumber = model.PageNumber,
+                Items = model.ToList()
+            };
+            return Ok(new ApiSuccessResult<PagedResult<QuyCuaHangVm>>(pagedResult));
         }
 
         [HttpPost("CreateOrUpdate")]

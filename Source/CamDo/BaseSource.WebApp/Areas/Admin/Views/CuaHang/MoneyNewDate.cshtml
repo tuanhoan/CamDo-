@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Nhập tiền quỹ đầu ngày";
 
 }
@@ -32,20 +33,22 @@
                         <h5><i data-feather="dollar-sign"></i> Nhập quỹ tiền mặt</h5>
 
                         <hr />
-                        <form id="frmQuytien">
+                        <form asp-action="CreateTienDauNgay" data-name="ajaxFormUpload" enctype="multipart/form-data">
                             <div class="row mb-3">
                                 <label for="inputEmail3" class="col-sm-2 col-form-label">Số tiền <span class="text-danger">*</span></label>
                                 <div class="col-sm-5">
                                     <div class="input-group ">
                                         <div class="input-group-text">VNĐ</div>
-                                        <input type="text" class="form-control " placeholder="inputAmount" id="txtMoney">
+                                        <input name="Money" type="text" class="form-control " placeholder="inputAmount">
                                     </div>
                                 </div>
+                                <input type="hidden" name="LogType" value="@EQuyTienCuaHang_LogType.TienDauNgay" />
+                                <input type="hidden" name="LogType" value="@EQuyTienMat_ActionType.NhapLaiQuy" />
                             </div>
                             <div class="row mb-3">
                                 <label for="inputEmail3" class="col-sm-2 col-form-label"></label>
                                 <div class="col-sm-5">
-                                    <button id="btnSaveQuyDauNgay" class="btn btn-primary btn-sm my-1"><i data-feather="file-text"></i> Lưu lại</button>
+                                    <button type="submit" class="btn btn-primary btn-sm my-1"><i data-feather="file-text"></i> Lưu lại</button>
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -56,16 +59,18 @@
                         <h5><i data-feather="dollar-sign"></i> Nhập quỹ đầu ngày</h5>
 
                         <hr />
-                        <form class="">
+                        <form asp-action="CreateQuyDauNgay" data-name="ajaxFormUpload" enctype="multipart/form-data">
                             <div class="row mb-3">
                                 <label for="inputEmail3" class="col-sm-2 col-form-label">Số tiền <span class="text-danger">*</span></label>
                                 <div class="col-sm-5">
                                     <div class="input-group ">
                                         <div class="input-group-text">VNĐ</div>
-                                        <input type="text" class="form-control " placeholder="inputAmount">
+                                        <input type="text" name="Money" class="form-control " placeholder="inputAmount">
                                     </div>
                                 </div>
                             </div>
+                            <input type="hidden" name="LogType" value="@EQuyTienCuaHang_LogType.TienDauNgay" />
+                            <input type="hidden" name="LogType" value="@EQuyTienMat_ActionType.NhapLaiQuy" />
                             <div class="row mb-3">
                                 <label for="inputEmail3" class="col-sm-2 col-form-label"></label>
                                 <div class="col-sm-5">
@@ -81,45 +86,8 @@
                     <div class="col-md-6">
                         <h5><i data-feather="file-text"></i> Lịch sử nhập quỹ tiền đầu ngày</h5>
                         <hr />
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">
-                                            #
-                                        </th>
-                                        <th scope="col">
-                                           Ngày
-                                        </th>
-                                        <th scope="col">
-                                           Người giao dịch
-                                        </th>
-                                        <th scope="col">
-                                            Số tiền
-                                        </th>
-                                        <th scope="col">
-                                           Hoạt động
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                   <tr>
-                                       <td>1</td>
-                                       <td>28/07/2022</td>
-                                       <td>test123</td>
-                                       <td class="text-success">+33</td>
-                                       <td>Cập nhập tiền hàng ngày</td>
-                                   </tr>
-                                   <tr>
-                                       <td>2</td>
-                                       <td>28/07/2022</td>
-                                       <td>test123</td>
-                                       <td class="text-success">+33</td>
-                                       <td>Cập nhập tiền hàng ngày</td>
-                                   </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <div id= "_resultTable"></div>
+                      
                     </div>
                 </div>
             </div>
@@ -127,13 +95,12 @@
     </div>
 </div>
 
-<div id="_resultInhondong"></div>
 
 @section Scripts{
-    <script>
-        $(".moneynewdate-nav").addClass("active");
+<script>
+    $(".moneynewdate-nav").addClass("active");
 
 
-        
-    </script>
+
+</script>
 }

@@ -24,7 +24,7 @@ using System.Threading.Tasks;
 namespace BaseSource.WebApp.Areas.Admin.Controllers
 {
 
-    public class CuaHangController : BaseAdminController
+    public partial class CuaHangController : BaseAdminController
     {
         private readonly ICuaHangApiClient _cuaHangApiClient;
         private readonly IConfiguration _configuration;
@@ -163,29 +163,5 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         }
         #endregion
 
-        #region MoneyNewDate
-        public async Task<IActionResult> MoneyNewDate()
-        {
-            
-            return View();
-        }
-
-        public async Task<IActionResult> CreateQuyDauNgay()
-        {
-
-            return View();
-        }
-        public async Task<IActionResult> CreateTienDauNgay()
-        {
-
-            return View();
-        }
-        public async Task<IActionResult> GetData()
-        {
-            
-
-            return Json("");
-        }
-        #endregion
     }
 }

@@ -12,3 +12,13 @@
 
     })
 });
+
+
+$(document).ready(function () {
+    ajaxTypePost(UrlCreate.Inhopdong, request).then(res => {
+        $("#_resultInhondong").html(res);
+        $("#idbatky").val(res.money);
+        windown.print();
+
+    })
+});
