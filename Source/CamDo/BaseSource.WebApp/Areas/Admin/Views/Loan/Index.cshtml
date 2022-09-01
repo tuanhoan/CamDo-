@@ -120,7 +120,7 @@
                                             <td class="text-end">@item.TienLaiToiNgayHienTai.ToString("N0")</td>
                                             <td>@item.HD_NgayVay.ToString("dd/MM/yyyy")</td>
                                             <td>
-                                                @if (item.HD_Status == (byte)EHopDong_CamDoStatusFilter.QuaHan || item.HD_Status == (byte)EHopDong_CamDoStatusFilter.DenNgayChuocDo)
+                                                @if (item.HD_Status == (byte)EHopDong_VayLaiStatusFilter.QuaHan || item.HD_Status == (byte)EHopDong_CamDoStatusFilter.DenNgayChuocDo)
                                                 {
                                                     <span class="badge badge-red" style="color: red; font-weight: bold;">@item.StatusName</span>
                                                 }
@@ -161,15 +161,18 @@
                                                     <button class="btn btn-sm btn-danger m-1" type="button" data-bs-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn xóa hợp đồng?" data-href="@Url.Action("Delete", "Loan", new { id = item.Id })" title="Xóa hợp đồng">
                                                         <i class="fas fa-trash-alt fa-fw"></i>
                                                     </button>
-                                                    <button class="btn btn-sm btn-info detaileHD m-1" data-tab="tab-chuocdo" type="button" data-id="@item.Id" data-url="@Url.Action("Detail", "Loan")" title="Chuộc đồ">
+                                                    <button class="btn btn-sm btn-info detaileHD m-1" data-tab="tab-chuocdo" type="button" data-id="@item.Id" data-url="@Url.Action("Detail", "Loan")" title="Đóng hợp đồng">
                                                         <i class="fas fa-anchor"></i>
                                                     </button>
                                                     <button class="btn btn-sm btn-success detaileHD m-1" data-tab="tab-hengio" type="button" data-id="@item.Id" data-url="@Url.Action("Detail", "Loan")" title="Hẹn giờ khoản vay">
                                                         <i class="fas fa-clock"></i>
                                                     </button>
-                                                    <button class="btn btn-sm btn-warning m-1" type="button" data-bs-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn chuyển sang trạng thái chờ thanh lý?" data-href="@Url.Action("ChuyenTTChoThanhLy", "HopDong", new { hopDongId = item.Id })" title="Chuyển HĐ qua trạng thái chờ thanh lý">
-                                                        <i class="fas fa-radiation fa-fw"></i>
-                                                    </button>
+                                                    @if(item.HD_Status != (byte)EHopDong_VayLaiStatusFilter.NoXau)
+                                                    {
+                                                        <button class="btn btn-sm btn-warning m-1" type="button" data-bs-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn chuyển sang trạng thái nợ xấu?" data-href="@Url.Action("ChuyenTTNoXau", "HopDong", new { hopDongId = item.Id })" title="Chuyển HĐ qua trạng thái nợ xấu">
+                                                            <i class="fas fa-radiation fa-fw"></i>
+                                                        </button>
+                                                    }
                                                     @if (item.HD_Status == (byte)EHopDong_CamDoStatusFilter.ChoThanhLy)
                                                     {
                                                         <button class="btn btn-sm btn-secondary m-1" type="button" data-bs-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn chuyển sang trạng thái đang vay?" data-href="@Url.Action("ChuyenTTVeDangVay", "HopDong", new { hopDongId = item.Id })" title="Chuyển HĐ từ chờ thanh lý về đang vay">
