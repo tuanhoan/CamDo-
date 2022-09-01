@@ -10,5 +10,5 @@
 //        $("#idbatky").val(res.money);
 //        windown.print();
 
-//    })
-//});
+    })
+});
