@@ -21,10 +21,10 @@
                 <form asp-action="Index" id="frmSearch" method="get" class="form-inline">
 
                     <div class="mb-3">
-                         <input type="text" class="form-control" name="info" value="@Context.Request.Query["info"]" placeholder="Tìm kiếm mã HĐ, Tên KH...">
+                        <input type="text" class="form-control" name="info" value="@Context.Request.Query["info"]" placeholder="Tìm kiếm mã HĐ, Tên KH...">
                     </div>
                     <div class="mb-3">
-                         <input type="date" class="form-control" name="from" value="@Context.Request.Query["from"]">
+                        <input type="date" class="form-control" name="from" value="@Context.Request.Query["from"]">
                     </div>
                     <div class="mb-3">
                         <input type="date" class="form-control" name="to" value="@Context.Request.Query["to"]">
@@ -146,20 +146,16 @@
                                                 </span>
                                             </td>
                                             <td width="140" class="text-center">
-                                                <button class="btn btn-sm btn-secondary detaileHD m-1" type="button" data-id="@item.Id" data-url="@Url.Action("Detail","QuanLyVon")" title="Đóng lãi">
+                                                <button disabled="@(item.HD_HinhThucLai == null?true:false)" class="btn btn-sm btn-secondary detaileHD m-1" type="button" data-id="@item.Id" data-url="@Url.Action("Detail","QuanLyVon")" title="Đóng lãi">
                                                     <i class="fas fa-coins"></i>
                                                 </button>
-
-
                                             </td>
                                         </tr>
                                     }
-
                                     idx++;
                                     index++;
                                 }
                             }
-
                         </tbody>
                         <tfoot>
                             <tr>
@@ -175,7 +171,6 @@
                                 <td></td>
                                 <td></td>
                             </tr>
-
                         </tfoot>
                     </table>
                 </div>
@@ -190,15 +185,15 @@
         $(".quanlyvon-nav").addClass("active");
     </script>
 }
-<div class="modal fade" id="hd-modal" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lager" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
+    <div class="modal fade" id="hd-modal" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lager" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                </div>
             </div>
         </div>
     </div>
-</div>

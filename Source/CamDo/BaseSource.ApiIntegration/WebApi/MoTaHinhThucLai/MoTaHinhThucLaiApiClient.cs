@@ -19,6 +19,13 @@ namespace BaseSource.ApiIntegration.WebApi.MoTaHinhThucLai
         {
             _httpClientFactory = httpClientFactory;
         }
+
+        public async Task<List<MoTaHinhThucLaiVm>> GetAll()
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.GetAsync<List<MoTaHinhThucLaiVm>>("/api/MoTaHinhThucLai/All");
+        }
+
         public async Task<ApiResult<PagedResult<MoTaHinhThucLaiVm>>> GetPagings(GetMoTaHinhThucLaiPagingRequest model)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);

@@ -258,7 +258,7 @@ namespace BaseSource.BackendApi.Controllers
 
             paymentByDate.CountDay = (paymentByDate.ToDate - paymentByDate.FromDate).Days + 1;
 
-            var moneyInterest = Math.Round(itemPayment.MoneyInterest / itemPayment.CountDay, 3) * paymentByDate.CountDay;
+            var moneyInterest = itemPayment == null ? 0 : Math.Round(itemPayment.MoneyInterest / itemPayment.CountDay, 3) * paymentByDate.CountDay;
 
             paymentByDate.HdId = hdId;
             paymentByDate.MoneyInterest = moneyInterest;

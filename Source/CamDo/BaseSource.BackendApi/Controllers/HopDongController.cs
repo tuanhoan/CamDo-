@@ -308,8 +308,8 @@ namespace BaseSource.BackendApi.Controllers
             result.CMND = kh.CMND;
             result.CMND_NgayCap = kh.CMND_NgayCap;
             result.CMND_NoiCap = kh.CMND_NoiCap;
-            result.TyLeLai = hd.HD_LaiSuat + htl.TyLeLai;
-            result.ThoiGian = htl.ThoiGian;
+            result.TyLeLai = hd.HD_LaiSuat + htl?.TyLeLai;
+            result.ThoiGian = htl == null ? 0 : htl.ThoiGian;
             if (hd.HD_Loai != ELoaiHopDong.GopVon)
             {
                 result.HD_MaTemp = int.Parse(result.HD_Ma.Split("-")[1]);
@@ -707,7 +707,7 @@ namespace BaseSource.BackendApi.Controllers
                 return Ok(new ApiErrorResult<string>("Not Found"));
             }
             var kh = await _db.KhachHangs.FindAsync(hd.KhachHangId);
-            var user = await _db.UserProfiles.AsNoTracking().Include(x=>x.AppUser).FirstOrDefaultAsync(x=>x.UserId == hd.UserIdAssigned);
+            var user = await _db.UserProfiles.AsNoTracking().Include(x => x.AppUser).FirstOrDefaultAsync(x => x.UserId == hd.UserIdAssigned);
             // If using Professional version, put your serial key below.
 
             string body = string.Empty;

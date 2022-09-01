@@ -3,6 +3,7 @@
     Layout = null;
 }
 <div>
+    <input type="text" id="hopdongid" hidden value="@Model.Id">
     <form asp-action="Edit" asp-controller="QuanLyVon" class="frmHD" data-name="ajaxFormHopDong">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         @Html.HiddenFor(x => x.Id)
@@ -141,5 +142,7 @@
             </div>
         </div>
     </form>
-
+    <button id="inhopdong" class="btn btn-primary">In hợp đồng</button>
 </div>
+
+<script src="~/admin//js/HopDong/inhopdong.js" asp-append-version="true"> </script>

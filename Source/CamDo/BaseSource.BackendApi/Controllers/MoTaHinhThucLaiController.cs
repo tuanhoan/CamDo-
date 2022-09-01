@@ -53,5 +53,20 @@ namespace BaseSource.BackendApi.Controllers
             };
             return Ok(new ApiSuccessResult<PagedResult<MoTaHinhThucLaiVm>>(pagedResult));
         }
+        [HttpGet("All")]
+        public async Task<IActionResult> GetAll()
+        {
+            var result = await _db.MoTaHinhThucLais.ToListAsync();
+            var data =  result.Select(x => new MoTaHinhThucLaiVm()
+            {
+                Id = x.Id,
+                HinhThucLai = x.HinhThucLai,
+                MoTaKyLai = x.MoTaKyLai,
+                TyLeLai = x.TyLeLai,
+                ThoiGian = x.ThoiGian,
+                ThoiGianDisplay = EnumExtensions.GetEnumDisplayName(x.ThoiGian)
+            });
+            return Ok(data);
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using BaseSource.ApiIntegration.WebApi;
 using BaseSource.ApiIntegration.WebApi.CauHinhHangHoa;
 using BaseSource.ApiIntegration.WebApi.HopDong;
+using BaseSource.ApiIntegration.WebApi.MoTaHinhThucLai;
 using BaseSource.Shared.Enums;
 using BaseSource.ViewModels.CauHinhHangHoa;
 using BaseSource.ViewModels.Common;
@@ -19,12 +20,14 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         private readonly IHopDongApiClient _hopDongApiClient;
         private readonly IUserApiClient _userApiClient;
         private readonly ICauHinhHangHoaApiClient _cauHinhHangHoaApiClient;
+        private readonly IMoTaHinhThucLaiApiClient _moTaHinhThucLaiApiClient;
         public LoanController(IHopDongApiClient hopDongApiClient, IUserApiClient userApiClient,
-            ICauHinhHangHoaApiClient cauHinhHangHoaApiClient)
+            ICauHinhHangHoaApiClient cauHinhHangHoaApiClient, IMoTaHinhThucLaiApiClient moTaHinhThucLaiApiClient)
         {
             _hopDongApiClient = hopDongApiClient;
             _userApiClient = userApiClient;
             _cauHinhHangHoaApiClient = cauHinhHangHoaApiClient;
+            _moTaHinhThucLaiApiClient = moTaHinhThucLaiApiClient;
         }
         public async Task<IActionResult> Index(string info, DateTime? from, DateTime? to, int? status, int page = 1)
         {
@@ -69,9 +72,11 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             var resultCuaHinhHH = _cauHinhHangHoaApiClient.GetPagings(requestCauHinhHH);
             var maxIDHD = _hopDongApiClient.GetMaxID(ELoaiHopDong.Vaylai);
             await Task.WhenAll(requestUser, resultCuaHinhHH, maxIDHD);
+            var hinhThucLai = await _moTaHinhThucLaiApiClient.GetAll();
 
             ViewData["ListHangHoa"] = new SelectList(resultCuaHinhHH.Result.ResultObj.Items, "Id", "Ten");
             ViewData["ListUser"] = new SelectList(requestUser.Result.ResultObj, "Id", "FullName");
+            ViewData["HinhThucLai"] = new SelectList(hinhThucLai, "HinhThucLai", "Id");
             var model = new CreateHopDongVm()
             {
                 HD_NgayVay = DateTime.Now.Date,

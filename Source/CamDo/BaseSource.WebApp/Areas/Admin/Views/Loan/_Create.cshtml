@@ -2,7 +2,8 @@
 @{
     Layout = null;
     var listHangHoa = ViewData["ListHangHoa"] as SelectList;
-    var lstUser = ViewData["ListUser"] as SelectList;
+    var hinhThucLai = ViewData["HinhThucLai"] as SelectList;
+      var lstUser = ViewData["ListUser"] as SelectList;
 }
 <div>
     <form asp-action="Create" asp-controller="Loan" class="frmHD" data-name="ajaxFormHopDong">
@@ -91,6 +92,7 @@
             <label asp-for="HD_HinhThucLai" class="control-label col-md-2"></label>
             <div class="col-md-3">
                 <select class="form-control" asp-for="HD_HinhThucLai" asp-items="@Html.GetEnumSelectList<EHinhThucLai>()" onchange="getMoTaHinhThucLai()">
+                @*<select class="form-control" asp-for="HD_HinhThucLai" asp-items="@hinhThucLai" onchange="getMoTaHinhThucLai()">*@
                 </select>
                 <span asp-validation-for="HD_HinhThucLai" class="text-danger"></span>
             </div>

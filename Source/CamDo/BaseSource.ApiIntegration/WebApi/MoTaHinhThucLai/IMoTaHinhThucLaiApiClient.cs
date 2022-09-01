@@ -11,5 +11,6 @@ namespace BaseSource.ApiIntegration.WebApi.MoTaHinhThucLai
     public interface IMoTaHinhThucLaiApiClient
     {
         Task<ApiResult<PagedResult<MoTaHinhThucLaiVm>>> GetPagings(GetMoTaHinhThucLaiPagingRequest model);
+        Task<List<MoTaHinhThucLaiVm>> GetAll();
     }
 }
