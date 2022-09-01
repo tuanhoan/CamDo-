@@ -92,7 +92,7 @@ namespace BaseSource.BackendApi.Controllers
                 {
                     HopDongId = hd.Id,
                     ActionType = EHopDong_ActionType.TraGoc,
-                    FeatureType = EFeatureType.Camdo,
+                    FeatureType = eFeatureType(hd.HD_Loai),
                     UserId = UserId,
                     Note = model.Note,
                     SoTienTraGoc = model.SoTienTraGoc,
@@ -137,7 +137,7 @@ namespace BaseSource.BackendApi.Controllers
                 {
                     HopDongId = hd.Id,
                     ActionType = EHopDong_ActionType.HuyTraGoc,
-                    FeatureType = EFeatureType.Camdo,
+                    FeatureType = eFeatureType(hd.HD_Loai),
                     UserId = UserId,
                     SoTienTraGoc = tran.TotalMoney
 
@@ -192,7 +192,7 @@ namespace BaseSource.BackendApi.Controllers
                 {
                     HopDongId = hd.Id,
                     ActionType = EHopDong_ActionType.VayThemGoc,
-                    FeatureType = EFeatureType.Camdo,
+                    FeatureType = eFeatureType(hd.HD_Loai),
                     UserId = UserId,
                     TienVayThem = model.SoTienVayThem,
                     NgayVayThem = model.NgayVayThem
@@ -215,6 +215,23 @@ namespace BaseSource.BackendApi.Controllers
         private async Task CreateCuaHang_TransactionLog(CreateCuaHang_TransactionLogVm model)
         {
             await _cuaHang_TransactionLogService.CreateTransactionLog(model);
+        }
+        private EFeatureType eFeatureType(ELoaiHopDong loaiHd)
+        {
+            var featureType = EFeatureType.Camdo;
+            switch (loaiHd)
+            {
+                case ELoaiHopDong.Camdo:
+                    featureType = EFeatureType.Camdo;
+                    break;
+                case ELoaiHopDong.Vaylai:
+                    featureType = EFeatureType.Vaylai;
+                    break;
+                case ELoaiHopDong.GopVon:
+                    featureType = EFeatureType.GopVon;
+                    break;
+            }
+            return featureType;
         }
         #endregion
     }

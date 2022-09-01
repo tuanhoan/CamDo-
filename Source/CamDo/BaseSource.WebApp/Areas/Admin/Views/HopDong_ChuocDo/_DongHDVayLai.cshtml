@@ -3,13 +3,13 @@
 <form id="frmChuocDo" asp-action="ChuocDo" asp-controller="HopDong_ChuocDo" method="post">
     <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.HopDongId" />
     <div class="row mb-3">
-        <label class="col-4 text-end">Ngày chuộc đồ</label>
+        <label class="col-4 text-end">Ngày trả vay</label>
         <div class="col-8">
-            <input type="date" asp-for="NgayChuocDo" disabled="@(Model.NgayTatToan != null)" class="form-control" onchange="loadChuocDo(this,@Model.HopDongId)" />
+            <input type="date" asp-for="NgayChuocDo" disabled="@(Model.NgayTatToan != null)" class="form-control" onchange="loadDongHopDong(this,@Model.HopDongId, '@ViewBag.loaiHD')" />
         </div>
     </div>
     <div class="row mb-3">
-        <label class="col-4 text-end">Tiền cầm</label>
+        <label class="col-4 text-end">Tiền Vay</label>
         <div class="col-8">
             <span class="chuocdo-info">@Model.TongTienVay.ToString("N0") VND</span>
         </div>
@@ -37,7 +37,7 @@
         </div>
     </div>
     <div class="row mb-3">
-        <label class="col-4 text-end">Tổng tiền chuộc</label>
+        <label class="col-4 text-end">Tổng tiền phải trả</label>
         <div class="col-8">
             <span class="chuocdo-tongtienchuoc" id="lblChuocdo_MoneyNeed">@Model.TongTienChuoc.ToString("N0") VND</span>
             <input type="hidden" id="TongTienChuoc" value="@Model.TongTienChuoc" />
@@ -53,8 +53,8 @@
         <div class="col-8">
             @if (Model.NgayTatToan == null)
             {
-                <button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-thumbs-up"></i> Chuộc đồ</button>
-            }            
+                <button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-thumbs-up"></i> Đóng hợp đồng vay</button>
+            }
         </div>
     </div>
 </form>

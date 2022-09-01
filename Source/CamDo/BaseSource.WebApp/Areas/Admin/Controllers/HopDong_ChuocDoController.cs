@@ -1,4 +1,5 @@
 ﻿using BaseSource.ApiIntegration.WebApi.HopDong_ChuocDo;
+using BaseSource.Shared.Enums;
 using BaseSource.ViewModels.Common;
 using BaseSource.ViewModels.HopDong;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +17,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         {
             _apiClient = apiClient;
         }
-        public async Task<IActionResult> GetInfoChuocDo(int hopDongId, DateTime? ngayChuocDo)
+        public async Task<IActionResult> GetInfoChuocDo(int hopDongId, DateTime? ngayChuocDo, ELoaiHopDong? loaiHopDong)
         {
             if (!ModelState.IsValid)
             {
@@ -33,7 +34,13 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            return PartialView("_ChuocDo", result.ResultObj);
+            var view = "_ChuocDo";
+            if(loaiHopDong == ELoaiHopDong.Vaylai)
+            {
+                ViewBag.loaiHD = loaiHopDong;
+                view = "_DongHDVayLai";
+            }
+            return PartialView(view, result.ResultObj);
         }
         [HttpPost]
         public async Task<IActionResult> ChuocDo(HopDong_ChuocDoVm model)

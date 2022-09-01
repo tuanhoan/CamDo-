@@ -480,6 +480,10 @@ namespace BaseSource.BackendApi.Services.Serivce.HopDong
                     }
                     break;
                 case ELoaiHopDong.Vaylai:
+                    if (hdStatus == (byte)EHopDong_CamDoStatusFilter.KetThuc)
+                    {
+                        result = true;
+                    }
                     break;
                 case ELoaiHopDong.GopVon:
                     break;
