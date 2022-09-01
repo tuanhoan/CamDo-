@@ -49,12 +49,9 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             await Task.WhenAll(result, resultHH);
             ViewData["ListHangHoa"] = new SelectList(resultHH.Result.ResultObj.Items, "Id", "Ten");
 
-            var data = await _hopDongApiClient.InHopDong(2);
-            ViewData["Print"] = data;
-
-
             return View(result.Result.ResultObj);
         }
+
         public async Task<IActionResult> ReportHeader()
         {
             var result = await _hopDongApiClient.GetReportHeader(ELoaiHopDong.Vaylai);
@@ -143,15 +140,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             ViewData["ListHangHoa"] = new SelectList(resultCuaHinhHH.Result.ResultObj.Items, "Id", "Ten");
             ViewData["ListUser"] = new SelectList(requestUser.Result.ResultObj, "Id", "FullName");
             return PartialView("_Edit", model);
-        }
-
-
-        public async Task<IActionResult> InHopDong()
-        {
-            var model = await _hopDongApiClient.InHopDong(2);
-            return PartialView("_InHopDong", model);
-        }
-        
+        } 
 
         [HttpPost]
         public async Task<IActionResult> Edit(EditHopDongVm model)

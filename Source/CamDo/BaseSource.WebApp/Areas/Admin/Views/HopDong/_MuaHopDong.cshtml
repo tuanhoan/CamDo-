@@ -1,0 +1,121 @@
+﻿@model CreateCuaHangVm
+
+<div class="modal fade" id="modal-muabaohiem" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Mua bảo hiểm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="info-hd-header">
+                    <i class="fa fa-user"></i> Thông tin khách hàng
+                </div>
+                <div class="row mb-3">
+                    <label class="control-label col-md-2">Khách hàng </label>
+                    <div class="col-md-10">
+                        <label><input type="radio" name="CustomerType" checked value="NewCustomer" /> Khách hàng mới</label>
+                        <label><input type="radio" name="CustomerType" value="OldCustomer" /> Khách hàng cũ</label>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="control-label col-md-2">Tên khách hàng *</label>
+                    <div class="col-md-3">
+                        <input class="form-control" />
+                    </div>
+                    <label class="control-label col-md-2">Giới tính</label>
+                    <div class="col-md-3">
+                        <label><input type="radio" name="CustomerType" checked value="NewCustomer" />Nam</label>
+                        <label><input type="radio" name="CustomerType" value="OldCustomer" />Nữ</label>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="control-label col-md-2">Số điện thoại *</label>
+                    <div class="col-md-3">
+                        <input class="form-control" />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="control-label col-md-2">Ngày sinh *</label>
+                    <div class="col-md-3">
+                        <input class="form-control" placeholder="Nhập ngày sinh" />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="control-label col-md-2">Số CMND/ Hộ chiếu *</label>
+                    <div class="col-md-3">
+                        <input class="form-control" />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="control-label col-md-2">Ngày cấp</label>
+                    <div class="col-md-3">
+                        <input class="form-control" />
+                    </div>
+                    <label class="control-label col-md-2">Nơi cấp</label>
+                    <div class="col-md-3">
+                        <input class="form-control" />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="control-label col-md-2">Email</label>
+                    <div class="col-md-3">
+                        <input class="form-control" />
+                    </div>
+                    <label class="control-label col-md-2">Mã số thuế</label>
+                    <div class="col-md-3">
+                        <input class="form-control" placeholder="Nhập mã hợp đồng..." />
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="control-label col-md-2">Địa chỉ *</label>
+                    <div class="col-md-3">
+                        <textarea rows="3" class="form-control"></textarea>
+                    </div>
+                </div>
+
+
+                <div class="info-hd-header">
+                    <i class="fas fa-money-bill-alt"></i> Thông tin bảo hiểm
+                </div>
+                <div class="row mb-3">
+                    <label class="control-label col-md-2">Gói bảo hiểm *</label>
+                    <div class="col-md-3">
+                        <input class="form-control" />
+                    </div>
+                    <label class="control-label col-md-2">Tiền phí</label>
+                    <div class="col-md-3">
+                        <label>0</label>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="control-label col-md-2">Ngày mua *</label>
+                    <div class="col-md-3">
+                        <input type="date" class="form-control" />
+                    </div>
+                    <label class="control-label col-md-2">Tiền chiết khấu</label>
+                    <div class="col-md-3">
+                        <label>0</label>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label class="control-label col-md-2">Thời gian mua</label>
+                    <div class="col-md-3">
+                        <input type="date" class="form-control" value="360" disabled />
+                    </div>
+                    <label class="control-label col-md-2">Tiền phải đóng</label>
+                    <div class="col-md-3">
+                        <label>0</label>
+                    </div>
+                </div>
+                <div class="info-hd-header">
+                    <i class="fas fa-money-bill-alt"></i> Chứng từ
+                </div>
+                <div class="file-upload-wrapper">
+                    <input type="file" id="input-file-now-custom-2" class="file-upload"
+                           data-height="500" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
