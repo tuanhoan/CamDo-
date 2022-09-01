@@ -23,15 +23,16 @@ namespace BaseSource.WebApp.Areas.Admin.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var result = new ThongBaoResponse()
-            {
-                AlarmDate = 10,
-                Capital= 2,
-                Installment=3,
-                Loan= 4,
-                Pawn= 8
-            };
-            return View("Default", result);
+            var result = await _userApiClient.ThongBaoResponse();
+            //var result = new ThongBaoResponse()
+            //{
+            //    AlarmDate = 10,
+            //    Capital= 2,
+            //    Installment=3,
+            //    Loan= 4,
+            //    Pawn= 8
+            //};
+            return View("Default", result.ResultObj);
         }
     }
 }

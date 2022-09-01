@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using X.PagedList;
 
 namespace BaseSource.BackendApi.Controllers
 {
@@ -53,6 +54,39 @@ namespace BaseSource.BackendApi.Controllers
             await _db.SaveChangesAsync();
             var title = model.IsDisable ? "Dừng hẹn giờ thành công" : "Đặt lịch hẹn giờ thành công";
             return Ok(new ApiSuccessResult<string>(title));
+        }
+
+        [HttpGet("GetPagings")]
+        public async Task<IActionResult> GetPagings([FromQuery] HopDong_AlarmLogRQ request)
+        {
+            var model = await (from hda in _db.HopDong_AlarmLogs
+                         join hd in _db.HopDongs on hda.HopDongId equals hd.Id
+                         join ch in _db.CuaHangs on hd.CuaHangId equals ch.Id
+                         where ch.Id == CuaHangId && (request.Type == default || hd.HD_Loai == request.Type)
+                         select new HopDong_AlarmLogVm()
+                         {
+                              Id = hda.Id,
+                              CuaHang = ch.Ten,
+                              Loai = hd.HD_Loai,
+                              MaHopDong = hd.HD_Ma,
+                              AlarmDate = hda.AlarmDate,
+                              Note = hda.Note,
+                              UserId = hda.UserId,
+                              HopDongId = hda.HopDongId,
+                              CreatedDate = hda.CreatedDate,
+                              IsDisable = hda.IsDisable
+
+                         }).ToPagedListAsync(request.Page, request.PageSize);
+
+            var pagedResult = new PagedResult<HopDong_AlarmLogVm>()
+            {
+                TotalItemCount = model.TotalItemCount,
+                PageSize = model.PageSize,
+                PageNumber = model.PageNumber,
+                Items = model.ToList()
+            };
+
+            return Ok(new ApiSuccessResult<PagedResult<HopDong_AlarmLogVm>>(pagedResult));
         }
     }
 }

@@ -11,6 +11,8 @@ using BaseSource.ViewModels.Common;
 using BaseSource.ViewModels.Admin;
 using X.PagedList;
 using Microsoft.AspNetCore.Identity;
+using BaseSource.ViewModels.User;
+using BaseSource.Shared.Enums;
 
 namespace BaseSource.BackendApi.Controllers
 {
@@ -272,6 +274,21 @@ namespace BaseSource.BackendApi.Controllers
             }
             return Ok(new ApiErrorResult<string>("Có lỗi xảy ra. Vui lòng thử lại"));
 
+        }
+
+        [HttpGet("ThongBaoNoti")]
+        public IActionResult ThongBaoNoti()
+        {
+            var Thongbao = new ThongBaoResponse()
+            {
+                AlarmDate = _db.HopDong_AlarmLogs.Count(x => x.UserId == UserId),
+                Loan = _db.HopDongs.Count(x => x.HD_Loai == ELoaiHopDong.Vaylai && x.CuaHangId == CuaHangId),
+                Pawn = _db.HopDongs.Count(x => x.HD_Loai == ELoaiHopDong.Camdo && x.CuaHangId == CuaHangId),
+                Capital = _db.HopDongs.Count(x => x.HD_Loai == ELoaiHopDong.GopVon && x.CuaHangId == CuaHangId),
+                Installment = _db.HopDongs.Count(x => x.HD_Loai == ELoaiHopDong.VayHo && x.CuaHangId == CuaHangId),
+            };
+
+            return Ok(new ApiSuccessResult<ThongBaoResponse>(Thongbao));
         }
 
         #region Helper

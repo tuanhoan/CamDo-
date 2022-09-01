@@ -18,7 +18,8 @@ namespace BaseSource.ApiIntegration.WebApi
         Task<ApiResult<string>> ForgotPassword(ForgotPasswordVm model);
         Task<ApiResult<string>> ResetPassword(ResetPasswordVm model);
         Task<ApiResult<UserInfoResponse>> GetUserInfo();
-        Task<ApiResult<string>> EditProfile(EditProfileVm model);
+        Task<ApiResult<ThongBaoResponse>> ThongBaoResponse(); 
+         Task<ApiResult<string>> EditProfile(EditProfileVm model);
         Task<ApiResult<string>> ChangePassword(ChangePasswordVm model);
         Task<ApiResult<string>> AuthenticateExternalAsync(UserClaimRequest model);
         Task<ApiResult<List<UserInfoResponse>>> GetUserByCuaHang();
