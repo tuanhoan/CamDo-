@@ -1,8 +1,8 @@
-﻿function getInfoChuocDo(hopDongId, ngayChuocDo) {
+﻿function getInfoChuocDo(hopDongId, ngayChuocDo, loaiHD) {
     $.ajax({
         type: "GET",
         url: "/Admin/HopDong_ChuocDo/GetInfoChuocDo",
-        data: { hopDongId: hopDongId, ngayChuocDo: ngayChuocDo },
+        data: { hopDongId: hopDongId, ngayChuocDo: ngayChuocDo, loaiHopDong : loaiHD},
         success: function (data) {
             $('#divContent-chuocdo').html(data);
         }
@@ -11,6 +11,10 @@
 function loadChuocDo(thiz, hopDongId) {
     var ngayChuoc = $(thiz).val();
     getInfoChuocDo(hopDongId, ngayChuoc);
+}
+function loadDongHopDong(thiz, hopDongId, loaiHD) {
+    var ngayChuoc = $(thiz).val();
+    getInfoChuocDo(hopDongId, ngayChuoc,loaiHD);
 }
 function tinhTongTienChuoc(thiz) {
     var tienKhac = parseFloat($(thiz).val().replaceAll(",", "") * 1);

@@ -378,6 +378,7 @@ $('body').on('submit', '#form-Search', function (e) {
     var $form = $('#form-Search');
     getPaging($form.attr('action'), $form.serializeArray(), '.table-responsive');
 });
+
 function getPaging(url, data, element) {
     $.ajax({
         type: "GET",

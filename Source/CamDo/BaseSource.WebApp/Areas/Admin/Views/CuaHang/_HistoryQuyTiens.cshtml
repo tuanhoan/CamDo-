@@ -1,0 +1,85 @@
+﻿@model PagedResult<QuyCuaHangVm>
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">
+                    #
+                </th>
+                <th scope="col">
+                    Ngày
+                </th>
+                <th scope="col">
+                    Người giao dịch
+                </th>
+                <th scope="col">
+                    Số tiền
+                </th>
+                <th scope="col">
+                    Hoạt động
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                if(Model!= null)
+                {
+                    var count = 1;
+                    foreach (var item in Model.Items)
+                    {
+                        <tr>
+                            <td>@count</td>
+                            <td>@item.CreatedDate.ToShortDateString()</td>
+                            <td>@item.CreatedBy</td>
+                            <td class="text-success">
+                                @{
+                                    var money = "";
+                                    if (item.Money > 0)
+                                    { money = $"+ {@item.Money}"; }
+                                    else
+
+                                    { money = $"-{@item.Money}"; }
+                                }
+                                @money
+                            </td>
+                            <td>
+                                @{
+                                    var hoatdong = "";
+                                    if (item.LogType == 2)
+                                    {
+                                        hoatdong = "Cập nhập tiền hàng ngày";
+                                    }
+                                    else
+                                    {
+                                        hoatdong = "Nhập lại quỷ tiền mặt";
+                                    }
+                                }
+                                @hoatdong
+                            </td>
+                        </tr>
+                        count++;
+                    }
+                }
+                
+            }
+
+        </tbody>
+    </table>
+</div>
+@{
+    if(Model != null)
+    {
+        if (Model.PageCount > 1)
+{
+    <div>
+        @await Html.PartialAsync("_Pager", new PagedResultBase()
+    {
+    PageNumber = Model.PageNumber,
+    PageSize = Model.PageSize,
+    TotalItemCount = Model.TotalItemCount,
+    PageUrl = Url.Action("GetData")
+    })
+    </div>
+}
+    }
+}

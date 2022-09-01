@@ -82,7 +82,7 @@ namespace BaseSource.BackendApi.Controllers
                 {
                     HopDongId = hd.Id,
                     ActionType = EHopDong_ActionType.GiaHan,
-                    FeatureType = EFeatureType.Camdo,
+                    FeatureType = eFeatureType(hd.HD_Loai),
                     UserId = UserId,
                     FromDate = ngayDaoHanOld,
                     ToDate = hd.HD_NgayDaoHan
@@ -105,6 +105,23 @@ namespace BaseSource.BackendApi.Controllers
         private async Task CreateCuaHang_TransactionLog(CreateCuaHang_TransactionLogVm model)
         {
             await _cuaHang_TransactionLogService.CreateTransactionLog(model);
+        }
+        private EFeatureType eFeatureType(ELoaiHopDong loaiHd)
+        {
+            var featureType = EFeatureType.Camdo;
+            switch (loaiHd)
+            {
+                case ELoaiHopDong.Camdo:
+                    featureType = EFeatureType.Camdo;
+                    break;
+                case ELoaiHopDong.Vaylai:
+                    featureType = EFeatureType.Vaylai;
+                    break;
+                case ELoaiHopDong.GopVon:
+                    featureType = EFeatureType.GopVon;
+                    break;
+            }
+            return featureType;
         }
         #endregion
     }

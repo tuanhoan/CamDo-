@@ -1,4 +1,5 @@
-﻿@{
+﻿
+@{
     ViewData["Title"] = "Nhập tiền quỹ đầu ngày";
 
 }
@@ -13,39 +14,30 @@
             </div>
             <div class="card-body">
 
-                <div class="row ">
-                    <div class="col-md-4 text-center border-right">
-                        <h4>QŨY TIỀN MẶT</h4>
-                        <h3 class="text-purple">100,000</h3>
-                    </div>
-                    <div class="col-md-4 text-center border-right">
-                        <h4>TIỀN ĐẦU NGÀY</h4>
-                        <h3 class="text-success">100,000</h3>
-                    </div>
-                    <div class="col-md-4 text-center border-right">
-                        <h4>VỐN ĐẦU TƯ</h4>
-                        <h3 class="text-blue">100,000</h3>
-                    </div>
+                <div class="row" id="_resultThongKe">
+                   
                 </div>
                 <div class="row mt-5">
                     <div class="col-md-6">
                         <h5><i data-feather="dollar-sign"></i> Nhập quỹ tiền mặt</h5>
 
                         <hr />
-                        <form id="frmQuytien">
+                        <form id="frmCreateTienDauNgay" >
                             <div class="row mb-3">
                                 <label for="inputEmail3" class="col-sm-2 col-form-label">Số tiền <span class="text-danger">*</span></label>
                                 <div class="col-sm-5">
                                     <div class="input-group ">
                                         <div class="input-group-text">VNĐ</div>
-                                        <input type="text" class="form-control " placeholder="inputAmount" id="txtMoney">
+                                        <input name="Money" type="text" class="form-control " placeholder="inputAmount">
                                     </div>
                                 </div>
+                                <input type="hidden" name="LogType" value="1" />
+                                <input type="hidden" name="ActionType" value="1" />
                             </div>
                             <div class="row mb-3">
                                 <label for="inputEmail3" class="col-sm-2 col-form-label"></label>
                                 <div class="col-sm-5">
-                                    <button id="btnSaveQuyDauNgay" class="btn btn-primary btn-sm my-1"><i data-feather="file-text"></i> Lưu lại</button>
+                                    <button id="btnCreateTienDauNgay" class="btn btn-primary btn-sm my-1"><i data-feather="file-text"></i> Lưu lại</button>
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -56,20 +48,22 @@
                         <h5><i data-feather="dollar-sign"></i> Nhập quỹ đầu ngày</h5>
 
                         <hr />
-                        <form class="">
+                        <form id="frmCreateQuyDauNgay">
                             <div class="row mb-3">
                                 <label for="inputEmail3" class="col-sm-2 col-form-label">Số tiền <span class="text-danger">*</span></label>
                                 <div class="col-sm-5">
                                     <div class="input-group ">
                                         <div class="input-group-text">VNĐ</div>
-                                        <input type="text" class="form-control " placeholder="inputAmount">
+                                        <input type="text" name="Money" class="form-control " placeholder="inputAmount">
                                     </div>
                                 </div>
                             </div>
+                            <input type="hidden" name="LogType" value="2" />
+                            <input type="hidden" name="ActionType" value="1" />
                             <div class="row mb-3">
                                 <label for="inputEmail3" class="col-sm-2 col-form-label"></label>
                                 <div class="col-sm-5">
-                                    <button type="submit" class="btn btn-primary btn-sm my-1"><i data-feather="file-text"></i> Lưu lại</button>
+                                    <button id="btnCreateQuyDauNgay" class="btn btn-primary btn-sm my-1"><i data-feather="file-text"></i> Lưu lại</button>
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -81,45 +75,8 @@
                     <div class="col-md-6">
                         <h5><i data-feather="file-text"></i> Lịch sử nhập quỹ tiền đầu ngày</h5>
                         <hr />
-                        <div class="table-responsive">
-                            <table class="table table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">
-                                            #
-                                        </th>
-                                        <th scope="col">
-                                           Ngày
-                                        </th>
-                                        <th scope="col">
-                                           Người giao dịch
-                                        </th>
-                                        <th scope="col">
-                                            Số tiền
-                                        </th>
-                                        <th scope="col">
-                                           Hoạt động
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                   <tr>
-                                       <td>1</td>
-                                       <td>28/07/2022</td>
-                                       <td>test123</td>
-                                       <td class="text-success">+33</td>
-                                       <td>Cập nhập tiền hàng ngày</td>
-                                   </tr>
-                                   <tr>
-                                       <td>2</td>
-                                       <td>28/07/2022</td>
-                                       <td>test123</td>
-                                       <td class="text-success">+33</td>
-                                       <td>Cập nhập tiền hàng ngày</td>
-                                   </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        <div id= "_resultTable"></div>
+                      
                     </div>
                 </div>
             </div>
@@ -127,13 +84,16 @@
     </div>
 </div>
 
-<div id="_resultInhondong"></div>
 
 @section Scripts{
-    <script>
-        $(".moneynewdate-nav").addClass("active");
-
-
-        
-    </script>
+<script>
+    $(".moneynewdate-nav").addClass("active");
+    var URLQuyCH = {
+        GetData : "@Url.Action("GetData")",
+        CreateTienDauNgay : "@Url.Action("CreateTienDauNgay")",
+        CreateQuyDauNgay : "@Url.Action("CreateQuyDauNgay")",
+        GetDataThongKe : "@Url.Action("GetDataThongKe")",
+    }
+</script>
+<script src="~/admin/js/CuaHang/quyCuaHang.js" asp-append-version=true></script>
 }

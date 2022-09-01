@@ -18,4 +18,14 @@ namespace BaseSource.ViewModels.User
         public double Blance { get; set; }
 
     }
+
+    public class ThongBaoResponse
+    {
+        public int AlarmDate { get; set; }
+        public int Capital { get; set; }
+        public int Pawn { get; set; }
+        public int Loan { get; set; }
+        public int Installment { get; set; }
+
+    }
 }
