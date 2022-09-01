@@ -1,24 +1,6 @@
-﻿using BaseSource.ApiIntegration.WebApi.CuaHang;
-using BaseSource.Data.EF;
-using BaseSource.Data.Entities;
-using BaseSource.Shared.Constants;
-using BaseSource.ViewModels.Common;
+﻿using BaseSource.ViewModels.Common;
 using BaseSource.ViewModels.CuaHang;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Logging;
-using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace BaseSource.WebApp.Areas.Admin.Controllers
@@ -28,7 +10,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
     {
         
         #region MoneyNewDate
-        public async Task<IActionResult> MoneyNewDate()
+        public IActionResult MoneyNewDate()
         {
             
             return View();
@@ -45,7 +27,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             {
                 return Json(new ApiErrorResult<string>(result.ValidationErrors));
             }
-            return Json(new ApiSuccessResult<string>(Url.Action("Index")));
+            return Json(1);
         }
         public async Task<IActionResult> CreateTienDauNgay(CreateQuyCuaHang model)
         {
@@ -58,7 +40,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             {
                 return Json(new ApiErrorResult<string>(result.ValidationErrors));
             }
-            return Json(new ApiSuccessResult<string>(Url.Action("MoneyNewDate")));
+            return Json(1);
         }
         public async Task<IActionResult> GetData(int page = 1)
         {
@@ -68,7 +50,14 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
                 PageSize = 10,
             };
             var result = await _cuaHangApiClient.GetPagings(request);
-            return PartialView("_HistoryQuytien", result);
+            return PartialView("_HistoryQuyTiens", result.ResultObj);
+        }
+
+
+        public async Task<IActionResult> GetDataThongKe()
+        {
+            var result = await _cuaHangApiClient.GetDataThongKe();
+            return PartialView("_ThongKe", result.ResultObj);
         }
         #endregion
     }

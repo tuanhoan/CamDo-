@@ -28,6 +28,11 @@ namespace BaseSource.ViewModels.CuaHang
         public EQuyTienCuaHang_LogType LogType { get; set; }
 
     }
+    public class QuyCuaHangThongKeVm
+    {
+        public double QuyTienMat { get; set; }
+        public double TienDauTuNgay { get; set; }
+        public double VonDauTu { get; set; }
+    }
 
-   
 }

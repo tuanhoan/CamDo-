@@ -17,7 +17,7 @@ namespace BaseSource.ApiIntegration.WebApi.CuaHang
         public async Task<ApiResult<PagedResult<QuyCuaHangVm>>> GetPagings(PageQuery model)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
-            return await client.GetAsync<ApiResult<PagedResult<QuyCuaHangVm>>>("/api/CuaHang_QuyTienLog/GetPagings", model);
+            return await client.GetAsync<ApiResult<PagedResult<QuyCuaHangVm>>>("/api/CuaHang_QuyTienLog/GetPagingQuyLogs", model);
         }
         public async Task<ApiResult<string>> CreateOrUpdate(CreateQuyCuaHang model)
         {
@@ -33,6 +33,12 @@ namespace BaseSource.ApiIntegration.WebApi.CuaHang
 
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.PostAsyncFormUrl<ApiResult<string>>("/api/CuaHang_QuyTienLog/Delete", dic);
+        }
+
+        public async Task<ApiResult<QuyCuaHangThongKeVm>> GetDataThongKe()
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.GetAsync<ApiResult<QuyCuaHangThongKeVm>>("/api/CuaHang_QuyTienLog/GetDataThongKe");
         }
     }
 }

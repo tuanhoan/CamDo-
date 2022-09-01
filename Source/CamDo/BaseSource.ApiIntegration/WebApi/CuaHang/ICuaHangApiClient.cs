@@ -25,6 +25,7 @@ namespace BaseSource.ApiIntegration.WebApi.CuaHang
         Task<ApiResult<PagedResult<QuyCuaHangVm>>> GetPagings(PageQuery model);
         Task<ApiResult<string>> CreateOrUpdate(CreateQuyCuaHang model);
         Task<ApiResult<string>> DeleteQuyCH(int id);
+        Task<ApiResult<QuyCuaHangThongKeVm>> GetDataThongKe();
 
     }
 }

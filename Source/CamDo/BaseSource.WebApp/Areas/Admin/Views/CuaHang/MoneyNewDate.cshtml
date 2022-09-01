@@ -14,26 +14,15 @@
             </div>
             <div class="card-body">
 
-                <div class="row ">
-                    <div class="col-md-4 text-center border-right">
-                        <h4>QŨY TIỀN MẶT</h4>
-                        <h3 class="text-purple">100,000</h3>
-                    </div>
-                    <div class="col-md-4 text-center border-right">
-                        <h4>TIỀN ĐẦU NGÀY</h4>
-                        <h3 class="text-success">100,000</h3>
-                    </div>
-                    <div class="col-md-4 text-center border-right">
-                        <h4>VỐN ĐẦU TƯ</h4>
-                        <h3 class="text-blue">100,000</h3>
-                    </div>
+                <div class="row" id="_resultThongKe">
+                   
                 </div>
                 <div class="row mt-5">
                     <div class="col-md-6">
                         <h5><i data-feather="dollar-sign"></i> Nhập quỹ tiền mặt</h5>
 
                         <hr />
-                        <form asp-action="CreateTienDauNgay" data-name="ajaxFormUpload" enctype="multipart/form-data">
+                        <form id="frmCreateTienDauNgay" >
                             <div class="row mb-3">
                                 <label for="inputEmail3" class="col-sm-2 col-form-label">Số tiền <span class="text-danger">*</span></label>
                                 <div class="col-sm-5">
@@ -42,13 +31,13 @@
                                         <input name="Money" type="text" class="form-control " placeholder="inputAmount">
                                     </div>
                                 </div>
-                                <input type="hidden" name="LogType" value="@EQuyTienCuaHang_LogType.TienDauNgay" />
-                                <input type="hidden" name="LogType" value="@EQuyTienMat_ActionType.NhapLaiQuy" />
+                                <input type="hidden" name="LogType" value="1" />
+                                <input type="hidden" name="ActionType" value="1" />
                             </div>
                             <div class="row mb-3">
                                 <label for="inputEmail3" class="col-sm-2 col-form-label"></label>
                                 <div class="col-sm-5">
-                                    <button type="submit" class="btn btn-primary btn-sm my-1"><i data-feather="file-text"></i> Lưu lại</button>
+                                    <button id="btnCreateTienDauNgay" class="btn btn-primary btn-sm my-1"><i data-feather="file-text"></i> Lưu lại</button>
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -59,7 +48,7 @@
                         <h5><i data-feather="dollar-sign"></i> Nhập quỹ đầu ngày</h5>
 
                         <hr />
-                        <form asp-action="CreateQuyDauNgay" data-name="ajaxFormUpload" enctype="multipart/form-data">
+                        <form id="frmCreateQuyDauNgay">
                             <div class="row mb-3">
                                 <label for="inputEmail3" class="col-sm-2 col-form-label">Số tiền <span class="text-danger">*</span></label>
                                 <div class="col-sm-5">
@@ -69,12 +58,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <input type="hidden" name="LogType" value="@EQuyTienCuaHang_LogType.TienDauNgay" />
-                            <input type="hidden" name="LogType" value="@EQuyTienMat_ActionType.NhapLaiQuy" />
+                            <input type="hidden" name="LogType" value="2" />
+                            <input type="hidden" name="ActionType" value="1" />
                             <div class="row mb-3">
                                 <label for="inputEmail3" class="col-sm-2 col-form-label"></label>
                                 <div class="col-sm-5">
-                                    <button type="submit" class="btn btn-primary btn-sm my-1"><i data-feather="file-text"></i> Lưu lại</button>
+                                    <button id="btnCreateQuyDauNgay" class="btn btn-primary btn-sm my-1"><i data-feather="file-text"></i> Lưu lại</button>
                                 </div>
                             </div>
                             <div class="row mb-3">
@@ -99,8 +88,12 @@
 @section Scripts{
 <script>
     $(".moneynewdate-nav").addClass("active");
-
-
-
+    var URLQuyCH = {
+        GetData : "@Url.Action("GetData")",
+        CreateTienDauNgay : "@Url.Action("CreateTienDauNgay")",
+        CreateQuyDauNgay : "@Url.Action("CreateQuyDauNgay")",
+        GetDataThongKe : "@Url.Action("GetDataThongKe")",
+    }
 </script>
+<script src="~/admin/js/CuaHang/quyCuaHang.js" asp-append-version=true></script>
 }

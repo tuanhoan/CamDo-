@@ -1,14 +1,38 @@
-﻿//$(document).on("click", "#btnSaveQuyDauNgay", function () {
-//    var money = $("#txtMoney").val();
-//    var dataForm1 = $("#frmData1").serialineObject();
-//    var dataForm2 = $("#frmData2").serialineObject();
-
-//    var request = {nameObject1 : dataForm1, nameObject2 : dataForm2}
-
-//    ajaxTypePost(UrlCreate.Inhopdong, request ).then(res => {
-//        $("#_resultInhondong").html(res);
-//        $("#idbatky").val(res.money);
-//        windown.print();
-
-    })
+﻿$(document).ready(function () {
+    GetData();
+    GetDataThongKe();
 });
+$(document).on("click", "#btnCreateQuyDauNgay", function () {
+    var model = $("#frmCreateQuyDauNgay").serializeObject();
+    ajaxTypePost(URLQuyCH.CreateQuyDauNgay, model).then(res => {
+        if (res == 1) {
+            GetDataThongKe();
+            GetData();
+        }
+    })
+
+});
+
+$(document).on("click", "#btnCreateTienDauNgay", function () {
+    var model = $("#frmCreateTienDauNgay").serializeObject();
+    ajaxTypePost(URLQuyCH.CreateTienDauNgay, model).then(res => {
+        if (res == 1) {
+            GetDataThongKe();
+            GetData();
+        }
+    })
+
+});
+
+
+function GetData() {
+    ajaxTypePost(URLQuyCH.GetData).then(res => {
+        $("#_resultTable").html(res);
+    })
+}
+
+function GetDataThongKe() {
+    ajaxTypePost(URLQuyCH.GetDataThongKe).then(res => {
+        $("#_resultThongKe").html(res);
+    })
+}

@@ -16,21 +16,14 @@ namespace BaseSource.BackendApi.Controllers
     {
 
         private readonly BaseSourceDbContext _db;
-        private readonly IConfiguration _configuration;
 
-        private readonly IHttpContextAccessor _httpContextAccessor;
-
-        public CuaHang_QuyTienLogController(BaseSourceDbContext db, IConfiguration configuration,
-             IHttpContextAccessor httpContextAccessor)
+        public CuaHang_QuyTienLogController(BaseSourceDbContext db)
         {
             _db = db;
-            _configuration = configuration;
-            _httpContextAccessor = httpContextAccessor;
-
         }
 
-        [HttpGet("GetPagings")]
-        public async Task<IActionResult> GetPagings([FromBody] PageQuery query)
+        [HttpGet("GetPagingQuyLogs")]
+        public async Task<IActionResult> GetPagingQuyLogs([FromQuery] PageQuery query)
         {
             if (!ModelState.IsValid)
             {
@@ -66,10 +59,10 @@ namespace BaseSource.BackendApi.Controllers
             {
                 return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
             }
-            var cuaHang = await _db.CuaHang_QuyTienLogs.FindAsync(model.Id);
+            var cuaHang = await _db.CuaHang_QuyTienLogs.FindAsync((long)model.Id);
             if(cuaHang == null)
             {
-                var dataCreate = new CuaHang_QuyTienLog()
+                cuaHang = new CuaHang_QuyTienLog()
                 {
                     CuaHangId = CuaHangId,
                     UserId = UserId,
@@ -79,7 +72,7 @@ namespace BaseSource.BackendApi.Controllers
                     LogType = model.LogType,
                     Money = model.Money,
                 };
-               await _db.AddAsync(dataCreate);
+               await _db.AddAsync(cuaHang);
             }
             else
             {
@@ -106,6 +99,33 @@ namespace BaseSource.BackendApi.Controllers
                 return Ok(new ApiSuccessResult<string>());
             }
             return Ok(new ApiErrorResult<string>("Not Found!"));
+        }
+
+
+        [HttpGet("GetDataThongKe")]
+        public async Task<IActionResult> GetDataThongKe()
+        {
+            var x = await _db.CuaHang_QuyTienLogs.LastOrDefaultAsync(x=> x.CuaHangId ==CuaHangId);
+            var y = await _db.CuaHangs.LastOrDefaultAsync(x=> x.Id ==CuaHangId);
+           
+            if (x == null)
+            {
+                QuyCuaHangThongKeVm data1 = new QuyCuaHangThongKeVm()
+                {
+                    QuyTienMat = 0,
+                    TienDauTuNgay = 0,
+                    VonDauTu = y.VonDauTu
+                };
+
+                return Ok(new ApiSuccessResult<QuyCuaHangThongKeVm>(data1));
+            }
+            QuyCuaHangThongKeVm data = new QuyCuaHangThongKeVm()
+            {
+                QuyTienMat = x.Money,
+                TienDauTuNgay =x.Money,
+                VonDauTu = y.VonDauTu
+            };
+            return Ok(new ApiSuccessResult<QuyCuaHangThongKeVm>(data));
         }
     }
 }
