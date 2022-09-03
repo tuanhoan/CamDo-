@@ -105,8 +105,8 @@ namespace BaseSource.BackendApi.Controllers
         [HttpGet("GetDataThongKe")]
         public async Task<IActionResult> GetDataThongKe()
         {
-            var x = await _db.CuaHang_QuyTienLogs.LastOrDefaultAsync(x=> x.CuaHangId ==CuaHangId);
-            var y = await _db.CuaHangs.LastOrDefaultAsync(x=> x.Id ==CuaHangId);
+            var x = await _db.CuaHang_QuyTienLogs.OrderByDescending(x=> x.Id).FirstOrDefaultAsync(x=> x.CuaHangId ==CuaHangId);
+            var y = await _db.CuaHangs.OrderByDescending(x=> x.Id).FirstOrDefaultAsync(x=> x.Id ==CuaHangId);
            
             if (x == null)
             {

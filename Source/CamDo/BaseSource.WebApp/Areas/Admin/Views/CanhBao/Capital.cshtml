@@ -82,20 +82,24 @@
                                         {
                                             foreach (var item in Model.Items)
                                             {
-                                                <tr>
-                                                    <td></td>
-                                                    <td>@item.HD_Ma</td>
-                                                    <td>@item.TenKhachHang</td>
-                                                    <td>@item.DiaChi</td>
-                                                    <td>@item.TenTaiSan</td>
-                                                    <td>@item.TienNo</td>
-                                                    <td>@item.TongTienLai</td>
-                                                    <td>Tiền gốc</td>
-                                                    <td>item.TongTien</td>
-                                                    <td>Nội dung</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                </tr>
+                                                if (item.Id != default)
+                                                {
+                                                    <tr>
+                                                        <td></td>
+                                                        <td>@item.HD_Ma</td>
+                                                        <td>@item.TenKhachHang</td>
+                                                        <td>@item.DiaChi</td>
+                                                        <td>@item.TenTaiSan</td>
+                                                        <td>@item.TienNo</td>
+                                                        <td>@item.TongTienLai</td>
+                                                        <td>Tiền gốc</td>
+                                                        <td>item.TongTien</td>
+                                                        <td>Nội dung</td>
+                                                        <td></td>
+                                                        <td></td>
+                                                    </tr>
+                                                }
+
                                             }
                                         }
 

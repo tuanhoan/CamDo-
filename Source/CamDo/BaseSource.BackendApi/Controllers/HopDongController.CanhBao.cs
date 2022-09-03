@@ -39,6 +39,10 @@ namespace BaseSource.BackendApi.Controllers
             {
                 model = model.Where(x => x.HD_Status == (byte)request.Status);
             }
+            if (request.KeySearch != null)
+            {
+                request.KeySearch = request.KeySearch.Trim();
+            }
 
             if (request.LoaiHopDong == ELoaiHopDong.GopVon)
             {
@@ -49,7 +53,6 @@ namespace BaseSource.BackendApi.Controllers
                                         join htl in _db.MoTaHinhThucLais on hd.HD_HinhThucLai equals htl.HinhThucLai into htls
                                         from xhtl in htls.DefaultIfEmpty()
                                         join kh in _db.KhachHangs on hd.KhachHangId equals kh.Id
-                                        where  (hd.HD_Ma.Contains(request.KeySearch.Trim()) || kh.Ten.Contains(request.KeySearch.Trim()) || request.KeySearch.Trim() == default)
                                         select new HopDongVm()
                                         {
                                             Id = hd.Id,
@@ -113,7 +116,6 @@ namespace BaseSource.BackendApi.Controllers
                                   join hh in _db.CauHinhHangHoas on hd.HangHoaId equals hh.Id into chhh
                                   from hh in chhh.DefaultIfEmpty()
                                   join htl in _db.MoTaHinhThucLais on hd.HD_HinhThucLai equals htl.HinhThucLai
-                                  where (hd.HD_Ma.Contains(request.KeySearch.Trim()) || kh.Ten.Contains(request.KeySearch.Trim()) || request.KeySearch.Trim() == default)
                                   select new HopDongVm()
                                   {
                                       Id = hd.Id,
@@ -154,7 +156,7 @@ namespace BaseSource.BackendApi.Controllers
                     TotalItemCount = data.TotalItemCount,
                     PageSize = data.PageSize,
                     PageNumber = data.PageNumber,
-                    Items = data.ToList()
+                    Items = data.Where(x=> (x.HD_Ma.Contains(request.KeySearch) || x.TenKhachHang.Contains(request.KeySearch) || request.KeySearch == default)).ToList()
                 };
 
                 //add record total
