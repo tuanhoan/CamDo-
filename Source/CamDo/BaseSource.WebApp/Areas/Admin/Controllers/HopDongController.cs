@@ -464,5 +464,10 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         {
             return PartialView("_MuaHopDong");
         }
+        public async Task<IActionResult> ChonMauHopDong(ELoaiHopDong eLoaiHopDong)
+        {
+            var result = await _hopDongApiClient.GetPrintDefault(ELoaiHopDong.Camdo);
+            return Ok(result.ResultObj);
+        }
     }
 }

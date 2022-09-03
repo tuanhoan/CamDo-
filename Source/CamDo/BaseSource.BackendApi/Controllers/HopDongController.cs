@@ -717,6 +717,8 @@ namespace BaseSource.BackendApi.Controllers
             }
             var kh = await _db.KhachHangs.FindAsync(hd.KhachHangId);
             var user = await _db.UserProfiles.AsNoTracking().Include(x => x.AppUser).FirstOrDefaultAsync(x => x.UserId == hd.UserIdAssigned);
+            var loadHopdong = (await GetMauHd(hd.HD_Loai));
+
             // If using Professional version, put your serial key below.
 
             string body = string.Empty;
@@ -725,8 +727,17 @@ namespace BaseSource.BackendApi.Controllers
             //using (StreamReader reader = new StreamReader(Server.MapPath(@"C:\Users\Nino\Downloads\HD cầm đồ 1.docx")))
 
             var template = new StringTemplate();
-
             var text = System.IO.File.ReadAllText(_appEnvironment.ContentRootPath + "\\wwwroot\\Resource\\" + "HD cầm đồ 1.html");
+
+            switch (hd.HD_Loai)
+            {
+                case ELoaiHopDong.Camdo:
+                    text = System.IO.File.ReadAllText(_appEnvironment.ContentRootPath + "\\wwwroot\\Resource\\" + $"HD cầm đồ {(int)loadHopdong.CamDo_HopDongPrintTemplate}.html");
+                    break;
+                case ELoaiHopDong.Vaylai:
+                    text = System.IO.File.ReadAllText(_appEnvironment.ContentRootPath + "\\wwwroot\\Resource\\" + $"HD cầm đồ {(int)loadHopdong.VayLai_HopDongPrintTemplate}.html");
+                    break;
+            }
 
             //remove all tabs - it used only to format template code, not output code
             template.Template = text.Replace("\t", "");
@@ -1175,6 +1186,35 @@ namespace BaseSource.BackendApi.Controllers
         public async Task TinhLaiNgay()
         {
             await _hopDongService.TinhLaiToiNgayHienTai();
+        }
+
+        private async Task<HopDongPrintDefaulVm> GetMauHd(ELoaiHopDong type)
+        {
+            var response = new HopDongPrintDefaulVm();
+            response.LoaiHopDong = type;
+            var cuaHang = await _db.CuaHangs.FirstOrDefaultAsync(x => x.Id == CuaHangId);
+            switch (type)
+            {
+                case ELoaiHopDong.Camdo:
+                    if (cuaHang != null)
+                    {
+                        response.CamDo_HopDongPrintTemplate = cuaHang.CamDo_HopDongPrintTemplate;
+                        response.CamDo_HopDongPrintTemplate = cuaHang.CamDo_HopDongPrintTemplate;
+                    }
+                    break;
+                case ELoaiHopDong.Vaylai:
+                    if (cuaHang != null)
+                    {
+                        response.VayLai_HopDongPrintTemplate = cuaHang.VayLai_HopDongPrintTemplate;
+                        response.VayLai_HopDongPrintTemplate = cuaHang.VayLai_HopDongPrintTemplate;
+                    }
+                    break;
+                case ELoaiHopDong.GopVon:
+                    break;
+                default:
+                    break;
+            }
+            return response;
         }
     }
 }
