@@ -37,5 +37,8 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
         Task<ApiResult<HopDongPrintDefaulVm>> GetPrintDefault(ELoaiHopDong type);
         Task<ApiResult<string>> SavePrintDefault(HopDongPrintDefaulVm model);
         Task<string> InHopDong(int hopDongId);
+
+        Task<ApiResult<PagedResult<HopDongVm>>> GetCanhBaoPagings(GetCanhBaoPagingRequest model);
+
     }
 }

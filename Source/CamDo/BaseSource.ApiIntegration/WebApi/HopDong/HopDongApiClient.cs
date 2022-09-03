@@ -248,5 +248,12 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.GetAsyncNew("/api/HopDong/InHopDong?hopDongId="+ hopDongId);
         }
+
+
+        public async Task<ApiResult<PagedResult<HopDongVm>>> GetCanhBaoPagings(GetCanhBaoPagingRequest model)
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.GetAsync<ApiResult<PagedResult<HopDongVm>>>("/api/HopDong/GetCanhBaoPagings", model);
+        }
     }
 }

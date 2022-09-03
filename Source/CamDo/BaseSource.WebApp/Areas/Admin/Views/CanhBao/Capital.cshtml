@@ -1,4 +1,5 @@
-﻿@{
+﻿@model PagedResult<HopDongVm>
+@{
     ViewData["Title"] = "Cảnh báo cầm đồ";
 }
 
@@ -76,6 +77,30 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @{
+                                        if (Model != null)
+                                        {
+                                            foreach (var item in Model.Items)
+                                            {
+                                                <tr>
+                                                    <td></td>
+                                                    <td>@item.HD_Ma</td>
+                                                    <td>@item.TenKhachHang</td>
+                                                    <td>@item.DiaChi</td>
+                                                    <td>@item.TenTaiSan</td>
+                                                    <td>@item.TienNo</td>
+                                                    <td>@item.TongTienLai</td>
+                                                    <td>Tiền gốc</td>
+                                                    <td>item.TongTien</td>
+                                                    <td>@item.Note</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            }
+                                        }
+
+                                    }
+
                                 </tbody>
                             </table>
                         </div>
@@ -88,7 +113,7 @@
 
 @section Scripts{
 
-    <script>
+<script>
 
-    </script>
+</script>
 }

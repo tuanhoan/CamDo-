@@ -27,7 +27,7 @@ using X.PagedList;
 
 namespace BaseSource.BackendApi.Controllers
 {
-    public class HopDongController : BaseApiController
+    public partial class HopDongController : BaseApiController
     {
         private readonly BaseSourceDbContext _db;
         private readonly IMapper _mapper;

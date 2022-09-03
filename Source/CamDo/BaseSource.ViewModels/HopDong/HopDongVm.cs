@@ -8,6 +8,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BaseSource.ViewModels.HopDong
 {
+    public class GetCanhBaoPagingRequest : PageQuery
+    {
+        public ELoaiHopDong LoaiHopDong { get; set; }
+        public int? Status { get; set; }
+        public string KeySearch { get; set; }
+    }
+
     public class GetHopDongPagingRequest : PageQuery
     {
         public string Info { get; set; }
