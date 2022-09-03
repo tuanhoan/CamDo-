@@ -424,6 +424,18 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         }
         #endregion
 
+        #region Nợ Xấu
+        public async Task<IActionResult> ChuyenTTNoXau(int hopDongId)
+        {
+            var result = await _hopDongApiClient.ChuyenTrangThaiNoXau(hopDongId);
+            if (!result.IsSuccessed)
+            {
+                return Json(new ApiErrorResult<string>(result.Message));
+            }
+            return Json(new ApiSuccessResult<string>(Url.Action("Index")));
+        }
+        #endregion
+
         #region Mở lại hợp đồng
         public async Task<IActionResult> MoLaiHopDong(int id)
         {

@@ -46,6 +46,17 @@ namespace BaseSource.ApiIntegration.WebApi.HopDong
             return await client.PostAsyncFormUrl<ApiResult<string>>("/api/HopDong/ChuyenTrangThaiChoThanhLy", dic);
         }
 
+        public async Task<ApiResult<string>> ChuyenTrangThaiNoXau(int hopDongId)
+        {
+            var dic = new Dictionary<string, string>()
+            {
+                { "hopDongId", hopDongId.ToString() }
+            };
+
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.PostAsyncFormUrl<ApiResult<string>>("/api/HopDong/ChuyenTrangThaiNoXau", dic);
+        }
+
         public async Task<ApiResult<string>> ChuyenTrangThaiVeDangVay(int hopDongId)
         {
             var dic = new Dictionary<string, string>()

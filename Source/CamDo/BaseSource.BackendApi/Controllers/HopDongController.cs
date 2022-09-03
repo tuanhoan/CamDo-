@@ -763,15 +763,13 @@ namespace BaseSource.BackendApi.Controllers
         public async Task<IActionResult> ChuyenTrangThaiChoThanhLy([FromForm] int hopDongId)
         {
             var hd = await _db.HopDongs.FindAsync(hopDongId);
-            if (hd == null)
+
+            var validate = await ValidateHopDong(hd);
+            if (!string.IsNullOrWhiteSpace(validate))
             {
-                return Ok(new ApiErrorResult<string>("Not Found"));
+                return Ok(new ApiErrorResult<string>(validate));
             }
-            var isKetThuc = await _hopDongService.CheckHopDongKetThuc(hd.HD_Status, hd.HD_Loai);
-            if (isKetThuc)
-            {
-                return Ok(new ApiErrorResult<string>("Hợp đồng này đã kết thúc"));
-            }
+
             switch (hd.HD_Loai)
             {
                 case ELoaiHopDong.Camdo:
@@ -811,15 +809,13 @@ namespace BaseSource.BackendApi.Controllers
         public async Task<IActionResult> ThanhLyHopDong([FromForm] int hopDongId)
         {
             var hd = await _db.HopDongs.FindAsync(hopDongId);
-            if (hd == null)
+
+            var validate = await ValidateHopDong(hd);
+            if (!string.IsNullOrWhiteSpace(validate))
             {
-                return Ok(new ApiErrorResult<string>("Not Found"));
+                return Ok(new ApiErrorResult<string>(validate));
             }
-            var isKetThuc = await _hopDongService.CheckHopDongKetThuc(hd.HD_Status, hd.HD_Loai);
-            if (isKetThuc)
-            {
-                return Ok(new ApiErrorResult<string>("Hợp đồng này đã kết thúc"));
-            }
+
             switch (hd.HD_Loai)
             {
                 case ELoaiHopDong.Camdo:
@@ -858,15 +854,13 @@ namespace BaseSource.BackendApi.Controllers
         public async Task<IActionResult> ChuyenTrangThaiVeDangVay([FromForm] int hopDongId)
         {
             var hd = await _db.HopDongs.FindAsync(hopDongId);
-            if (hd == null)
+                      
+            var validate = await ValidateHopDong(hd);
+            if (!string.IsNullOrWhiteSpace(validate))
             {
-                return Ok(new ApiErrorResult<string>("Not Found"));
+                return Ok(new ApiErrorResult<string>(validate));
             }
-            var isKetThuc = await _hopDongService.CheckHopDongKetThuc(hd.HD_Status, hd.HD_Loai);
-            if (isKetThuc)
-            {
-                return Ok(new ApiErrorResult<string>("Hợp đồng này đã kết thúc"));
-            }
+
             switch (hd.HD_Loai)
             {
                 case ELoaiHopDong.Camdo:
@@ -890,6 +884,48 @@ namespace BaseSource.BackendApi.Controllers
 
             await _db.SaveChangesAsync();
             return Ok(new ApiSuccessResult<string>("Xóa hợp đồng thành công"));
+        }
+        [HttpPost("ChuyenTrangThaiNoXau")]
+        public async Task<IActionResult> ChuyenTrangThaiVeNoXau([FromForm] int hopDongId)
+        {
+            var hd = await _db.HopDongs.FindAsync(hopDongId);
+
+            var validate = await ValidateHopDong(hd);
+            if (!string.IsNullOrWhiteSpace(validate))
+            {
+                return Ok(new ApiErrorResult<string>(validate));
+            }
+
+            if (hd.HD_Loai != ELoaiHopDong.Vaylai)
+            {
+                return Ok(new ApiErrorResult<string>("Loại hợp đồng không phù hợp"));
+            }
+
+            var currentStatus = (EHopDong_VayLaiStatusFilter)hd.HD_Status;
+            if (currentStatus != EHopDong_VayLaiStatusFilter.NoXau)
+            {
+                hd.HD_Status = (byte)EHopDong_VayLaiStatusFilter.NoXau;
+            }
+            else
+            {
+                return Ok(new ApiErrorResult<string>("Hợp đồng đã chuyển về trạng thái Nợ xấu trước đó"));
+            }
+
+            await _db.SaveChangesAsync();
+            return Ok(new ApiSuccessResult<string>("Chuyển trạng thái Nợ Xấu thành công"));
+        }
+        private async Task<string> ValidateHopDong(HopDong hd)
+        {
+            if (hd == null)
+            {
+                return "Not Found";
+            }
+            var isKetThuc = await _hopDongService.CheckHopDongKetThuc(hd.HD_Status, hd.HD_Loai);
+            if (isKetThuc)
+            {
+                return "Hợp đồng này đã kết thúc";
+            }
+            return null;
         }
         #endregion
 
