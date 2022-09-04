@@ -35,10 +35,15 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             }
 
             var view = "_ChuocDo";
-            if(loaiHopDong == ELoaiHopDong.Vaylai)
+            ViewBag.loaiHD = loaiHopDong;
+            if (loaiHopDong == ELoaiHopDong.Vaylai)
             {
                 ViewBag.loaiHD = loaiHopDong;
                 view = "_DongHDVayLai";
+            }
+            if (loaiHopDong == ELoaiHopDong.GopVon)
+            {
+                view = "_RutVon";
             }
             return PartialView(view, result.ResultObj);
         }

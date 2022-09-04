@@ -148,11 +148,136 @@
 
             </div>
         </fieldset>
-        <fieldset id="tab-trabotgoc">
+        <fieldset id="tab-rutbotgoc">
+            <div class="d-flex justify-content-center">
+                <div class="col-md-6">
+                    <form id="frmTraBotGoc" asp-action="TraBotGoc" asp-controller="HopDong_VayRutGoc" method="post">
+                        <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.Id" />
+                        <div class="row mb-3">
+                            <label class="col-4 text-end">Ngày rút tiền gốc</label>
+                            <div class="col-8">
+                                <input type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" name="NgayTraGoc" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-4 text-end">Số tiền gốc cần rút</label>
+                            <div class="col-8">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="SoTienTraGocDisplay" />
+                                    <input type="hidden" name="SoTienTraGoc" />
+                                    <span class="input-group-text">VNĐ</span>
+                                </div>
+                                <span class="text-danger field-validation-valid" data-valmsg-for="SoTienTraGoc" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-4 text-end">Ghi chú</label>
+                            <div class="col-8">
+                                <textarea class="form-control" name="Note" rows="4"></textarea>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-4"></label>
+                            <div class="col-8">
+                                <button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-thumbs-up"></i> Đồng ý</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div id="divContent-ListTraGoc">
+
+            </div>
         </fieldset>
         <fieldset id="tab-vaythem">
+            <div class="d-flex justify-content-center">
+                <div class="col-md-6">
+                    <form id="frmVayThem" asp-action="VayThem" asp-controller="HopDong_VayRutGoc" method="post">
+                        <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.Id" />
+                        <div class="row mb-3">
+                            <label class="col-4 text-end">Ngày vay thêm gốc</label>
+                            <div class="col-8">
+                                <input type="date" value="@DateTime.Now.ToString("yyyy-MM-dd")" name="NgayVayThem" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-4 text-end">Số tiền gốc vay thêm</label>
+                            <div class="col-8">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="SoTienVayThemDisplay" />
+                                    <input type="hidden" name="SoTienVayThem" />
+                                    <span class="input-group-text">VNĐ</span>
+                                </div>
+                                <span class="text-danger field-validation-valid" data-valmsg-for="SoTienVayThem" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-4 text-end">Ghi chú</label>
+                            <div class="col-8">
+                                <textarea class="form-control" name="Note" rows="4"></textarea>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-4 text-end"></label>
+                            <div class="col-8">
+                                <button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-thumbs-up"></i> Đồng ý</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div id="divContent-ListVayThem">
+
+            </div>
         </fieldset>
         <fieldset id="tab-giahan">
+            <div class="d-flex justify-content-center">
+                <div class="col-md-6">
+                    <form id="frmGiaHan" asp-action="GiaHan" asp-controller="HopDong_GiaHan" method="post">
+                        <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.Id" />
+                        <div class="row mb-3">
+                            <label class="col-4 text-end">Khách Hàng</label>
+                            <div class="col-8">
+                                <span>@Model.TenKhachHang</span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-4 text-end">Gia hạn thêm</label>
+                            <div class="col-8">
+                                <div class="input-group">
+                                    <input type="number" class="form-control" name="SoNgayGiaHan" />
+                                    <span class="input-group-text">@Model.ThoiGian.GetEnumDisplayName()</span>
+                                </div>
+                                <span class="text-danger field-validation-valid" data-valmsg-for="SoNgayGiaHan" data-valmsg-replace="true"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-4 text-end">Ghi chú</label>
+                            <div class="col-8">
+                                <textarea class="form-control" name="Note" rows="4"></textarea>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-4"></label>
+                            <div class="col-8">
+                                <button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-thumbs-up"></i> Đồng ý</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div id="divContent-GiaHan">
+
+            </div>
+        </fieldset>
+        <fieldset id="tab-rutvon">
+            <div class="d-flex justify-content-center">
+                <div class="col-md-5">
+                    <div id="divContent-chuocdo">
+
+                    </div>
+                </div>
+            </div>
         </fieldset>
         <fieldset id="tab-history">
         </fieldset>
@@ -180,7 +305,9 @@
                 getListPaymentLog(@Model.Id);
                 getInfoPaymentByDate(@Model.Id);
                 break;
-            case "tab-trabotgoc":
+            case "tab-rutbotgoc":
+                getHistoryLoanExtra("tab-trabotgoc",@Model.Id);
+                break;
             case "tab-vaythem":
                 getHistoryLoanExtra(type,@Model.Id);
                 break;
@@ -193,8 +320,8 @@
              case "tab-chungtu":
                 getChungTu(@Model.Id);
                 break;
-             case "tab-chuocdo":
-                getInfoChuocDo(@Model.Id);
+             case "tab-rutvon":
+                getInfoChuocDo(@Model.Id,undefined,'@Model.HD_Loai');
                 break;
             default:
                 break;

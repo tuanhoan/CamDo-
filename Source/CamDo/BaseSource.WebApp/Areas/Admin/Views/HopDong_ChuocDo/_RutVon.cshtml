@@ -1,0 +1,63 @@
+﻿@model HopDong_ChuocDoVm
+
+<form id="frmChuocDo" asp-action="ChuocDo" asp-controller="HopDong_ChuocDo" method="post">
+    <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.HopDongId" />
+    <div class="row mb-3">
+        <label class="col-4 text-end">Ngày rút vốn</label>
+        <div class="col-8">
+            <input type="date" asp-for="NgayChuocDo" disabled="@(Model.NgayTatToan != null)" class="form-control" onchange="loadDongHopDong(this,@Model.HopDongId, '@ViewBag.loaiHD')" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-4 text-end">Tiền góp vốn</label>
+        <div class="col-8">
+            <span class="chuocdo-info">@Model.TongTienVay.ToString("N0") VND</span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-4 text-end">Nợ cũ</label>
+        <div class="col-8">
+            <span class="chuocdo-info">@Model.NoCu.ToString("N0") VND</span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-4 text-end">Tiền lãi</label>
+        <div class="col-8">
+            <span class="chuocdo-info">@Model.TienLai.ToString("N0") VND (@Model.TongSoNgayLai ngày)</span>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-4 text-end">Tiền khác</label>
+        <div class="col-8">
+            <div class="input-group">
+                <input type="text" class="form-control" disabled="@(Model.NgayTatToan != null)" id="TienKhacDisplay" value="@Model.TienKhac" onkeyup="tinhTongTienChuoc(this)" />
+                <input type="hidden" asp-for="TienKhac" />
+                <span class="input-group-text">VNĐ</span>
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-4 text-end">Tổng tiền phải trả</label>
+        <div class="col-8">
+            <span class="chuocdo-tongtienchuoc" id="lblChuocdo_MoneyNeed">@Model.TongTienChuoc.ToString("N0") VND</span>
+            <input type="hidden" id="TongTienChuoc" value="@Model.TongTienChuoc" />
+        </div>
+    </div>
+    <div class="row mb-3">
+        <label class="col-4 text-end" id="divInHDCD">
+            @if (Model.NgayTatToan != null)
+            {
+                <button class="btn btn-success btn-sm" type="button" onclick="inChuocDo(@Model.HopDongId)"> In HĐCĐ</button>
+            }
+        </label>
+        <div class="col-8">
+            @if (Model.NgayTatToan == null)
+            {
+                <button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-thumbs-up"></i> Rút vốn</button>
+            }
+        </div>
+    </div>
+</form>
+<script>
+    setMoneyTextBox("#TienKhacDisplay");
+</script>

@@ -144,6 +144,7 @@ namespace BaseSource.BackendApi.Controllers
                     hd.HD_Status = (byte)EHopDong_CommonStatusFilter.KetThuc;
                     break;
                 case ELoaiHopDong.GopVon:
+                    hd.HD_Status = (byte)EHopDong_CommonStatusFilter.KetThuc;
                     break;
                 default:
                     break;
@@ -178,6 +179,11 @@ namespace BaseSource.BackendApi.Controllers
             {
                 FeatureType = EFeatureType.Vaylai;
                 successMessage = "Bạn đã trả khoản vay thành công";
+            }
+            if (hd.HD_Loai == ELoaiHopDong.GopVon)
+            {
+                FeatureType = EFeatureType.GopVon;
+                successMessage = "Đã rút vốn thành công";
             }
 
             //tạo lịch sử giao dịch
