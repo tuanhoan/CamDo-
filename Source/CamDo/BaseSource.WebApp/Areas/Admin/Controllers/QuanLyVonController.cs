@@ -36,6 +36,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             };
             var result = _hopDongApiClient.GetPagings(request);
             await Task.WhenAll(result);
+            ViewBag.ListAuth = ListAuthFunc;
             return View(result.Result.ResultObj);
         }
 

@@ -436,6 +436,10 @@ namespace BaseSource.BackendApi.Controllers
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
             var cuaHang = await _db.CuaHangs.OrderByDescending(x => x.CreatedDate).FirstOrDefaultAsync();
+            var ListFuncCode = await (from au in _db.AuthorUserFunctions
+                                join af in _db.AuthorFunctions on au.FuncId equals af.Id
+                                where au.UserId == user.Id.ToString()
+                                select af.FuncCode).ToListAsync(); 
 
             var roles = await _userManager.GetRolesAsync(user);
             var claims = new List<Claim>()
@@ -444,7 +448,8 @@ namespace BaseSource.BackendApi.Controllers
                 new Claim(ClaimTypes.Name, user.UserName),
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim("CuaHangId", cuaHang?.Id.ToString() ?? ""),
-                 new Claim("TenCuaHang", cuaHang?.Ten ?? "")
+                new Claim("TenCuaHang", cuaHang?.Ten ?? ""),
+                new Claim("AuthFunction", String.Join(",",ListFuncCode))
              };
 
             foreach (var item in roles)
