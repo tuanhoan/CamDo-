@@ -1,5 +1,10 @@
-﻿@{
+﻿@using BaseSource.ViewModels.BaoCao
+@using System.Globalization
+@model ReportBalanceVM
+@{
     ViewData["Title"] = "Tổng kết giao dịch";
+    var lstUser = ViewData["ListUser"] as SelectList;
+    CultureInfo cul = CultureInfo.GetCultureInfo("vi-VN");
 }
 
 
@@ -13,35 +18,29 @@
             <div class="card-body">
                 <div class="row ">
                     <div class="col-md-12">
-                        <div class="mb-2">
-                            <button class="btn btn-success"><i data-feather="printer"></i> Excel</button>
-                            <button class="btn btn-warning"> <i data-feather="printer"></i> In</button>
-                        </div>
+                        <form action="@Url.Action("Export","BaoCao")" method="post">
+                            <div class="mb-2">
+                                <input type="hidden" class="form-control" name="from" value="@Context.Request.Query["from"]">
+                                <input type="hidden" class="form-control" name="to" value="@Context.Request.Query["to"]">
+                                <input type="hidden" class="form-control" name="loaihopdong" value="@Context.Request.Query["loaihopdong"]">
+                                <input type="hidden" class="form-control" name="user" value="@Context.Request.Query["user"]">
+                                <button type="submit" class="btn btn-success"><i data-feather="printer"></i> Excel</button>
+                                <button class="btn btn-warning"> <i data-feather="printer"></i> In</button>
+                            </div>
+                        </form>
                         <div class="mb-3">
                             <form class="form-inline">
                                 <div class="mb-3">
-                                    <input type="date" class="form-control" id="from">
+                                    <input type="date" name="from" value="@Context.Request.Query["from"]" class="form-control" id="from">
                                 </div>
                                 <div class="mb-3">
-                                    <input type="date" class="form-control" id="to">
+                                    <input type="date" name="to" value="@Context.Request.Query["to"]" class="form-control" id="to">
                                 </div>
                                 <div class="mb-3">
-                                    <select class=" form-control" name="type">
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                    </select>
+                                    @Html.DropDownList("loaihopdong", Html.GetEnumSelectList<ELoaiHopDong>(), "---Tất cả---", new { @class = "form-control" })
                                 </div>
                                 <div class="mb-3">
-                                    <select class=" form-control" name="type">
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                    </select>
+                                     @Html.DropDownList("user", lstUser, "---Tất cả---", new { @class = "form-control" })
                                 </div>
                                 <button type="submit" class="btn btn-primary mb-2">Tìm kiếm</button>
                             </form>
@@ -72,55 +71,55 @@
                                         </td>
                                         <td>-</td>
                                         <td>-</td>
-                                        <td class=" text-blue font-weight-bold lead"><span>999,992,022</span></td>
+                                        <td class=" text-blue font-weight-bold lead"><span>@Model?.TienDauNgay.Total.ToString("#,###", cul.NumberFormat)</span></td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <span class="">Cầm Đồ</span>
                                         </td>
-                                        <td><span class="text-blue lead">0</span></td>
-                                        <td><span class="lead">0</span></td>
-                                        <td class=" text-blue lead"><span>0</span></td>
+                                        <td><span class="text-blue lead">@Model?.CamDo.Thu.ToString("#,###", cul.NumberFormat)</span></td>
+                                        <td><span class="lead">@Model?.CamDo.Chi.ToString("#,###", cul.NumberFormat)</span></td>
+                                        <td class=" text-blue lead"><span>@Model?.CamDo.Total.ToString("#,###", cul.NumberFormat)</span></td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <span class="">Vay Lãi</span>
                                         </td>
-                                        <td><span class="text-blue lead">0</span></td>
-                                        <td><span class="lead">0</span></td>
-                                        <td class="text-blue lead"><span>0</span></td>
+                                        <td><span class="text-blue lead">@Model?.VayLai.Thu.ToString("#,###", cul.NumberFormat)</span></td>
+                                        <td><span class="lead">@Model?.VayLai.Thu.ToString("#,###", cul.NumberFormat)</span></td>
+                                        <td class="text-blue lead"><span>@Model?.VayLai.Total.ToString("#,###", cul.NumberFormat)</span></td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <span class="">Bát Họ</span>
                                         </td>
-                                        <td><span class="text-blue lead">0</span></td>
-                                        <td><span class="lead">0</span></td>
-                                        <td class=text-blue lead"><span>0</span></td>
+                                        <td><span class="text-blue lead">@Model?.BatHo.Thu.ToString("#,###", cul.NumberFormat)</span></td>
+                                        <td><span class="lead">@Model?.BatHo.Chi.ToString("#,###", cul.NumberFormat)</span></td>
+                                        <td class=text-blue lead"><span>@Model?.BatHo.Total.ToString("#,###", cul.NumberFormat)</span></td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <span class="">Thu Hoạt Động</span>
                                         </td>
-                                        <td><span class="text-blue lead">0</span></td>
-                                        <td><span class="lead">0</span></td>
-                                        <td class="text-blue lead"><span>0</span></td>
+                                        <td><span class="text-blue lead">@Model?.ThuHoatDong.Thu.ToString("#,###", cul.NumberFormat)</span></td>
+                                        <td><span class="lead">@Model?.ThuHoatDong.Chi.ToString("#,###", cul.NumberFormat)</span></td>
+                                        <td class="text-blue lead"><span>@Model?.ThuHoatDong.Total.ToString("#,###", cul.NumberFormat)</span></td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <span class="">Chi Hoạt Động</span>
                                         </td>
-                                        <td><span class="text-blue lead">0</span></td>
-                                        <td><span class="lead">0</span></td>
-                                        <td class="text-blue lead"><span>0</span></td>
+                                        <td><span class="text-blue lead">@Model?.ChiHoatDong.Thu.ToString("#,###", cul.NumberFormat)</span></td>
+                                        <td><span class="lead">@Model?.ChiHoatDong.Chi.ToString("#,###", cul.NumberFormat)</span></td>
+                                        <td class="text-blue lead"><span>@Model?.ChiHoatDong.Total.ToString("#,###", cul.NumberFormat)</span></td>
                                     </tr>
                                     <tr>
                                         <td>
                                             <span class="">Nguồn Vốn</span>
                                         </td>
-                                        <td><span class="text-blue lead">0</span></td>
-                                        <td><span class="lead">0</span></td>
-                                        <td class="text-blue lead"><span>0</span></td>
+                                        <td><span class="text-blue lead">@Model?.NguonVon.Thu.ToString("#,###", cul.NumberFormat)</span></td>
+                                        <td><span class="lead">@Model?.NguonVon.Chi.ToString("#,###", cul.NumberFormat)</span></td>
+                                        <td class="text-blue lead"><span>@Model?.NguonVon.Total.ToString("#,###", cul.NumberFormat)</span></td>
                                     </tr>
                                     <tr>
                                         <td>
@@ -128,7 +127,7 @@
                                         </td>
                                         <td>-</td>
                                         <td>-</td>
-                                        <td class="text-blue font-weight-bold lead"><span>999,992,022</span></td>
+                                        <td class="text-blue font-weight-bold lead"><span>@Model?.TienMatConLai.Total.ToString("#,###", cul.NumberFormat)</span></td>
                                     </tr>
                                 </tbody>
                                 <!--end::Tbody-->
@@ -136,7 +135,7 @@
                             <!--end::Table-->
                         </div>
                         <h5><i data-feather="file-text"></i>Chi tiết giao dịch</h5>
-                         <div class="progress" style="height: 4px;">
+                        <div class="progress" style="height: 4px;">
                             <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                         <div class="table-responsive mt-3">
@@ -173,10 +172,30 @@
                                         <th scope="col">
                                             Ghi chú
                                         </th>
-
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @if (Model?.GiaoDichs != null)
+                                    {
+                                        var idx = 1;
+
+                                        foreach (var item in Model.GiaoDichs)
+                                        {
+                                            <tr>
+                                                <td>@idx</td>
+                                                <td>@item.LoaiHopDong</td>
+                                                <td>@item.MaHopDong</td>
+                                                <td>@item.NguoiGD</td>
+                                                <td>@item.KhachHang</td>
+                                                <td>@item.NgayGiaoDich.ToShortDateString()</td>
+                                                <td>@item.DienDai</td>
+                                                <td>@item.DaThu.ToString("#,###", cul.NumberFormat)</td>
+                                                <td>@item.DaChi.ToString("#,###", cul.NumberFormat)</td>
+                                                <td>@item.GhiChu</td>
+                                            </tr>
+                                            idx++;
+                                        }
+                                    }
                                 </tbody>
 
                             </table>

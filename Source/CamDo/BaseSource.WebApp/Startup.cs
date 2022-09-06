@@ -39,7 +39,7 @@ using BaseSource.ApiIntegration.WebApi.QuanlyThuChi;
 
 using BaseSource.ApiIntegration.WebApi.GoiSanPham;
 using BaseSource.ApiIntegration.WebApi.BaiViet;
-
+using BaseSource.ApiIntegration.WebApi.BaoCao;
 
 namespace BaseSource.WebApp
 {
@@ -128,6 +128,7 @@ namespace BaseSource.WebApp
             services.AddTransient<IQuanLyThuChiApiClient, QuanLyThuChiApiClient>();
 
             services.AddTransient<IBaiVietApiClient, BaiVietApiClient>();
+            services.AddTransient<IBaoCaoApiClient, BaoCaoApiClient>();
 
 
             services.AddTransient<IUserAdminApiClient, UserAdminApiClient>();
