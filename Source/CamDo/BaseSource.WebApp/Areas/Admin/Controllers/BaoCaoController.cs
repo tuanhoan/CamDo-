@@ -1,15 +1,22 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BaseSource.ApiIntegration.WebApi.BaoCao;
+using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace BaseSource.WebApp.Areas.Admin.Controllers
 {
     public class BaoCaoController : BaseAdminController
     {
+        private readonly IBaoCaoApiClient _baoCaoApiClient;
+        public BaoCaoController(IBaoCaoApiClient baoCaoApiClient)
+        {
+            _baoCaoApiClient = baoCaoApiClient;
+        }
 
         //Tổng kết giao dịch
         public async Task<IActionResult>  ReportBalance()
         {
-            return View();
+            var result = await _baoCaoApiClient.ReportBalance();
+            return View(result.ResultObj);
         }
         //Tổng kết lợi nhuận
         public async Task<IActionResult> Profit()
