@@ -1,5 +1,14 @@
-﻿using BaseSource.ApiIntegration.WebApi.BaoCao;
+﻿using BaseSource.ApiIntegration.WebApi;
+using BaseSource.ApiIntegration.WebApi.BaoCao;
+using BaseSource.Shared.Enums;
+using BaseSource.ViewModels.BaoCao;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+using System;
+using System.Drawing;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BaseSource.WebApp.Areas.Admin.Controllers
@@ -7,17 +16,105 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
     public class BaoCaoController : BaseAdminController
     {
         private readonly IBaoCaoApiClient _baoCaoApiClient;
-        public BaoCaoController(IBaoCaoApiClient baoCaoApiClient)
+        private readonly IUserApiClient _userApiClient; 
+        public BaoCaoController(IBaoCaoApiClient baoCaoApiClient, IUserApiClient userApiClient)
         {
             _baoCaoApiClient = baoCaoApiClient;
+            _userApiClient = userApiClient;
         }
 
         //Tổng kết giao dịch
-        public async Task<IActionResult>  ReportBalance()
+        public async Task<IActionResult>  ReportBalance(DateTime? from, DateTime? to, int? loaihopdong, string user)
         {
-            var result = await _baoCaoApiClient.ReportBalance();
+            var request = new ReportBalanceRequest()
+            {
+                FormDate = from,
+                ToDate = to,
+                LoaiHopDong = loaihopdong,
+                UserId = user
+            };
+            var result = await _baoCaoApiClient.ReportBalance(request);
+            var requestUser = await _userApiClient.GetUserByCuaHang();
+            ViewData["ListUser"] = new SelectList(requestUser.ResultObj, "Id", "FullName");
             return View(result.ResultObj);
         }
+        #region Export
+        public async Task<IActionResult> Export( DateTime? from, DateTime? to, int loaihopdong, string user)
+        {
+            var request = new ReportBalanceRequest()
+            {
+                FormDate = from,
+                ToDate = to,
+                LoaiHopDong = loaihopdong,
+                UserId = user
+            };
+
+            var result = await _baoCaoApiClient.ReportBalance(request);
+            string fileName = "reportBalance" + "-" + DateTime.Now.ToString("ddMMyyyy_HHmmss") + ".xlsx";
+
+            using (ExcelPackage p = new ExcelPackage())
+            {
+                p.Workbook.Properties.Title = "reportBalance";
+
+                //Create a sheet
+                p.Workbook.Worksheets.Add("reportBalance");
+                ExcelWorksheet ws = p.Workbook.Worksheets[0];
+                ws.Name = "reportBalance"; //Setting Sheet's name
+                ws.Cells.Style.Font.Size = 11; //Default font size for whole sheet
+                ws.Cells.Style.Font.Name = "Calibri"; //Default Font name for whole sheet
+
+
+                // Create header column
+                string[] arrColumnHeader = { "Loại hình", "Mã HĐ", "Người GD", "Khách hàng", "Ngày giao dịch", "Diễn Giải",
+                                           "Đã thu","Đã chi","Ghi chú"};
+                var countColHeader = arrColumnHeader.Count();
+
+                int colIndex = 1;
+                int rowIndex = 1;
+
+                //Creating Headings
+                foreach (var item in arrColumnHeader)
+                {
+                    var cell = ws.Cells[rowIndex, colIndex];
+
+                    //Setting the background color of header cells to Gray
+                    cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    cell.Style.Fill.BackgroundColor.SetColor(Color.MediumBlue);
+                    cell.Style.Font.Color.SetColor(Color.White);
+                    cell.Style.Font.Bold = true;
+
+                    cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    cell.AutoFitColumns();
+                    //Setting Value in cell
+                    cell.Value = item;
+
+                    colIndex++;
+                }
+
+                // Adding Data into rows
+
+                foreach (var item in result.ResultObj.GiaoDichs)
+                {
+                    colIndex = 1;
+                    rowIndex++;
+                    ws.Cells[rowIndex, colIndex++].Value = item.LoaiHopDong;
+                    ws.Cells[rowIndex, colIndex++].Value = item.MaHopDong;
+                    ws.Cells[rowIndex, colIndex++].Value = item.NgayGiaoDich;
+                    ws.Cells[rowIndex, colIndex++].Value = item.KhachHang;
+                    ws.Cells[rowIndex, colIndex++].Value = item.NgayGiaoDich.ToString("dd/MM/yyyy");
+                    ws.Cells[rowIndex, colIndex++].Value = item.DienDai;
+                    ws.Cells[rowIndex, colIndex++].Value = item.DaThu.ToString("N0");
+                    ws.Cells[rowIndex, colIndex++].Value = item.DaChi.ToString("N0");
+                    ws.Cells[rowIndex, colIndex++].Value = item.GhiChu;
+                }
+                ws.Cells.AutoFitColumns();
+                //Generate A File with name
+                Byte[] bin = p.GetAsByteArray();
+                return File(bin, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+            }
+
+        }
+        #endregion
         //Tổng kết lợi nhuận
         public async Task<IActionResult> Profit()
         {

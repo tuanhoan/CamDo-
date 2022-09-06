@@ -10,6 +10,6 @@ namespace BaseSource.ApiIntegration.WebApi.BaoCao
 {
     public interface IBaoCaoApiClient
     {
-        Task<ApiResult<ReportBalanceVM>> ReportBalance();
+        Task<ApiResult<ReportBalanceVM>> ReportBalance(ReportBalanceRequest request);
     }
 }

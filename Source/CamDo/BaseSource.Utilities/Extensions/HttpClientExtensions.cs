@@ -41,7 +41,8 @@ namespace BaseSource.Utilities.Helper
             if (data != null)
             {
                 string queryString = UrlHelper.GetQueryString(data);
-                url += "?" + queryString;
+                if (!string.IsNullOrEmpty(queryString))
+                    url += "?" + queryString;
             }
 
             using (var response = await client.GetAsync(url))

@@ -1,8 +1,11 @@
 ﻿using BaseSource.Data.EF;
+using BaseSource.Shared.Enums;
 using BaseSource.ViewModels.BaoCao;
 using BaseSource.ViewModels.Common;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,11 +20,34 @@ namespace BaseSource.BackendApi.Controllers
         }
 
         [HttpGet("ReportBalance")]
-        public async Task<IActionResult> ReportBalance()
-        {
-            var hopdongs = await _db.HopDongs.ToListAsync();
-            var cuahangtranLogs = await _db.CuaHang_TransactionLogs.ToListAsync();
-            var cuahangQuyTienLogs = await _db.CuaHang_QuyTienLogs.ToListAsync();
+        public async Task<IActionResult> ReportBalance(DateTime? FormDate, DateTime? ToDate, string UserId, int? LoaiHopDong)
+        { 
+            var hopdongs = await _db.HopDongs.Where(x=>x.CuaHangId== CuaHangId).ToListAsync();
+
+            if(FormDate != null)
+            {
+                hopdongs = hopdongs.Where(x => x.CreatedDate >= FormDate).ToList();
+            }
+            if (ToDate != null)
+            {
+                hopdongs = hopdongs.Where(x => x.CreatedDate <= ToDate).ToList();
+            }
+            if (UserId != null)
+            {
+                hopdongs = hopdongs.Where(x => x.UserIdCreated == UserId).ToList();
+            }
+            if (LoaiHopDong != null)
+            {
+                hopdongs = hopdongs.Where(x => (int)x.HD_Loai == LoaiHopDong).ToList();
+            }
+
+
+            var cuahangtranLogs = await _db.CuaHang_TransactionLogs.Where(x => x.CuaHangId == CuaHangId).ToListAsync();
+            var cuahangQuyTienLogs = await _db.CuaHang_QuyTienLogs.Where(x => x.CuaHangId == CuaHangId).ToListAsync();
+            var giaodichs = new List<GiaoDich>();
+            var khachhangs = await _db.KhachHangs.Where(x => x.CuaHangId == CuaHangId).ToListAsync();
+            var users = await _db.UserProfiles.Where(x => x.CuaHangId == CuaHangId).ToListAsync();
+
             var data = new ReportBalanceVM()
             {
                 TienDauNgay = new Summary
@@ -66,13 +92,31 @@ namespace BaseSource.BackendApi.Controllers
                 },
             };
             data.TienDauNgay.Total = cuahangQuyTienLogs.Where(x => x.LogType == Shared.Enums.EQuyTienCuaHang_LogType.TienDauNgay).Sum(x => x.Money);
-            data.BatHo.Total = data.BatHo.Chi - data.BatHo.Thu;
-            data.CamDo.Total = data.CamDo.Chi - data.CamDo.Thu;
-            data.ChiHoatDong.Total = data.ChiHoatDong.Chi - data.ChiHoatDong.Thu;
-            data.NguonVon.Total = data.NguonVon.Chi - data.NguonVon.Thu;
-            data.ThuHoatDong.Total = data.ThuHoatDong.Chi - data.ThuHoatDong.Thu;
-            data.TienMatConLai.Total = data.TienMatConLai.Chi - data.TienMatConLai.Thu;
-            data.VayLai.Total = data.VayLai.Chi - data.VayLai.Thu;
+            data.BatHo.Total = data.BatHo.Thu - data.BatHo.Chi;
+            data.CamDo.Total = data.CamDo.Thu - data.CamDo.Chi;
+            data.ChiHoatDong.Total = data.ChiHoatDong.Thu - data.ChiHoatDong.Chi;
+            data.NguonVon.Total = data.NguonVon.Thu - data.NguonVon.Chi;
+            data.ThuHoatDong.Total = data.ThuHoatDong.Thu - data.ThuHoatDong.Chi;
+            data.VayLai.Total = data.VayLai.Thu - data.VayLai.Chi;
+            data.TienMatConLai.Total = data.TienMatConLai.Thu - data.TienMatConLai.Chi;
+
+            foreach(var item in hopdongs)
+            {
+                var gd = new GiaoDich
+                {
+                    LoaiHopDong = item.HD_Loai,
+                    DaChi = item.HD_TongTienVayBanDau,
+                    DaThu = item.TongTienLaiDaThanhToan,
+                    DienDai = "",
+                    GhiChu = item.HD_GhiChu,
+                    KhachHang = khachhangs.FirstOrDefault(x => x.Id == item.KhachHangId)?.Ten,
+                    MaHopDong = item.HD_Ma,
+                    NgayGiaoDich = item.CreatedDate,
+                    NguoiGD = users.FirstOrDefault(x => x.UserId == item.UserIdAssigned)?.FullName
+                };
+                giaodichs.Add(gd);
+            }
+            data.GiaoDichs = giaodichs;
 
             return base.Ok(new ApiSuccessResult<ReportBalanceVM>(data));
         }
