@@ -19,10 +19,17 @@ namespace BaseSource.ApiIntegration.WebApi.BaoCao
             _httpClientFactory = httpClientFactory;
         }
 
-        public async Task<ApiResult<ReportBalanceVM>> ReportBalance()
+        public async Task<ApiResult<ReportBalanceVM>> ReportBalance(ReportBalanceRequest request)
         {
+            var obj = new
+            {
+                formDate = request.FormDate,
+                toDate = request.ToDate,
+                userId = request.UserId,
+                loaiHopDong = request.LoaiHopDong
+            };
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
-            return await client.GetAsync<ApiResult<ReportBalanceVM>>("/api/BaoCaos/ReportBalance");
+            return await client.GetAsync<ApiResult<ReportBalanceVM>>("/api/BaoCaos/ReportBalance", request);
         }
     }
 }
