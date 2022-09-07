@@ -35,7 +35,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
                 UserName = username,
                 Email = email
             };
-
+            
             var result = await _apiClientUser.GetPagings(request);
             if (!result.IsSuccessed)
             {
