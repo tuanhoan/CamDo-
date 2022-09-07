@@ -2,6 +2,7 @@
 using BaseSource.Shared.Enums;
 using BaseSource.ViewModels.BaoCao;
 using BaseSource.ViewModels.Common;
+using BaseSource.ViewModels.HD_PaymentLog;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -21,10 +22,10 @@ namespace BaseSource.BackendApi.Controllers
 
         [HttpGet("ReportBalance")]
         public async Task<IActionResult> ReportBalance(DateTime? FormDate, DateTime? ToDate, string UserId, int? LoaiHopDong)
-        { 
-            var hopdongs = await _db.HopDongs.Where(x=>x.CuaHangId== CuaHangId).ToListAsync();
+        {
+            var hopdongs = await _db.HopDongs.Where(x => x.CuaHangId == CuaHangId).ToListAsync();
 
-            if(FormDate != null)
+            if (FormDate != null)
             {
                 hopdongs = hopdongs.Where(x => x.CreatedDate >= FormDate).ToList();
             }
@@ -100,7 +101,7 @@ namespace BaseSource.BackendApi.Controllers
             data.VayLai.Total = data.VayLai.Thu - data.VayLai.Chi;
             data.TienMatConLai.Total = data.TienMatConLai.Thu - data.TienMatConLai.Chi;
 
-            foreach(var item in hopdongs)
+            foreach (var item in hopdongs)
             {
                 var gd = new GiaoDich
                 {
@@ -119,6 +120,33 @@ namespace BaseSource.BackendApi.Controllers
             data.GiaoDichs = giaodichs;
 
             return base.Ok(new ApiSuccessResult<ReportBalanceVM>(data));
+        }
+        [HttpGet("GetPaymentLog")]
+        public async Task<IActionResult> GetPaymentLog()
+        {
+            var users = await _db.UserProfiles.ToListAsync();
+            var khachHangs = await _db.KhachHangs.ToListAsync();
+            var lstPayment = (await _db.HopDong_PaymentLogs
+                .Include(x => x.HopDong)
+                .Where(x=>x.HopDong.CuaHangId==CuaHangId)
+                .ToListAsync())
+                .Select(x => new HD_PaymentLogReportVm()
+                {
+                    MaHD = x.HopDong.HD_Ma,
+                    TenKhachHang = khachHangs.FirstOrDefault(k => k.Id == x.HopDong.KhachHangId) == null ? "" : khachHangs.FirstOrDefault(k => k.Id == x.HopDong.KhachHangId).Ten,
+                    KhachHangId = x.HopDong.KhachHangId,
+                    TenHang = x.HopDong.TenTaiSan,
+                    TienVay = x.HopDong.TongTienVayHienTai,
+                    NguoiGiaoDich = users.FirstOrDefault(u => x.HopDong.UserIdAssigned == u.UserId) == null ? "" : users.FirstOrDefault(u => x.HopDong.UserIdAssigned == u.UserId).FullName,
+                    NgayGiaoDich = x.PaidDate,
+                    TienLai = x.MoneyPay,
+                    TienKhac = x.MoneyOther,
+                    TongLai = x.MoneyInterest,
+                    LoaiGiaoDich = "Trả tiền lãi"
+
+                }).ToList();
+
+            return Ok(new ApiSuccessResult<List<HD_PaymentLogReportVm>>(lstPayment));
         }
     }
 }

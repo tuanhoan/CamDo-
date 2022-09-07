@@ -19,6 +19,12 @@ namespace BaseSource.ApiIntegration.WebApi.BaoCao
             _httpClientFactory = httpClientFactory;
         }
 
+        public async Task<ApiResult<List<HD_PaymentLogReportVm>>> GetPaymentLog()
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.GetAsync<ApiResult<List<HD_PaymentLogReportVm>>>("/api/BaoCaos/GetPaymentLog");
+        }
+
         public async Task<ApiResult<ReportBalanceVM>> ReportBalance(ReportBalanceRequest request)
         {
             var obj = new

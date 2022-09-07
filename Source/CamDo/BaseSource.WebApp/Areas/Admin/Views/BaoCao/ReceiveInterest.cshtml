@@ -1,5 +1,8 @@
-﻿@{
+﻿@using BaseSource.ViewModels.BaoCao
+@model List<HD_PaymentLogReportVm>
+@{
     ViewData["Title"] = "Chi tiết tiền lãi";
+      var lstUser = ViewData["ListUser"] as SelectList;
 }
 
 
@@ -13,35 +16,30 @@
             <div class="card-body">
                 <div class="row ">
                     <div class="col-md-12">
-
                         <div class="mb-3">
                             <form class="form-inline">
                                 <div class="mb-3">
-                                    <input type="date" class="form-control" id="from">
+                                    <input type="date" name="from" value="@Context.Request.Query["from"]" class="form-control" id="from">
                                 </div>
                                 <div class="mb-3">
-                                    <input type="date" class="form-control" id="to">
+                                    <input type="date" name="to" value="@Context.Request.Query["to"]" class="form-control" id="to">
                                 </div>
                                 <div class="mb-3">
-                                    <select class=" form-control" name="type">
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                    </select>
+                                    @Html.DropDownList("loaihopdong", Html.GetEnumSelectList<ELoaiHopDong>(), "---Tất cả---", new { @class = "form-control" })
                                 </div>
                                 <div class="mb-3">
-                                    <select class=" form-control" name="type">
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                    </select>
+                                     @Html.DropDownList("user", lstUser, "---Tất cả---", new { @class = "form-control" })
                                 </div>
-                                <button type="submit" class="btn btn-primary mb-2"><i data-feather="search"></i> Tìm kiếm</button>
-                                <button type="submit" class="btn btn-success mb-2 ms-2"><i data-feather="file-text"></i> Excel</button>
+                                <button type="submit" class="btn btn-primary mb-2">Tìm kiếm</button>
+                            </form>
+                            <form action="@Url.Action("Export_ReceiveInterest","BaoCao")" method="post">
+                                <div class="mb-2">
+                                    <input type="hidden" class="form-control" name="from" value="@Context.Request.Query["from"]">
+                                    <input type="hidden" class="form-control" name="to" value="@Context.Request.Query["to"]">
+                                    <input type="hidden" class="form-control" name="loaihopdong" value="@Context.Request.Query["loaihopdong"]">
+                                    <input type="hidden" class="form-control" name="user" value="@Context.Request.Query["user"]">
+                                    <button type="submit" class="btn btn-success mb-2 ms-2"><i data-feather="file-text"></i> Excel</button>
+                                </div>
                             </form>
                         </div>
 
@@ -87,19 +85,26 @@
                                 <tbody>
                                 </tbody>
                                 <tfoot>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td class="text-danger">Tổng tiền</td>
-                                        <td class="text-primary">14000</td>
-                                        <td class="text-primary">14000</td>
-                                        <td class="text-primary">14000</td>
-                                        <td></td>
-                                    </tr>
+                                    @if (Model != null)
+                                    {
+                                        var idx = 1;
+                                        foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>@idx</td>
+                                                <td>@item.MaHD</td>
+                                                <td>@item.TenKhachHang</td>
+                                                <td>@item.TenHang</td>
+                                                <td>@item.TienVay</td>
+                                                <td>@item.NguoiGiaoDich</td>
+                                                <td>@item.NgayGiaoDich?.ToString("dd/MM/yyy")</td>
+                                                <td class="text-primary">@item.TienLai</td>
+                                                <td class="text-primary">@item.TienKhac</td>
+                                                <td class="text-primary">@item.TongLai</td>
+                                                <td>@item.LoaiGiaoDich</td>
+                                            </tr>
+                                        }
+                                    }
                                 </tfoot>
                             </table>
                         </div>
