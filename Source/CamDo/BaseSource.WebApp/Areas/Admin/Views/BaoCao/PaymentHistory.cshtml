@@ -1,5 +1,8 @@
-﻿@{
+﻿@using BaseSource.ViewModels.BaoCao
+@model List<PaymentHistoryVM>
+@{
     ViewData["Title"] = "Thống kê thu tiền";
+    var lstUser = ViewData["ListUser"] as SelectList;
 }
 
 
@@ -17,31 +20,18 @@
                         <div class="mb-3">
                             <form class="form-inline">
                                 <div class="mb-3">
-                                    <input type="date" class="form-control" id="from">
+                                    <input type="date" name="from" value="@Context.Request.Query["from"]" class="form-control" id="from">
                                 </div>
                                 <div class="mb-3">
-                                    <input type="date" class="form-control" id="to">
+                                    <input type="date" name="to" value="@Context.Request.Query["to"]" class="form-control" id="to">
                                 </div>
                                 <div class="mb-3">
-                                    <select class=" form-control" name="type">
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                    </select>
+                                    @Html.DropDownList("loaihopdong", Html.GetEnumSelectList<ELoaiHopDong>(), "---Tất cả---", new { @class = "form-control" })
                                 </div>
                                 <div class="mb-3">
-                                    <select class=" form-control" name="type">
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                    </select>
+                                    @Html.DropDownList("user", lstUser, "---Tất cả---", new { @class = "form-control" })
                                 </div>
-                                <button type="submit" class="btn btn-primary mb-2"><i data-feather="search"></i> Tìm kiếm</button>
-
+                                <button type="submit" class="btn btn-primary mb-2">Tìm kiếm</button>
                             </form>
                         </div>
 
@@ -53,7 +43,7 @@
                                             #
                                         </th>
                                         <th scope="col">
-                                          Tên nhân viên
+                                            Tên nhân viên
                                         </th>
                                         <th scope="col">
                                             Từ ngày
@@ -71,9 +61,24 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @if (Model != null)
+                                    {
+                                        var idx = 1;
+                                        foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>@idx</td>
+                                                <td>@item.TenNhanVien</td>
+                                                <td>@item.TuNgay</td>
+                                                <td>@item.DenNgay</td>
+                                                <td>@item.TongTienThu.ToString("N0")</td>
+                                            </tr>
+                                            idx++;
+                                        }
+                                    }
                                 </tbody>
                                 <tfoot>
-                                     <tr style="background:#ede8ab">
+                                    <tr style="background:#ede8ab">
                                         <td></td>
                                         <td></td>
                                         <td></td>

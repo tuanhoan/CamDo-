@@ -11,6 +11,9 @@ namespace BaseSource.ApiIntegration.WebApi.BaoCao
     public interface IBaoCaoApiClient
     {
         Task<ApiResult<ReportBalanceVM>> ReportBalance(ReportBalanceRequest request);
-        Task<ApiResult<List<HD_PaymentLogReportVm>>> GetPaymentLog();
+        Task<ApiResult<List<HD_PaymentLogReportVm>>> GetPaymentLog(ReportBalanceRequest request);
+        Task<ApiResult<List<ReportPawnHoldingVm>>> ReportPawnHolding(ReportBalanceRequest request);
+        Task<ApiResult<List<ReportPawnNewRepurchaseVM>>> ReportPawnNewRepurchase();
+        Task<ApiResult<List<PaymentHistoryVM>>> PaymentHistory(ReportBalanceRequest request);
     }
 }
