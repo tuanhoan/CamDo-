@@ -1,4 +1,6 @@
-﻿@{
+﻿@using BaseSource.ViewModels.BaoCao
+@model List<PaymentHistoryVM>
+@{
     ViewData["Title"] = "Thống kê thu tiền";
 }
 
@@ -53,7 +55,7 @@
                                             #
                                         </th>
                                         <th scope="col">
-                                          Tên nhân viên
+                                            Tên nhân viên
                                         </th>
                                         <th scope="col">
                                             Từ ngày
@@ -71,9 +73,24 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @if (Model != null)
+                                    {
+                                        var idx = 1;
+                                        foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>@idx</td>
+                                                <td>@item.TenNhanVien</td>
+                                                <td>@item.TuNgay</td>
+                                                <td>@item.DenNgay</td>
+                                                <td>@item.TongTienThu.ToString("N0")</td>
+                                            </tr>
+                                            idx++;
+                                        }
+                                    }
                                 </tbody>
                                 <tfoot>
-                                     <tr style="background:#ede8ab">
+                                    <tr style="background:#ede8ab">
                                         <td></td>
                                         <td></td>
                                         <td></td>

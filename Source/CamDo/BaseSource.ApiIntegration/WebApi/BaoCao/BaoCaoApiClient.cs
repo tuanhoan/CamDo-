@@ -23,7 +23,7 @@ namespace BaseSource.ApiIntegration.WebApi.BaoCao
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.GetAsync<ApiResult<List<HD_PaymentLogReportVm>>>("/api/BaoCaos/GetPaymentLog");
-        }
+        } 
 
         public async Task<ApiResult<ReportBalanceVM>> ReportBalance(ReportBalanceRequest request)
         {
@@ -36,6 +36,24 @@ namespace BaseSource.ApiIntegration.WebApi.BaoCao
             };
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.GetAsync<ApiResult<ReportBalanceVM>>("/api/BaoCaos/ReportBalance", request);
+        }
+
+        public async Task<ApiResult<List<ReportPawnHoldingVm>>> ReportPawnHolding()
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.GetAsync<ApiResult<List<ReportPawnHoldingVm>>>("/api/BaoCaos/ReportPawnHolding");
+        }
+
+        public async Task<ApiResult<List<PaymentHistoryVM>>> PaymentHistory()
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.GetAsync<ApiResult<List<PaymentHistoryVM>>>("/api/BaoCaos/PaymentHistory");
+        }
+
+        public async Task<ApiResult<List<ReportPawnNewRepurchaseVM>>> ReportPawnNewRepurchase()
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.GetAsync<ApiResult<List<ReportPawnNewRepurchaseVM>>>("/api/BaoCaos/ReportPawnNewRepurchase");
         }
     }
 }

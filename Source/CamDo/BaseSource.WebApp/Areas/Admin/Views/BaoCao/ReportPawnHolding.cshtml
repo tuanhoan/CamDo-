@@ -1,7 +1,8 @@
-﻿@{
+﻿@using BaseSource.ViewModels.BaoCao
+@model List<ReportPawnHoldingVm>
+@{
     ViewData["Title"] = "Báo cáo hợp đồng đang cho vay";
 }
-
 
 <div class="row">
     <!-- table  Lastest Tickets -->
@@ -41,7 +42,15 @@
                                     </select>
                                 </div>
                                 <button type="submit" class="btn btn-primary mb-2"><i data-feather="search"></i> Tìm kiếm</button>
-                                <button type="submit" class="btn btn-success mb-2 ms-2"><i data-feather="file-text"></i> Excel</button>
+                            </form>
+                             <form action="@Url.Action("Export_ReportPawnHolding","BaoCao")" method="post">
+                                <div class="mb-2">
+                                    <input type="hidden" class="form-control" name="from" value="@Context.Request.Query["from"]">
+                                    <input type="hidden" class="form-control" name="to" value="@Context.Request.Query["to"]">
+                                    <input type="hidden" class="form-control" name="loaihopdong" value="@Context.Request.Query["loaihopdong"]">
+                                    <input type="hidden" class="form-control" name="user" value="@Context.Request.Query["user"]">
+                                    <button type="submit" class="btn btn-success mb-2 ms-2"><i data-feather="file-text"></i> Excel</button>
+                                </div>
                             </form>
                         </div>
 
@@ -76,8 +85,26 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                </tbody>
+                                    @if (Model != null)
+                                    {
+                                        var idx = 1;
 
+                                        foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>@idx</td>
+                                                <td>@item.LoaiHopDong</td>
+                                                <td>@item.MaHD</td>
+                                                <td>@item.TenKhachHang</td>
+                                                <td>@item.TenHang</td>
+                                                <td>@item.NgayVay</td>
+                                                <td>@item.TienVay.ToString("N0")</td>
+                                                <td>@item.TinhTrang</td>
+                                            </tr>
+                                            idx++;
+                                        }
+                                    }
+                                </tbody>
                             </table>
                         </div>
                     </div>

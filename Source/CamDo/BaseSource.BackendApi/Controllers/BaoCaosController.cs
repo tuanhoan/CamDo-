@@ -1,4 +1,5 @@
 ﻿using BaseSource.Data.EF;
+using BaseSource.Data.Entities;
 using BaseSource.Shared.Enums;
 using BaseSource.ViewModels.BaoCao;
 using BaseSource.ViewModels.Common;
@@ -128,7 +129,7 @@ namespace BaseSource.BackendApi.Controllers
             var khachHangs = await _db.KhachHangs.ToListAsync();
             var lstPayment = (await _db.HopDong_PaymentLogs
                 .Include(x => x.HopDong)
-                .Where(x=>x.HopDong.CuaHangId==CuaHangId)
+                .Where(x => x.HopDong.CuaHangId == CuaHangId)
                 .ToListAsync())
                 .Select(x => new HD_PaymentLogReportVm()
                 {
@@ -147,6 +148,62 @@ namespace BaseSource.BackendApi.Controllers
                 }).ToList();
 
             return Ok(new ApiSuccessResult<List<HD_PaymentLogReportVm>>(lstPayment));
+        }
+        [HttpGet("ReportPawnHolding")]
+        public async Task<IActionResult> ReportPawnHolding()
+        {
+            var khachangs = await _db.KhachHangs.Where(x => x.CuaHangId == CuaHangId).ToListAsync();
+            var queryable = _db.HopDongs.Where(x => x.CuaHangId == CuaHangId);
+
+            var result = (await queryable.ToListAsync()).Select(x => new ReportPawnHoldingVm
+            {
+                LoaiHopDong = x.HD_Loai,
+                MaHD = x.HD_Ma,
+                NgayVay = x.HD_NgayVay.ToString("dd/MM/yyyy"),
+                TenHang = x.TenTaiSan,
+                TenKhachHang = khachangs.FirstOrDefault(i => i.Id == x.Id)?.Ten,
+                TienVay = x.TongTienVayHienTai,
+                TinhTrang = (EHopDong_CamDoStatusFilter)x.HD_Status
+            }).ToList();
+
+            return Ok(new ApiSuccessResult<List<ReportPawnHoldingVm>>(result));
+        }
+        [HttpGet("ReportPawnNewRepurchase")]
+        public async Task<IActionResult> ReportPawnNewRepurchase()
+        {
+            var khachangs = await _db.KhachHangs.Where(x => x.CuaHangId == CuaHangId).ToListAsync();
+            var queryable = _db.HopDongs.Where(x => x.CuaHangId == CuaHangId);
+
+            var result = (await queryable.ToListAsync()).Select(x => new ReportPawnNewRepurchaseVM
+            {
+                MaHD = x.HD_Ma,
+                NgayVay = x.HD_NgayVay.ToString("dd/MM/yyyy"),
+                TenHang = x.TenTaiSan,
+                TenKhachHang = khachangs.FirstOrDefault(i => i.Id == x.Id)?.Ten,
+                NgayTatToan = x.NgayTatToan?.ToString("dd/MM/yyyy"),
+                TienVay = x.HD_TongTienVayBanDau,
+                TienLai = x.TienLaiToiNgayHienTai,
+                TongTien = x.TongTienVayHienTai
+            }).ToList();
+
+            return Ok(new ApiSuccessResult<List<ReportPawnNewRepurchaseVM>>(result));
+        }
+        [HttpGet("PaymentHistory")]
+        public async Task<IActionResult> PaymentHistory()
+        {
+            var users = await _db.UserProfiles.ToListAsync();
+            var rs = await _db.HopDong_PaymentLogs
+                .Include(x => x.HopDong).ToListAsync();
+
+            var result = rs.Select(x => new PaymentHistoryVM
+            {
+                TenNhanVien = users.FirstOrDefault(u => u.UserId == x.HopDong.UserIdAssigned)?.FullName,
+                TuNgay = x.FromDate.ToString("dd/MM/yyyy"),
+                DenNgay = x.ToDate.ToString("dd/MM/yyyy"),
+                TongTienThu = x.MoneyPay
+            }).ToList();
+
+            return Ok(new ApiSuccessResult<List<PaymentHistoryVM>>(result));
         }
     }
 }
