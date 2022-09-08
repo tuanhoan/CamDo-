@@ -16,8 +16,7 @@ namespace BaseSource.Data.Configurations
             builder.ToTable("AuthorUserFunctions");
             builder.HasKey(t => new { t.UserId , t.FuncId});
             builder.Property(x => x.UserId).IsRequired().HasMaxLength(128);
-            builder.Property(x => x.FuncId).IsRequired();
-
+            builder.Property(x => x.FuncId).IsRequired(); 
         }
     }
 }

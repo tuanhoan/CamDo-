@@ -14,6 +14,7 @@ namespace BaseSource.Data.Configurations
         public void Configure(EntityTypeBuilder<AuthorFunction> builder)
         {
             builder.ToTable("AuthorFunctions");
+            builder.Property(x=>x.Id).ValueGeneratedOnAdd().ValueGeneratedNever();
             builder.HasKey(x => x.Id);
             builder.Property(x => x.FuncCode).IsRequired().HasMaxLength(128);
             builder.Property(x => x.FuncName).IsRequired().HasMaxLength(128);

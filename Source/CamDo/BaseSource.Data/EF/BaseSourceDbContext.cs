@@ -71,6 +71,7 @@ namespace BaseSource.Data.EF
 
             //Data seeding
             modelBuilder.Seed();
+            modelBuilder.ApplyConfiguration(new AuthorFunctionsSeedingData());
             base.OnModelCreating(modelBuilder);
 
         }
