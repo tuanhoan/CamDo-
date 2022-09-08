@@ -44,6 +44,8 @@ namespace BaseSource.Data.EF
             modelBuilder.ApplyConfiguration(new HopDong_PaymentLogNoteConfiguration());
             modelBuilder.ApplyConfiguration(new CuaHang_TransactionLogConfiguration());
             modelBuilder.ApplyConfiguration(new CuaHang_QuyTienLogConfiguration());
+            modelBuilder.ApplyConfiguration(new AuthorFunctionConfiguration());
+            modelBuilder.ApplyConfiguration(new AuthorUserFunctionConfiguration());
 
             //modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("AppUserClaims").HasKey(x => x.Id);
             modelBuilder.Entity<IdentityUserClaim<string>>().Property(x => x.UserId).HasMaxLength(128);
@@ -95,6 +97,8 @@ namespace BaseSource.Data.EF
         public DbSet<CuaHang_QuyTienLog> CuaHang_QuyTienLogs { get; set; }
         public DbSet<DanhMucBaiViet> DanhMucBaiViets { get; set; }
         public DbSet<BaiViet> BaiViets { get; set; }
+        public DbSet<AuthorFunction> AuthorFunctions { get; set; }
+        public DbSet<AuthorUserFunction> AuthorUserFunctions { get; set; }
     }
 }
 

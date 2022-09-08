@@ -4,14 +4,16 @@ using BaseSource.Data.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BaseSource.Data.Migrations
 {
     [DbContext(typeof(BaseSourceDbContext))]
-    partial class BaseSourceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220906154835_UpdateColumn")]
+    partial class UpdateColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,7 +57,7 @@ namespace BaseSource.Data.Migrations
                         new
                         {
                             Id = "c1105ce5-9dbc-49a9-a7d5-c963b6daa62a",
-                            ConcurrencyStamp = "02a71101-a9cc-4af0-b034-68d2d7717b1d",
+                            ConcurrencyStamp = "7db41b2e-b765-427e-aafb-914935c19094",
                             Description = "Administrator role",
                             Name = "Admin",
                             NormalizedName = "Admin"
@@ -63,7 +65,7 @@ namespace BaseSource.Data.Migrations
                         new
                         {
                             Id = "3a1cf1ce-83be-44ed-a5fe-6b2f25ffae32",
-                            ConcurrencyStamp = "97da24e9-4c5c-424b-96d7-bbc4fe99bb60",
+                            ConcurrencyStamp = "5ec9fe59-3486-454c-81ef-6a6dd938b4ea",
                             Description = "Shop Manager role",
                             Name = "ShopManager",
                             NormalizedName = "ShopManager"
@@ -141,13 +143,13 @@ namespace BaseSource.Data.Migrations
                         {
                             Id = "ffded6b0-3769-4976-841b-69459049a62d",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "bf2c5392-44db-428f-b45f-9a7e3fdbece3",
+                            ConcurrencyStamp = "282649df-1642-4e88-aa1b-34de76b31bb8",
                             Email = "doangiau2006@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "doangiau2006@gmail.com",
                             NormalizedUserName = "superadmin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKfDVdWwOKXNwSORpEf7jT6hEN9QpLskfwpPcdSq60apaqfKxtQrKcirlWyatw6ppw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAECdBwi4H40oDPSEuyJjgiXmjvA6k2dn1u5+sWz/RD056VX3OmL+Wi6KfRFsySxySsw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -188,14 +190,16 @@ namespace BaseSource.Data.Migrations
 
             modelBuilder.Entity("BaseSource.Data.Entities.AuthorUserFunction", b =>
                 {
+                    b.Property<int>("FuncId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
                     b.Property<string>("UserId")
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
-                    b.Property<int>("FuncId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "FuncId");
+                    b.HasKey("FuncId");
 
                     b.ToTable("AuthorUserFunctions");
                 });

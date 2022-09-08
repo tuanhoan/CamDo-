@@ -51,5 +51,19 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             }
 
         }
+
+        public List<string> ListAuthFunc
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(User.FindFirstValue("AuthFunction")))
+                {
+                    var stringAuth = User.FindFirstValue("AuthFunction");
+                    var listAuth = stringAuth.Split(",");
+                    return listAuth.ToList();
+                }
+                return new List<string>();
+            }
+        }
     }
 }
