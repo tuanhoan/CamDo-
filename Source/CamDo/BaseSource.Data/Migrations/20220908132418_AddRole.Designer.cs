@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BaseSource.Data.Migrations
 {
     [DbContext(typeof(BaseSourceDbContext))]
-    [Migration("20220906160257_UpdateColumnAuth")]
-    partial class UpdateColumnAuth
+    [Migration("20220908132418_AddRole")]
+    partial class AddRole
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -57,7 +57,7 @@ namespace BaseSource.Data.Migrations
                         new
                         {
                             Id = "c1105ce5-9dbc-49a9-a7d5-c963b6daa62a",
-                            ConcurrencyStamp = "02a71101-a9cc-4af0-b034-68d2d7717b1d",
+                            ConcurrencyStamp = "9d75e567-8309-44c7-a62c-60bc9cf79576",
                             Description = "Administrator role",
                             Name = "Admin",
                             NormalizedName = "Admin"
@@ -65,7 +65,7 @@ namespace BaseSource.Data.Migrations
                         new
                         {
                             Id = "3a1cf1ce-83be-44ed-a5fe-6b2f25ffae32",
-                            ConcurrencyStamp = "97da24e9-4c5c-424b-96d7-bbc4fe99bb60",
+                            ConcurrencyStamp = "18848ae0-0cd7-47b8-abe7-2b551d360a09",
                             Description = "Shop Manager role",
                             Name = "ShopManager",
                             NormalizedName = "ShopManager"
@@ -143,13 +143,13 @@ namespace BaseSource.Data.Migrations
                         {
                             Id = "ffded6b0-3769-4976-841b-69459049a62d",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "bf2c5392-44db-428f-b45f-9a7e3fdbece3",
+                            ConcurrencyStamp = "1b6a84e6-4767-4ff5-b05e-db36978caf00",
                             Email = "doangiau2006@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "doangiau2006@gmail.com",
                             NormalizedUserName = "superadmin",
-                            PasswordHash = "AQAAAAEAACcQAAAAEKfDVdWwOKXNwSORpEf7jT6hEN9QpLskfwpPcdSq60apaqfKxtQrKcirlWyatw6ppw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEP1SM0xESaQzX186e96qFgNBNlktGD/rweI9nXQWYPL5J2tJFLucM/EBEeND+O9mwg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -160,9 +160,7 @@ namespace BaseSource.Data.Migrations
             modelBuilder.Entity("BaseSource.Data.Entities.AuthorFunction", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedTime")
                         .HasColumnType("datetime2");
@@ -186,6 +184,773 @@ namespace BaseSource.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AuthorFunctions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(1160),
+                            FuncCode = "TrangChu",
+                            FuncName = "Trang Chủ",
+                            Level = 1,
+                            SubFunc = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8195),
+                            FuncCode = "DichVu",
+                            FuncName = "Dịch vụ",
+                            Level = 1,
+                            SubFunc = 0
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8209),
+                            FuncCode = "DichVu_MuaBaoHiem",
+                            FuncName = "Mua bảo hiểm",
+                            Level = 2,
+                            SubFunc = 2
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8211),
+                            FuncCode = "DichVu_MuaBaoHiem_ThemMoi",
+                            FuncName = "Thêm mới",
+                            Level = 3,
+                            SubFunc = 3
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8213),
+                            FuncCode = "DichVu_MuaBaoHiem_NapTien",
+                            FuncName = "Thêm mới",
+                            Level = 3,
+                            SubFunc = 3
+                        },
+                        new
+                        {
+                            Id = 6,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8214),
+                            FuncCode = "DichVu_ThanhToan",
+                            FuncName = "Thanh toán",
+                            Level = 1,
+                            SubFunc = 2
+                        },
+                        new
+                        {
+                            Id = 7,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8215),
+                            FuncCode = "QuanLyCuaHang",
+                            FuncName = "Quản lý cửa hàng",
+                            Level = 1,
+                            SubFunc = 0
+                        },
+                        new
+                        {
+                            Id = 8,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8217),
+                            FuncCode = "QuanLyCuaHang_TongQuatChuoiCuaHang",
+                            FuncName = "Tổng quát chuỗi cửa hàng",
+                            Level = 2,
+                            SubFunc = 7
+                        },
+                        new
+                        {
+                            Id = 9,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8218),
+                            FuncCode = "QuanLyCuaHang_ThongTinChiTietCuaHang",
+                            FuncName = "Thông tin chi tiết cửa hàng",
+                            Level = 2,
+                            SubFunc = 7
+                        },
+                        new
+                        {
+                            Id = 10,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8219),
+                            FuncCode = "QuanLyCuaHang_DanhSachCuaHang",
+                            FuncName = "Danh sách cửa hàng",
+                            Level = 2,
+                            SubFunc = 7
+                        },
+                        new
+                        {
+                            Id = 11,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8220),
+                            FuncCode = "QuanLyCuaHang_DanhSachCuaHang_ThemMoi",
+                            FuncName = "Thêm mới",
+                            Level = 3,
+                            SubFunc = 10
+                        },
+                        new
+                        {
+                            Id = 12,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8222),
+                            FuncCode = "QuanLyCuaHang_DanhSachCuaHang_CapNhat",
+                            FuncName = "Cập nhật",
+                            Level = 3,
+                            SubFunc = 10
+                        },
+                        new
+                        {
+                            Id = 13,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8223),
+                            FuncCode = "QuanLyCuaHang_DanhSachCuaHang_Xoa",
+                            FuncName = "Xóa",
+                            Level = 3,
+                            SubFunc = 10
+                        },
+                        new
+                        {
+                            Id = 14,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8225),
+                            FuncCode = "QuanLyCuaHang_DanhSachCuaHang_ChuyenShop",
+                            FuncName = "Chuyển shop",
+                            Level = 3,
+                            SubFunc = 10
+                        },
+                        new
+                        {
+                            Id = 15,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8226),
+                            FuncCode = "QuanLyCuaHang_CauHinhHangHoa",
+                            FuncName = "Cấu hình hàng hóa",
+                            Level = 2,
+                            SubFunc = 7
+                        },
+                        new
+                        {
+                            Id = 16,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8227),
+                            FuncCode = "QuanLyCuaHang_CauHinhHangHoa_ThemMoi",
+                            FuncName = "Thêm mới",
+                            Level = 3,
+                            SubFunc = 15
+                        },
+                        new
+                        {
+                            Id = 17,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8229),
+                            FuncCode = "QuanLyCuaHang_CauHinhHangHoa_Xoa",
+                            FuncName = "Xóa",
+                            Level = 3,
+                            SubFunc = 15
+                        },
+                        new
+                        {
+                            Id = 18,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8230),
+                            FuncCode = "QuanLyCuaHang_NhapTienQuyDauNgay",
+                            FuncName = "Nhập tiền quỹ đầu ngày",
+                            Level = 1,
+                            SubFunc = 7
+                        },
+                        new
+                        {
+                            Id = 19,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8231),
+                            FuncCode = "QuanLyThuChi",
+                            FuncName = "Quản lý thu chi",
+                            Level = 1,
+                            SubFunc = 0
+                        },
+                        new
+                        {
+                            Id = 20,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8233),
+                            FuncCode = "QuanLyThuChi_ChiHoatDong",
+                            FuncName = "Chi hoạt động",
+                            Level = 2,
+                            SubFunc = 19
+                        },
+                        new
+                        {
+                            Id = 21,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8234),
+                            FuncCode = "QuanLyThuChi_ChiHoatDong_ChiTien",
+                            FuncName = "Chi tiền",
+                            Level = 3,
+                            SubFunc = 20
+                        },
+                        new
+                        {
+                            Id = 22,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8235),
+                            FuncCode = "QuanLyThuChi_ThuHoatDong",
+                            FuncName = "Thu hoạt động",
+                            Level = 2,
+                            SubFunc = 19
+                        },
+                        new
+                        {
+                            Id = 23,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8236),
+                            FuncCode = "QuanLyThuChi_ThuHoatDong_ThuTien",
+                            FuncName = "Thu tiền",
+                            Level = 3,
+                            SubFunc = 0
+                        },
+                        new
+                        {
+                            Id = 24,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8238),
+                            FuncCode = "CamDo",
+                            FuncName = "Cầm đồ",
+                            Level = 1,
+                            SubFunc = 0
+                        },
+                        new
+                        {
+                            Id = 25,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8239),
+                            FuncCode = "CamDo_ThemMoi",
+                            FuncName = "Thêm mới",
+                            Level = 2,
+                            SubFunc = 24
+                        },
+                        new
+                        {
+                            Id = 26,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8240),
+                            FuncCode = "CamDo_XuatExcel",
+                            FuncName = "Xuất excel",
+                            Level = 2,
+                            SubFunc = 24
+                        },
+                        new
+                        {
+                            Id = 27,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8241),
+                            FuncCode = "CamDo_ChonMauHopDong",
+                            FuncName = "Chọn mẫu hợp đồng",
+                            Level = 2,
+                            SubFunc = 24
+                        },
+                        new
+                        {
+                            Id = 28,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8243),
+                            FuncCode = "CamDo_CapNhat",
+                            FuncName = "Cập nhật",
+                            Level = 2,
+                            SubFunc = 24
+                        },
+                        new
+                        {
+                            Id = 29,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8244),
+                            FuncCode = "CamDo_InHopDong",
+                            FuncName = "In hợp đồng",
+                            Level = 2,
+                            SubFunc = 24
+                        },
+                        new
+                        {
+                            Id = 30,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8245),
+                            FuncCode = "CamDo_DongLai",
+                            FuncName = "Đóng lãi",
+                            Level = 1,
+                            SubFunc = 0
+                        },
+                        new
+                        {
+                            Id = 31,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8246),
+                            FuncCode = "CamDo_Xoa",
+                            FuncName = "Xóa",
+                            Level = 1,
+                            SubFunc = 0
+                        },
+                        new
+                        {
+                            Id = 32,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8247),
+                            FuncCode = "CamDo_ChuocDo",
+                            FuncName = "Chuộc đồ",
+                            Level = 2,
+                            SubFunc = 24
+                        },
+                        new
+                        {
+                            Id = 33,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8249),
+                            FuncCode = "CamDo_HenGioKhoanVay",
+                            FuncName = "Hẹn giờ khoản vay",
+                            Level = 2,
+                            SubFunc = 24
+                        },
+                        new
+                        {
+                            Id = 34,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8250),
+                            FuncCode = "CamDo_ChuyenTrangThai",
+                            FuncName = "Chuyển trạng thái qua thanh lý",
+                            Level = 2,
+                            SubFunc = 24
+                        },
+                        new
+                        {
+                            Id = 35,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8251),
+                            FuncCode = "CamDo_TraBotGoc",
+                            FuncName = "Trả bớt gốc",
+                            Level = 2,
+                            SubFunc = 24
+                        },
+                        new
+                        {
+                            Id = 36,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8253),
+                            FuncCode = "CamDo_VayThem",
+                            FuncName = "Vay thêm",
+                            Level = 2,
+                            SubFunc = 24
+                        },
+                        new
+                        {
+                            Id = 37,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8254),
+                            FuncCode = "CamDo_No",
+                            FuncName = "Nợ",
+                            Level = 2,
+                            SubFunc = 24
+                        },
+                        new
+                        {
+                            Id = 38,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8255),
+                            FuncCode = "CamDo_ChungTu",
+                            FuncName = "Chứng từ",
+                            Level = 2,
+                            SubFunc = 24
+                        },
+                        new
+                        {
+                            Id = 39,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8257),
+                            FuncCode = "CamDo_HenGio",
+                            FuncName = "Hẹn giờ",
+                            Level = 2,
+                            SubFunc = 24
+                        },
+                        new
+                        {
+                            Id = 40,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8258),
+                            FuncCode = "CamDo_ThanhLy",
+                            FuncName = "Thanh lý",
+                            Level = 2,
+                            SubFunc = 24
+                        },
+                        new
+                        {
+                            Id = 41,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8259),
+                            FuncCode = "VayLai",
+                            FuncName = "Vay lãi",
+                            Level = 2,
+                            SubFunc = 0
+                        },
+                        new
+                        {
+                            Id = 42,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8260),
+                            FuncCode = "VayLai_ThemMoi",
+                            FuncName = "Thêm mới",
+                            Level = 2,
+                            SubFunc = 41
+                        },
+                        new
+                        {
+                            Id = 43,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8262),
+                            FuncCode = "VayLai_CapNhat",
+                            FuncName = "Nợ",
+                            Level = 2,
+                            SubFunc = 41
+                        },
+                        new
+                        {
+                            Id = 44,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8263),
+                            FuncCode = "VayLai_InHopDong",
+                            FuncName = "In hợp đồng",
+                            Level = 2,
+                            SubFunc = 41
+                        },
+                        new
+                        {
+                            Id = 45,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8264),
+                            FuncCode = "VayLai_DongLai",
+                            FuncName = "Đóng tiền lãi",
+                            Level = 2,
+                            SubFunc = 41
+                        },
+                        new
+                        {
+                            Id = 46,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8265),
+                            FuncCode = "VayLai_TraBotGoc",
+                            FuncName = "Trả bớt gốc",
+                            Level = 2,
+                            SubFunc = 41
+                        },
+                        new
+                        {
+                            Id = 47,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8267),
+                            FuncCode = "VayLai_VayThem",
+                            FuncName = "Vay thêm",
+                            Level = 2,
+                            SubFunc = 41
+                        },
+                        new
+                        {
+                            Id = 48,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8268),
+                            FuncCode = "VayLai_GiaHan",
+                            FuncName = "Gia hạn",
+                            Level = 2,
+                            SubFunc = 41
+                        },
+                        new
+                        {
+                            Id = 49,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8269),
+                            FuncCode = "VayLai_DongHopDong",
+                            FuncName = "Đóng hợp đồng",
+                            Level = 2,
+                            SubFunc = 41
+                        },
+                        new
+                        {
+                            Id = 50,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8308),
+                            FuncCode = "VayLai_No",
+                            FuncName = "Nợ",
+                            Level = 2,
+                            SubFunc = 41
+                        },
+                        new
+                        {
+                            Id = 51,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8310),
+                            FuncCode = "VayLai_ChungTu",
+                            FuncName = "Chứng từ",
+                            Level = 2,
+                            SubFunc = 41
+                        },
+                        new
+                        {
+                            Id = 52,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8311),
+                            FuncCode = "VayLai_HenGio",
+                            FuncName = "Hẹn giờ",
+                            Level = 2,
+                            SubFunc = 41
+                        },
+                        new
+                        {
+                            Id = 53,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8312),
+                            FuncCode = "VayLai_ChuyenTrangThai",
+                            FuncName = "Chuyển trạng thái",
+                            Level = 2,
+                            SubFunc = 41
+                        },
+                        new
+                        {
+                            Id = 54,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8314),
+                            FuncCode = "VayLai_Xoa",
+                            FuncName = "Xóa",
+                            Level = 2,
+                            SubFunc = 41
+                        },
+                        new
+                        {
+                            Id = 55,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8315),
+                            FuncCode = "QuanLyNhanVien",
+                            FuncName = "Quản lý nhân viên",
+                            Level = 1,
+                            SubFunc = 0
+                        },
+                        new
+                        {
+                            Id = 56,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8316),
+                            FuncCode = "QuanLyNhanVien_ThemMoi",
+                            FuncName = "Thêm mới",
+                            Level = 2,
+                            SubFunc = 55
+                        },
+                        new
+                        {
+                            Id = 57,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8317),
+                            FuncCode = "QuanLyNhanVien_CapNhat",
+                            FuncName = "Cập nhật",
+                            Level = 2,
+                            SubFunc = 55
+                        },
+                        new
+                        {
+                            Id = 58,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8319),
+                            FuncCode = "QuanLyNhanVien_Xoa",
+                            FuncName = "Xóa",
+                            Level = 2,
+                            SubFunc = 55
+                        },
+                        new
+                        {
+                            Id = 59,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8320),
+                            FuncCode = "QuanLyNguonVon",
+                            FuncName = "Quản lý nguồn vốn",
+                            Level = 1,
+                            SubFunc = 0
+                        },
+                        new
+                        {
+                            Id = 60,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8322),
+                            FuncCode = "QuanLyNguonVon_ThemMoi",
+                            FuncName = "Thêm mới",
+                            Level = 2,
+                            SubFunc = 59
+                        },
+                        new
+                        {
+                            Id = 61,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8323),
+                            FuncCode = "QuanLyNguonVon_CapNhat",
+                            FuncName = "Cập nhật",
+                            Level = 2,
+                            SubFunc = 59
+                        },
+                        new
+                        {
+                            Id = 62,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8324),
+                            FuncCode = "QuanLyNguonVon_InHopDong",
+                            FuncName = "In hợp đồng",
+                            Level = 2,
+                            SubFunc = 59
+                        },
+                        new
+                        {
+                            Id = 63,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8326),
+                            FuncCode = "QuanLyNguonVon_TraTienLai",
+                            FuncName = "Trả tiền lãi",
+                            Level = 2,
+                            SubFunc = 59
+                        },
+                        new
+                        {
+                            Id = 64,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8328),
+                            FuncCode = "QuanLyNguonVon_RutBotGoc",
+                            FuncName = "Rút bớt gốc",
+                            Level = 2,
+                            SubFunc = 59
+                        },
+                        new
+                        {
+                            Id = 65,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8329),
+                            FuncCode = "QuanLyNguonVon_VayThem",
+                            FuncName = "Vay thêm",
+                            Level = 2,
+                            SubFunc = 59
+                        },
+                        new
+                        {
+                            Id = 66,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8330),
+                            FuncCode = "QuanLyNguonVon_GiaHan",
+                            FuncName = "Gia hạn",
+                            Level = 2,
+                            SubFunc = 59
+                        },
+                        new
+                        {
+                            Id = 67,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8332),
+                            FuncCode = "QuanLyNguonVon_RutVon",
+                            FuncName = "Rút vốn",
+                            Level = 2,
+                            SubFunc = 59
+                        },
+                        new
+                        {
+                            Id = 68,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8333),
+                            FuncCode = "Setting",
+                            FuncName = "Setting",
+                            Level = 1,
+                            SubFunc = 0
+                        },
+                        new
+                        {
+                            Id = 69,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8334),
+                            FuncCode = "BaoCao",
+                            FuncName = "Báo cáo",
+                            Level = 1,
+                            SubFunc = 0
+                        },
+                        new
+                        {
+                            Id = 70,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8335),
+                            FuncCode = "BaoCao_TongKetGiaoDich",
+                            FuncName = "Tổng kết giao dịch",
+                            Level = 2,
+                            SubFunc = 69
+                        },
+                        new
+                        {
+                            Id = 71,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8337),
+                            FuncCode = "BaoCao_TongKetLoiNhuan",
+                            FuncName = "Tổng kết lợi nhuận",
+                            Level = 2,
+                            SubFunc = 69
+                        },
+                        new
+                        {
+                            Id = 72,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8338),
+                            FuncCode = "BaoCao_ChiTietLai",
+                            FuncName = "Chi tiết lãi",
+                            Level = 2,
+                            SubFunc = 69
+                        },
+                        new
+                        {
+                            Id = 73,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8339),
+                            FuncCode = "BaoCao_DangChoVay",
+                            FuncName = "Đang cho vay",
+                            Level = 2,
+                            SubFunc = 69
+                        },
+                        new
+                        {
+                            Id = 74,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8341),
+                            FuncCode = "BaoCao_ThongKeThuTien",
+                            FuncName = "Thống kê thu tiền",
+                            Level = 2,
+                            SubFunc = 69
+                        },
+                        new
+                        {
+                            Id = 75,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8342),
+                            FuncCode = "BaoCao_HangChoThanhLy",
+                            FuncName = "Hàng chờ thanh lý",
+                            Level = 2,
+                            SubFunc = 69
+                        },
+                        new
+                        {
+                            Id = 76,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8343),
+                            FuncCode = "BaoCao_ChuocDoDongHopDong",
+                            FuncName = "Chuộc đồ, đóng hợp đồng",
+                            Level = 2,
+                            SubFunc = 69
+                        },
+                        new
+                        {
+                            Id = 77,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8344),
+                            FuncCode = "BaoCao_ThanhLyDo",
+                            FuncName = "Thanh lý đồ",
+                            Level = 2,
+                            SubFunc = 69
+                        },
+                        new
+                        {
+                            Id = 78,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8346),
+                            FuncCode = "BaoCao_HopDongDaXoa",
+                            FuncName = "Hợp đồng đã xóa",
+                            Level = 2,
+                            SubFunc = 69
+                        },
+                        new
+                        {
+                            Id = 79,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8347),
+                            FuncCode = "BaoCao_TinNhan",
+                            FuncName = "Tin nhắn",
+                            Level = 2,
+                            SubFunc = 69
+                        },
+                        new
+                        {
+                            Id = 80,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8348),
+                            FuncCode = "BaoCao_BanGiaoCa",
+                            FuncName = "Bàn giao ca",
+                            Level = 2,
+                            SubFunc = 69
+                        },
+                        new
+                        {
+                            Id = 81,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8350),
+                            FuncCode = "BaoCao_DongTienTheoNgay",
+                            FuncName = "Dòng tiền theo ngày",
+                            Level = 2,
+                            SubFunc = 69
+                        },
+                        new
+                        {
+                            Id = 82,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8351),
+                            FuncCode = "CheckNoXau",
+                            FuncName = "Check nợ xấu",
+                            Level = 1,
+                            SubFunc = 0
+                        },
+                        new
+                        {
+                            Id = 83,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8352),
+                            FuncCode = "CheckNoXau_CheckNoXau",
+                            FuncName = "Check nợ xấu",
+                            Level = 2,
+                            SubFunc = 82
+                        },
+                        new
+                        {
+                            Id = 84,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8354),
+                            FuncCode = "CheckNoXau_ThemMoiBanBe",
+                            FuncName = "Thêm mới bạn bè",
+                            Level = 2,
+                            SubFunc = 82
+                        },
+                        new
+                        {
+                            Id = 85,
+                            CreatedTime = new DateTime(2022, 9, 8, 20, 24, 18, 219, DateTimeKind.Local).AddTicks(8355),
+                            FuncCode = "CheckNoXau_XacNhanBanBe",
+                            FuncName = "Xác nhận bạn bè",
+                            Level = 2,
+                            SubFunc = 82
+                        });
                 });
 
             modelBuilder.Entity("BaseSource.Data.Entities.AuthorUserFunction", b =>

@@ -38,7 +38,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             ViewData["ListUser"] = new SelectList(requestUser.ResultObj, "Id", "FullName");
             return View(result.ResultObj);
         }
-        #region Export
+        #region Export ReportBalance
         public async Task<IActionResult> Export( DateTime? from, DateTime? to, int loaihopdong, string user)
         {
             var request = new ReportBalanceRequest()
@@ -114,17 +114,105 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             }
 
         }
-        #endregion
+        #endregion 
         //Tổng kết lợi nhuận
         public async Task<IActionResult> Profit()
         {
             return View();
         }
         //Chi tiết tiền lãi
-        public async Task<IActionResult> ReceiveInterest()
+        public async Task<IActionResult> ReceiveInterest(DateTime? from, DateTime? to, int? loaihopdong, string user)
         {
-            return View();
+            var request = new ReportBalanceRequest()
+            {
+                FormDate = from,
+                ToDate = to,
+                LoaiHopDong = loaihopdong,
+                UserId = user
+            };
+            var result = await _baoCaoApiClient.GetPaymentLog();
+            var requestUser = await _userApiClient.GetUserByCuaHang();
+            ViewData["ListUser"] = new SelectList(requestUser.ResultObj, "Id", "FullName");
+            return View(result.ResultObj);
         }
+        #region Export ReceiveInterest
+        public async Task<IActionResult> Export_ReceiveInterest(DateTime? from, DateTime? to, int loaihopdong, string user)
+        {
+            var request = new ReportBalanceRequest()
+            {
+                FormDate = from,
+                ToDate = to,
+                LoaiHopDong = loaihopdong,
+                UserId = user
+            };
+
+            var result = await _baoCaoApiClient.GetPaymentLog();
+            string fileName = "ReceiveInterest" + "-" + DateTime.Now.ToString("ddMMyyyy_HHmmss") + ".xlsx";
+
+            using (ExcelPackage p = new ExcelPackage())
+            {
+                p.Workbook.Properties.Title = "ReceiveInterest";
+
+                //Create a sheet
+                p.Workbook.Worksheets.Add("ReceiveInterest");
+                ExcelWorksheet ws = p.Workbook.Worksheets[0];
+                ws.Name = "ReceiveInterest"; //Setting Sheet's name
+                ws.Cells.Style.Font.Size = 11; //Default font size for whole sheet
+                ws.Cells.Style.Font.Name = "Calibri"; //Default Font name for whole sheet
+
+
+                // Create header column
+                string[] arrColumnHeader = { "Mã HĐ", "Tên Khách hàng", "Tên Hàng","Tiền vay",  "Người GD", "Ngày giao dịch", "Tiền lãi",
+                                           "Tiền khác","Tổng lãi","Loại giao dịch"};
+                var countColHeader = arrColumnHeader.Count();
+
+                int colIndex = 1;
+                int rowIndex = 1;
+
+                //Creating Headings
+                foreach (var item in arrColumnHeader)
+                {
+                    var cell = ws.Cells[rowIndex, colIndex];
+
+                    //Setting the background color of header cells to Gray
+                    cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    cell.Style.Fill.BackgroundColor.SetColor(Color.MediumBlue);
+                    cell.Style.Font.Color.SetColor(Color.White);
+                    cell.Style.Font.Bold = true;
+
+                    cell.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    cell.AutoFitColumns();
+                    //Setting Value in cell
+                    cell.Value = item;
+
+                    colIndex++;
+                }
+
+                // Adding Data into rows
+
+                foreach (var item in result.ResultObj)
+                {
+                    colIndex = 1;
+                    rowIndex++;
+                    ws.Cells[rowIndex, colIndex++].Value = item.MaHD;
+                    ws.Cells[rowIndex, colIndex++].Value = item.TenKhachHang;
+                    ws.Cells[rowIndex, colIndex++].Value = item.TenHang;
+                    ws.Cells[rowIndex, colIndex++].Value = item.TienVay;
+                    ws.Cells[rowIndex, colIndex++].Value = item.NguoiGiaoDich;
+                    ws.Cells[rowIndex, colIndex++].Value = item.NgayGiaoDich?.ToString("dd/MM/yyyy");
+                    ws.Cells[rowIndex, colIndex++].Value = item.TienLai.ToString("N0");
+                    ws.Cells[rowIndex, colIndex++].Value = item.TienKhac.ToString("N0");
+                    ws.Cells[rowIndex, colIndex++].Value = item.TongLai.ToString("N0");
+                    ws.Cells[rowIndex, colIndex++].Value = item.LoaiGiaoDich;
+                }
+                ws.Cells.AutoFitColumns();
+                //Generate A File with name
+                Byte[] bin = p.GetAsByteArray();
+                return File(bin, System.Net.Mime.MediaTypeNames.Application.Octet, fileName);
+            }
+
+        }
+        #endregion 
         //Báo cáo đang cho vay
         public async Task<IActionResult> ReportPawnHolding()
         {
