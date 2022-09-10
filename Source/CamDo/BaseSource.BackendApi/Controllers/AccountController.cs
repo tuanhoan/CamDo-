@@ -80,6 +80,13 @@ namespace BaseSource.BackendApi.Controllers
 
             if (result.Succeeded)
             {
+                var listRoleFunction =await _db.AuthorFunctions.Select(x => x.Id).ToListAsync();
+                var userAuth = new List<AuthorUserFunction>();
+                foreach (var item in listRoleFunction)
+                {
+                    userAuth.Add(new AuthorUserFunction() { FuncId = item, UserId = appUser.Id.ToString() });
+                }
+                await _db.AuthorUserFunctions.AddRangeAsync(userAuth);
                 var userDetail = new UserProfile()
                 {
                     UserId = appUser.Id.ToString(),
