@@ -45,6 +45,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             {
                 view = "_RutVon";
             }
+            ViewBag.ListAuth = ListAuthFunc;
             return PartialView(view, result.ResultObj);
         }
         [HttpPost]

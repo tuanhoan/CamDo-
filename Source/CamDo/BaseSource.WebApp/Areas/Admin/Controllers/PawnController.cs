@@ -44,6 +44,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             var result = _hopDongApiClient.GetPagings(request);
             var resultHH = _cauHinhHangHoaApiClient.GetPagings(requestHH);
             await Task.WhenAll(result, resultHH);
+            ViewBag.ListAuth = ListAuthFunc;
             ViewData["ListHangHoa"] = new SelectList(resultHH.Result.ResultObj.Items, "Id", "Ten");
             return View(result.Result.ResultObj);
         }
