@@ -45,7 +45,7 @@
                                 <button type="submit" class="btn btn-primary mb-2">Tìm kiếm</button>
                             </form>
                         </div>
-                        <h5><i data-feather="file-text"></i>Bảng tổng kết giao dịch Từ ngày <i>30/07/2022 - 30/07/2022</i></h5>
+                        <h5><i data-feather="file-text"></i>Bảng tổng kết giao dịch Từ ngày <i>@Context.Request.Query["from"] - @Context.Request.Query["to"]</i></h5>
                         <div class="progress" style="height: 4px;">
                             <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>

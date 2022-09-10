@@ -130,7 +130,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
                 LoaiHopDong = loaihopdong,
                 UserId = user
             };
-            var result = await _baoCaoApiClient.GetPaymentLog();
+            var result = await _baoCaoApiClient.GetPaymentLog(request);
             var requestUser = await _userApiClient.GetUserByCuaHang();
             ViewData["ListUser"] = new SelectList(requestUser.ResultObj, "Id", "FullName");
             return View(result.ResultObj);
@@ -146,7 +146,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
                 UserId = user
             };
 
-            var result = await _baoCaoApiClient.GetPaymentLog();
+            var result = await _baoCaoApiClient.GetPaymentLog(request);
             string fileName = "ReceiveInterest" + "-" + DateTime.Now.ToString("ddMMyyyy_HHmmss") + ".xlsx";
 
             using (ExcelPackage p = new ExcelPackage())
@@ -214,14 +214,23 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         }
         #endregion 
         //Báo cáo đang cho vay
-        public async Task<IActionResult> ReportPawnHolding()
+        public async Task<IActionResult> ReportPawnHolding(DateTime? from, DateTime? to, int? loaihopdong, string user)
         {
-            var result = await _baoCaoApiClient.ReportPawnHolding();
+            var request = new ReportBalanceRequest()
+            {
+                FormDate = from,
+                ToDate = to,
+                LoaiHopDong = loaihopdong,
+                UserId = user
+            };
+            var result = await _baoCaoApiClient.ReportPawnHolding(request);
+            var requestUser = await _userApiClient.GetUserByCuaHang();
+            ViewData["ListUser"] = new SelectList(requestUser.ResultObj, "Id", "FullName"); 
             return View(result.ResultObj);
         }
 
         #region Export ReportPawnHolding
-        public async Task<IActionResult> Export_ReportPawnHolding(DateTime? from, DateTime? to, int loaihopdong, string user)
+        public async Task<IActionResult> Export_ReportPawnHolding(DateTime? from, DateTime? to, int? loaihopdong, string user)
         {
             var request = new ReportBalanceRequest()
             {
@@ -231,7 +240,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
                 UserId = user
             };
 
-            var result = await _baoCaoApiClient.ReportPawnHolding();
+            var result = await _baoCaoApiClient.ReportPawnHolding(request);
             string fileName = "ReportPawnHolding" + "-" + DateTime.Now.ToString("ddMMyyyy_HHmmss") + ".xlsx";
 
             using (ExcelPackage p = new ExcelPackage())
@@ -295,9 +304,18 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         }
         #endregion 
         //Thống kê thu tiền
-        public async Task<IActionResult> PaymentHistory()
+        public async Task<IActionResult> PaymentHistory(DateTime? from, DateTime? to, int? loaihopdong, string user)
         {
-            var result = await _baoCaoApiClient.PaymentHistory();
+            var request = new ReportBalanceRequest()
+            {
+                FormDate = from,
+                ToDate = to,
+                LoaiHopDong = loaihopdong,
+                UserId = user
+            };
+            var result = await _baoCaoApiClient.PaymentHistory(request);
+            var requestUser = await _userApiClient.GetUserByCuaHang();
+            ViewData["ListUser"] = new SelectList(requestUser.ResultObj, "Id", "FullName");
             return View(result.ResultObj);
         }
         #region Export ReportPawnHolding
@@ -311,7 +329,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
                 UserId = user
             };
 
-            var result = await _baoCaoApiClient.PaymentHistory();
+            var result = await _baoCaoApiClient.PaymentHistory(request);
             string fileName = "PaymentHistory" + "-" + DateTime.Now.ToString("ddMMyyyy_HHmmss") + ".xlsx";
 
             using (ExcelPackage p = new ExcelPackage())

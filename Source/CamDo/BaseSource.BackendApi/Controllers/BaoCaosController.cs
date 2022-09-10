@@ -24,23 +24,23 @@ namespace BaseSource.BackendApi.Controllers
         [HttpGet("ReportBalance")]
         public async Task<IActionResult> ReportBalance(DateTime? FormDate, DateTime? ToDate, string UserId, int? LoaiHopDong)
         {
-            var hopdongs = await _db.HopDongs.Where(x => x.CuaHangId == CuaHangId).ToListAsync();
+            var queryable =  _db.HopDongs.Where(x => x.CuaHangId == CuaHangId).AsQueryable();
 
             if (FormDate != null)
             {
-                hopdongs = hopdongs.Where(x => x.CreatedDate >= FormDate).ToList();
+                queryable = queryable.Where(x => x.CreatedDate >= FormDate);
             }
             if (ToDate != null)
             {
-                hopdongs = hopdongs.Where(x => x.CreatedDate <= ToDate).ToList();
+                queryable = queryable.Where(x => x.CreatedDate <= ToDate);
             }
             if (UserId != null)
             {
-                hopdongs = hopdongs.Where(x => x.UserIdCreated == UserId).ToList();
+                queryable = queryable.Where(x => x.UserIdCreated == UserId);
             }
             if (LoaiHopDong != null)
             {
-                hopdongs = hopdongs.Where(x => (int)x.HD_Loai == LoaiHopDong).ToList();
+                queryable = queryable.Where(x => (int)x.HD_Loai == LoaiHopDong);
             }
 
 
@@ -49,6 +49,7 @@ namespace BaseSource.BackendApi.Controllers
             var giaodichs = new List<GiaoDich>();
             var khachhangs = await _db.KhachHangs.Where(x => x.CuaHangId == CuaHangId).ToListAsync();
             var users = await _db.UserProfiles.Where(x => x.CuaHangId == CuaHangId).ToListAsync();
+            var hopdongs = await queryable.ToListAsync();
 
             var data = new ReportBalanceVM()
             {
@@ -101,7 +102,7 @@ namespace BaseSource.BackendApi.Controllers
             data.ThuHoatDong.Total = data.ThuHoatDong.Thu - data.ThuHoatDong.Chi;
             data.VayLai.Total = data.VayLai.Thu - data.VayLai.Chi;
             data.TienMatConLai.Total = data.TienMatConLai.Thu - data.TienMatConLai.Chi;
-
+             
             foreach (var item in hopdongs)
             {
                 var gd = new GiaoDich
@@ -123,14 +124,30 @@ namespace BaseSource.BackendApi.Controllers
             return base.Ok(new ApiSuccessResult<ReportBalanceVM>(data));
         }
         [HttpGet("GetPaymentLog")]
-        public async Task<IActionResult> GetPaymentLog()
+        public async Task<IActionResult> GetPaymentLog(DateTime? FormDate, DateTime? ToDate, string UserId, int? LoaiHopDong)
         {
-            var users = await _db.UserProfiles.ToListAsync();
-            var khachHangs = await _db.KhachHangs.ToListAsync();
-            var lstPayment = (await _db.HopDong_PaymentLogs
-                .Include(x => x.HopDong)
-                .Where(x => x.HopDong.CuaHangId == CuaHangId)
-                .ToListAsync())
+            var users = await _db.UserProfiles.Where(x => x.CuaHangId == CuaHangId).ToListAsync();
+            var khachHangs = await _db.KhachHangs.Where(x => x.CuaHangId == CuaHangId).ToListAsync();
+            var queryable = _db.HopDong_PaymentLogs.Include(x => x.HopDong).Where(x => x.HopDong.CuaHangId == CuaHangId).AsQueryable();
+
+            if (FormDate != null)
+            {
+                queryable = queryable.Where(x => x.CreatedDate >= FormDate);
+            }
+            if (ToDate != null)
+            {
+                queryable = queryable.Where(x => x.CreatedDate <= ToDate);
+            }
+            if (UserId != null)
+            {
+                queryable = queryable.Where(x => x.HopDong.UserIdAssigned == UserId);
+            }
+            if (LoaiHopDong != null)
+            {
+                queryable = queryable.Where(x => (int)x.HopDong.HD_Loai == LoaiHopDong);
+            }
+
+            var lstPayment = (await queryable.ToListAsync())
                 .Select(x => new HD_PaymentLogReportVm()
                 {
                     MaHD = x.HopDong.HD_Ma,
@@ -150,10 +167,28 @@ namespace BaseSource.BackendApi.Controllers
             return Ok(new ApiSuccessResult<List<HD_PaymentLogReportVm>>(lstPayment));
         }
         [HttpGet("ReportPawnHolding")]
-        public async Task<IActionResult> ReportPawnHolding()
+        public async Task<IActionResult> ReportPawnHolding(DateTime? FormDate, DateTime? ToDate, string UserId, int? LoaiHopDong)
         {
             var khachangs = await _db.KhachHangs.Where(x => x.CuaHangId == CuaHangId).ToListAsync();
             var queryable = _db.HopDongs.Where(x => x.CuaHangId == CuaHangId);
+
+            if (FormDate != null)
+            {
+                queryable = queryable.Where(x => x.CreatedDate >= FormDate);
+            }
+            if (ToDate != null)
+            {
+                queryable = queryable.Where(x => x.CreatedDate <= ToDate);
+            }
+            if (UserId != null)
+            {
+                queryable = queryable.Where(x => x.UserIdCreated == UserId);
+            }
+            if (LoaiHopDong != null)
+            {
+                queryable = queryable.Where(x => (int)x.HD_Loai == LoaiHopDong);
+            }
+
 
             var result = (await queryable.ToListAsync()).Select(x => new ReportPawnHoldingVm
             {
@@ -189,13 +224,30 @@ namespace BaseSource.BackendApi.Controllers
             return Ok(new ApiSuccessResult<List<ReportPawnNewRepurchaseVM>>(result));
         }
         [HttpGet("PaymentHistory")]
-        public async Task<IActionResult> PaymentHistory()
+        public async Task<IActionResult> PaymentHistory(DateTime? FormDate, DateTime? ToDate, string UserId, int? LoaiHopDong)
         {
             var users = await _db.UserProfiles.ToListAsync();
-            var rs = await _db.HopDong_PaymentLogs
-                .Include(x => x.HopDong).ToListAsync();
 
-            var result = rs.Select(x => new PaymentHistoryVM
+            var queryable = _db.HopDong_PaymentLogs.Include(x => x.HopDong).Where(x => x.HopDong.CuaHangId == CuaHangId).AsQueryable();
+
+            if (FormDate != null)
+            {
+                queryable = queryable.Where(x => x.CreatedDate >= FormDate);
+            }
+            if (ToDate != null)
+            {
+                queryable = queryable.Where(x => x.CreatedDate <= ToDate);
+            }
+            if (UserId != null)
+            {
+                queryable = queryable.Where(x => x.HopDong.UserIdAssigned == UserId);
+            }
+            if (LoaiHopDong != null)
+            {
+                queryable = queryable.Where(x => (int)x.HopDong.HD_Loai == LoaiHopDong);
+            }
+
+            var result = (await queryable.ToListAsync()).Select(x => new PaymentHistoryVM
             {
                 TenNhanVien = users.FirstOrDefault(u => u.UserId == x.HopDong.UserIdAssigned)?.FullName,
                 TuNgay = x.FromDate.ToString("dd/MM/yyyy"),
