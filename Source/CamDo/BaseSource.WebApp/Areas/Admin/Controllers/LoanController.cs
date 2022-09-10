@@ -51,6 +51,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
             var resultHH = _cauHinhHangHoaApiClient.GetPagings(requestHH);
             await Task.WhenAll(result, resultHH);
             ViewData["ListHangHoa"] = new SelectList(resultHH.Result.ResultObj.Items, "Id", "Ten");
+            ViewBag.ListAuth = ListAuthFunc;
 
             return View(result.Result.ResultObj);
         }
@@ -166,6 +167,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         {
             var hd = await _hopDongApiClient.GetById(id);
             ViewData["TabActive"] = tabActive;
+            ViewBag.ListAuth = ListAuthFunc;
             return PartialView("_Detail", hd.ResultObj);
         }
         #region Chọn mẫu hợp đồng

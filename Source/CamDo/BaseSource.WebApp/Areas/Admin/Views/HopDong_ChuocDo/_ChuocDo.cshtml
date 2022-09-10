@@ -1,4 +1,7 @@
 ﻿@model HopDong_ChuocDoVm
+@{
+    var ListAuth = (List<string>)ViewBag.ListAuth;
+}
 
 <form id="frmChuocDo" asp-action="ChuocDo" asp-controller="HopDong_ChuocDo" method="post">
     <input type="hidden" name="HopDongId" id="HopDongId" value="@Model.HopDongId" />
@@ -45,7 +48,7 @@
     </div>
     <div class="row mb-3">
         <label class="col-4 text-end" id="divInHDCD">
-            @if (Model.NgayTatToan != null)
+            @if (Model.NgayTatToan != null && ListAuth.Contains("CamDo_InHopDong"))
             {
                 <button class="btn btn-success btn-sm" type="button" onclick="inChuocDo(@Model.HopDongId)"> In HĐCĐ</button>
             }
