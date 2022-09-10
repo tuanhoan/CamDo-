@@ -16,6 +16,7 @@ namespace BaseSource.Data.Extensions
             // Identity data
             var roleAdminId = (new Guid("c1105ce5-9dbc-49a9-a7d5-c963b6daa62a")).ToString();
             var roleShopManagerId = (new Guid("3a1cf1ce-83be-44ed-a5fe-6b2f25ffae32")).ToString();
+            var staff = (new Guid("ffded6b0-37d9-4676-241b-69459029a622")).ToString();
 
             modelBuilder.Entity<AppRole>().HasData(
                 new AppRole
@@ -32,6 +33,14 @@ namespace BaseSource.Data.Extensions
                     Name = "ShopManager",
                     NormalizedName = "ShopManager",
                     Description = "Shop Manager role"
+                });
+            modelBuilder.Entity<AppRole>().HasData(
+                new AppRole
+                {
+                    Id = staff,
+                    Name = "Staff",
+                    NormalizedName = "Staff",
+                    Description = "Staff"
                 });
 
             var userAdminId = (new Guid("ffded6b0-3769-4976-841b-69459049a62d")).ToString();
