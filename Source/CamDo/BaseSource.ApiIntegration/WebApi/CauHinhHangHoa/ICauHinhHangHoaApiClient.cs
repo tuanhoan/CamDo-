@@ -15,5 +15,6 @@ namespace BaseSource.ApiIntegration.WebApi.CauHinhHangHoa
         Task<ApiResult<CauHinhHangHoaVm>> GetById(int id, int hdId = 0);
         Task<ApiResult<string>> Edit(EditCauHinhHangHoaVm model);
         Task<ApiResult<string>> Delete(int id);
+        Task<ApiResult<List<CauHinhHangHoaVm>>> GetByCuaHang();
     }
 }

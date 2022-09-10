@@ -468,6 +468,6 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         {
             var result = await _hopDongApiClient.GetPrintDefault(ELoaiHopDong.Camdo);
             return Ok(result.ResultObj);
-        }
+        } 
     }
 }

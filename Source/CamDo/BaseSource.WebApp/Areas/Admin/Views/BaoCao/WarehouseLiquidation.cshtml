@@ -1,5 +1,8 @@
-﻿@{
+﻿@using BaseSource.ViewModels.BaoCao
+@model List<WarehouseLiquidationVM>
+@{
     ViewData["Title"] = "Báo cáo hàng chờ thanh lý";
+    var chhanghoas = ViewData["chhanghoas"] as SelectList;
 }
 
 
@@ -17,18 +20,14 @@
                         <div class="mb-3">
                             <form class="form-inline">
                                 <div class="mb-3">
-                                    <input type="text" class="form-control" placeholder="Tìm kiếm mã HĐ, Tên khách hàng">
+                                    <input type="text" class="form-control" name="filter" value="@Context.Request.Query["filter"]" placeholder="Tìm kiếm mã HĐ, Tên khách hàng">
                                 </div>
                                 <div class="mb-3">
-
-                                    <select class=" form-control" name="type">
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                    </select>
+                                    <div class="mb-3">
+                                        @Html.DropDownList("chid", chhanghoas, "---Tất cả---", new { @class = "form-control" })
+                                    </div>
                                 </div>
+                                 <button type="submit" class="btn btn-primary mb-2">Tìm kiếm</button>
                             </form>
                         </div>
 
@@ -40,27 +39,63 @@
                                             #
                                         </th>
                                         <th scope="col">
-                                            Tên nhân viên
+                                            Mã HĐ
                                         </th>
                                         <th scope="col">
-                                            Từ ngày
+                                            Khách Hàng
                                         </th>
                                         <th scope="col">
-                                            Đến ngày
+                                            Sản phẩm
                                         </th>
                                         <th scope="col">
-                                            Tổng tiền thu
+                                            Tiền cầm
                                         </th>
                                         <th scope="col">
-
+                                            Ngày cầm
                                         </th>
-
+                                        <th scope="col">
+                                            Lãi đã đóng
+                                        </th>
+                                        <th scope="col">
+                                            Tiền nợ
+                                        </th>
+                                        <th scope="col">
+                                            Lãi đến hôm nay
+                                        </th>
+                                        <th scope="col">
+                                            Tình trạng
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @if (Model != null)
+                                    {
+                                        var idx = 1;
+
+                                        foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>@idx</td>
+                                                <td>@item.MaHD</td>
+                                                <td>@item.KhachHang</td>
+                                                <td>@item.SanPham</td>
+                                                <td>@item.TienCam</td>
+                                                <td>@item.NgayCam</td>
+                                                <td>@item.LaiDaDong.ToString("N0")</td>
+                                                <td>@item.TienNo.ToString("N0")</td>
+                                                <td>@item.LaiDenHomNay.ToString("N0")</td>
+                                                <td>@item.TinhTrang</td>
+                                            </tr>
+                                            idx++;
+                                        }
+                                    }
                                 </tbody>
                                 <tfoot>
                                     <tr style="background:#ede8ab">
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
