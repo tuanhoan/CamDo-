@@ -1,7 +1,9 @@
-﻿@{
+﻿@using BaseSource.ViewModels.BaoCao
+@model List<ReportPawnHoldingVm>
+@{
     ViewData["Title"] = "Báo cáo hợp đồng đang cho vay";
+    var lstUser = ViewData["ListUser"] as SelectList;
 }
-
 
 <div class="row">
     <!-- table  Lastest Tickets -->
@@ -17,31 +19,27 @@
                         <div class="mb-3">
                             <form class="form-inline">
                                 <div class="mb-3">
-                                    <input type="date" class="form-control" id="from">
+                                    <input type="date" name="from" value="@Context.Request.Query["from"]" class="form-control" id="from">
                                 </div>
                                 <div class="mb-3">
-                                    <input type="date" class="form-control" id="to">
+                                    <input type="date" name="to" value="@Context.Request.Query["to"]" class="form-control" id="to">
                                 </div>
                                 <div class="mb-3">
-                                    <select class=" form-control" name="type">
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                    </select>
+                                    @Html.DropDownList("loaihopdong", Html.GetEnumSelectList<ELoaiHopDong>(), "---Tất cả---", new { @class = "form-control" })
                                 </div>
                                 <div class="mb-3">
-                                    <select class=" form-control" name="type">
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                        <option value="AL">Tất cả loại phiếu</option>
-                                    </select>
+                                     @Html.DropDownList("user", lstUser, "---Tất cả---", new { @class = "form-control" })
                                 </div>
-                                <button type="submit" class="btn btn-primary mb-2"><i data-feather="search"></i> Tìm kiếm</button>
-                                <button type="submit" class="btn btn-success mb-2 ms-2"><i data-feather="file-text"></i> Excel</button>
+                                <button type="submit" class="btn btn-primary mb-2">Tìm kiếm</button>
+                            </form>
+                            <form action="@Url.Action("Export_ReportPawnHolding","BaoCao")" method="post">
+                                <div class="mb-2">
+                                    <input type="hidden" class="form-control" name="from" value="@Context.Request.Query["from"]">
+                                    <input type="hidden" class="form-control" name="to" value="@Context.Request.Query["to"]">
+                                    <input type="hidden" class="form-control" name="loaihopdong" value="@Context.Request.Query["loaihopdong"]">
+                                    <input type="hidden" class="form-control" name="user" value="@Context.Request.Query["user"]">
+                                    <button type="submit" class="btn btn-success mb-2 ms-2"><i data-feather="file-text"></i> Excel</button>
+                                </div>
                             </form>
                         </div>
 
@@ -76,8 +74,26 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                </tbody>
+                                    @if (Model != null)
+                                    {
+                                        var idx = 1;
 
+                                        foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>@idx</td>
+                                                <td>@item.LoaiHopDong</td>
+                                                <td>@item.MaHD</td>
+                                                <td>@item.TenKhachHang</td>
+                                                <td>@item.TenHang</td>
+                                                <td>@item.NgayVay</td>
+                                                <td>@item.TienVay.ToString("N0")</td>
+                                                <td>@item.TinhTrang</td>
+                                            </tr>
+                                            idx++;
+                                        }
+                                    }
+                                </tbody>
                             </table>
                         </div>
                     </div>
