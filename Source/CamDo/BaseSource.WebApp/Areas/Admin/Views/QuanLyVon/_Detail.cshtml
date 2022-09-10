@@ -279,7 +279,38 @@
                 </div>
             </div>
         </fieldset>
-        <fieldset id="tab-history">
+        <fieldset id="tab-lichsu">
+            <div>
+                <div class="d-flex justify-content-center">
+                    <div class="col-md-6">
+                        <form id="frmNhacNo" method="post" asp-action="Create" asp-controller="HopDong_DebtNote">
+                            <input type="hidden" name="HopDongId" value="@Model.Id" />
+                            <div class="row mb-3">
+                                <label class="col-2 text-end">Ghi chú</label>
+                                <div class="col-10">
+                                    <textarea class="form-control" name="Note" rows="5"></textarea>
+                                    <span class="text-danger field-validation-valid" data-valmsg-for="Note" data-valmsg-replace="true"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-2"></label>
+                                <div class="col-10">
+                                    <button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-save"></i> Lưu lại</button>
+                                </div>
+                            </div>
+
+
+                        </form>
+                    </div>
+                </div>
+                <div id="divContent-CommentDebt">
+
+                </div>
+            </div>
+
+            <div id="divContent-CuaHang_TransactionLog">
+
+            </div>
         </fieldset>
     </div>
 </div>
@@ -297,7 +328,7 @@
 
     function loadDataTab(type) {
         switch (type) {
-            case "tab-history":
+            case "tab-lichsu":
                 getCuahang_TransactionLog(@Model.Id,'@Model.HD_Loai');
                  geHopDong_DebtNote(@Model.Id);
                 break;

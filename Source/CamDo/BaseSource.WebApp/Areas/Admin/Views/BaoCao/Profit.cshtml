@@ -42,7 +42,7 @@
                                 <button type="submit" class="btn btn-primary mb-2"><i data-feather="search"></i> Tìm kiếm</button>
                             </form>
                         </div>
-                        <form action="@Url.Action("Export","Export_Profit")" method="post">
+                        <form action="@Url.Action("Export_Profit","Export")" method="post">
                             <div class="mb-2">
                                 <input type="hidden" class="form-control" name="from" value="@Context.Request.Query["from"]">
                                 <input type="hidden" class="form-control" name="to" value="@Context.Request.Query["to"]">
