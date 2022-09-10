@@ -111,8 +111,8 @@
     </div>
 </div>
 
-
-<div class="modal fade" id="set-role" tabindex="-1" role="dialog" aria-hidden="true">
+<div id ="_modalAddRole"></div>
+@*<div class="modal fade" id="set-role" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -124,49 +124,17 @@
         </div>
     </div>
 </div>
-
+*@
 @section Scripts{
 <script>
-    $(".user-nav").addClass("active");
-
-    function editUserRole(id) {
-        $("#set-role .modal-body").html('<i class="fas fa-fw fa-spin fa-spinner"></i>');
-        $("#set-role").modal('show');
-
-        $.ajax({
-            method: "GET",
-            url: '@Url.Action("EditUserRole", "User")',
-            data: { id:id },
-            success: function (res) {
-                $("#set-role .modal-body").html(res);
-
-                $('#form-edit-role').submit(function (e) {
-                    e.preventDefault();
-                    $.ajax({
-                        method: $('#form-edit-role').attr('method'),
-                        url: $('#form-edit-role').attr('action'),
-                        data: $('#form-edit-role').serializeArray(),
-                        success: function (res) {
-                            location.reload();
-                        }
-                    });
-                });
-            }, error: function (error) {
-                alert("Error!");
-            }
-        });
-    }
-     function deleteUser() {
-        $.ajax({
-            method: "POST",
-            url: '@Url.Action("DeleteUser", "User")',
-            data: { userId:  $("#txtUserId").val() },
-            success: function (res) {
-               alert("Success!");
-            }, error: function (error) {
-                alert("Error!");
-            }
-        });
-    }
+    var UrlCreate ={
+         EditUserRole : "@Url.Action("EditUserRole","User")",
+     };
 </script>
+<script src="~/admin/js/User/createOrUpdate.js" asp-append-version=true></script>
+
+<script>
+    $(".user-nav").addClass("active");
+</script>
+
 }

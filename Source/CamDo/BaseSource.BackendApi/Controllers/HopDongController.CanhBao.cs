@@ -76,6 +76,8 @@ namespace BaseSource.BackendApi.Controllers
                                             TongTienVayHienTai = hd.TongTienVayHienTai,
                                             HD_Loai = hd.HD_Loai,
                                             HD_Status = hd.HD_Status,
+                                            HD_GhiChu = hd.HD_GhiChu,
+                                           
                                         }).OrderByDescending(x => x.Id).ToPagedListAsync(request.Page, request.PageSize);
 
 

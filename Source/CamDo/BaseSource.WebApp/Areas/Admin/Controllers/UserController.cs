@@ -44,16 +44,10 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
 
             return View(result.ResultObj);
         }
-        //public async Task<ActionResult> EditUserRole(string id)
-        //{
-        //    var result = await _apiClient.GetUserRoles(id);
-        //    if (!result.IsSuccessed)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return PartialView("_EditUserRole", result.ResultObj);
-        //}
+        public async Task<IActionResult> EditUserRole(string id)
+        {
+            return PartialView("_ModalSetRoleUser");
+        }
 
         [HttpPost]
         public async Task<IActionResult> EditUserRole(RoleAssignVm model)
