@@ -41,6 +41,12 @@ namespace BaseSource.ApiIntegration.WebApi.CauHinhHangHoa
             return await client.PostAsync<ApiResult<string>>("/api/CauHinhHangHoa/Edit", model);
         }
 
+        public async Task<ApiResult<List<CauHinhHangHoaVm>>> GetByCuaHang()
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.GetAsync<ApiResult<List<CauHinhHangHoaVm>>>("/api/CauHinhHangHoa/GetByCuaHang");
+        }
+
         public async Task<ApiResult<CauHinhHangHoaVm>> GetById(int id, int hdId = 0)
         {
             var obj = new

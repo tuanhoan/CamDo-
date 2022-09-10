@@ -1,4 +1,6 @@
-﻿@{
+﻿@using BaseSource.ViewModels.BaoCao
+@model ProfitVM
+@{
     ViewData["Title"] = "Tổng kết lợi nhuận";
 }
 
@@ -21,26 +23,32 @@
                         <div class="row mb-5">
                             <div class="col-md-6 text-center border-right">
                                 <h4>HỢP ĐỒNG MỚI</h4>
-                                <h3 class="text-primary">10</h3>
+                                <h3 class="text-primary">@Model.HDMoi</h3>
                             </div>
                             <div class="col-md-6 text-center border-right">
                                 <h4>LỢI NHUẬN</h4>
-                                <h3 class="text-primary">100,000</h3>
+                                <h3 class="text-primary">@Model.LoiNhuan</h3>
                             </div>
                         </div>
                         <div class="mb-3">
                             <form class="form-inline">
                                 <div class="mb-3">
-                                    <input type="date" class="form-control" id="from">
+                                    <input type="date" name="from" value="@Context.Request.Query["from"]" class="form-control" id="from">
                                 </div>
                                 <div class="mb-3">
-                                    <input type="date" class="form-control" id="to">
+                                    <input type="date" name="to" value="@Context.Request.Query["to"]" class="form-control" id="to">
                                 </div>
 
                                 <button type="submit" class="btn btn-primary mb-2"><i data-feather="search"></i> Tìm kiếm</button>
-                                <button type="submit" class="btn btn-success mb-2 ms-2"><i data-feather="file-text"></i> Excel</button>
                             </form>
                         </div>
+                        <form action="@Url.Action("Export_Profit","Export")" method="post">
+                            <div class="mb-2">
+                                <input type="hidden" class="form-control" name="from" value="@Context.Request.Query["from"]">
+                                <input type="hidden" class="form-control" name="to" value="@Context.Request.Query["to"]">
+                                <button type="submit" class="btn btn-success"><i data-feather="printer"></i> Excel</button>
+                            </div>
+                        </form>
 
                         <div class="table-responsive">
                             <table class="table table-bordered m-table table-hover table-calendar table-report">
@@ -67,66 +75,28 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr class="">
-                                        <td align="left" class="align-middle">Vốn</td>
-                                        <td align="right" class="align-middle">1</td>
-                                        <td align="right" class="align-middle">1</td>
-                                        <td align="right" class="align-middle">0</td>
-                                        <td align="right" class="align-middle">0</td>
-                                        <td align="right" class="align-middle">1</td>
-                                        <td align="right" class="align-middle">0</td>
-                                        <td align="right" class="align-middle">0</td>
-                                        <td align="right" class="align-middle">0</td>
-                                        <td align="right" class="align-middle text-danger">0</td>
-                                        <td align="right" class="align-middle text-danger">0</td>
-                                        <td align="right" class="align-middle text-danger">0</td>
-                                        <td align="right" class="align-middle  text-danger">0</td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" class="align-middle">Hoạt động thu</td>
-                                        <td align="right" class="align-middle">0</td>
-                                        <td align="right" class="align-middle">0</td>
-                                        <td align="right" class="align-middle">0</td>
-                                        <td align="right" class="align-middle">0</td>
-                                        <td align="right" class="align-middle">0</td>
-                                        <td align="right" class="align-middle">0</td>
-                                        <td align="right" class="align-middle">0</td>
-                                        <td align="right" class="align-middle">0</td>
-                                        <td align="right" class="align-middle text-danger">0</td>
-                                        <td align="right" class="align-middle text-danger">0</td>
-                                        <td align="right" class="align-middle text-blue">+6,246</td>
-                                        <td align="right" class="align-middle  text-danger">0</td>
-                                    </tr>
-                                    <tr>
-                                        <td align="left" class="align-middle">Hoạt động chi</td>
-                                        <td align="right" class="align-middle">0</td>
-                                        <td align="right" class="align-middle">0</td>
-                                        <td align="right" class="align-middle">0</td>
-                                        <td align="right" class="align-middle">0</td>
-                                        <td align="right" class="align-middle">0</td>
-                                        <td align="right" class="align-middle">0</td>
-                                        <td align="right" class="align-middle">0</td>
-                                        <td align="right" class="align-middle">0</td>
-                                        <td align="right" class="align-middle text-danger">0</td>
-                                        <td align="right" class="align-middle text-danger">0</td>
-                                        <td align="right" class="align-middle text-danger">-14,224</td>
-                                        <td align="right" class="align-middle  text-danger">0</td>
-                                    </tr>
-                                    <tr style="background:#ede8ab">
-                                        <td align="right" class="align-middle  text-start">Tổng cộng</td>
-                                        <td align="right" class="align-middle">1</td>
-                                        <td align="right" class="align-middle">1</td>
-                                        <td align="right" class="align-middle">0</td>
-                                        <td align="right" class="align-middle">0</td>
-                                        <td align="right" class="align-middle">1</td>
-                                        <td align="right" class="align-middle">0</td>
-                                        <td align="right" class="align-middle">0</td>
-                                        <td align="right" class="align-middle">0</td>
-                                        <td align="right" class="align-middle text-danger">0</td>
-                                        <td align="right" class="align-middle text-danger">0</td>
-                                        <td align="right" class="align-middle text-danger">-7,978</td>
-                                        <td align="right" class="align-middle  text-danger">0</td>
-                                    </tr>
+                                    @if (Model.profitVMDetails != null)
+                                    {
+                                        var idx = 1;
+                                        foreach (var item in Model.profitVMDetails)
+                                        {
+                                            <tr>
+                                                <td align="left" class="align-middle">@item.Loai</td>
+                                                <td align="right" class="align-middle">@item.Tong</td>
+                                                <td align="right" class="align-middle">@item.Moi</td>
+                                                <td align="right" class="align-middle">@item.Cu</td>
+                                                <td align="right" class="align-middle">@item.Dong</td>
+                                                <td align="right" class="align-middle">@item.TraLai</td>
+                                                <td align="right" class="align-middle">@item.NoLai</td>
+                                                <td align="right" class="align-middle">@item.QuaLai</td>
+                                                <td align="right" class="align-middle">@item.ThanhLy</td>
+                                                <td align="right" class="align-middle text-danger">@item.TongTienChoVay</td>
+                                                <td align="right" class="align-middle text-danger">@item.DangChoVay</td>
+                                                <td align="right" class="align-middle text-danger">@item.LoiNhuan</td>
+                                                <td align="right" class="align-middle  text-danger">@item.KhachNo</td>
+                                            </tr>
+                                        }
+                                    }
                                 </tbody>
                             </table>
                         </div>

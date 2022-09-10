@@ -24,7 +24,7 @@ namespace BaseSource.BackendApi.Controllers
         [HttpGet("ReportBalance")]
         public async Task<IActionResult> ReportBalance(DateTime? FormDate, DateTime? ToDate, string UserId, int? LoaiHopDong)
         {
-            var queryable =  _db.HopDongs.Where(x => x.CuaHangId == CuaHangId).AsQueryable();
+            var queryable = _db.HopDongs.Where(x => x.CuaHangId == CuaHangId).AsQueryable();
 
             if (FormDate != null)
             {
@@ -44,7 +44,7 @@ namespace BaseSource.BackendApi.Controllers
             }
 
 
-            var cuahangtranLogs = await _db.CuaHang_TransactionLogs.Where(x => x.CuaHangId == CuaHangId).ToListAsync();
+            var cuahangtranLogs = await _db.CuaHang_TransactionLogs.Include(x=>x.HopDong).Where(x => x.CuaHangId == CuaHangId).ToListAsync();
             var cuahangQuyTienLogs = await _db.CuaHang_QuyTienLogs.Where(x => x.CuaHangId == CuaHangId).ToListAsync();
             var giaodichs = new List<GiaoDich>();
             var khachhangs = await _db.KhachHangs.Where(x => x.CuaHangId == CuaHangId).ToListAsync();
@@ -102,20 +102,20 @@ namespace BaseSource.BackendApi.Controllers
             data.ThuHoatDong.Total = data.ThuHoatDong.Thu - data.ThuHoatDong.Chi;
             data.VayLai.Total = data.VayLai.Thu - data.VayLai.Chi;
             data.TienMatConLai.Total = data.TienMatConLai.Thu - data.TienMatConLai.Chi;
-             
-            foreach (var item in hopdongs)
+
+            foreach (var item in cuahangtranLogs)
             {
                 var gd = new GiaoDich
                 {
-                    LoaiHopDong = item.HD_Loai,
-                    DaChi = item.HD_TongTienVayBanDau,
-                    DaThu = item.TongTienLaiDaThanhToan,
+                    LoaiHopDong = item.HopDong.HD_Loai,
+                    DaChi = item.HopDong.HD_TongTienVayBanDau,
+                    DaThu = item.HopDong.TongTienLaiDaThanhToan,
                     DienDai = "",
-                    GhiChu = item.HD_GhiChu,
-                    KhachHang = khachhangs.FirstOrDefault(x => x.Id == item.KhachHangId)?.Ten,
-                    MaHopDong = item.HD_Ma,
+                    GhiChu = item.HopDong.HD_GhiChu,
+                    KhachHang = khachhangs.FirstOrDefault(x => x.Id == item.HopDong.KhachHangId)?.Ten,
+                    MaHopDong = item.HopDong.HD_Ma,
                     NgayGiaoDich = item.CreatedDate,
-                    NguoiGD = users.FirstOrDefault(x => x.UserId == item.UserIdAssigned)?.FullName
+                    NguoiGD = users.FirstOrDefault(x => x.UserId == item.HopDong.UserIdAssigned)?.FullName
                 };
                 giaodichs.Add(gd);
             }
@@ -256,6 +256,175 @@ namespace BaseSource.BackendApi.Controllers
             }).ToList();
 
             return Ok(new ApiSuccessResult<List<PaymentHistoryVM>>(result));
+        }
+        [HttpGet("WarehouseLiquidation")]
+        public async Task<IActionResult> WarehouseLiquidation(DateTime? FormDate, DateTime? ToDate, string UserId, int? LoaiHopDong)
+        {
+            var users = await _db.UserProfiles.Where(x => x.CuaHangId == CuaHangId).ToListAsync();
+            var khachHangs = await _db.KhachHangs.Where(x => x.CuaHangId == CuaHangId).ToListAsync();
+            var chhhs = await _db.CauHinhHangHoas.Where(x => x.Id == LoaiHopDong).Select(x => x.Ten).ToListAsync();
+            var namekhs = khachHangs.Select(x => x.Ten).ToList();
+
+            var queryable = _db.HopDongs.Where(x => x.HD_Status == (byte)EHopDong_CamDoStatusFilter.ChoThanhLy).AsQueryable();
+
+            if (UserId != null)
+            {
+                queryable = queryable.Where(x => x.HD_Ma.Contains(UserId) || namekhs.Contains(UserId));
+            }
+            if (LoaiHopDong != null)
+            {
+                queryable = queryable.Where(x => chhhs.Contains(x.TenTaiSan));
+            }
+
+            var result = (await queryable.ToListAsync()).Select(x => new WarehouseLiquidationVM
+            {
+                MaHD = x.HD_Ma,
+                KhachHang = khachHangs.FirstOrDefault(k => k.Id == x.KhachHangId)?.Ten,
+                LaiDaDong = x.TongTienLaiDaThanhToan,
+                LaiDenHomNay = x.TienLaiToiNgayHienTai,
+                NgayCam = x.HD_NgayVay.ToString("dd/MM/yyyy"),
+                SanPham = x.TenTaiSan,
+                TienCam = x.HD_TongTienVayBanDau,
+                TienNo = x.TongTienVayHienTai,
+                TinhTrang = "Chờ thanh lý"
+            }).ToList();
+
+            return Ok(new ApiSuccessResult<List<WarehouseLiquidationVM>>(result));
+        }
+        [HttpGet("Profit")]
+        public async Task<IActionResult> Profit(DateTime? FormDate, DateTime? ToDate, string UserId, int? LoaiHopDong)
+        {
+            var users = await _db.UserProfiles.ToListAsync();
+
+            var queryable = _db.HopDongs.Where(x => x.CuaHangId == CuaHangId).AsQueryable();
+            var cuahangtranLogQueryable = _db.CuaHang_TransactionLogs.Include(x=>x.HopDong).Where(x => x.CuaHangId == CuaHangId).AsQueryable();
+
+            if (FormDate != null)
+            {
+                queryable = queryable.Where(x => x.CreatedDate >= FormDate);
+                cuahangtranLogQueryable = cuahangtranLogQueryable.Where(x=>x.FromDate >= FormDate);
+            }
+            if (ToDate != null)
+            {
+                queryable = queryable.Where(x => x.CreatedDate <= ToDate);
+                cuahangtranLogQueryable = cuahangtranLogQueryable.Where(x => x.ToDate <= ToDate);
+            }
+
+            var hopdongs = await queryable.ToListAsync();
+            var cuahangtranLogs = await cuahangtranLogQueryable.ToListAsync();
+
+            var result = new ProfitVM
+            {
+                HDMoi = cuahangtranLogs.Where(x => x.FeatureType == EFeatureType.Vaylai).Count(x => hopdongs.Select(x => x.KhachHangId).Distinct().Count() == 1),
+                LoiNhuan = cuahangtranLogs.Sum(x => x.MoneyAdd),
+                profitVMDetails = new List<ProfitVMDetail>
+                {
+                    new ProfitVMDetail
+                    {
+                        Loai = "Vay lãi",
+                        Tong = cuahangtranLogs.Count(x=>x.FeatureType == EFeatureType.Vaylai),
+                        Moi =cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Vaylai).Count(x => hopdongs.Select(x => x.KhachHangId).Distinct().Count() == 1),
+                        Cu =cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Vaylai).Count(x => hopdongs.Select(x => x.KhachHangId).Distinct().Count() > 1),
+                        Dong =cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Vaylai).Count(x=>x.HopDong.HD_Status ==(byte)EHopDong_CamDoStatusFilter.DaXoa),
+                        TraLai = cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Vaylai).Count(x=>x.HopDong.HD_Status == (byte)EHopDong_CamDoStatusFilter.HomNayDongTien),
+                        NoLai =  cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Vaylai).Count(x=>x.HopDong.HD_Status == (byte)EHopDong_CamDoStatusFilter.ChamLai),
+                        QuaLai =  cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Vaylai).Count(x=>x.HopDong.HD_Status == (byte)EHopDong_CamDoStatusFilter.QuaHan),
+                        ThanhLy =  cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Vaylai).Count(x=>x.HopDong.HD_Status == (byte)EHopDong_CamDoStatusFilter.ChoThanhLy),
+                        TongTienChoVay = cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Vaylai).Sum(x=>x.MoneyPayNeed),
+                        DangChoVay = cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Vaylai).Sum(x=>x.TotalMoneyLoan),
+                        LoiNhuan = cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Vaylai).Sum(x=>x.MoneyAdd),
+                        KhachNo = cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Vaylai).Sum(x=>x.MoneyDebit)
+
+                    },
+                       new ProfitVMDetail
+                    {
+                        Loai = "Vốn",
+                        Tong = cuahangtranLogs.Count(x=>x.FeatureType == EFeatureType.GopVon),
+                        Moi =cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.GopVon).Count(x => hopdongs.Select(x => x.KhachHangId).Distinct().Count() == 1),
+                        Cu =cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.GopVon).Count(x => hopdongs.Select(x => x.KhachHangId).Distinct().Count() > 1),
+                        Dong =cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.GopVon).Count(x=>x.HopDong.HD_Status ==(byte)EHopDong_CamDoStatusFilter.DaXoa),
+                        TraLai = cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.GopVon).Count(x=>x.HopDong.HD_Status == (byte)EHopDong_CamDoStatusFilter.HomNayDongTien),
+                        NoLai =  cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.GopVon).Count(x=>x.HopDong.HD_Status == (byte)EHopDong_CamDoStatusFilter.ChamLai),
+                        QuaLai =  cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.GopVon).Count(x=>x.HopDong.HD_Status == (byte)EHopDong_CamDoStatusFilter.QuaHan),
+                        ThanhLy =  cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.GopVon).Count(x=>x.HopDong.HD_Status == (byte)EHopDong_CamDoStatusFilter.ChoThanhLy),
+                        TongTienChoVay = cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.GopVon).Sum(x=>x.MoneyPayNeed),
+                        DangChoVay = cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.GopVon).Sum(x=>x.TotalMoneyLoan),
+                        LoiNhuan = cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.GopVon).Sum(x=>x.MoneyAdd),
+                        KhachNo = cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.GopVon).Sum(x=>x.MoneyDebit)
+
+                    },
+                    new ProfitVMDetail
+                    {
+                        Loai = "Cầm đồ",
+                        Tong = cuahangtranLogs.Count(x=>x.FeatureType == EFeatureType.Camdo),
+                        Moi =cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Camdo).Count(x => hopdongs.Select(x => x.KhachHangId).Distinct().Count() == 1),
+                        Cu =cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Camdo).Count(x => hopdongs.Select(x => x.KhachHangId).Distinct().Count() > 1),
+                        Dong =cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Camdo).Count(x=>x.HopDong.HD_Status ==(byte)EHopDong_CamDoStatusFilter.DaXoa),
+                        TraLai = cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Camdo).Count(x=>x.HopDong.HD_Status == (byte)EHopDong_CamDoStatusFilter.HomNayDongTien),
+                        NoLai =  cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Camdo).Count(x=>x.HopDong.HD_Status == (byte)EHopDong_CamDoStatusFilter.ChamLai),
+                        QuaLai =  cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Camdo).Count(x=>x.HopDong.HD_Status == (byte)EHopDong_CamDoStatusFilter.QuaHan),
+                        ThanhLy =  cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Camdo).Count(x=>x.HopDong.HD_Status == (byte)EHopDong_CamDoStatusFilter.ChoThanhLy),
+                        TongTienChoVay = cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Camdo).Sum(x=>x.MoneyPayNeed),
+                        DangChoVay = cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Camdo).Sum(x=>x.TotalMoneyLoan),
+                        LoiNhuan = cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Camdo).Sum(x=>x.MoneyAdd),
+                        KhachNo = cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Camdo).Sum(x=>x.MoneyDebit)
+
+                    },
+                       new ProfitVMDetail
+                    {
+                        Loai = "Hoạt động thu",
+                        Tong = cuahangtranLogs.Count(x=>x.FeatureType == EFeatureType.Thu),
+                        Moi =cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Thu).Count(x => hopdongs.Select(x => x.KhachHangId).Distinct().Count() == 1),
+                        Cu =cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Thu).Count(x => hopdongs.Select(x => x.KhachHangId).Distinct().Count() > 1),
+                        Dong =cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Thu).Count(x=>x.HopDong.HD_Status ==(byte)EHopDong_CamDoStatusFilter.DaXoa),
+                        TraLai = cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Thu).Count(x=>x.HopDong.HD_Status == (byte)EHopDong_CamDoStatusFilter.HomNayDongTien),
+                        NoLai =  cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Thu).Count(x=>x.HopDong.HD_Status == (byte)EHopDong_CamDoStatusFilter.ChamLai),
+                        QuaLai =  cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Thu).Count(x=>x.HopDong.HD_Status == (byte)EHopDong_CamDoStatusFilter.QuaHan),
+                        ThanhLy =  cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Thu).Count(x=>x.HopDong.HD_Status == (byte)EHopDong_CamDoStatusFilter.ChoThanhLy),
+                        TongTienChoVay = cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Thu).Sum(x=>x.MoneyPayNeed),
+                        DangChoVay = cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Thu).Sum(x=>x.TotalMoneyLoan),
+                        LoiNhuan = cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Thu).Sum(x=>x.MoneyAdd),
+                        KhachNo = cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Thu).Sum(x=>x.MoneyDebit)
+
+                    },
+                       new ProfitVMDetail
+                    {
+                        Loai = "Hoạt động chi",
+                        Tong = cuahangtranLogs.Count(x=>x.FeatureType == EFeatureType.Chi),
+                        Moi =cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Chi).Count(x => hopdongs.Select(x => x.KhachHangId).Distinct().Count() == 1),
+                        Cu =cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Chi).Count(x => hopdongs.Select(x => x.KhachHangId).Distinct().Count() > 1),
+                        Dong =cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Chi).Count(x=>x.HopDong.HD_Status ==(byte)EHopDong_CamDoStatusFilter.DaXoa),
+                        TraLai = cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Chi).Count(x=>x.HopDong.HD_Status == (byte)EHopDong_CamDoStatusFilter.HomNayDongTien),
+                        NoLai =  cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Chi).Count(x=>x.HopDong.HD_Status == (byte)EHopDong_CamDoStatusFilter.ChamLai),
+                        QuaLai =  cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Chi).Count(x=>x.HopDong.HD_Status == (byte)EHopDong_CamDoStatusFilter.QuaHan),
+                        ThanhLy =  cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Chi).Count(x=>x.HopDong.HD_Status == (byte)EHopDong_CamDoStatusFilter.ChoThanhLy),
+                        TongTienChoVay = cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Thu).Sum(x=>x.MoneyPayNeed),
+                        DangChoVay = cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Chi).Sum(x=>x.TotalMoneyLoan),
+                        LoiNhuan = cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Chi).Sum(x=>x.MoneyAdd),
+                        KhachNo = cuahangtranLogs.Where(x=>x.FeatureType == EFeatureType.Chi).Sum(x=>x.MoneyDebit)
+
+                    },
+                       new ProfitVMDetail
+                    {
+                        Loai = "Tổng",
+                        Tong = cuahangtranLogs.Count(),
+                        Moi =cuahangtranLogs.Count(x => hopdongs.Select(x => x.KhachHangId).Distinct().Count() == 1),
+                        Cu =cuahangtranLogs.Count(x => hopdongs.Select(x => x.KhachHangId).Distinct().Count() > 1),
+                        Dong =cuahangtranLogs.Count(x=>x.HopDong.HD_Status ==(byte)EHopDong_CamDoStatusFilter.DaXoa),
+                        TraLai = cuahangtranLogs.Count(x=>x.HopDong.HD_Status == (byte)EHopDong_CamDoStatusFilter.HomNayDongTien),
+                        NoLai =  cuahangtranLogs.Count(x=>x.HopDong.HD_Status == (byte)EHopDong_CamDoStatusFilter.ChamLai),
+                        QuaLai =  cuahangtranLogs.Count(x=>x.HopDong.HD_Status == (byte)EHopDong_CamDoStatusFilter.QuaHan),
+                        ThanhLy =  cuahangtranLogs.Count(x=>x.HopDong.HD_Status == (byte)EHopDong_CamDoStatusFilter.ChoThanhLy),
+                        TongTienChoVay = cuahangtranLogs.Sum(x=>x.MoneyPayNeed),
+                        DangChoVay = cuahangtranLogs.Sum(x=>x.TotalMoneyLoan),
+                        LoiNhuan = cuahangtranLogs.Sum(x=>x.MoneyAdd),
+                        KhachNo = cuahangtranLogs.Sum(x=>x.MoneyDebit)
+
+                    }
+                }
+            };
+
+            return Ok(new ApiSuccessResult<ProfitVM>(result));
         }
     }
 }

@@ -15,5 +15,10 @@ namespace BaseSource.ApiIntegration.WebApi.BaoCao
         Task<ApiResult<List<ReportPawnHoldingVm>>> ReportPawnHolding(ReportBalanceRequest request);
         Task<ApiResult<List<ReportPawnNewRepurchaseVM>>> ReportPawnNewRepurchase();
         Task<ApiResult<List<PaymentHistoryVM>>> PaymentHistory(ReportBalanceRequest request);
+        Task<ApiResult<List<WarehouseLiquidationVM>>> WarehouseLiquidation(ReportBalanceRequest request);
+        Task<ApiResult<ProfitVM>> Profit(ReportBalanceRequest request);
+        Task<ApiResult<List<HD_PaymentLogReportVm>>> GetPaymentLog();
+        Task<ApiResult<List<ReportPawnHoldingVm>>> ReportPawnHolding();
+        Task<ApiResult<List<PaymentHistoryVM>>> PaymentHistory();
     }
 }

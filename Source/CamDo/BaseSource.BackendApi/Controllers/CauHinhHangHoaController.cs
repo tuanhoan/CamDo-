@@ -176,5 +176,25 @@ namespace BaseSource.BackendApi.Controllers
             }
             return Ok(new ApiErrorResult<string>("Not Found!"));
         }
+        [HttpGet("GetByCuaHang")]
+        public async Task<IActionResult> GetByCuaHang()
+        {
+            var hanghoas = await _db.CauHinhHangHoas.Where(x=>x.CuaHangId ==CuaHangId).ToListAsync();
+            var data = hanghoas.Select(x => new CauHinhHangHoaVm()
+            {
+                Id = x.Id,
+                LinhVuc = x.LinhVuc,
+                Ten = x.Ten,
+                MaTS = x.MaTS,
+                TongTien = x.TongTien,
+                LaiSuat = x.LaiSuat,
+                KyLai = x.KyLai,
+                SoNgayQuaHan = x.SoNgayQuaHan,
+                IsPublish = x.IsPublish,
+            }).ToList();
+
+
+            return Ok(new ApiSuccessResult<List<CauHinhHangHoaVm>>(data));
+        }
     }
 }
