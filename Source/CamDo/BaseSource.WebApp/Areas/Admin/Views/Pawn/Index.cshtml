@@ -2,6 +2,7 @@
 @{
     ViewData["Title"] = "Hợp đồng cầm đồ";
     var listHangHoa = ViewData["ListHangHoa"] as SelectList;
+    var ListAuth = (List<string>)ViewBag.ListAuth;
 }
 <div class="row">
     <!-- table  Lastest Tickets -->
@@ -16,18 +17,27 @@
 
                 <div class="row mb-2">
                     <div class="col-md-12 d-flex">
-                        <button type="button" class="btn btn-primary btn-sm addEditHD" data-id="0" data-url="@Url.Action("Create","HopDong")">Thêm mới</button>
-                        <form action="@Url.Action("Export","HopDong")" method="post">
-                            <input type="hidden" name="loaiHD" value="@ELoaiHopDong.Camdo" />
-                            <input type="hidden" class="form-control" name="info" value="@Context.Request.Query["info"]">
-                            <input type="hidden" class="form-control" name="from" value="@Context.Request.Query["from"]">
-                            <input type="hidden" class="form-control" name="to" value="@Context.Request.Query["to"]">
-                            <input type="hidden" class="form-control" name="loaihanghoa" value="@Context.Request.Query["loaihanghoa"]">
-                            <input type="hidden" class="form-control" name="status" value="@Context.Request.Query["status"]">
+                        @if (ListAuth.Contains("CamDo_ThemMoi"))
+                        {
+                            <button type="button" class="btn btn-primary btn-sm addEditHD" data-id="0" data-url="@Url.Action("Create","HopDong")">Thêm mới</button>
+                        }
+                        @if (ListAuth.Contains("CamDo_XuatExcel"))
+                        {
+                            <form action="@Url.Action("Export","HopDong")" method="post">
+                                <input type="hidden" name="loaiHD" value="@ELoaiHopDong.Camdo" />
+                                <input type="hidden" class="form-control" name="info" value="@Context.Request.Query["info"]">
+                                <input type="hidden" class="form-control" name="from" value="@Context.Request.Query["from"]">
+                                <input type="hidden" class="form-control" name="to" value="@Context.Request.Query["to"]">
+                                <input type="hidden" class="form-control" name="loaihanghoa" value="@Context.Request.Query["loaihanghoa"]">
+                                <input type="hidden" class="form-control" name="status" value="@Context.Request.Query["status"]">
 
-                            <button type="submit" id="btnExportExcel" class="btn btn-info btn-sm mx-sm-3"> <i class="fas fa-file-export"></i> Xuất Excel</button>
-                        </form>
-                        <button type="button" class="btn btn-primary btn-sm mx-sm-1" onclick="chonMauHopDong()">Chọn mẫu hợp đồng</button>
+                                <button type="submit" id="btnExportExcel" class="btn btn-info btn-sm mx-sm-3"> <i class="fas fa-file-export"></i> Xuất Excel</button>
+                            </form>
+                        }
+                        @if (ListAuth.Contains("CamDo_ChonMauHopDong"))
+                        {
+                            <button type="button" class="btn btn-primary btn-sm mx-sm-1" onclick="chonMauHopDong()">Chọn mẫu hợp đồng</button>
+                        }
                     </div>
                 </div>
                 <form asp-action="Index" id="frmSearch" method="get" class="form-inline">
@@ -146,7 +156,7 @@
                                                 {
                                                     <button class="btn btn-sm btn-info m-1 detaileHD" type="button" data-tab="tab-history" data-id="@item.Id" data-url="@Url.Action("Detail", "HopDong")" title="Lịch sử">
                                                         <i class="fas fa-chart-line"></i>
-                                                    </button>
+                                                    </button>                                                   
                                                     if (item.HD_Status == (byte)EHopDong_CommonStatusFilter.DaThanhLy)
                                                     {
 
@@ -166,27 +176,43 @@
                                                 }
                                                 else
                                                 {
-                                                    <button class="btn btn-sm btn-secondary detaileHD m-1" type="button" data-id="@item.Id" data-url="@Url.Action("Detail", "HopDong")" title="Đóng lãi">
-                                                        <i class="fas fa-coins"></i>
-                                                    </button>
-                                                    <button class="btn btn-sm btn-danger m-1" type="button" data-bs-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn xóa hợp đồng?" data-href="@Url.Action("Delete", "HopDong", new { id = item.Id })" title="Xóa hợp đồng">
-                                                        <i class="fas fa-trash-alt fa-fw"></i>
-                                                    </button>
-                                                    <button class="btn btn-sm btn-info detaileHD m-1" data-tab="tab-chuocdo" type="button" data-id="@item.Id" data-url="@Url.Action("Detail", "HopDong")" title="Chuộc đồ">
-                                                        <i class="fas fa-anchor"></i>
-                                                    </button>
-                                                    <button class="btn btn-sm btn-success detaileHD m-1" data-tab="tab-hengio" type="button" data-id="@item.Id" data-url="@Url.Action("Detail", "HopDong")" title="Hẹn giờ khoản vay">
-                                                        <i class="fas fa-clock"></i>
-                                                    </button>
-                                                    <button class="btn btn-sm btn-warning m-1" type="button" data-bs-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn chuyển sang trạng thái chờ thanh lý?" data-href="@Url.Action("ChuyenTTChoThanhLy", "HopDong", new { hopDongId = item.Id })" title="Chuyển HĐ qua trạng thái chờ thanh lý">
-                                                        <i class="fas fa-radiation fa-fw"></i>
-                                                    </button>
-                                                    @if (item.HD_Status == (byte)EHopDong_CamDoStatusFilter.ChoThanhLy)
+                                                    @if (ListAuth.Contains("CamDo_DongLai"))
                                                     {
-                                                        <button class="btn btn-sm btn-secondary m-1" type="button" data-bs-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn chuyển sang trạng thái đang vay?" data-href="@Url.Action("ChuyenTTVeDangVay", "HopDong", new { hopDongId = item.Id })" title="Chuyển HĐ từ chờ thanh lý về đang vay">
-                                                            <i class="fas fa-heart fa-fw"></i>
+                                                        <button class="btn btn-sm btn-secondary detaileHD m-1" type="button" data-id="@item.Id" data-url="@Url.Action("Detail", "HopDong")" title="Đóng lãi">
+                                                            <i class="fas fa-coins"></i>
                                                         </button>
                                                     }
+                                                    @if (ListAuth.Contains("CamDo_Xoa"))
+                                                    {
+                                                        <button class="btn btn-sm btn-danger m-1" type="button" data-bs-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn xóa hợp đồng?" data-href="@Url.Action("Delete", "HopDong", new { id = item.Id })" title="Xóa hợp đồng">
+                                                            <i class="fas fa-trash-alt fa-fw"></i>
+                                                        </button>
+                                                    }                                                    
+                                                    @if (ListAuth.Contains("CamDo_ChuocDo"))
+                                                    {
+                                                        <button class="btn btn-sm btn-info detaileHD m-1" data-tab="tab-chuocdo" type="button" data-id="@item.Id" data-url="@Url.Action("Detail", "HopDong")" title="Chuộc đồ">
+                                                            <i class="fas fa-anchor"></i>
+                                                        </button>
+                                                    }
+                                                    @if (ListAuth.Contains("CamDo_HenGioKhoanVay"))
+                                                    {
+                                                        <button class="btn btn-sm btn-success detaileHD m-1" data-tab="tab-hengio" type="button" data-id="@item.Id" data-url="@Url.Action("Detail", "HopDong")" title="Hẹn giờ khoản vay">
+                                                            <i class="fas fa-clock"></i>
+                                                        </button>
+                                                    }                                                    
+                                                    @if (ListAuth.Contains("CamDo_ChuyenTrangThai"))
+                                                    {
+                                                        <button class="btn btn-sm btn-warning m-1" type="button" data-bs-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn chuyển sang trạng thái chờ thanh lý?" data-href="@Url.Action("ChuyenTTChoThanhLy", "HopDong", new { hopDongId = item.Id })" title="Chuyển HĐ qua trạng thái chờ thanh lý">
+                                                            <i class="fas fa-radiation fa-fw"></i>
+                                                        </button>
+                                                        @if (item.HD_Status == (byte)EHopDong_CamDoStatusFilter.ChoThanhLy)
+                                                        {
+                                                            <button class="btn btn-sm btn-secondary m-1" type="button" data-bs-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn chuyển sang trạng thái đang vay?" data-href="@Url.Action("ChuyenTTVeDangVay", "HopDong", new { hopDongId = item.Id })" title="Chuyển HĐ từ chờ thanh lý về đang vay">
+                                                                <i class="fas fa-heart fa-fw"></i>
+                                                            </button>
+                                                        }
+                                                    }                         
+                                                    
                                                 }
 
                                             </td>

@@ -119,6 +119,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         {
             var hd = await _hopDongApiClient.GetById(id);
             ViewData["TabActive"] = tabActive;
+            ViewBag.ListAuth = ListAuthFunc;
             return PartialView("_Detail", hd.ResultObj);
         }
     }

@@ -65,9 +65,17 @@ namespace BaseSource.BackendApi.Controllers
             var result = await _userManager.CreateAsync(newUser, model.Password);
             if (result.Succeeded)
             {
+
+
                 var lstRole = new List<string>(new string[] { "ShopManager" });
                 await _userManager.AddToRolesAsync(newUser, lstRole);
-
+                var listRoleFunction = await _db.AuthorFunctions.Select(x => x.Id).ToListAsync();
+                var userAuth = new List<AuthorUserFunction>();
+                foreach (var item in listRoleFunction)
+                {
+                    userAuth.Add(new AuthorUserFunction() { FuncId = item, UserId = newUser.Id.ToString() });
+                }
+                await _db.AuthorUserFunctions.AddRangeAsync(userAuth);
                 var userProfile = new UserProfile()
                 {
                     CustomId = newUser.Id,
