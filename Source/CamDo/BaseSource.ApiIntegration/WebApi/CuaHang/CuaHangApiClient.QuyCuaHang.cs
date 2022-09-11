@@ -40,5 +40,14 @@ namespace BaseSource.ApiIntegration.WebApi.CuaHang
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.GetAsync<ApiResult<QuyCuaHangThongKeVm>>("/api/CuaHang_QuyTienLog/GetDataThongKe");
         }
+        public async Task<ApiResult<DashboardDetail>> GetDashBoard(int CuaHangId)
+        {
+            var obj = new
+            {
+                CuaHangId = CuaHangId
+            };
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.GetAsync<ApiResult<DashboardDetail>>("/api/CuaHang/GetDashBoardByChId", obj);
+        }
     }
 }

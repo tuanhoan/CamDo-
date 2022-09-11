@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using BaseSource.ApiIntegration.WebApi.CuaHang;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +9,17 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
 {
     public class HomeController : BaseAdminController
     {
-        public IActionResult Index()
+        private readonly ICuaHangApiClient _cuaHangApiClient;
+
+        public HomeController(ICuaHangApiClient cuaHangApiClient)
         {
-            return View();
+            _cuaHangApiClient = cuaHangApiClient;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var result = await _cuaHangApiClient.GetDashBoard(ShopId);
+            return View(result.ResultObj);
         }
     }
 }

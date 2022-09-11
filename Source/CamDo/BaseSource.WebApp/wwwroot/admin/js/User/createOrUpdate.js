@@ -9,9 +9,9 @@
 });
 
 function editUserRole(id) {
-    ajaxTypeGet(UrlCreate.OpenModal).then(res => {
+    ajaxTypeGet(UrlCreate.EditUserRole, {id: id}).then(res => {
         $("#_modalAddRole").html(res);
-        $("#EditUserRole").modal("show");
+        $("#modalSetRole").modal("show");
     })
 }
 function deleteUser() {

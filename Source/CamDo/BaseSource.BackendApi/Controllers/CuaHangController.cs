@@ -347,5 +347,54 @@ namespace BaseSource.BackendApi.Controllers
             }
         }
         #endregion
+
+        #region Chi tiết cửa hàng
+        [HttpGet("GetDashBoardByChId")]
+        public async Task<IActionResult> ChiTietDashBoard(int CuaHangId)
+        {
+            var ch = await _db.CuaHangs.FirstOrDefaultAsync(x => x.Id == CuaHangId);
+            var hd = await _db.HopDongs.Where(x=> x.CuaHangId == CuaHangId).Select(x=> new {
+                x.HD_Loai,
+                x.HD_Status,
+                x.TongTienVayHienTai,
+                x.TongTienLaiDaThanhToan,
+                x.HopDong_PaymentLogs,
+              }
+            ).ToListAsync();
+            if (ch == null)
+            {
+                return NotFound();
+            }
+
+            var result = new DashboardDetail();
+
+            result.TongQuyTienMat = ch.VonDauTu;
+
+            var hdDangVay = hd.Where(x => x.HD_Loai == ELoaiHopDong.Vaylai
+                                            && x.HD_Status != (byte)EHopDong_VayLaiStatusFilter.KetThuc
+                                            && x.HD_Status != (byte)EHopDong_VayLaiStatusFilter.NoXau
+                                            && x.HD_Status != (byte)EHopDong_VayLaiStatusFilter.DaXoa);
+            result.SoHDDangVay = hdDangVay.Count();
+            result.TienDangChoVay = hdDangVay.Sum(x=> x.TongTienVayHienTai);
+
+            var firstDayOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddMilliseconds(-1);
+            var paymentLogCamVay = hd.Where(x => x.HD_Loai == ELoaiHopDong.Camdo 
+                                                || x.HD_Loai == ELoaiHopDong.Vaylai).Select(x=> x.HopDong_PaymentLogs);
+
+            result.LaiDaThuTrongThang = paymentLogCamVay.Select(x => x.Where(y => y.PaidDate >= firstDayOfMonth && y.PaidDate <= lastDayOfMonth).Sum(y => y.MoneyPay)).Sum();
+
+            result.TongSoHDCam = hd.Where(x => x.HD_Loai == ELoaiHopDong.Camdo && x.HD_Status != (byte)EHopDong_CamDoStatusFilter.DaXoa).Count();
+            result.TongSoHDVay = hd.Where(x => x.HD_Loai == ELoaiHopDong.Vaylai && x.HD_Status != (byte)EHopDong_VayLaiStatusFilter.DaXoa).Count();
+            result.SoHDDangCam = hd.Where(x => x.HD_Loai == ELoaiHopDong.Camdo
+                                            && x.HD_Status != (byte)EHopDong_CamDoStatusFilter.KetThuc
+                                            && x.HD_Status != (byte)EHopDong_CamDoStatusFilter.ChoThanhLy
+                                            && x.HD_Status != (byte)EHopDong_CamDoStatusFilter.DaThanhLy
+                                            && x.HD_Status != (byte)EHopDong_CamDoStatusFilter.DaXoa).Count();
+
+            return Ok(new ApiSuccessResult<DashboardDetail>(result));
+        }
+
+        #endregion
     }
 }

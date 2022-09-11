@@ -48,6 +48,16 @@ namespace BaseSource.ViewModels.CuaHang
     {
         public int Id { get; set; }
     }
+    public class DashboardDetail
+    {
+        public long TongQuyTienMat { get; set; } 
+        public int SoHDDangVay { get; set; } 
+        public double TienDangChoVay { get; set; } 
+        public double LaiDaThuTrongThang { get; set; } 
+        public int SoHDDangCam { get; set; } 
+        public long TongSoHDCam { get; set; } 
+        public long TongSoHDVay { get; set; } 
+    }
 
     #region Đăng ký cửa hàng
 
