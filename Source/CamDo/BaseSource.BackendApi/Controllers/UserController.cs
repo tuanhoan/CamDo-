@@ -181,6 +181,8 @@ namespace BaseSource.BackendApi.Controllers
                         CuaHangId = model.CuaHangId,
                         SubUserId = UserId,
                     });
+                    var staff = (new Guid("ffded6b0-37d9-4676-241b-69459029a622")).ToString();
+                    await _db.UserRoles.AddAsync(new IdentityUserRole<string> { UserId = newUser.Id, RoleId= staff });
                     await _db.SaveChangesAsync();
                     return Ok(new ApiSuccessResult<string>());
                 }
