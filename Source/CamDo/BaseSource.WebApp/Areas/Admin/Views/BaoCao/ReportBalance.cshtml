@@ -18,18 +18,20 @@
             <div class="card-body">
                 <div class="row ">
                     <div class="col-md-12">
-                        <form action="@Url.Action("Export","BaoCao")" method="post">
-                            <div class="mb-2">
-                                <input type="hidden" class="form-control" name="from" value="@Context.Request.Query["from"]">
-                                <input type="hidden" class="form-control" name="to" value="@Context.Request.Query["to"]">
-                                <input type="hidden" class="form-control" name="loaihopdong" value="@Context.Request.Query["loaihopdong"]">
-                                <input type="hidden" class="form-control" name="user" value="@Context.Request.Query["user"]">
-                                <button type="submit" class="btn btn-success"><i data-feather="printer"></i> Excel</button>
-                            </div>
-                        </form>
-                        <button id="printreportblance" class="btn btn-warning"> <i data-feather="printer"></i> In</button>
+                        <div class="d-flex">
+                            <form action="@Url.Action("Export","BaoCao")" method="post">
+                                <div class="mb-2">
+                                    <input type="hidden" class="form-control" name="from" value="@Context.Request.Query["from"]">
+                                    <input type="hidden" class="form-control" name="to" value="@Context.Request.Query["to"]">
+                                    <input type="hidden" class="form-control" name="loaihopdong" value="@Context.Request.Query["loaihopdong"]">
+                                    <input type="hidden" class="form-control" name="user" value="@Context.Request.Query["user"]">
+                                    <button type="submit" class="btn btn-success"><i data-feather="printer"></i> Excel</button>
+                                </div>
+                            </form>
+                            <button id="printreportblance" class="btn btn-warning mb-2"> <i data-feather="printer"></i> In</button>
 
-                        <div class="mb-3">
+                        </div>
+                         <div class="mb-3">
                             <form class="form-inline">
                                 <div class="mb-3">
                                     <input type="date" name="from" value="@Context.Request.Query["from"]" class="form-control" id="from">
