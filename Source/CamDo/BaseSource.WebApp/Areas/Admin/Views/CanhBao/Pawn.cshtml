@@ -3,7 +3,6 @@
     ViewData["Title"] = "Lịch nhắc thu tiền lãi";
 }
 
-
 <div class="row">
     <!-- table  Lastest Tickets -->
     <div class="col-12 ">
@@ -14,13 +13,17 @@
             <div class="card-body">
                 <div class="row ">
                     <div class="col-md-12">
+                        <div class="d-flex">
+                            <form action="@Url.Action("Export_Pawn","CanhBao")" method="post">
+                                <div class="mb-2">
+                                    <button type="submit" class="btn btn-success"><i data-feather="printer"></i> Excel</button>
+                                </div>
+                            </form>
+                            <button id="printpawn" class="btn btn-warning mb-2"> <i data-feather="printer"></i> In</button>
 
+                        </div>
                         <div class="mb-3">
                             <form class="form-inline">
-                                <div class="mb-3">
-                                    <button type="button" class="btn btn-primary mb-2 me-2"><i class="fa fa-print" aria-hidden="true"></i> In</button>
-                                    <button type="button" class="btn btn-success mb-2"><i class="fa fa-file-excel" aria-hidden="true"></i> Excel</button>
-                                </div>
                                 <div class="mb-3">
                                     <input type="text" class="form-control" id="search" placeholder="Tìm kiếm tên người góp vốn">
                                 </div>
@@ -111,8 +114,6 @@
 </div>
 
 @section Scripts{
-
-    <script>
-
+    <script src="~/admin//js/CanhBao/printCapital.js" asp-append-version="true">
     </script>
 }

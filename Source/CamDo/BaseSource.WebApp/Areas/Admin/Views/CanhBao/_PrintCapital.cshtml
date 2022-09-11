@@ -13,31 +13,6 @@
             <div class="card-body">
                 <div class="row ">
                     <div class="col-md-12">
-
-                        <div class="mb-3">
-                            <div class="d-flex">
-                                <form action="@Url.Action("Export_Capital","CanhBao")" method="post">
-                                    <div class="mb-2">
-                                        <button type="submit" class="btn btn-success"><i data-feather="printer"></i> Excel</button>
-                                    </div>
-                                </form>
-                                <button id="printcapital" class="btn btn-warning mb-2"> <i data-feather="printer"></i> In</button>
-
-                            </div> 
-                            <form class="form-inline">
-                                <div class="mb-3">
-                                    <input type="text" class="form-control" id="search" placeholder="Tìm kiếm mã HĐ, Tên khách hàng...">
-                                </div>
-                                <div class="mb-3">
-                                    <select class="form-control">
-                                        <option>Tất cả</option>
-                                        <option>Tất cả</option>
-                                        <option>Tất cả</option>
-                                    </select>
-                                </div>
-                            </form>
-                        </div>
-
                         <div class="table-responsive">
                             <table class="table table-bordered">
                                 <thead>
@@ -108,9 +83,7 @@
 
                                             }
                                         }
-
                                     }
-
                                 </tbody>
                             </table>
                         </div>
@@ -123,6 +96,7 @@
 
 @section Scripts{
 
-    <script src="~/admin//js/CanhBao/printCapital.js" asp-append-version="true">
+    <script>
+
     </script>
 }

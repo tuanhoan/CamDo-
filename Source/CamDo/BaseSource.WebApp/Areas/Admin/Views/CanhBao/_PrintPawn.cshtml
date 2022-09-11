@@ -1,42 +1,19 @@
 ﻿@model PagedResult<HopDongVm>
 @{
-    ViewData["Title"] = "Cảnh báo cầm đồ";
+    ViewData["Title"] = "Lịch nhắc thu tiền lãi";
 }
+
 
 <div class="row">
     <!-- table  Lastest Tickets -->
     <div class="col-12 ">
         <div class="card shadow h-100 mb-4 ">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h3 class="m-0 font-weight-bold">@ViewData["Title"]</h3>
+                <h3 class="m-0 font-weight-bold">Cảnh báo góp vốn</h3>
             </div>
             <div class="card-body">
                 <div class="row ">
                     <div class="col-md-12">
-
-                        <div class="mb-3">
-                            <div class="d-flex">
-                                <form action="@Url.Action("Export_Capital","CanhBao")" method="post">
-                                    <div class="mb-2">
-                                        <button type="submit" class="btn btn-success"><i data-feather="printer"></i> Excel</button>
-                                    </div>
-                                </form>
-                                <button id="printcapital" class="btn btn-warning mb-2"> <i data-feather="printer"></i> In</button>
-
-                            </div> 
-                            <form class="form-inline">
-                                <div class="mb-3">
-                                    <input type="text" class="form-control" id="search" placeholder="Tìm kiếm mã HĐ, Tên khách hàng...">
-                                </div>
-                                <div class="mb-3">
-                                    <select class="form-control">
-                                        <option>Tất cả</option>
-                                        <option>Tất cả</option>
-                                        <option>Tất cả</option>
-                                    </select>
-                                </div>
-                            </form>
-                        </div>
 
                         <div class="table-responsive">
                             <table class="table table-bordered">
@@ -46,25 +23,19 @@
                                             #
                                         </th>
                                         <th scope="col">
-                                            Mã HĐ
-                                        </th>
-                                        <th scope="col">
                                             Khách hàng
                                         </th>
                                         <th scope="col">
                                             Địa chỉ
                                         </th>
                                         <th scope="col">
-                                            Tài sản
-                                        </th>
-                                        <th scope="col">
-                                            Nợ cũ
+                                            Tiền gốc
                                         </th>
                                         <th scope="col">
                                             Tiền lãi
                                         </th>
                                         <th scope="col">
-                                            Tiền gốc
+                                            Nợ cũ
                                         </th>
                                         <th scope="col">
                                             Tổng tiền
@@ -110,7 +81,6 @@
                                         }
 
                                     }
-
                                 </tbody>
                             </table>
                         </div>
@@ -123,6 +93,7 @@
 
 @section Scripts{
 
-    <script src="~/admin//js/CanhBao/printCapital.js" asp-append-version="true">
+    <script>
+
     </script>
 }

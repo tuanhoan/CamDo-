@@ -158,7 +158,7 @@ namespace BaseSource.BackendApi.Controllers
                     TotalItemCount = data.TotalItemCount,
                     PageSize = data.PageSize,
                     PageNumber = data.PageNumber,
-                    Items = data.Where(x=> (x.HD_Ma.Contains(request.KeySearch) || x.TenKhachHang.Contains(request.KeySearch) || request.KeySearch == default)).ToList()
+                    Items = request.KeySearch != null ? data.Where(x => (x.HD_Ma.Contains(request?.KeySearch) || x.TenKhachHang.Contains(request?.KeySearch) || request?.KeySearch == default)).ToList() : new List<HopDongVm>()
                 };
 
                 //add record total
