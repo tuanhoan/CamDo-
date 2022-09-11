@@ -88,11 +88,20 @@ namespace BaseSource.BackendApi.Controllers
                 TongTienLaiDaDong = hd.TongTienLaiDaThanhToan,
                 TongTienGhiNo = hd.TongTienGhiNo
             };
+            var FeatureType = EFeatureType.Camdo;
+            if (hd.HD_Loai == ELoaiHopDong.Vaylai)
+            {
+                FeatureType = EFeatureType.Vaylai;
+            }
+            if (hd.HD_Loai == ELoaiHopDong.GopVon)
+            {
+                FeatureType = EFeatureType.GopVon;
+            }
             var tranLog = new CreateCuaHang_TransactionLogVm()
             {
                 HopDongId = hd.Id,
                 ActionType = EHopDong_ActionType.DongTienLai,
-                FeatureType = EFeatureType.Camdo,
+                FeatureType = FeatureType,
                 UserId = UserId,
                 PaymentId = payment.Id
             };
@@ -138,11 +147,21 @@ namespace BaseSource.BackendApi.Controllers
                     TongTienLaiDaDong = hd.TongTienLaiDaThanhToan,
                     TongTienGhiNo = hd.TongTienGhiNo
                 };
+
+                var FeatureType = EFeatureType.Camdo;
+                if(hd.HD_Loai == ELoaiHopDong.Vaylai)
+                {
+                    FeatureType = EFeatureType.Vaylai;
+                }
+                if(hd.HD_Loai == ELoaiHopDong.GopVon)
+                {
+                    FeatureType = EFeatureType.GopVon;
+                }
                 var tranLog = new CreateCuaHang_TransactionLogVm()
                 {
                     HopDongId = hd.Id,
                     ActionType = EHopDong_ActionType.HuyDongTienLai,
-                    FeatureType = EFeatureType.Camdo,
+                    FeatureType = FeatureType,
                     UserId = UserId,
                     PaymentId = payment.Id
                 };

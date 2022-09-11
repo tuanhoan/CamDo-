@@ -1,4 +1,5 @@
-﻿@{
+﻿@model DashboardDetail
+@{
     ViewData["Title"] = "Trạng thái";
 }
 <style>
@@ -33,7 +34,7 @@
     <div class="col-3 mb-3">
         <div class="card">
             <div class="card-body font-weight-bold">
-                <h3 class="text-primary">999,991,022</h3>
+                <h3 class="text-primary money-format">@Model.TongQuyTienMat</h3>
                 <h4 class="text-black">TỔNG QUỸ TIỀN MẶT</h4>
             </div>
             <div class="progress" style="height:4px">
@@ -44,7 +45,7 @@
     <div class="col-3 mb-3">
         <div class="card">
             <div class="card-body font-weight-bold">
-                <h3 class="text-orange">999,991,022</h3>
+                <h3 class="text-orange">@Model.SoHDDangVay</h3>
                 <h4 class="text-black">SỐ HỢP ĐỒNG ĐANG VAY</h4>
             </div>
             <div class="progress" style="height:4px">
@@ -55,7 +56,7 @@
     <div class="col-3 mb-3">
         <div class="card">
             <div class="card-body font-weight-bold">
-                <h3 class="text-blue">999,991,022</h3>
+                <h3 class="text-blue money-format">@Model.TienDangChoVay</h3>
                 <h4 class="text-black">TIỀN ĐANG CHO VAY</h4>
             </div>
             <div class="progress" style="height:4px">
@@ -66,7 +67,7 @@
     <div class="col-3 mb-3">
         <div class="card">
             <div class="card-body font-weight-bold">
-                <h3 class="text-green">999,991,022</h3>
+                <h3 class="text-green money-format">@Model.LaiDaThuTrongThang</h3>
                 <h4 class="text-black">LÃI ĐÃ THU TRONG THÁNG</h4>
             </div>
             <div class="progress" style="height:4px">
@@ -96,18 +97,13 @@
                                         <tbody>
                                             <tr class="">
                                                 <td>Cầm đồ</td>
-                                                <td>1</td>
-                                                <td>1</td>
+                                                <td>@Model.SoHDDangCam</td>
+                                                <td>@Model.TongSoHDCam</td>
                                             </tr>
                                             <tr class="">
                                                 <td>Vay lãi</td>
-                                                <td>1</td>
-                                                <td>1</td>
-                                            </tr>
-                                            <tr class="">
-                                                <td>Bát họ</td>
-                                                <td>1</td>
-                                                <td>1</td>
+                                                <td>@Model.SoHDDangVay</td>
+                                                <td>@Model.TongSoHDVay</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -142,10 +138,17 @@
 </div>
 
 @section Scripts{
+    <script>
+        function setMoneyElement(selector) {
+            new AutoNumeric.multiple(selector, { currencySymbol: '', decimalPlacesOverride: 0, showWarnings: false, decimalPlaces: '0' })
+        }
+
+        setMoneyElement(".money-format");
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script>
         var xValues = ["Cầm đồ", "Vay lãi", "Bát họ"];
-        var yValues = [90, 6, 4];
+        var yValues = [@Model.SoHDDangCam, @Model.SoHDDangVay, 0];
         var barColors = [
             "#716aca",
             "#f4516c",
