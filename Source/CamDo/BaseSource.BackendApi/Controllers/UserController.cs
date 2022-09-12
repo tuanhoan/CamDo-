@@ -28,15 +28,15 @@ namespace BaseSource.BackendApi.Controllers
         {
             _db = context;
             _userManager = userManager;
-            _roleManager = roleManager; 
+            _roleManager = roleManager;
         }
 
 
         [HttpGet("GetPagings")]
         public async Task<IActionResult> GetPagings([FromQuery] GetUserPagingRequest_Admin request)
         {
-            
-            var model = _db.Users.Where(x=> (x.Id == UserId  || x.UserProfile.SubUserId == UserId) && x.UserProfile.IsDelete !=true).AsQueryable();
+
+            var model = _db.Users.Where(x => (x.Id == UserId || x.UserProfile.SubUserId == UserId) && x.UserProfile.IsDelete != true).AsQueryable();
 
             if (!string.IsNullOrEmpty(request.UserName))
             {
@@ -182,13 +182,14 @@ namespace BaseSource.BackendApi.Controllers
                         SubUserId = UserId,
                     });
                     var staff = (new Guid("ffded6b0-37d9-4676-241b-69459029a622")).ToString();
-                    await _db.UserRoles.AddAsync(new IdentityUserRole<string> { UserId = newUser.Id, RoleId= staff });
+                    await _db.UserRoles.AddAsync(new IdentityUserRole<string> { UserId = newUser.Id, RoleId = staff });
                     await _db.SaveChangesAsync();
                     return Ok(new ApiSuccessResult<string>());
                 }
                 AddErrors(result, nameof(model.UserName));
             }
-            else {
+            else
+            {
                 user.Email = model.Email;
                 user.NormalizedEmail = model.Email;
                 user.PhoneNumber = model.PhoneNumber;
@@ -198,7 +199,7 @@ namespace BaseSource.BackendApi.Controllers
                     var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                     await _userManager.ResetPasswordAsync(user, token, model.Password);
                 }
-                var userProfile = _db.UserProfiles.FirstOrDefault(x=> x.UserId == user.Id);
+                var userProfile = _db.UserProfiles.FirstOrDefault(x => x.UserId == user.Id);
                 if (userProfile != null)
                 {
                     userProfile.FullName = model.FullName;
@@ -208,7 +209,7 @@ namespace BaseSource.BackendApi.Controllers
                     await _db.SaveChangesAsync();
                     return Ok(new ApiSuccessResult<string>());
                 }
-               
+
             }
             return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
         }
@@ -216,7 +217,7 @@ namespace BaseSource.BackendApi.Controllers
         [HttpPost("DeleteUser")]
         public async Task<IActionResult> DeleteUser([FromForm] string userId)
         {
-            var user = await _db.UserProfiles.FirstOrDefaultAsync(x=> x.UserId == userId && x.IsDelete == false);
+            var user = await _db.UserProfiles.FirstOrDefaultAsync(x => x.UserId == userId && x.IsDelete == false);
             if (user != null)
             {
                 user.IsDelete = true;
@@ -225,7 +226,7 @@ namespace BaseSource.BackendApi.Controllers
                 return Ok(new ApiSuccessResult<string>("Xóa nhân viên thành công"));
             }
             return Ok(new ApiErrorResult<string>("User is not exits !"));
-           
+
 
         }
 
@@ -293,6 +294,63 @@ namespace BaseSource.BackendApi.Controllers
             return Ok(new ApiSuccessResult<ThongBaoResponse>(Thongbao));
         }
 
+        [HttpGet("TreeFuncAuth")]
+        public async Task<IActionResult> TreeFuncAuth(string UserId)
+        {
+            var data = await (from lv1 in _db.AuthorFunctions
+                              where lv1.Level == 1
+                              select new RoleTree
+                              {
+                                  FuncId = lv1.Id,
+                                  DisplayName = lv1.FuncName,
+                                  Level = lv1.Level,
+                                  SubId = lv1.SubFunc,
+                                  RoleUsers = (from lv2 in _db.AuthorFunctions
+                                               where lv2.Level == 2 && lv2.SubFunc == lv1.Id
+                                               select new RoleTree
+                                               {
+                                                   FuncId = lv2.Id,
+                                                   DisplayName = lv2.FuncName,
+                                                   Level = lv2.Level,
+                                                   SubId = lv2.SubFunc,
+                                                   RoleUsers = (from lv3 in _db.AuthorFunctions
+                                                                where lv3.Level == 3 && lv3.SubFunc == lv2.Id
+                                                                select new RoleTree
+                                                                {
+                                                                    FuncId = lv3.Id,
+                                                                    DisplayName = lv3.FuncName,
+                                                                    Level = lv3.Level,
+                                                                    SubId = lv3.SubFunc,
+                                                                }).ToList()
+                                               }).ToList()
+                              }
+                           ).ToListAsync();
+
+            var listFuncByUser =await _db.AuthorUserFunctions.Where(x=> x.UserId == UserId).Select(x=> x.FuncId).ToListAsync();
+
+            var Result = new DataLoadTreeRoleFunc { FuncAuthByUser = listFuncByUser, RoleUsers = data };
+
+            return Ok(new ApiSuccessResult<DataLoadTreeRoleFunc>(Result));
+        }
+        [HttpPost("CreateOrUpdate")]
+        public async Task<IActionResult> SetRoleByUser(ModelSaveFuncRole model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
+            }
+            var ListRoleDelete = await _db.AuthorUserFunctions.Where(x=> x.UserId == model.UserId).Select(x=> x).ToListAsync();
+            _db.AuthorUserFunctions.RemoveRange(ListRoleDelete);
+            await _db.SaveChangesAsync();
+            var ListAddNew = new List<AuthorUserFunction>();
+            foreach (var item in model.ListFunc)
+            {
+                ListAddNew.Add(new AuthorUserFunction { FuncId = item, UserId = model.UserId });
+            }
+            await _db.AuthorUserFunctions.AddRangeAsync(ListAddNew);
+            await _db.SaveChangesAsync();
+            return Ok(new ApiSuccessResult<string>());
+        }
         #region Helper
         private void AddErrors(IdentityResult result, string Property)
         {

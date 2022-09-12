@@ -27,6 +27,9 @@ namespace BaseSource.ApiIntegration.WebApi
         Task<ApiResult<EditUserShop>> GetUserById(string userId = default);
         Task<ApiResult<string>> CreateOrUpdate(EditUserShop model);
         Task<ApiResult<string>> DeleteUser(string userId = default);
+        Task<ApiResult<DataLoadTreeRoleFunc>> TreeFuncAuth(string UserId = default);
+        Task<ApiResult<string>> SetRoleByUser(ModelSaveFuncRole model);
+
 
 
     }
