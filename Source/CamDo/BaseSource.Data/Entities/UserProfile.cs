@@ -19,7 +19,8 @@ namespace BaseSource.Data.Entities
         public int CuaHangId { get; set; }
         public string SubUserId { get; set; }
         public bool IsDelete { get; set; }
-
+        public double Balance { get; set; }
+        
         // object
         public virtual AppUser AppUser { get; set; }
         public virtual List<CuaHang> CuaHangQuanLys { get; set; }

@@ -11,7 +11,7 @@ namespace BaseSource.Data.Entities
     {
         public string UserIdRequest { get; set; }
         public string UserIdReceive { get; set; }
-        public string IsConfirm { get; set; }
+        public bool IsConfirm { get; set; }
         public DateTime CreatedDate { get; set; }
     }
 }

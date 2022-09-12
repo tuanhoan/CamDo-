@@ -22,6 +22,7 @@ namespace BaseSource.Data.Configurations
             builder.Property(x => x.FullName).IsRequired().HasMaxLength(256);
             builder.Property(x => x.IsDelete).IsRequired().HasDefaultValue(false);
             builder.Property(x => x.JoinedDate).IsRequired().HasDefaultValueSql("GetDate()");
+            builder.Property(x => x.Balance);
 
 
             builder.HasOne(x => x.AppUser).WithOne(x => x.UserProfile).HasForeignKey<UserProfile>(x => x.UserId).OnDelete(DeleteBehavior.Cascade);
