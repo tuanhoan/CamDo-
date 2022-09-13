@@ -50,13 +50,27 @@ namespace BaseSource.ViewModels.CuaHang
     }
     public class DashboardDetail
     {
-        public long TongQuyTienMat { get; set; } 
+        public double TongQuyTienMat { get; set; } 
         public int SoHDDangVay { get; set; } 
         public double TienDangChoVay { get; set; } 
         public double LaiDaThuTrongThang { get; set; } 
         public int SoHDDangCam { get; set; } 
+        public int SoHDDangVayLai { get; set; } 
         public long TongSoHDCam { get; set; } 
         public long TongSoHDVay { get; set; } 
+        public List<ThongBaoShort> ThongBaos { get; set; }
+        public List<GiaoDichTrongNgay> GDTrongNgay { get; set; }
+    }
+    public class ThongBaoShort
+    {
+        public string Title { get; set; }
+        public string Url { get; set; }
+    }
+    public class GiaoDichTrongNgay
+    {
+        public string Time { get; set; }
+        public string Action { get; set; }
+        public string CreatedUserName { get; set; }
     }
 
     #region Đăng ký cửa hàng

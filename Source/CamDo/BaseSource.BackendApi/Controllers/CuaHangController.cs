@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -358,7 +359,7 @@ namespace BaseSource.BackendApi.Controllers
                 x.HD_Status,
                 x.TongTienVayHienTai,
                 x.TongTienLaiDaThanhToan,
-                x.HopDong_PaymentLogs,
+                x.CuaHang_TransactionLogs,
               }
             ).ToListAsync();
             if (ch == null)
@@ -368,21 +369,29 @@ namespace BaseSource.BackendApi.Controllers
 
             var result = new DashboardDetail();
 
-            result.TongQuyTienMat = ch.VonDauTu;
+            var tienDauNgay = _db.CuaHang_QuyTienLogs.Where(x => x.CuaHangId == CuaHangId && x.CreatedDate.Date == DateTime.Today.Date && x.LogType == EQuyTienCuaHang_LogType.TienDauNgay).Sum(x => x.Money);
+            var transactionLogInDay = _db.CuaHang_TransactionLogs.Where(x => x.CreatedDate.Date == DateTime.Today.Date).OrderBy(x => x.CreatedDate);
+            var tienThuChiNgay = transactionLogInDay.Where(x => x.FeatureType != EFeatureType.GopVon).Sum(x => x.MoneyAdd - x.MoneySub) 
+                                - transactionLogInDay.Where(x=> x.FeatureType == EFeatureType.GopVon).Sum(x => x.MoneyPay);
+            result.TongQuyTienMat = tienDauNgay + tienThuChiNgay;
 
-            var hdDangVay = hd.Where(x => x.HD_Loai == ELoaiHopDong.Vaylai
-                                            && x.HD_Status != (byte)EHopDong_VayLaiStatusFilter.KetThuc
-                                            && x.HD_Status != (byte)EHopDong_VayLaiStatusFilter.NoXau
-                                            && x.HD_Status != (byte)EHopDong_VayLaiStatusFilter.DaXoa);
+            var hdDangVay = hd.Where(x => (x.HD_Loai == ELoaiHopDong.Vaylai 
+                                                                    && x.HD_Status != (byte)EHopDong_VayLaiStatusFilter.KetThuc
+                                                                    && x.HD_Status != (byte)EHopDong_VayLaiStatusFilter.NoXau
+                                                                    && x.HD_Status != (byte)EHopDong_VayLaiStatusFilter.DaXoa)
+                                            || (x.HD_Loai == ELoaiHopDong.Camdo
+                                                                    && x.HD_Status != (byte)EHopDong_CamDoStatusFilter.DaThanhLy
+                                                                    && x.HD_Status != (byte)EHopDong_CamDoStatusFilter.KetThuc
+                                                                    && x.HD_Status != (byte)EHopDong_CamDoStatusFilter.DaXoa));
             result.SoHDDangVay = hdDangVay.Count();
             result.TienDangChoVay = hdDangVay.Sum(x=> x.TongTienVayHienTai);
 
             var firstDayOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddMilliseconds(-1);
             var paymentLogCamVay = hd.Where(x => x.HD_Loai == ELoaiHopDong.Camdo 
-                                                || x.HD_Loai == ELoaiHopDong.Vaylai).Select(x=> x.HopDong_PaymentLogs);
+                                                || x.HD_Loai == ELoaiHopDong.Vaylai).Select(x => x.CuaHang_TransactionLogs);
 
-            result.LaiDaThuTrongThang = paymentLogCamVay.Select(x => x.Where(y => y.PaidDate >= firstDayOfMonth && y.PaidDate <= lastDayOfMonth).Sum(y => y.MoneyPay)).Sum();
+            result.LaiDaThuTrongThang = paymentLogCamVay.Select(x => x.Where(y => y.CreatedDate >= firstDayOfMonth && y.CreatedDate <= lastDayOfMonth).Sum(y => y.MoneyInterest + y.MoneyOther)).Sum();
 
             result.TongSoHDCam = hd.Where(x => x.HD_Loai == ELoaiHopDong.Camdo && x.HD_Status != (byte)EHopDong_CamDoStatusFilter.DaXoa).Count();
             result.TongSoHDVay = hd.Where(x => x.HD_Loai == ELoaiHopDong.Vaylai && x.HD_Status != (byte)EHopDong_VayLaiStatusFilter.DaXoa).Count();
@@ -391,6 +400,28 @@ namespace BaseSource.BackendApi.Controllers
                                             && x.HD_Status != (byte)EHopDong_CamDoStatusFilter.ChoThanhLy
                                             && x.HD_Status != (byte)EHopDong_CamDoStatusFilter.DaThanhLy
                                             && x.HD_Status != (byte)EHopDong_CamDoStatusFilter.DaXoa).Count();
+            result.SoHDDangVayLai = hd.Where(x => x.HD_Loai == ELoaiHopDong.Vaylai 
+                                            && x.HD_Status != (byte)EHopDong_VayLaiStatusFilter.KetThuc
+                                            && x.HD_Status != (byte)EHopDong_VayLaiStatusFilter.NoXau
+                                            && x.HD_Status != (byte)EHopDong_VayLaiStatusFilter.DaXoa).Count();
+
+            result.ThongBaos = _db.NotifySystems.Where(x => x.StartTime <= DateTime.Now && x.EndTime >= DateTime.Now)
+                                                .Select(x => new ThongBaoShort {
+                                                    Title = x.Title,
+                                                    Url = x.Url
+                                                }).ToList();
+
+            result.GDTrongNgay = transactionLogInDay.Join(
+                                                _db.UserProfiles,
+                                                p => p.UserId,
+                                                t => t.UserId,
+                                                (p, t) => new GiaoDichTrongNgay
+                                                {
+                                                    Time = p.CreatedDate.ToString("hh:mm"),
+                                                    Action = ((EHopDong_ActionType)p.ActionType).GetDisplayName() + " " + p.HopDong.HD_Ma,
+                                                    CreatedUserName = t.FullName
+                                                }).ToList();
+        
 
             return Ok(new ApiSuccessResult<DashboardDetail>(result));
         }

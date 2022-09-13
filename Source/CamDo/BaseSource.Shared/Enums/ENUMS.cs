@@ -255,7 +255,9 @@ namespace BaseSource.Shared.Enums
         [Display(Name = "Chậm lãi")]
         ChamLai = EHopDong_CommonStatusFilter.ChamLai,
         [Display(Name = "Kết thúc")]
-        KetThuc = EHopDong_CommonStatusFilter.KetThuc
+        KetThuc = EHopDong_CommonStatusFilter.KetThuc,
+        [Display(Name = "Đang góp vốn")]
+        DangGopVon
     }
     #endregion
     public enum EHopDong_ChungTuType : byte
