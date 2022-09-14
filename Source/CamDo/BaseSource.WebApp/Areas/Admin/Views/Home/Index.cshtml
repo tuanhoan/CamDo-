@@ -7,6 +7,23 @@
         color: black;
         background-color: #fff;
     }
+    .border-before:before{
+        background: #36a3f7;
+        position: absolute;
+        display: block;
+        width: 0.28rem;
+        border-radius: 0.3rem;
+        height: 70%;
+        left: 4.5rem;
+        top: 0.46rem;
+        content: "";
+    }
+    .trans-time{
+        position: relative; 
+        display: table-cell; 
+        vertical-align: middle; 
+        width:100px
+    }
 </style>
 
 <div class="row">
@@ -27,7 +44,13 @@
     <div class="col-12 mb-3">
         <div class="card">
             <div class="card-body font-weight-bold">
-                <span class="text-blue">Tính năng mới:</span> <span class="text-orange">Kiểm tra đang vay tại các cơ sở tín dụng</span>
+                <span class="text-blue">Tính năng mới:</span> 
+                @foreach(var item in @Model.ThongBaos)
+                {
+                    <a href="@item.Url" class="thong-bao-slide" style="color: rgba(var(--bs-orange-rgb)); display:none; position: absolute;">
+                        <span class="text-orange">@item.Title</span>
+                    </a>
+                }
             </div>
         </div>
     </div>
@@ -102,7 +125,7 @@
                                             </tr>
                                             <tr class="">
                                                 <td>Vay lãi</td>
-                                                <td>@Model.SoHDDangVay</td>
+                                                <td>@Model.SoHDDangVayLai</td>
                                                 <td>@Model.TongSoHDVay</td>
                                             </tr>
                                         </tbody>
@@ -129,9 +152,22 @@
                 <h3 class="m-0 font-weight-bold">Giao dịch trong ngày</h3>
             </div>
             <div class="card-body">
-                <div class="row ">
-
-                </div>
+                @foreach(var item in @Model.GDTrongNgay)
+                {
+                    <div class="row border-before" style="display:block; position: relative;margin-bottom: 5px;">
+                        <span class="trans-time">@item.Time</span>
+                        <div style="display: table-cell;padding-left: 20px;">
+                            <span>@item.Action : 
+                                <b style="color:blue">@item.TenKH</b> 
+                                @if(item.TienKhoiTao > 0.00)
+                                {
+                                    <b style="color:hotpink">@item.TienKhoiTao VNĐ</b>
+                                }
+                            </span>
+                            <span style="display: table-cell; font-size: 11px;color: #c4c5d6;">Bởi @item.CreatedUserName</span>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     </div>
@@ -144,11 +180,25 @@
         }
 
         setMoneyElement(".money-format");
+
+        var $elements = $('.thong-bao-slide');
+
+        function anim_loop(index) {
+            $elements.eq(index).fadeIn(1000, function() {
+                var $self = $(this);
+                setTimeout(function() {
+                    $self.fadeOut(1000);
+                    anim_loop((index + 1) % $elements.length);
+                }, 10000);
+            });
+        }
+
+        anim_loop(0);
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
     <script>
         var xValues = ["Cầm đồ", "Vay lãi", "Bát họ"];
-        var yValues = [@Model.SoHDDangCam, @Model.SoHDDangVay, 0];
+        var yValues = [@Model.SoHDDangCam, @Model.SoHDDangVayLai, 0];
         var barColors = [
             "#716aca",
             "#f4516c",

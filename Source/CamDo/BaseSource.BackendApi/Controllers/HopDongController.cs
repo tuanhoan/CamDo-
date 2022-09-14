@@ -248,13 +248,14 @@ namespace BaseSource.BackendApi.Controllers
                     prefix = "TC";
                     break;
                 case ELoaiHopDong.GopVon:
+                    prefix = "GV";
                     break;
                 default:
                     break;
             }
             if (model.HD_Loai == ELoaiHopDong.GopVon)
             {
-                hd.HD_Ma = "0";
+                hd.HD_Ma = $"{prefix}-0";
             }
             else
             {
@@ -277,6 +278,7 @@ namespace BaseSource.BackendApi.Controllers
                     hd.HD_Status = (byte)EHopDong_VayLaiStatusFilter.DangVay;
                     break;
                 case ELoaiHopDong.GopVon:
+                    hd.HD_Status = (byte)EHopDong_GopVonStatusFilter.DangGopVon;
                     break;
                 default:
                     break;
@@ -285,6 +287,17 @@ namespace BaseSource.BackendApi.Controllers
             hd.TongTienLai = await _hopDongService.TinhLaiHD(hd.HD_HinhThucLai, hd.HD_TongThoiGianVay, hd.HD_LaiSuat, hd.TongTienVayHienTai);
             _db.HopDongs.Add(hd);
             await _db.SaveChangesAsync();
+
+            var tranLog = new CreateCuaHang_TransactionLogVm()
+            {
+                HopDongId = hd.Id,
+                ActionType = EHopDong_ActionType.TaoMoiHD,
+                FeatureType = eFeatureType(hd.HD_Loai),
+                UserId = UserId,
+                TotalMoneyLoan = hd.TongTienVayHienTai
+
+            };
+            var result = Task.Run(() => CreateCuaHang_TransactionLog(tranLog));
 
             var rs = Task.Run(() => TaoKyDongLai(hd.Id));
             return Ok(new ApiSuccessResult<string>("Tạo mới hợp đồng thành công"));
@@ -419,7 +432,7 @@ namespace BaseSource.BackendApi.Controllers
                     }
                     break;
                 case ELoaiHopDong.GopVon:
-                    break;
+                    return Ok(new ApiErrorResult<string>("Không thể xóa hợp đồng góp vốn"));
                 default:
                     break;
             }

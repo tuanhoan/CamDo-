@@ -12,7 +12,7 @@
 
             </div>
             <div class="card-body">
-                @if (ListAuth.Contains("QuanLyVon_Create"))
+                @if (ListAuth.Contains("QuanLyNguonVon_ThemMoi"))
                 {
                     <div class="row mb-2">
                         <div class="col-md-12 d-flex">
@@ -141,6 +141,10 @@
                                                     @if (item.HD_HinhThucLai == null)
                                                     {
                                                         <span class="text-success"> Đang đầu tư</span>
+                                                    }
+                                                    else if(item.HD_Status == (byte)EHopDong_GopVonStatusFilter.KetThuc)
+                                                    {
+                                                        <span style="color:red">Kết thúc</span>
                                                     }
                                                     else
                                                     {

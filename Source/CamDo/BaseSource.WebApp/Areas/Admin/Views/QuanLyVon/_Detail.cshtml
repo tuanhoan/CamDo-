@@ -159,7 +159,7 @@
     <div class="mt-3">
         @if (ListAuth.Contains("QuanLyNguonVon_TraTienLai"))
         {
-            <fieldset id="tab-dongtienlai">
+            <fieldset id="tab-tratienlai">
                 <div id="divContent-Tralaitheongay">
 
                 </div>
@@ -365,7 +365,7 @@
                 getCuahang_TransactionLog(@Model.Id,'@Model.HD_Loai');
                  geHopDong_DebtNote(@Model.Id);
                 break;
-            case "tab-dongtienlai":
+            case "tab-tratienlai":
                 getListPaymentLog(@Model.Id);
                 getInfoPaymentByDate(@Model.Id);
                 break;
