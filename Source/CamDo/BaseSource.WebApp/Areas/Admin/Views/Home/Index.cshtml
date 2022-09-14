@@ -157,7 +157,13 @@
                     <div class="row border-before" style="display:block; position: relative;margin-bottom: 5px;">
                         <span class="trans-time">@item.Time</span>
                         <div style="display: table-cell;padding-left: 20px;">
-                            <span>@item.Action</span>
+                            <span>@item.Action : 
+                                <b style="color:blue">@item.TenKH</b> 
+                                @if(item.TienKhoiTao > 0.00)
+                                {
+                                    <b style="color:hotpink">@item.TienKhoiTao VNĐ</b>
+                                }
+                            </span>
                             <span style="display: table-cell; font-size: 11px;color: #c4c5d6;">Bởi @item.CreatedUserName</span>
                         </div>
                     </div>

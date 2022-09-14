@@ -418,7 +418,9 @@ namespace BaseSource.BackendApi.Controllers
                                                 (p, t) => new GiaoDichTrongNgay
                                                 {
                                                     Time = p.CreatedDate.ToString("hh:mm"),
-                                                    Action = ((EHopDong_ActionType)p.ActionType).GetDisplayName() + " " + p.HopDong.HD_Ma,
+                                                    Action = ((EHopDong_ActionType)p.ActionType).GetDisplayName(),
+                                                    TenKH = p.TenKhachHang,
+                                                    TienKhoiTao = (EHopDong_ActionType)p.ActionType == EHopDong_ActionType.TaoMoiHD ? p.TotalMoneyLoan : 0.00,
                                                     CreatedUserName = t.FullName
                                                 }).ToList();
         

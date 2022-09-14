@@ -1,4 +1,5 @@
-﻿using BaseSource.ViewModels.Common;
+﻿using BaseSource.Shared.Enums;
+using BaseSource.ViewModels.Common;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -70,6 +71,9 @@ namespace BaseSource.ViewModels.CuaHang
     {
         public string Time { get; set; }
         public string Action { get; set; }
+        public string TenKH { get; set; }
+        public string MaHD { get; set; }
+        public double TienKhoiTao { get; set; }
         public string CreatedUserName { get; set; }
     }
 

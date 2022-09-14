@@ -248,13 +248,14 @@ namespace BaseSource.BackendApi.Controllers
                     prefix = "TC";
                     break;
                 case ELoaiHopDong.GopVon:
+                    prefix = "GV";
                     break;
                 default:
                     break;
             }
             if (model.HD_Loai == ELoaiHopDong.GopVon)
             {
-                hd.HD_Ma = "0";
+                hd.HD_Ma = $"{prefix}-0";
             }
             else
             {
