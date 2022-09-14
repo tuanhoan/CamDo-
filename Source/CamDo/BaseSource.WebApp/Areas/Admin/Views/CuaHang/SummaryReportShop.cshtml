@@ -1,4 +1,5 @@
-﻿@{
+﻿@model List<SummaryReportShopVM>
+@{
     ViewData["Title"] = "Tổng quát các cửa hàng";
 }
 
@@ -41,27 +42,36 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>abc</td>
-                                <td>100000</td>
-                                <td>100000</td>
-                                <td>10000</td>
-                                <td>10000</td>
-                                <td>10000</td>
-                                <td>10000</td>
-                                <td>100000</td>
-                            </tr>
+                            @if (Model != null)
+                            {
+                                var idx = 1;
+
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@item.TenCuaHang</td>
+                                        <td>@item.QuyTienMat.ToString("N0")</td>
+                                        <td>@item.VonDauTu.ToString("N0")</td>
+                                        <td>@item.ChoVayCamDo.ToString("N0")</td>
+                                        <td>@item.ChoVayLai.ToString("N0")</td>
+                                        <td>@item.ChoVayBatHo.ToString("N0")</td>
+                                        <td>@item.LaiDuKien.ToString("N0")</td> 
+                                        <td>@item.LaiDaThu.ToString("N0")</td> 
+                                    </tr>
+                                    idx++;
+                                }
+                            }
                         </tbody>
                         <tfoot>
                             <tr class="text-danger">
-                                 <td>Tổng</td>
-                                <td>100000</td>
-                                <td>100000</td>
-                                <td>10000</td>
-                                <td>10000</td>
-                                <td>10000</td>
-                                <td>10000</td>
-                                <td>100000</td>
+                                <td>Tổng</td>
+                                <td>@Model.Sum(x=>x.QuyTienMat).ToString("N0")</td>
+                                <td>@Model.Sum(x=>x.VonDauTu).ToString("N0")</td>
+                                <td>@Model.Sum(x=>x.ChoVayCamDo).ToString("N0")</td>
+                                <td>@Model.Sum(x=>x.ChoVayLai).ToString("N0")</td>
+                                <td>@Model.Sum(x=>x.ChoVayBatHo).ToString("N0")</td>
+                                <td>@Model.Sum(x=>x.LaiDuKien).ToString("N0")</td> 
+                                <td>@Model.Sum(x=>x.LaiDaThu).ToString("N0")</td> 
                             </tr>
                         </tfoot>
                     </table>

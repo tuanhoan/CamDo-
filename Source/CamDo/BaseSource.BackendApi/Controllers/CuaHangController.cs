@@ -291,6 +291,33 @@ namespace BaseSource.BackendApi.Controllers
 
             return Ok(new ApiSuccessResult<List<CuaHangVm>>(lstResult));
         }
+        [HttpGet("SummaryReportShop")]
+        public async Task<IActionResult> SummaryReportShop()
+        {
+            var lstShop = await _db.CuaHangs
+                .Include(x => x.CuaHang_QuyTienLogs)
+                .Include(x => x.HopDongs)
+                .Where(x => x.UserId == UserId).ToListAsync();
+            var lstResult = new List<SummaryReportShopVM>();
+            foreach (var item in lstShop)
+            {
+                var summaryReportShop = new SummaryReportShopVM()
+                {
+                    TenCuaHang = item.Ten,
+                    QuyTienMat = item.VonDauTu + item.HopDongs.Where(x => x.HD_Loai == ELoaiHopDong.GopVon).Sum(x => x.HD_TongTienVayBanDau),
+                    VonDauTu = item.VonDauTu,
+                    ChoVayCamDo = item.HopDongs.Where(x => x.HD_Loai == ELoaiHopDong.Camdo).Sum(x => x.HD_TongTienVayBanDau),
+                    ChoVayLai = item.HopDongs.Where(x => x.HD_Loai == ELoaiHopDong.Vaylai).Sum(x => x.HD_TongTienVayBanDau),
+                    ChoVayBatHo = item.HopDongs.Where(x => x.HD_Loai == ELoaiHopDong.VayHo).Sum(x => x.HD_TongTienVayBanDau),
+                    LaiDuKien = item.HopDongs.Sum(x => x.TienLaiToiNgayHienTai),
+                    LaiDaThu = item.HopDongs.Sum(x => x.TongTienLaiDaThanhToan),
+                };
+                summaryReportShop.QuyTienMat = summaryReportShop.QuyTienMat - summaryReportShop.ChoVayBatHo - summaryReportShop.ChoVayCamDo - summaryReportShop.ChoVayLai + summaryReportShop.LaiDaThu;
+                lstResult.Add(summaryReportShop);
+            }
+
+            return Ok(new ApiSuccessResult<List<SummaryReportShopVM>>(lstResult));
+        }
 
 
 
@@ -353,13 +380,14 @@ namespace BaseSource.BackendApi.Controllers
         public async Task<IActionResult> ChiTietDashBoard(int CuaHangId)
         {
             var ch = await _db.CuaHangs.FirstOrDefaultAsync(x => x.Id == CuaHangId);
-            var hd = await _db.HopDongs.Where(x=> x.CuaHangId == CuaHangId).Select(x=> new {
+            var hd = await _db.HopDongs.Where(x => x.CuaHangId == CuaHangId).Select(x => new
+            {
                 x.HD_Loai,
                 x.HD_Status,
                 x.TongTienVayHienTai,
                 x.TongTienLaiDaThanhToan,
                 x.HopDong_PaymentLogs,
-              }
+            }
             ).ToListAsync();
             if (ch == null)
             {
@@ -375,12 +403,12 @@ namespace BaseSource.BackendApi.Controllers
                                             && x.HD_Status != (byte)EHopDong_VayLaiStatusFilter.NoXau
                                             && x.HD_Status != (byte)EHopDong_VayLaiStatusFilter.DaXoa);
             result.SoHDDangVay = hdDangVay.Count();
-            result.TienDangChoVay = hdDangVay.Sum(x=> x.TongTienVayHienTai);
+            result.TienDangChoVay = hdDangVay.Sum(x => x.TongTienVayHienTai);
 
             var firstDayOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
             var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddMilliseconds(-1);
-            var paymentLogCamVay = hd.Where(x => x.HD_Loai == ELoaiHopDong.Camdo 
-                                                || x.HD_Loai == ELoaiHopDong.Vaylai).Select(x=> x.HopDong_PaymentLogs);
+            var paymentLogCamVay = hd.Where(x => x.HD_Loai == ELoaiHopDong.Camdo
+                                                || x.HD_Loai == ELoaiHopDong.Vaylai).Select(x => x.HopDong_PaymentLogs);
 
             result.LaiDaThuTrongThang = paymentLogCamVay.Select(x => x.Where(y => y.PaidDate >= firstDayOfMonth && y.PaidDate <= lastDayOfMonth).Sum(y => y.MoneyPay)).Sum();
 

@@ -159,7 +159,8 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
 
         public async Task<IActionResult> SummaryReportShop()
         {
-            return View();
+            var result = await _cuaHangApiClient.SummaryReportShop();
+            return View(result.ResultObj);
         }
         #endregion
 

@@ -27,6 +27,7 @@ namespace BaseSource.ApiIntegration.WebApi.CuaHang
         Task<ApiResult<string>> DeleteQuyCH(int id);
         Task<ApiResult<QuyCuaHangThongKeVm>> GetDataThongKe();
         Task<ApiResult<DashboardDetail>> GetDashBoard(int cuaHangId);
+        Task<ApiResult<List<SummaryReportShopVM>>> SummaryReportShop();
 
     }
 }
