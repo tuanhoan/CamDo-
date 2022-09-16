@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,8 +12,12 @@ namespace BaseSource.Data.Entities
     public class BaoHiem
     {
         public int Id { get; set; }
+        [ForeignKey("CuaHang")]
         public int CuaHangId { get; set; }
+        public CuaHang CuaHang { get; set; }
+        [ForeignKey("UserProfile")]
         public string UserId { get; set; }
+        public UserProfile UserProfile { get; set; }
         public string Ten { get; set; }
         public string SDT { get; set; }
         public double GioiTinh { get; set; }

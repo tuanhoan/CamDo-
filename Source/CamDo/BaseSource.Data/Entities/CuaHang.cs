@@ -20,12 +20,12 @@ namespace BaseSource.Data.Entities
         public string UserId { get; set; }
         public ECamDo_HopDongPrintTemplate CamDo_HopDongPrintTemplate { get; set; }
         public EVayLai_HopDongPrintTemplate VayLai_HopDongPrintTemplate { get; set; }
-
         public virtual UserProfile UserProfileQuanLy { get; set; }
         public virtual List<KhachHang> KhachHangs { get; set; }
         public virtual List<CauHinhHangHoa> CauHinhHangHoas { get; set; }
         public virtual List<CuaHang_TransactionLog> CuaHang_TransactionLogs { get; set; }
         public virtual List<HopDong> HopDongs { get; set; }
         public virtual List<CuaHang_QuyTienLog> CuaHang_QuyTienLogs { get; set; }
+        public virtual List<BaoHiem> BaoHiems { get; set; }
     }
 }

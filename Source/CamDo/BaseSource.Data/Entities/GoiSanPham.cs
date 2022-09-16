@@ -18,5 +18,6 @@ namespace BaseSource.Data.Entities
         public DateTime CreatedTime { get; set; }
         public string UserIdUpdate { get; set; }
         public DateTime? UpdatedTime { get; set; }
+        public List<GoiSanPham_LichSuMua> goiSanPham_LichSuMuas { get; set; }
     }
 }

@@ -10,19 +10,18 @@ namespace BaseSource.Data.Entities
     public class UserProfile
     {
         public string UserId { get; set; }
-
         public string CustomId { get; set; }
-
         public string FullName { get; set; }
-
         public DateTime JoinedDate { get; set; }
         public int CuaHangId { get; set; }
         public string SubUserId { get; set; }
         public bool IsDelete { get; set; }
         public double Balance { get; set; }
-        
         // object
         public virtual AppUser AppUser { get; set; }
         public virtual List<CuaHang> CuaHangQuanLys { get; set; }
+        public List<BaoHiem> BaoHiems { get; set; }
+        public List<WalletTransaction> WalletTransactions { get; set; }
+        public List<GoiSanPham_LichSuMua> GoiSanPham_LichSuMuas { get; set; }
     }
 }
