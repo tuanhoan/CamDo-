@@ -1,17 +1,19 @@
-﻿@{
+﻿@model DetailShopVM
+@{
     ViewData["Title"] = "Chi tiết cửa hàng";
-
 }
 <style>
     .tr-border-bottom {
         border-bottom: 0.07rem dashed #ebedf2;
     }
-    .text-purple{
+
+    .text-purple {
         color: #716aca;
     }
-    .bg-purple{
-         color: #ffffff;
-         background:#716aca;
+
+    .bg-purple {
+        color: #ffffff;
+        background: #716aca;
     }
 </style>
 <div class="row">
@@ -26,17 +28,17 @@
                         <thead>
                             <tr class="tr-border-bottom">
                                 <th> Vốn đầu tư</th>
-                                <th class="text-success">100,000</th>
+                                <th class="text-success">@Model.ThongTinVon.VonDauTu.ToString("N0")</th>
                             </tr>
 
                             <tr class="tr-border-bottom">
                                 <th> Quỹ tiền mặt</th>
-                                <th class="text-success"> 100,000</th>
+                                <th class="text-success"> @Model.ThongTinVon.QuyTienMat.ToString("N0")</th>
                             </tr>
 
                             <tr class="tr-border-bottom text-danger">
                                 <th> Tiền đang cho vay</th>
-                                <th>100,000</th>
+                                <th>@Model.ThongTinVon.TienDangChoVay.ToString("N0")</th>
                             </tr>
                         </thead>
 
@@ -57,17 +59,17 @@
                         <thead>
                             <tr class="tr-border-bottom">
                                 <th> Hợp đồng mở</th>
-                                <th class="text-primary">100,000</th>
+                                <th class="text-primary">@Model.ThongTinHopDong.HopDongMo</th>
                             </tr>
 
                             <tr class="tr-border-bottom">
                                 <th> Hợp dồng đóng</th>
-                                <th class="text-primary"> 100,000</th>
+                                <th class="text-primary"> @Model.ThongTinHopDong.HopDongDong</th>
                             </tr>
 
                             <tr class="tr-border-bottom ">
                                 <th> Tổng số hợp đồng</th>
-                                <th class="text-primary">100,000</th>
+                                <th class="text-primary">@Model.ThongTinHopDong.TongSoHopDong</th>
                             </tr>
                         </thead>
 
@@ -88,17 +90,17 @@
                         <thead>
                             <tr class="tr-border-bottom">
                                 <th> Tổng tiền chi</th>
-                                <th class="text-warning">100,000</th>
+                                <th class="text-warning">@Model.ThuChi.TongTienChi.ToString("N0")</th>
                             </tr>
 
                             <tr class="tr-border-bottom">
                                 <th> Tổng tiền thu</th>
-                                <th class="text-warning"> 100,000</th>
+                                <th class="text-warning"> @Model.ThuChi.TongTienThu.ToString("N0")</th>
                             </tr>
 
                             <tr class="tr-border-bottom text-danger">
                                 <th> Tổng tiền khách nợ</th>
-                                <th>100,000</th>
+                                <th>@Model.ThuChi.TongTienKhachNo.ToString("N0")</th>
                             </tr>
                         </thead>
 
@@ -108,146 +110,55 @@
         </div>
     </div>
 
-    <div class="col-lg-4 col-md-6 col-sm-12 mt-5">
-        <div class="card shadow h-100 mb-4 ">
-            <div class="card-header d-flex justify-content-between align-items-center bg-purple">
-                <h3 class="m-0 font-weight-bold text-white">Cầm đồ</h3>
+    @foreach (var item in Model.HopDongs)
+    {
+        <div class="col-lg-4 col-md-6 col-sm-12 mt-5">
+            <div class="card shadow h-100 mb-4 ">
+                <div class="card-header d-flex justify-content-between align-items-center bg-purple">
+                    <h3 class="m-0 font-weight-bold text-white">@item.Ten</h3>
 
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-striped table-borderless">
-                        <thead>
-                            <tr class="tr-border-bottom">
-                                <th> Số hợp đồng</th>
-                                <th class="text-purple">100,000</th>
-                            </tr>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-borderless">
+                            <thead>
+                                <tr class="tr-border-bottom">
+                                    <th> Số hợp đồng</th>
+                                    <th class="text-purple">@item.SoHD</th>
+                                </tr>
 
-                            <tr class="tr-border-bottom">
-                                <th> Hợp đồng đóng</th>
-                                <th class="text-purple"> 100,000</th>
-                            </tr>
+                                <tr class="tr-border-bottom">
+                                    <th> Hợp đồng đóng</th>
+                                    <th class="text-purple"> @item.HopDongDong</th>
+                                </tr>
 
-                            <tr class="tr-border-bottom ">
-                                <th> Hợp đồng mở</th>
-                                <th class="text-purple">100,000</th>
-                            </tr>
-                            <tr class="tr-border-bottom text-danger">
-                                <th> Tiền cho vay</th>
-                                <th>100,000</th>
-                            </tr>
-                            <tr class="tr-border-bottom text-danger">
-                                <th> Lãi dự kiến</th>
-                                <th>100,000</th>
-                            </tr>
-                            <tr class="tr-border-bottom text-danger">
-                                <th> Lãi đã thu</th>
-                                <th>100,000</th>
-                            </tr>
-                            <tr class="tr-border-bottom text-danger">
-                                <th> Tiền khách nợ</th>
-                                <th>100,000</th>
-                            </tr>
-                        </thead>
-                    </table>
+                                <tr class="tr-border-bottom ">
+                                    <th> Hợp đồng mở</th>
+                                    <th class="text-purple">@item.HopDongMo</th>
+                                </tr>
+                                <tr class="tr-border-bottom text-danger">
+                                    <th> Tiền cho vay</th>
+                                    <th>@item.TienChoVay.ToString("N0")</th>
+                                </tr>
+                                <tr class="tr-border-bottom text-danger">
+                                    <th> Lãi dự kiến</th>
+                                    <th>@item.LaiDuKien.ToString("N0")</th>
+                                </tr>
+                                <tr class="tr-border-bottom text-danger">
+                                    <th> Lãi đã thu</th>
+                                    <th>@item.LaiDaThu.ToString("N0")</th>
+                                </tr>
+                                <tr class="tr-border-bottom text-danger">
+                                    <th> Tiền khách nợ</th>
+                                    <th>@item.TienKhachNo.ToString("N0")</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="col-lg-4 col-md-6 col-sm-12 mt-5">
-        <div class="card shadow h-100 mb-4 ">
-            <div class="card-header d-flex justify-content-between align-items-center bg-purple">
-                <h3 class="m-0 font-weight-bold text-white">Vay lãi</h3>
-
-            </div>
-             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-striped table-borderless">
-                        <thead>
-                            <tr class="tr-border-bottom">
-                                <th> Số hợp đồng</th>
-                                <th class="text-purple">100,000</th>
-                            </tr>
-
-                            <tr class="tr-border-bottom">
-                                <th> Hợp đồng đóng</th>
-                                <th class="text-purple"> 100,000</th>
-                            </tr>
-
-                            <tr class="tr-border-bottom ">
-                                <th> Hợp đồng mở</th>
-                                <th class="text-purple">100,000</th>
-                            </tr>
-                            <tr class="tr-border-bottom text-danger">
-                                <th> Tiền cho vay</th>
-                                <th>100,000</th>
-                            </tr>
-                            <tr class="tr-border-bottom text-danger">
-                                <th> Lãi dự kiến</th>
-                                <th>100,000</th>
-                            </tr>
-                            <tr class="tr-border-bottom text-danger">
-                                <th> Lãi đã thu</th>
-                                <th>100,000</th>
-                            </tr>
-                            <tr class="tr-border-bottom text-danger">
-                                <th> Tiền khách nợ</th>
-                                <th>100,000</th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-lg-4 col-md-6 col-sm-12 mt-5">
-        <div class="card shadow h-100 mb-4 ">
-            <div class="card-header d-flex justify-content-between align-items-center bg-purple">
-                <h3 class="m-0 font-weight-bold text-white">Bát họ</h3>
-
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-striped table-borderless">
-                        <thead>
-                            <tr class="tr-border-bottom">
-                                <th> Số hợp đồng</th>
-                                <th class="text-purple">100,000</th>
-                            </tr>
-
-                            <tr class="tr-border-bottom">
-                                <th> Hợp đồng đóng</th>
-                                <th class="text-purple"> 100,000</th>
-                            </tr>
-
-                            <tr class="tr-border-bottom ">
-                                <th> Hợp đồng mở</th>
-                                <th class="text-purple">100,000</th>
-                            </tr>
-                            <tr class="tr-border-bottom text-danger">
-                                <th> Tiền cho vay</th>
-                                <th>100,000</th>
-                            </tr>
-                            <tr class="tr-border-bottom text-danger">
-                                <th> Lãi dự kiến</th>
-                                <th>100,000</th>
-                            </tr>
-                            <tr class="tr-border-bottom text-danger">
-                                <th> Lãi đã thu</th>
-                                <th>100,000</th>
-                            </tr>
-                            <tr class="tr-border-bottom text-danger">
-                                <th> Tiền khách nợ</th>
-                                <th>100,000</th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
+    }
 
     <div class="col-lg-4 col-md-6 col-sm-12 mt-5">
         <div class="card shadow h-100 mb-4 ">
@@ -261,15 +172,15 @@
                         <thead>
                             <tr class="tr-border-bottom">
                                 <th> Lãi dự kiến</th>
-                                <th class="text-info">100,000</th>
+                                <th class="text-info">@Model.ThongTinLai.LaiDuKien.ToString("N0")</th>
                             </tr>
 
                             <tr class="tr-border-bottom">
                                 <th> Lãi đã thu</th>
-                                <th class="text-info"> 100,000</th>
+                                <th class="text-info"> @Model.ThongTinLai.LaiDaThu.ToString("N0")</th>
                             </tr>
 
-                           
+
                         </thead>
 
                     </table>

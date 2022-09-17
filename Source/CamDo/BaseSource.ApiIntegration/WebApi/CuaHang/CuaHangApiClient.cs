@@ -87,5 +87,10 @@ namespace BaseSource.ApiIntegration.WebApi.CuaHang
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.GetAsync<ApiResult<List<SummaryReportShopVM>>>("/api/CuaHang/SummaryReportShop");
         }
+        public async Task<ApiResult<DetailShopVM>> DetailShop()
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.GetAsync<ApiResult<DetailShopVM>>("/api/CuaHang/DetailShop");
+        }
     }
 }
