@@ -20,7 +20,16 @@ namespace BaseSource.Shared.Enums
         [Display(Name = "Chi")]
         Chi = 5
     }
-
+    public enum ETargetType : byte
+    {
+        [Display(Name = "Nạp tiền")]
+        NapTien = 1,
+        [Display(Name = "Mua gói sản phẩm")]
+        MuaGoi = 2,
+        [Display(Name = "Mua bảo hiểm")]
+        MuaBaoHiem = 3,
+    }
+    
     public enum ELoaiHopDong : byte
     {
         [Display(Name = "Cầm đồ")]

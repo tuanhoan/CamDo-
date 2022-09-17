@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using BaseSource.Shared.Enums;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -16,7 +17,7 @@ namespace BaseSource.Data.Entities
         public string UserId { get; set; }
         public UserProfile UserProfile { get; set; }
         public string Note { get; set; }
-        public byte TargetType { get; set; }
+        public ETargetType TargetType { get; set; }
         public int TargetId { get; set; }
         public double Amount { get; set; }
         public double BalanceBefore { get; set; }

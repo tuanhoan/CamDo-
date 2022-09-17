@@ -46,6 +46,10 @@ namespace BaseSource.Data.EF
             modelBuilder.ApplyConfiguration(new CuaHang_QuyTienLogConfiguration());
             modelBuilder.ApplyConfiguration(new AuthorFunctionConfiguration());
             modelBuilder.ApplyConfiguration(new AuthorUserFunctionConfiguration());
+            modelBuilder.ApplyConfiguration(new WalletTransactionConfiguration());
+            modelBuilder.ApplyConfiguration(new FriendshipConfiguration());
+            modelBuilder.ApplyConfiguration(new BaoHiemConfiguration());
+            modelBuilder.ApplyConfiguration(new GoiSanPham_LichSuMuaConfiguration());
 
             //modelBuilder.Entity<IdentityUserClaim<string>>().ToTable("AppUserClaims").HasKey(x => x.Id);
             modelBuilder.Entity<IdentityUserClaim<string>>().Property(x => x.UserId).HasMaxLength(128);
@@ -100,6 +104,10 @@ namespace BaseSource.Data.EF
         public DbSet<BaiViet> BaiViets { get; set; }
         public DbSet<AuthorFunction> AuthorFunctions { get; set; }
         public DbSet<AuthorUserFunction> AuthorUserFunctions { get; set; }
+        public DbSet<GoiSanPham_LichSuMua> GoiSanPham_LichSuMuas { get; set; }
+        public DbSet<Friendship> Friendships { get; set; }
+        public DbSet<BaoHiem> BaoHiems { get; set; }
+        public DbSet<WalletTransaction> WalletTransactions { get; set; }
     }
 }
 

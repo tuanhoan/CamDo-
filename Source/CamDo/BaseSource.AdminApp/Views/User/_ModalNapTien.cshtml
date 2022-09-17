@@ -1,0 +1,64 @@
+﻿@using BaseSource.ViewModels.CuaHang
+@model CreateCuaHangVm
+
+<div class="modal fade" id="modalNapTien" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Set role</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="card shadow h-100">
+
+                    <div class="card-body">
+                        <form asp-action="CreateNapTien" data-name="ajaxFormUpload" enctype="multipart/form-data">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                            <div class="row mb-3">
+                                <label asp-for="TenCuaHang" class="control-label col-md-2"></label>
+                                <div class="col-md-10">
+                                    <select name="CuaHangId" id="btnAddCuaHang" class="form-select">
+                                        <option value="">Vui lòng chọn .</option>
+                                        <option value="1">Nạp tiền</option>
+                                        <option value="2">Mua gói sản phẩm</option>
+                                        <option value="3">Mua bảo hiểm</option>
+                                    </select>
+                                    <span asp-validation-for="TenCuaHang" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label asp-for="SDT" class="control-label col-md-2"></label>
+                                <div class="col-md-10">
+                                    <select name="CuaHangId" id="btnAddCuaHang" class="form-select">
+                                        <option value="">Vui lòng chọn.</option>
+                                    </select>
+                                    <span asp-validation-for="SDT" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <label asp-for="DiaChi" class="control-label col-md-2"></label>
+                                <div class="col-md-10">
+                                    <textarea rows="5" asp-for="DiaChi" class="form-control " />
+                                    <span asp-validation-for="DiaChi" class="text-danger"></span>
+                                </div>
+
+                            </div>
+                            <div class="row mb-3">
+                                <label asp-for="TenNguoiDaiDien" class="control-label col-md-2"></label>
+                                <div class="col-md-10">
+                                    <input asp-for="TenNguoiDaiDien" class="form-control " type="number" />
+                                    <span asp-validation-for="TenNguoiDaiDien" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <button type="submit" class="btn btn-primary">Create</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

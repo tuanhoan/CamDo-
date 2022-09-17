@@ -84,7 +84,7 @@ namespace BaseSource.AdminApp
             services.AddTransient<IMoTaHinhThucLaiAdmiApiClient, MoTaHinhThucLaiAdmiApiClient>();
             services.AddTransient<IFeedBackAdminApiClient, FeedBackAdminApiClient>();
             services.AddTransient<IReportCustomerAdminApiClient, ReportCustomerAdminApiClient>();
-            services.AddTransient<IGoiSanPhamAdminApiClient, GoiSanPhamAdminApiClient>();
+            services.AddTransient<IGoiSanPhamAdminApiClient, WalletTransactionAdminApiClient>();
             services.AddTransient<INotifySystemAdminApiClient, NotifySystemAdminApiClient>();
             services.AddTransient<IUserAdminApiClient, UserAdminApiClient>();
             services.AddTransient<ILienHeAdminApiClient, LienHeAdminApiClient>();
