@@ -29,6 +29,7 @@ namespace BaseSource.ApiIntegration.WebApi
         Task<ApiResult<string>> DeleteUser(string userId = default);
         Task<ApiResult<DataLoadTreeRoleFunc>> TreeFuncAuth(string UserId = default);
         Task<ApiResult<string>> SetRoleByUser(ModelSaveFuncRole model);
+        Task<ApiResult<string>> SetRoleForUser(string userId, string FuncId, bool check);
 
 
 

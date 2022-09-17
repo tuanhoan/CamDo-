@@ -139,12 +139,23 @@ namespace BaseSource.ApiIntegration.WebApi
         public async Task<ApiResult<DataLoadTreeRoleFunc>> TreeFuncAuth(string UserId = default)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
-            return await client.GetAsync<ApiResult<DataLoadTreeRoleFunc>>($"/api/User/GetUserById/{UserId}");
+            return await client.GetAsync<ApiResult<DataLoadTreeRoleFunc>>($"/api/User/TreeFuncAuth?UserId={UserId}");
         }
         public async Task<ApiResult<string>> SetRoleByUser(ModelSaveFuncRole model)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.PostAsync<ApiResult<string>>("/api/User/SetRoleByUser", model);
+        }
+        public async Task<ApiResult<string>> SetRoleForUser(string userId, string FuncId, bool check)
+        {
+            var model = new SetRoleForUserModel
+            {
+                userId = userId,
+                FuncId = FuncId,
+                check = check
+            };
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.PostAsync<ApiResult<string>>($"/api/User/SetRoleForUser", model);
         }
     }
 }

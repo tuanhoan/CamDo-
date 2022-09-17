@@ -1,4 +1,6 @@
-﻿
+﻿@model DataLoadTreeRoleFunc
+
+
 <style>
     * {
         -webkit-box-sizing: border-box;
@@ -73,7 +75,7 @@
 
             .tree-structure ol li {
                 list-style-type: none;
-                padding: 8px 0
+                padding: 5px 0 0 0
             }
 
                 .tree-structure ol li .num {
@@ -111,6 +113,10 @@
             height: 1px;
             background-color: #939393;
         }
+        .tree-structure ol.tree-child{
+            padding-bottom: 0px;
+            padding-top: 0px;
+        }
 </style>
 <div class="modal fade" id="modalSetRole" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
@@ -127,30 +133,58 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     <ol class="tree-structure">
-                                        <li>
-                                            <div class="form-check">
-                                                <input class="form-check-input flexCheckChecked" type="checkbox" value="" id="" checked>
-                                                <label class="form-check-label" for="flexCheckChecked">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
-                                                        <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z" />
-                                                    </svg>
-                                                    Checked checkbox
-                                                </label>
-                                            </div>
-                                            <ol>
-                                                <li>
-                                                    <div class="form-check">
-                                                        <input class="form-check-input flexCheckChecked" type="checkbox" value="" id="" checked>
-                                                        <label class="form-check-label" for="flexCheckChecked">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
-                                                                <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z" />
-                                                            </svg>
-                                                            Checked checkbox
-                                                        </label>
-                                                    </div>
-                                                </li>
-                                            </ol>
-                                        </li>
+                                        @foreach(var item in Model.RoleUsers)
+                                        {
+                                            <li>
+                                                <div class="form-check">
+                                                    <input class="form-check-input flexCheckChecked" type="checkbox" value="@item.FuncId" level="@item.Level" id="@item.FuncId" @if(Model.FuncAuthByUser.Contains(@item.FuncId)) {@Html.Raw("checked")} >
+                                                    <label class="form-check-label" for="flexCheckChecked">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                                            <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z" />
+                                                        </svg>
+                                                        @item.DisplayName
+                                                    </label>
+                                                </div>
+                                                @if(item.RoleUsers.Count > 0)
+                                                {
+                                                    <ol class="tree-child">
+                                                        @foreach (var item2 in item.RoleUsers)
+                                                        {
+                                                            <li>
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input flexCheckChecked" type="checkbox" value="@item2.FuncId" level="@item.Level" id="@item2.FuncId" @if(Model.FuncAuthByUser.Contains(@item2.FuncId)) {@Html.Raw("checked")} >
+                                                                    <label class="form-check-label" for="flexCheckChecked">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                                                            <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z" />
+                                                                        </svg>
+                                                                        @item2.DisplayName
+                                                                    </label>
+                                                                </div>
+                                                                @if(item2.RoleUsers.Count > 0 )
+                                                                {
+                                                                    <ol class="tree-child">
+                                                                        @foreach (var item3 in item2.RoleUsers)
+                                                                        {
+                                                                            <li>
+                                                                                <div class="form-check">
+                                                                                    <input class="form-check-input flexCheckChecked" type="checkbox" value="@item3.FuncId" level="@item.Level" id="@item3.FuncId" @if(Model.FuncAuthByUser.Contains(@item3.FuncId)) {@Html.Raw("checked")}>
+                                                                                    <label class="form-check-label" for="flexCheckChecked">
+                                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
+                                                                                            <path d="M13 0H6a2 2 0 0 0-2 2 2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h7a2 2 0 0 0 2-2 2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zm0 13V4a2 2 0 0 0-2-2H5a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1zM3 4a1 1 0 0 1 1-1h7a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4z" />
+                                                                                        </svg>
+                                                                                        @item3.DisplayName
+                                                                                    </label>
+                                                                                </div>
+                                                                            </li>
+                                                                        }                                                                        
+                                                                    </ol>                                                                    
+                                                                }
+                                                            </li>
+                                                        }                                                        
+                                                    </ol>
+                                                }                                                
+                                            </li>
+                                        }                                        
                                     </ol>
                                 </div>
                             </div>
@@ -161,3 +195,49 @@
         </div>
     </div>
 </div>
+<script>
+$(document).ready(function() {
+    $("input:checkbox").change(function() {
+        var isChecked = $(this).prop("checked");
+        var element = $(this);
+        var level = element.attr("level");
+        var checkboxChild = $(this).closest("li").find("input:checkbox");
+        $.ajax({
+            url: '/Admin/user/EditUserRole',
+            type: 'POST',
+            data: { FuncId: $(this).attr("id"), userId: "@ViewBag.UserId", check: isChecked },
+            success: function(res) {
+                if (res.isSuccessed == true) {
+                    if (level == "1" && !isChecked) {
+                        checkboxChild.prop("checked", isChecked);
+                    }
+                    else if (level == "2") {
+                        if (!isChecked) {
+                            checkboxChild.prop("checked", isChecked);
+                        }
+                        else {
+                            element.closest("ol").closest("li").find("input:checkbox").first().prop("checked", isChecked);
+                        }
+                    }
+                    else {
+                        if (isChecked) {
+                            var elml2 = element.closest("ol").closest("li").find("input:checkbox").first();
+                            elml2.prop("checked", isChecked);
+                            elml2.closest("ol").closest("li").find("input:checkbox").first().prop("checked", isChecked);
+                        }
+                    }
+                    toastr.info("Cập nhật quyền thành công");
+                }
+                else if (res.message != null) {
+                    element.prop("checked", !isChecked);
+                    toastr.error(res.message);
+                }
+                else {
+                    element.prop("checked", !isChecked);
+                    toastr.error("Có lỗi xảy ra. Vui lòng đợi trong giây lát");
+                }  
+            }
+        });
+    });
+});
+</script>

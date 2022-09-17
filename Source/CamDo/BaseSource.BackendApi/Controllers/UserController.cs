@@ -332,6 +332,100 @@ namespace BaseSource.BackendApi.Controllers
 
             return Ok(new ApiSuccessResult<DataLoadTreeRoleFunc>(Result));
         }
+        [HttpPost("SetRoleForUser")]
+        public async Task<IActionResult> SetRoleForUser(SetRoleForUserModel model)
+        {
+            var aFuncId = int.Parse(model.FuncId);
+            var AuthFuncs = _db.AuthorFunctions.Select(x => new
+            {
+                Id = x.Id,
+                Level = x.Level,
+                SubFunc = x.SubFunc
+            }).ToList();
+            var AuthFuncAdd = AuthFuncs.Where(x => x.Id == aFuncId).FirstOrDefault();
+            if(AuthFuncAdd == null)
+            {
+                return Ok(new ApiErrorResult<string>("Quyền không tồn tại."));
+            }
+
+            if (model.check)
+            {
+                var userFunctionOld = _db.AuthorUserFunctions.Where(x => x.UserId == model.userId).ToList();
+                if (userFunctionOld.Where(x => x.FuncId == aFuncId).FirstOrDefault() == null)
+                {
+                    var roleAdds = new List<AuthorUserFunction>();
+                    roleAdds.Add(new AuthorUserFunction
+                    {
+                        FuncId = aFuncId,
+                        UserId = model.userId
+                    });
+                    if (AuthFuncAdd.Level == 2)
+                    {
+                        if (userFunctionOld.Where(x => x.FuncId == AuthFuncAdd.SubFunc).FirstOrDefault() == null)
+                        {
+                            roleAdds.Add(new AuthorUserFunction
+                            {
+                                FuncId = AuthFuncAdd.SubFunc,
+                                UserId = model.userId
+                            });
+                        }
+                    }
+                    if (AuthFuncAdd.Level == 3)
+                    {
+                        if (userFunctionOld.Where(x => x.FuncId == AuthFuncAdd.SubFunc).FirstOrDefault() == null)
+                        {
+                            roleAdds.Add(new AuthorUserFunction
+                            {
+                                FuncId = AuthFuncAdd.SubFunc,
+                                UserId = model.userId
+                            });
+                        }
+                        var AuthFuncsLv2 = AuthFuncs.FirstOrDefault(x => x.Id == AuthFuncAdd.SubFunc);
+                        if (userFunctionOld.Where(x => x.FuncId == AuthFuncsLv2.SubFunc).FirstOrDefault() == null)
+                        {
+                            roleAdds.Add(new AuthorUserFunction
+                            {
+                                FuncId = AuthFuncsLv2.SubFunc,
+                                UserId = model.userId
+                            });
+                        }
+                    }
+                    await _db.AuthorUserFunctions.AddRangeAsync(roleAdds);
+                    await _db.SaveChangesAsync();
+                }
+            }
+            else
+            {
+                var roleUserDeletes = new List<AuthorUserFunction>();
+                if (AuthFuncAdd.Level == 3)
+                {
+                    roleUserDeletes = await _db.AuthorUserFunctions.Where(x=> x.UserId == model.userId && x.FuncId == aFuncId).ToListAsync();
+                }
+                else if(AuthFuncAdd.Level == 2)
+                {
+                    var ListRoleIdDelete = AuthFuncs.Where(x => x.Id == aFuncId || x.SubFunc == aFuncId).Select(x => x.Id).ToList();
+                    roleUserDeletes = await _db.AuthorUserFunctions.Where(x => x.UserId == model.userId && ListRoleIdDelete.Contains(x.FuncId)).Select(x => x).ToListAsync();
+                }
+                else
+                {
+                    var ListRoleIdLevel2 = AuthFuncs.Where(x => x.SubFunc == aFuncId).Select(x => x.Id).ToList();
+                    var ListRoleIdLevel3 = AuthFuncs.Where(x => ListRoleIdLevel2.Contains(x.SubFunc)).Select(x => x.Id).ToList();
+                    var ListRoleIdDelete = new List<int>();
+                    ListRoleIdDelete.Add(aFuncId);
+                    ListRoleIdDelete.AddRange(ListRoleIdLevel2);
+                    ListRoleIdDelete.AddRange(ListRoleIdLevel3);
+
+                    roleUserDeletes = await _db.AuthorUserFunctions.Where(x => x.UserId == model.userId && ListRoleIdDelete.Contains(x.FuncId)).Select(x => x).ToListAsync();
+                }
+                _db.AuthorUserFunctions.RemoveRange(roleUserDeletes);
+                await _db.SaveChangesAsync();
+            }
+
+            return Ok(new ApiSuccessResult<string>());
+        }
+
+
+
         [HttpPost("CreateOrUpdate")]
         public async Task<IActionResult> SetRoleByUser(ModelSaveFuncRole model)
         {

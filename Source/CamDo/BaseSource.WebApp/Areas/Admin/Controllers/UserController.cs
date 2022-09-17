@@ -6,6 +6,7 @@ using BaseSource.Shared.Enums;
 using BaseSource.ViewModels.Admin;
 using BaseSource.ViewModels.Common;
 using BaseSource.ViewModels.CuaHang;
+using BaseSource.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -46,24 +47,20 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         }
         public async Task<IActionResult> EditUserRole(string id)
         {
-            return PartialView("_ModalSetRoleUser");
+            ViewBag.UserId = id;
+            var result = await _apiClientUser.TreeFuncAuth(id);
+            return PartialView("_ModalSetRoleUser", result.ResultObj);
         }
 
         [HttpPost]
-        public async Task<IActionResult> EditUserRole(RoleAssignVm model)
+        public async Task<IActionResult> EditUserRole(string userId, string FuncId, bool check)
         {
-            if (!ModelState.IsValid)
+            var result = await _apiClientUser.SetRoleForUser(userId,FuncId,check);
+            if (!result.IsSuccessed)
             {
-                return Json(false);
+                return Json(new ApiErrorResult<string>(result.Message));
             }
-
-            //var result = await _apiClient.RoleAssign(model);
-            //if (!result.IsSuccessed)
-            //{
-            //    return Json(false);
-            //}
-
-            return Json(true);
+            return Json(new ApiSuccessResult<string>());
         }
 
         public async Task<IActionResult> CreateOrUpdateUser(string id = default)
