@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace BaseSource.ApiIntegration.AdminApi.WalletTransaction
 {
-    public interface IWalletTransactionApiClient
+    public interface IWalletTransactionAdminApiClient
     {
-        Task<ApiResult<PagedResult<GoiSanPhamAdminVm>>> GetPagings(WalletTransactionPagingRequest_Admin model);
+        Task<ApiResult<PagedResult<WalletTransactionVM>>> GetPagings(WalletTransactionPagingRequest_Admin model);
         Task<ApiResult<string>> Create(CreateGoiSanPhamVm model);
         Task<ApiResult<GoiSanPhamAdminVm>> GetById(int id);
         Task<ApiResult<string>> Edit(EditGoiSanPhamVm model);

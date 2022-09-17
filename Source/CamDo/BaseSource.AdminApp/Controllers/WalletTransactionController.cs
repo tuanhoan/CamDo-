@@ -8,8 +8,8 @@ namespace BaseSource.AdminApp.Controllers
 {
     public class WalletTransactionController : Controller
     {
-        private readonly IWalletTransactionApiClient _apiClient;
-        public WalletTransactionController(IWalletTransactionApiClient apiClient)
+        private readonly IWalletTransactionAdminApiClient _apiClient;
+        public WalletTransactionController(IWalletTransactionAdminApiClient apiClient)
         {
             _apiClient = apiClient;
         }

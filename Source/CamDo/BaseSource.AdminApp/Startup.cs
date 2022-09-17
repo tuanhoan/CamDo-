@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using BaseSource.ApiIntegration.AdminApi.WalletTransaction;
 
 namespace BaseSource.AdminApp
 {
@@ -84,13 +85,14 @@ namespace BaseSource.AdminApp
             services.AddTransient<IMoTaHinhThucLaiAdmiApiClient, MoTaHinhThucLaiAdmiApiClient>();
             services.AddTransient<IFeedBackAdminApiClient, FeedBackAdminApiClient>();
             services.AddTransient<IReportCustomerAdminApiClient, ReportCustomerAdminApiClient>();
-            services.AddTransient<IGoiSanPhamAdminApiClient, WalletTransactionAdminApiClient>();
+            services.AddTransient<IGoiSanPhamAdminApiClient, GoiSanPhamAdminApiClient>();
             services.AddTransient<INotifySystemAdminApiClient, NotifySystemAdminApiClient>();
             services.AddTransient<IUserAdminApiClient, UserAdminApiClient>();
             services.AddTransient<ILienHeAdminApiClient, LienHeAdminApiClient>();
             services.AddTransient<IDanhMucBaiVietAdminApiClient, DanhMucBaiVietAdminApiClient>();
             services.AddTransient<IBaiVietAdminApiClient, BaiVietAdminApiClient>();
             services.AddTransient<IUploadAdminApiClient, UploadAdminApiClient>();
+            services.AddTransient<IWalletTransactionAdminApiClient, WalletTransactionAdminApiClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

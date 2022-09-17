@@ -29,6 +29,13 @@ namespace BaseSource.Shared.Enums
         [Display(Name = "Mua bảo hiểm")]
         MuaBaoHiem = 3,
     }
+    public enum ETypeBaoHiem : byte
+    {
+        [Display(Name = "Mua thành công")]
+        MuaThanhCong = 1,
+        [Display(Name = "Đang chờ mua")]
+        DangChoMua = 2,
+    }
     
     public enum ELoaiHopDong : byte
     {

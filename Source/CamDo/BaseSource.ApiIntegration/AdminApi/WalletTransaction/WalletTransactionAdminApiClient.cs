@@ -8,11 +8,10 @@ using System.Text;
 using System.Threading.Tasks;
 using BaseSource.Utilities.Helper;
 using BaseSource.Shared.Constants;
-using BaseSource.ApiIntegration.AdminApi.WalletTransaction;
 
 namespace BaseSource.ApiIntegration.AdminApi.WalletTransaction
 {
-    public class WalletTransactionAdminApiClient : IWalletTransactionApiClient
+    public class WalletTransactionAdminApiClient : IWalletTransactionAdminApiClient
     {
         private readonly IHttpClientFactory _httpClientFactory;
         public WalletTransactionAdminApiClient(IHttpClientFactory httpClientFactory)
