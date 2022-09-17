@@ -151,7 +151,8 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         #region Shop details
         public async Task<IActionResult> DetailShop()
         {
-            return View();
+            var result = await _cuaHangApiClient.DetailShop();
+            return View(result.ResultObj);
         }
         #endregion
 
