@@ -40,6 +40,7 @@ using BaseSource.ApiIntegration.WebApi.QuanlyThuChi;
 using BaseSource.ApiIntegration.WebApi.GoiSanPham;
 using BaseSource.ApiIntegration.WebApi.BaiViet;
 using BaseSource.ApiIntegration.WebApi.BaoCao;
+using BaseSource.ApiIntegration.WebApi.DichVu;
 
 namespace BaseSource.WebApp
 {
@@ -129,6 +130,7 @@ namespace BaseSource.WebApp
 
             services.AddTransient<IBaiVietApiClient, BaiVietApiClient>();
             services.AddTransient<IBaoCaoApiClient, BaoCaoApiClient>();
+            services.AddTransient<IDichVuClient, DichVuClient>();
 
 
             services.AddTransient<IUserAdminApiClient, UserAdminApiClient>();

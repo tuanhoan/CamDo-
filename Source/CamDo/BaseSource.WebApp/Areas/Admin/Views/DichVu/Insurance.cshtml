@@ -1,4 +1,6 @@
-﻿@{
+﻿@using BaseSource.ViewModels.BaoHiem
+@model List<BaoHiemVm>
+@{
     ViewData["Title"] = "Danh sách khách hàng mua bảo hiểm";
 }
 
@@ -64,7 +66,6 @@
                             </div>
                         </div>
                         <div>
-
                         </div>
                         <div class="table-responsive">
                             <table class="table table-bordered">
@@ -98,17 +99,25 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>abc</td>
-                                        <td>28/07/2022</td>
-                                        <td>abc</td>
-                                        <td>10000</td>
-                                        <td>10000</td>
-                                        <td>10000</td>
-                                        <td>Đang chờ mua</td>
-                                        <td></td>
-                                    </tr>
+                                    @if (Model != null)
+                                    {
+                                        var index = 1;
+                                        foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td>@index</td>
+                                                <td>@item.Ten</td>
+                                                <td>@item.StartDate.ToString("dd/MM/yyyy")</td>
+                                                <td>@item.Type.ToString()</td>
+                                                <td>@item.TienBaoHiem.ToString("N0")</td>
+                                                <td>@item.TongTien.ToString("N0")</td>
+                                                <td>@item.TienChietKhau.ToString("N0")</td>
+                                                <td>Đang chờ mua</td>
+                                                <td></td>
+                                            </tr>
+                                            index++;
+                                        }
+                                    }
                                 </tbody>
                                 <tfoot>
                                     <tr>
@@ -116,9 +125,9 @@
                                         <td></td>
                                         <td></td>
                                         <td>Tổng</td>
-                                        <td>-14000</td>
-                                        <td>10000</td>
-                                        <td>1000</td>
+                                        <td>@Model.Sum(x=>x.TienBaoHiem).ToString("N0")</td>
+                                        <td>@Model.Sum(x=>x.TongTien).ToString("N0")</td>
+                                        <td>@Model.Sum(x=>x.TienChietKhau).ToString("N0")</td>
                                         <td></td>
                                         <td></td>
                                     </tr>
@@ -367,8 +376,8 @@
 
         //show modal
         $("#myModal").modal("show");
-       // Dropzone.autoDiscover = false;
-       // Dropzone.default.autoDiscover = false;
+        // Dropzone.autoDiscover = false;
+        // Dropzone.default.autoDiscover = false;
         $("div#myDrop").dropzone({
             url: "/file",
         });
