@@ -93,6 +93,7 @@ namespace BaseSource.AdminApp
             services.AddTransient<IBaiVietAdminApiClient, BaiVietAdminApiClient>();
             services.AddTransient<IUploadAdminApiClient, UploadAdminApiClient>();
             services.AddTransient<IWalletTransactionAdminApiClient, WalletTransactionAdminApiClient>();
+            services.AddTransient<IGoiSanPham_LichSuMuaAdminApiClient, GoiSanPham_LichSuMuaAdminApiClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
