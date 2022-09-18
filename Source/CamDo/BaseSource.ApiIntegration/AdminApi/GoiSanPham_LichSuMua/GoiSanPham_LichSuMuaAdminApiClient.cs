@@ -18,10 +18,10 @@ namespace BaseSource.ApiIntegration.AdminApi.WalletTransaction
         {
             _httpClientFactory = httpClientFactory;
         }
-        public async Task<ApiResult<string>> Create(CreateGoiSanPhamVm model)
+        public async Task<ApiResult<string>> Create(GoiSanPham_LichSuMuaCreate model)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
-            return await client.PostAsync<ApiResult<string>>("/api/admin/WalletTransaction/Create", model);
+            return await client.PostAsync<ApiResult<string>>("/api/admin/GoiSanPham_LichSuMua/Create", model);
         }
 
         public async Task<ApiResult<string>> Delete(int id)
@@ -32,29 +32,29 @@ namespace BaseSource.ApiIntegration.AdminApi.WalletTransaction
             };
 
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
-            return await client.PostAsyncFormUrl<ApiResult<string>>("/api/admin/WalletTransaction/Delete", dic);
+            return await client.PostAsyncFormUrl<ApiResult<string>>("/api/admin/GoiSanPham_LichSuMua/Delete", dic);
         }
 
-        public async Task<ApiResult<string>> Edit(EditGoiSanPhamVm model)
+        public async Task<ApiResult<string>> Edit(GoiSanPham_LichSuMuaEdit model)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
-            return await client.PostAsync<ApiResult<string>>("/api/admin/WalletTransaction/Edit", model);
+            return await client.PostAsync<ApiResult<string>>("/api/admin/GoiSanPham_LichSuMua/Edit", model);
         }
 
-        public async Task<ApiResult<GoiSanPhamAdminVm>> GetById(int id)
+        public async Task<ApiResult<GoiSanPham_LichSuMuaVM>> GetById(int id)
         {
             var obj = new
             {
                 id = id
             };
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
-            return await client.GetAsync<ApiResult<GoiSanPhamAdminVm>>("/api/admin/WalletTransaction/GetById", obj);
+            return await client.GetAsync<ApiResult<GoiSanPham_LichSuMuaVM>>("/api/admin/GoiSanPham_LichSuMua/GetById", obj);
         }
 
-        public async Task<ApiResult<PagedResult<WalletTransactionVM>>> GetPagings(WalletTransactionPagingRequest_Admin model)
+        public async Task<ApiResult<PagedResult<GoiSanPham_LichSuMuaVM>>> GetPagings(GoiSanPham_LichSuMuaQr model)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
-            return await client.GetAsync<ApiResult<PagedResult<WalletTransactionVM>>>("/api/admin/WalletTransaction/GetPagings", model);
+            return await client.GetAsync<ApiResult<PagedResult<GoiSanPham_LichSuMuaVM>>>("/api/admin/GoiSanPham_LichSuMua/GetPagings", model);
         }
     }
 }

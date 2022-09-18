@@ -1,4 +1,4 @@
-﻿@model PagedResult<GoiSanPhamAdminVm>
+﻿@model PagedResult<GoiSanPham_LichSuMuaVM>
 @{
     ViewData["Title"] = "Quản lý lịch sử mua hàng";
 
@@ -55,7 +55,6 @@
                                 <th scope="col">
                                     Ngày tạo
                                 </th>
-                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -65,23 +64,19 @@
                                 {
                                     <tr>
                                         <td>
-                                            @item.Ten
+                                            @item.TenGoi
                                         </td>
                                         <td>
-                                            @item.SoThang
+                                            item.SoThang
                                         </td>
                                         <td>
-                                            @item.TongTien.ToString("N0")
+                                            item.TongTien.ToString("N0")
                                         </td>
                                         <td>
-                                            @item.KhuyenMai
+                                            item.KhuyenMai
                                         </td>
                                         <td>
-                                            @item.CreatedTime.ToString("HH:mm dd/MM/yyyy")
-                                        </td>
-                                        <td width="175">
-                                            <a class="btn btn-secondary btn-sm" href="@Url.Action("Edit", new { id = item.Id })"><i class="fas fa-pencil-alt fa-fw"></i> Edit</a>
-                                            <button class="btn btn-sm btn-danger" data-toggle="btn-confirm" data-title="Bạn có chắc chắn muốn xóa?" data-href="@Url.Action("Delete", new { id = item.Id })" title="Delete"><i class="fas fa-trash-alt fa-fw"></i> Delete</button>
+                                            @item.CreatedDate.ToString("HH:mm dd/MM/yyyy")
                                         </td>
                                     </tr>
                                 }

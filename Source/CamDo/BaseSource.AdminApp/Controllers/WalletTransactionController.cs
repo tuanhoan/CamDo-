@@ -22,7 +22,7 @@ namespace BaseSource.AdminApp.Controllers
                 Info = ten
             };
             var result = await _apiClient.GetPagings(request);
-            return View();
+            return View(result);
         }
     }
 }
