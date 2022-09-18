@@ -91,6 +91,7 @@
                                             <button class="btn btn-sm btn-danger shadow-sm" data-toggle="btn-confirm" data-title="Are you sure lock user?" data-href="@Url.Action("LockUnLockUser", new { id = item.Id })" title="Lock user">Lock user</button>
                                         }
                                         <button class="btn btn-sm btn-warning shadow-sm" data-toggle="btn-confirm" data-title="Hệ thống sẽ reset về mật khẩu mặc định: 123456. Bạn có chắc chắc muốn reset mật khẩu" data-href="@Url.Action("ResetPassword", new { id = item.Id })" title="Reset Password">ResetPassword</button>
+                                         <button class="btn btn-sm btn-primary  btn-sm btnNapTien" data-userid="@item.Id">Nạp tiền</button>
                                     </td>
                                 </tr>
                             }
@@ -114,7 +115,7 @@
         </div>
     </div>
 </div>
-
+<div id="_rsModalNapTien"></div>
 
 <div class="modal fade" id="set-role" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">

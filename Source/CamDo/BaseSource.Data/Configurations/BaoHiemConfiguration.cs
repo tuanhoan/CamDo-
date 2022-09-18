@@ -36,6 +36,7 @@ namespace BaseSource.Data.Configurations
             builder.Property(x => x.TienChietKhau);
             builder.Property(x => x.TongTien);
             builder.Property(x => x.ImageList);
+            builder.Property(x => x.Type);
 
             //builder.HasOne(x => x.CuaHang).WithMany(x => x.KhachHangs).HasForeignKey(x => x.CuaHangId).OnDelete(DeleteBehavior.Cascade);
         }
