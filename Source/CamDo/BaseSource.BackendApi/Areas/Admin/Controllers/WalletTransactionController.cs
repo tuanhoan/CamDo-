@@ -74,45 +74,51 @@ namespace BaseSource.BackendApi.Areas.Admin.Controllers
             return Ok(new ApiSuccessResult<WalletTransactionVM>(result));
         }
         [HttpPost("Create")]
-        public async Task<IActionResult> Create(CreateGoiSanPhamVm model)
+        public async Task<IActionResult> Create(WalletTransactionCreate model)
         {
             if (!ModelState.IsValid)
             {
                 return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
             }
-            var sp = new GoiSanPham()
+            var x = await _db.UserProfiles.FindAsync(model.UserId);
+
+            var sp = new WalletTransaction()
             {
-                Ten = model.Ten,
-                TongTien = model.TongTien,
-                SoThang = model.SoThang,
-                MoTa = model.MoTa,
-                KhuyenMai = model.KhuyenMai,
-                UserIdCreated=UserId,
+                UserId = model.UserId,
+                BalanceBefore = x.Balance,
+                BalanceAffter = x.Balance +model.Sotien,
+                Amount = model.Sotien,
+                CreatedBy = UserId,
+                CreatedDate = model.NgayGiaoDich,
+                TargetType = model.TargetType,
+                TargetId = model.SoBaoHiem,
+                Note = model.Note
             };
 
-            _db.GoiSanPhams.Add(sp);
+            _db.WalletTransactions.Add(sp);
             await _db.SaveChangesAsync();
             return Ok(new ApiSuccessResult<string>(sp.Id.ToString()));
         }
         [HttpPost("Edit")]
-        public async Task<IActionResult> Edit(EditGoiSanPhamVm model)
+        public async Task<IActionResult> Edit(WalletTransactionEdit model)
         {
             if (!ModelState.IsValid)
             {
                 return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
             }
-            var x = await _db.GoiSanPhams.FindAsync(model.Id);
+            var x = await _db.WalletTransactions.FindAsync(model.Id);
             if (x == null)
             {
                 return Ok(new ApiErrorResult<string>("Not found"));
             }
-            x.Ten = model.Ten;
-            x.TongTien = model.TongTien;
-            x.SoThang = model.SoThang;
-            x.MoTa = model.MoTa;
-            x.KhuyenMai = model.KhuyenMai;
-            x.UserIdUpdate = UserId;
-            x.UpdatedTime = DateTime.Now;
+            x.BalanceBefore = x.BalanceBefore;
+            x.BalanceAffter = x.BalanceBefore + model.Sotien;
+            x.Amount        = model.Sotien;
+            x.CreatedBy     = UserId;
+            x.CreatedDate   = model.NgayGiaoDich;
+            x.TargetType    = model.TargetType;
+            x.TargetId      = model.SoBaoHiem;
+            x.Note = model.Note;
             await _db.SaveChangesAsync();
 
             return Ok(new ApiSuccessResult<string>(x.Id.ToString()));
