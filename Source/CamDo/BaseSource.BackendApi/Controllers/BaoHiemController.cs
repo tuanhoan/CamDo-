@@ -54,6 +54,8 @@ namespace BaseSource.BackendApi.Controllers
                                   TienPhi = bh.TienPhi,
                                   TienChietKhau = bh.TienChietKhau,
                                   TongTien = bh.TongTien,
+                                  Type = bh.Type
+
                               }).ToPagedListAsync(request.Page, request.PageSize);
 
             var pagedResult = new PagedResult<BaoHiemVm>()

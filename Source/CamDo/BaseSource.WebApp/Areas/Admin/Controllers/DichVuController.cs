@@ -1,4 +1,7 @@
-﻿using BaseSource.ViewModels.BaoHiem;
+﻿using BaseSource.ApiIntegration.WebApi.BaoCao;
+using BaseSource.ApiIntegration.WebApi.DichVu;
+using BaseSource.ViewModels.BaoHiem;
+using BaseSource.ViewModels.Common;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,9 +12,24 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
 {
     public class DichVuController : BaseAdminController
     {
-        public async Task<IActionResult>  Insurance()
+        private readonly IDichVuClient _dichVuClient;
+        public DichVuController(IDichVuClient dichVuClient)
         {
-            return View();
+            _dichVuClient = dichVuClient;
+        }
+
+        public async Task<IActionResult> Insurance()
+        {
+            var request = new BaohiemQr()
+            {
+                FromDate = null,
+                ToDate = null,
+                Page = 1,
+                PageSize = 20,
+                Type = 0
+            };
+            var result = await _dichVuClient.GetPagings(request);
+            return View(result.ResultObj.Items);
         }
 
 
@@ -23,6 +41,13 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         {
             var model = new CreateBaoHiemVM();
             return PartialView("MuaBaoHiem", model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateBaoHiemVM createBaoHiem)
+        {
+            await Task.Delay(1);
+            return Json(new ApiSuccessResult<string>("OK"));
         }
     }
 }
