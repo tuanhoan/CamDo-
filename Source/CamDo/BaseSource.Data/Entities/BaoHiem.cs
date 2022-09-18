@@ -37,7 +37,5 @@ namespace BaseSource.Data.Entities
         public double TienChietKhau { get; set; }
         public double TongTien { get; set; }
         public ETypeBaoHiem Type { get; set; }
-
-      
     }
 }
