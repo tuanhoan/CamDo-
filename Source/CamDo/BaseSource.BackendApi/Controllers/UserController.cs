@@ -180,6 +180,7 @@ namespace BaseSource.BackendApi.Controllers
                         UserId = newUser.Id,
                         CuaHangId = model.CuaHangId,
                         SubUserId = UserId,
+                        Balance = 0
                     });
                     var staff = (new Guid("ffded6b0-37d9-4676-241b-69459029a622")).ToString();
                     await _db.UserRoles.AddAsync(new IdentityUserRole<string> { UserId = newUser.Id, RoleId = staff });
@@ -423,8 +424,23 @@ namespace BaseSource.BackendApi.Controllers
 
             return Ok(new ApiSuccessResult<string>());
         }
+        [HttpGet("ListAuthenByUser")]
+        public async Task<IActionResult> ListAuthenByUser()
+        {
+            var ListFuncCode = await (from au in _db.AuthorUserFunctions
+                                      join af in _db.AuthorFunctions on au.FuncId equals af.Id
+                                      where au.UserId == UserId.ToString()
+                                      select af.FuncCode).ToListAsync();
+            if (ListFuncCode == null)
+            {
+                return Ok(new ApiErrorResult<string>("Not found"));
+            }
 
+           
+            return Ok(new ApiSuccessResult<string>(String.Join(",",ListFuncCode)));
 
+        }
+        
 
         [HttpPost("CreateOrUpdate")]
         public async Task<IActionResult> SetRoleByUser(ModelSaveFuncRole model)

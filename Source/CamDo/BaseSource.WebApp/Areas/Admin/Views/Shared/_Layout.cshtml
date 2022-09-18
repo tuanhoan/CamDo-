@@ -22,7 +22,8 @@
     </nav>
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
-            @await Html.PartialAsync("_SideBar")
+            @await Component.InvokeAsync("SideBar")
+            @*@await Html.PartialAsync("_SideBar")*@
         </div>
         <div id="layoutSidenav_content">
             <main class="container-fluid py-4">

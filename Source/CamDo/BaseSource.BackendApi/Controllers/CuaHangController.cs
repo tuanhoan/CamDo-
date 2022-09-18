@@ -118,7 +118,7 @@ namespace BaseSource.BackendApi.Controllers
         [HttpGet("GetPagings")]
         public async Task<IActionResult> GetPagings([FromQuery] GetCuaHangPagingRequest request)
         {
-            var model = _db.CuaHangs.AsQueryable();
+            var model = _db.CuaHangs.Where(x=> x.UserId == UserId).AsQueryable();
 
             if (!string.IsNullOrEmpty(request.Ten))
             {

@@ -1,0 +1,145 @@
+﻿@model List<string>
+
+<nav class="sidenav shadow-right sidenav-dark">
+    <div class="sidenav-menu">
+        <div class="nav accordion" id="accordionSidenav">
+
+            <div class="sidenav-menu-heading">DATA</div>
+
+            <a class="nav-link collapsed" href="/admin">
+                <div class="nav-link-icon"><i data-feather="file-text"></i></div>
+                Trang chủ
+
+            </a>
+            @if (Model.Contains("DichVu"))
+            {
+                <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseDichvu" aria-expanded="false" aria-controls="collapseCTLQ">
+                    <div class="nav-link-icon"><i data-feather="file-text"></i></div>
+                    Dịch vụ
+                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseDichvu" data-parent="#accordionSidenav">
+                    <nav class="sidenav-menu-nested nav">
+                        <a class="nav-link insurance-nav" href="@Url.Action("Insurance", "DichVu")">Mua bảo hiểm</a>
+                        <a class="nav-link pay-nav" href="@Url.Action("Pay", "DichVu")">Thanh toán</a>
+                    </nav>
+                </div>
+            }
+
+
+            @if (Model.Contains("QuanLyCuaHang"))
+            {
+                <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseCuahang" aria-expanded="false" aria-controls="collapseCTLQ">
+                    <div class="nav-link-icon"><i data-feather="file-text"></i></div>
+                    Quản lý cửa hàng
+                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseCuahang" data-parent="#accordionSidenav">
+                    <nav class="sidenav-menu-nested nav">
+                        <a class="nav-link summaryshop-nav" href="@Url.Action("SummaryReportShop", "CuaHang")">Tổng quát chuỗi cửa hàng</a>
+                        <a class="nav-link detailshop-nav" href="@Url.Action("DetailShop", "CuaHang")">Thông tin chi tiết cửa hàng</a>
+                        <a class="nav-link cuahang-nav" href="@Url.Action("Index", "CuaHang")">Danh sách cửa hàng</a>
+                        <a class="nav-link cauhinhhanghoa-nav" href="@Url.Action("Index", "CauHinhHangHoa")">Cấu hình hàng hóa</a>
+                        <a class="nav-link moneynewdate-nav" href="@Url.Action("MoneyNewDate", "CuaHang")">Nhập tiền quỹ đầu ngày</a>
+
+                    </nav>
+                </div>
+            }
+
+            @if (Model.Contains("QuanLyThuChi"))
+            {
+                <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseThuchi" aria-expanded="false" aria-controls="collapseCTLQ">
+                    <div class="nav-link-icon"><i data-feather="file-text"></i></div>
+                    Quản lý thu chi
+                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseThuchi" data-parent="#accordionSidenav">
+                    <nav class="sidenav-menu-nested nav">
+                        <a class="nav-link expense-nav" href="@Url.Action("Expense", "QuanLyThuChi")">Chi hoạt động</a>
+                        <a class="nav-link income-nav" href="@Url.Action("Income", "QuanLyThuChi")">Thu hoạt động</a>
+                    </nav>
+                </div>
+            }
+
+            @if (Model.Contains("CamDo"))
+            {
+                <a class="nav-link user-nav" href="@Url.Action("Index", "Pawn")">
+                    <div class="nav-link-icon"><i data-feather="briefcase"></i></div>
+                    Cầm đồ
+                </a>
+            }
+            @if (Model.Contains("VayLai"))
+            {
+                <a class="nav-link loan-nav" href="@Url.Action("Index", "Loan")">
+                    <div class="nav-link-icon"><i data-feather="trello"></i></div>
+                    Vay lãi
+                </a>
+            }
+            @if (Model.Contains("QuanLyNhanVien"))
+            {
+                <a class="nav-link user-nav" href="@Url.Action("Index", "User")">
+                    <div class="nav-link-icon"><i data-feather="users"></i></div>
+                    Quản lý nhân viên
+                </a>
+            }
+
+            @if (Model.Contains("QuanLyNguonVon"))
+            {
+                <a class="nav-link collapsed" href="@Url.Action("Index", "Quanlyvon")">
+                    <div class="nav-link-icon"><i data-feather="file-text"></i></div>
+                    Quản lý nguồn vốn
+
+                </a>
+            }
+            @if (Model.Contains("Setting"))
+            {
+                <a class="nav-link setting-nav" href="@Url.Action("Index", "Setting")">
+                    <div class="nav-link-icon"><i data-feather="settings"></i></div>
+                    Setting
+                </a>
+            }
+            @if (Model.Contains("BaoCao"))
+            {
+
+                <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseBaocao" aria-expanded="false" aria-controls="collapseCTLQ">
+                    <div class="nav-link-icon"><i data-feather="file-text"></i></div>
+                    Báo cáo
+                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseBaocao" data-parent="#accordionSidenav">
+                    <nav class="sidenav-menu-nested nav">
+                        <a class="nav-link reportbalance-nav" href="@Url.Action("ReportBalance", "BaoCao")">Tổng kết giao dịch</a>
+                        <a class="nav-link profit-nav" href="@Url.Action("Profit", "BaoCao")">Tổng kết lợi nhuận</a>
+                        <a class="nav-link receiveInterest-nav" href="@Url.Action("ReceiveInterest", "BaoCao")">Chi tiết tiền lãi</a>
+                        <a class="nav-link reportPawnHolding-nav" href="@Url.Action("ReportPawnHolding", "BaoCao")">Báo cáo đang cho vay</a>
+                        <a class="nav-link paymentHistory-nav" href="@Url.Action("PaymentHistory", "BaoCao")">Thống kê thu tiền</a>
+                        <a class="nav-link warehouseLiquidation-nav" href="@Url.Action("WarehouseLiquidation", "BaoCao")">Báo cáo hàng chờ thanh lý</a>
+                        <a class="nav-link reportPawnNewRepurchase-nav" href="@Url.Action("ReportPawnNewRepurchase", "BaoCao")">Báo cáo chuộc đồ, đóng hợp đồng</a>
+                        <a class="nav-link reportPawnNewLiquidation-nav" href="@Url.Action("ReportPawnNewLiquidation", "BaoCao")">Báo cáo thanh lý đồ</a>
+                        <a class="nav-link reportContractCancel-nav" href="@Url.Action("ReportContractCancel", "BaoCao")">Báo cáo hợp đồng đã xóa</a>
+                        <a class="nav-link reportSMS-nav" href="@Url.Action("ReportSMS", "BaoCao")">Báo cáo tin nhắn</a>
+                        <a class="nav-link reportInventory-nav" href="@Url.Action("Inventory", "BaoCao")">Bàn giao ca</a>
+                        <a class="nav-link moneyByDay-nav" href="@Url.Action("MoneyByDay", "BaoCao")">Dòng tiền theo ngày</a>
+
+                    </nav>
+                </div>
+            }
+            @if (Model.Contains("CheckNoXau"))
+            {
+
+                <a class="nav-link collapsed" href="javascript:void(0);" data-bs-toggle="collapse" data-bs-target="#collapseNoXau" aria-expanded="false" aria-controls="collapseCTLQ">
+                    <div class="nav-link-icon"><i data-feather="file-text"></i></div>
+                    Check Nợ Xấu
+                    <div class="sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseNoXau" data-parent="#accordionSidenav">
+                    <nav class="sidenav-menu-nested nav">
+                        <a class="nav-link reportbalance-nav" href="#">Check Nợ Xấu</a>
+                        <a class="nav-link profit-nav" href="#">Thêm mới bạn bè</a>
+                        <a class="nav-link receiveInterest-nav" href="#">Xác nhận bạn bè</a>
+                    </nav>
+                </div>
+            }
+        </div>
+    </div>
+</nav>

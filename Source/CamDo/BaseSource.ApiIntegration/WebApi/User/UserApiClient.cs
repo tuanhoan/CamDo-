@@ -157,5 +157,10 @@ namespace BaseSource.ApiIntegration.WebApi
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.PostAsync<ApiResult<string>>($"/api/User/SetRoleForUser", model);
         }
+        public async Task<ApiResult<string>> ListAuthenByUser()
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.GetAsync<ApiResult<string>>("/api/User/ListAuthenByUser");
+        }
     }
 }
