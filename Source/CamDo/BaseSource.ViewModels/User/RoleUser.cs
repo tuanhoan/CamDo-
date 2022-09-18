@@ -26,4 +26,10 @@ namespace BaseSource.ViewModels.User
         public List<int> ListFunc { get; set; }
         public string UserId { get; set; }
     }
+    public class SetRoleForUserModel
+    {
+        public string userId { get; set; }
+        public string FuncId { get; set; }
+        public bool check { get; set; }
+    }
 }
