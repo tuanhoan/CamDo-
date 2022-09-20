@@ -20,8 +20,14 @@ namespace BaseSource.ApiIntegration.WebApi.DichVu
             _httpClientFactory = httpClientFactory;
         }
 
+        public async Task<ApiResult<string>> Create(BaoHiemCreate request)
+        {
+            var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
+            return await client.PostAsync<ApiResult<string>>("/api/BaoHiem/Create", request);
+        }
+
         public async Task<ApiResult<PagedResult<BaoHiemVm>>> GetPagings(BaohiemQr request)
-        { 
+        {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.GetAsync<ApiResult<PagedResult<BaoHiemVm>>>("/api/BaoHiem/GetPagings", request);
         }

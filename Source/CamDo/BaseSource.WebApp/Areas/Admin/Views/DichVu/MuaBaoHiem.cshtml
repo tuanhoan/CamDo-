@@ -1,8 +1,20 @@
 ﻿@using BaseSource.ViewModels.BaoHiem
-@model CreateBaoHiemVM
+@model BaoHiemCreate
 
 @{
-
+    var GoiBaoHiems = new List<int>
+    {
+        10000000,
+        20000000,
+        30000000,
+        40000000,
+        50000000,
+        60000000,
+        70000000,
+        80000000,
+        90000000,
+        100000000,
+    };
 }
 
 <div class="modal fade" id="modal_create_BuyInsurance1">
@@ -17,7 +29,8 @@
 
             <!-- Modal body -->
             <div class="modal-body">
-                <form asp-action="Create" asp-controller="DichVu">
+                <form asp-action="Create" asp-controller="DichVu" data-name="ajaxFormBaoHiem">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div>
                         <h6>Thông tin khách hàng</h6>
                     </div>
@@ -27,18 +40,20 @@
                         <div class="row mb-3">
                             <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label ">Tên khách hàng <span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-sm-12 col-12">
-                                <input type="text" class="form-control " placeholder="Nhập họ và tên bạn">
+                                <input type="text" class="form-control " placeholder="Nhập họ và tên bạn" asp-for="Ten">
+                                <span asp-validation-for="Ten" class="text-danger"></span>
                             </div>
                             <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label ">Giới tính <span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-sm-12 col-12">
+
                                 <div class="form-check-inline mt-2">
                                     <label class="form-check-label">
-                                        <input type="radio" class="form-check-input" name="optradio">Nam
+                                        @Html.RadioButtonFor(m => m.GioiTinh,0)Nam
                                     </label>
                                 </div>
                                 <div class="form-check-inline">
                                     <label class="form-check-label">
-                                        <input type="radio" class="form-check-input" name="optradio">Nữ
+                                        @Html.RadioButtonFor(m => m.GioiTinh,1)Nữ
                                     </label>
                                 </div>
                             </div>
@@ -47,44 +62,52 @@
                             <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label ">Số điện thoại <span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-sm-12 col-12">
                                 <input type="text" asp-for="SDT" class="form-control" placeholder="Nhập số điện thoại">
+                                <span asp-validation-for="SDT" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label ">Ngày sinh <span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-sm-12 col-12">
                                 <input type="date" asp-for="NgaySinh" class="form-control ">
+                                <span asp-validation-for="NgaySinh" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label ">Số CMND/Hộ chiếu <span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-sm-12 col-12">
                                 <input type="text" asp-for="CMND" class="form-control" placeholder="Nhập số CMND/Hộ chiếu">
+                                <span asp-validation-for="CMND" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label ">Ngày cấp <span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-sm-12 col-12">
-                                <input type="date" asp-for="NgayCap" class="form-control">
+                                <input asp-for="CMND_NgayCap" type="date" class="form-control" />
+                                <span asp-validation-for="CMND_NgayCap" class="text-danger"></span>
                             </div>
                             <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label ">Nơi cấp <span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-sm-12 col-12">
-                                <input type="text" asp-for="NoiCap" class="form-control" placeholder="Nhập nơi cấp">
+                                <input type="text" asp-for="CMND_NoiCap" class="form-control" placeholder="Nhập nơi cấp">
+                                <span asp-validation-for="CMND_NoiCap" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label ">Email <span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-sm-12 col-12">
                                 <input type="text" asp-for="Email" class="form-control" placeholder="Nhập Email">
+                                <span asp-validation-for="Email" class="text-danger"></span>
                             </div>
                             <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label ">Mã số thuế <span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-sm-12 col-12">
                                 <input type="text" asp-for="MST" class="form-control" placeholder="Nhập mã hợp đồng...">
+                                <span asp-validation-for="MST" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label  font-weight-bold">Địa chỉ <span class="text-danger">*</span></label>
                             <div class="col-lg-9 col-sm-12 col-12">
-                                <textarea type="text" asp-for="Address" class="form-control " placeholder="Nhập địa chỉ"></textarea>
+                                <textarea type="text" asp-for="DiaChi" class="form-control " placeholder="Nhập địa chỉ"></textarea>
+                                <span asp-validation-for="DiaChi" class="text-danger"></span>
                             </div>
                         </div>
                     </div>
@@ -98,32 +121,30 @@
                         <div class="row mb-3">
                             <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label ">Gói bảo hiểm <span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-sm-12 col-12">
-                                <select class="form-control">
-                                    <option>10000</option>
-                                    <option>10000</option>
-                                    <option>10000</option>
-                                    <option>10000</option>
-                                </select>
+                                @Html.DropDownListFor(x=>x.TienBaoHiem,
+                                new SelectList(GoiBaoHiems),
+                                new { @class = "form-control" })
                             </div>
-                            <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label ">Tiền phí : <span>0</span></label>
+                            <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label " asp-for="TienPhi">Tiền phí : <span>0</span></label>
 
                         </div>
                         <div class="row mb-3">
-                            <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label ">Ngày mua <span class="text-danger">*</span></label>
+                            <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label">Ngày mua <span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-sm-12 col-12">
-                                <input asp-for="NgayMua" type="date" class="form-control">
+                                <input asp-for="StartDate" type="date" class="form-control">
+                                <span asp-validation-for="StartDate" class="text-danger"></span>
                             </div>
-                            <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label ">Tiền chiết khấu : <span>0</span></label>
+                            <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label" asp-for="TienChietKhau">Tiền chiết khấu : <span>0</span></label>
                         </div>
                         <div class="row mb-3">
                             <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label ">Thời gian mua <span class="text-danger">*</span></label>
                             <div class="col-lg-3 col-sm-12 col-12">
                                 <div class="input-group mb-2">
                                     <div class="input-group-text">Ngày</div>
-                                    <input type="number" value="360" disabled class="form-control">
+                                    <input type="number" asp-for="ThoiGianMua" value="360" disabled class="form-control">
                                 </div>
                             </div>
-                            <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label ">Tiền phải đóng : <span>0</span></label>
+                            <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label " asp-for="TongTien">Tiền phải đóng : <span>0</span></label>
                         </div>
                     </div>
                     <hr />
@@ -133,7 +154,7 @@
                     <hr />
                     <div class="">
                         <div class="row mb-3">
-                            <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label ">Ngày mua <span class="text-danger">*</span></label>
+                            <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label ">Hình ảnh <span class="text-danger">*</span></label>
                             <div class="col-lg-9 col-sm-12 col-12">
                                 <div class="dropzone dz-clickable" id="myDrop">
                                     <div class="dz-default dz-message" data-dz-message="">
