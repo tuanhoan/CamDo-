@@ -1,58 +1,58 @@
-﻿@using BaseSource.ViewModels.CuaHang
-@model CreateCuaHangVm
+﻿@model WalletTransactionCreate
+
 
 <div class="modal fade" id="modalNapTien" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Set role</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title">Nạp tiền</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">X</button>
             </div>
             <div class="modal-body">
                 <div class="card shadow h-100">
 
                     <div class="card-body">
                         <form asp-action="CreateNapTien" data-name="ajaxFormUpload" enctype="multipart/form-data">
-                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
+                             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input type="hidden" asp-for="UserId" />
                             <div class="row mb-3">
-                                <label asp-for="TenCuaHang" class="control-label col-md-2"></label>
+                                <label class="control-label col-md-2">Chọn hình thức thanh toán </label>
                                 <div class="col-md-10">
-                                    <select name="CuaHangId" id="btnAddCuaHang" class="form-select">
+                                    <select name="TargetType" class="form-select">
                                         <option value="">Vui lòng chọn .</option>
                                         <option value="1">Nạp tiền</option>
                                         <option value="2">Mua gói sản phẩm</option>
                                         <option value="3">Mua bảo hiểm</option>
                                     </select>
-                                    <span asp-validation-for="TenCuaHang" class="text-danger"></span>
+                                     <span asp-validation-for="TargetType" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label asp-for="SDT" class="control-label col-md-2"></label>
+                                <label class="control-label col-md-2">Thành toán cho </label>
                                 <div class="col-md-10">
-                                    <select name="CuaHangId" id="btnAddCuaHang" class="form-select">
+                                    <select name="SoBaoHiem" class="form-select">
                                         <option value="">Vui lòng chọn.</option>
                                     </select>
-                                    <span asp-validation-for="SDT" class="text-danger"></span>
+                                     <span asp-validation-for="SoBaoHiem" class="text-danger"></span>
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <label asp-for="DiaChi" class="control-label col-md-2"></label>
+                                <label class="control-label col-md-2">Số tiền thành toán </label>
                                 <div class="col-md-10">
-                                    <textarea rows="5" asp-for="DiaChi" class="form-control " />
-                                    <span asp-validation-for="DiaChi" class="text-danger"></span>
+                                    <input class="form-control " type="number" asp-for="Sotien" />
+                                     <span asp-validation-for="Sotien" class="text-danger"></span>
                                 </div>
-
                             </div>
+
                             <div class="row mb-3">
-                                <label asp-for="TenNguoiDaiDien" class="control-label col-md-2"></label>
+                                <label class="control-label col-md-2">Nội dung thành toán</label>
                                 <div class="col-md-10">
-                                    <input asp-for="TenNguoiDaiDien" class="form-control " type="number" />
-                                    <span asp-validation-for="TenNguoiDaiDien" class="text-danger"></span>
+                                    <textarea rows="5" asp-for="Note" class="form-control"></textarea>
+                                     <span asp-validation-for="Note" class="text-danger"></span>
                                 </div>
                             </div>
 
-                            <div class="">
+                            <div class="btn">
                                 <button type="submit" class="btn btn-primary">Create</button>
                             </div>
                         </form>

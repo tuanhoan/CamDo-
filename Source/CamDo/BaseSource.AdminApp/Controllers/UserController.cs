@@ -1,4 +1,5 @@
 ﻿using BaseSource.ApiIntegration.AdminApi;
+using BaseSource.ApiIntegration.AdminApi.WalletTransaction;
 using BaseSource.ViewModels.Admin;
 using BaseSource.ViewModels.Common;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +13,11 @@ namespace BaseSource.AdminApp.Controllers
     public class UserController : BaseController
     {
         private readonly IUserAdminApiClient _apiClient;
-        public UserController(IUserAdminApiClient apiClient)
+        private readonly IWalletTransactionAdminApiClient _apiClientWT;
+        public UserController(IUserAdminApiClient apiClient, IWalletTransactionAdminApiClient apiClientWT)
         {
             _apiClient = apiClient;
+            _apiClientWT = apiClientWT;
         }
         public async Task<IActionResult> Index(string username, string email, int? page = 1)
         {
@@ -133,5 +136,18 @@ namespace BaseSource.AdminApp.Controllers
 
             return Json(new ApiSuccessResult<string>(result.ResultObj));
         }
+        [HttpPost]
+        public IActionResult OpenModalThanhToan(string Userid)
+        {
+           var data = new WalletTransactionCreate() { UserId = Userid};
+            return PartialView("_ModalNapTien" , data);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateNapTien(WalletTransactionCreate model)
+        {
+            var result = await _apiClientWT.Create(model);
+            return Json(new ApiSuccessResult<string>(result.ResultObj));
+        }
+        
     }
 }
