@@ -3,20 +3,18 @@
         $("#modal_BuyInsurance").html(res);
         $("#modal_create_BuyInsurance1").modal("show");
         saveBaoHiem();
-
     })
-    //$("#modal_create_BuyInsurance").modal("show");
 });
 
 function saveBaoHiem() {
     $('form[data-name="ajaxFormBaoHiem"]').on("submit", function (e) {
         e.preventDefault();
+        var files = $(".list-image-hd").get(0);
+        console.log(files);
         var $form = $(this);
         var $btnSubmit = $form.find("button[type='submit']");
         var modal = $btnSubmit.data("modal");
         $btnSubmit.attr("disabled", "true");
-
-        //$('#ListThuocTinhHangHoa').val(JSON.stringify(lstThuocTinh));
 
         $.ajax({
             method: $form.attr("method"),
