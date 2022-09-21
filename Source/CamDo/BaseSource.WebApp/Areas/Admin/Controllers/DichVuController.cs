@@ -45,11 +45,9 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
 
         [HttpPost]
         public async Task<IActionResult> Create(BaoHiemCreate createBaoHiem)
-        {
-
+        { 
             createBaoHiem.Type = Shared.Enums.ETypeBaoHiem.DangChoMua;
             createBaoHiem.ThoiGianMua = 360;
-            createBaoHiem.ImageList = "ádas";
             createBaoHiem.CuaHangId = 1;
             createBaoHiem.UserId = UserId;
             if (!ModelState.IsValid)

@@ -1,4 +1,5 @@
 ﻿using BaseSource.Shared.Enums;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BaseSource.ViewModels.BaoHiem
 {
-    public  class BaoHiemCreate
+    public class BaoHiemCreate
     {
         public int CuaHangId { get; set; }
         public string UserId { get; set; }
@@ -43,7 +44,7 @@ namespace BaseSource.ViewModels.BaoHiem
         public int ThoiGianMua { get; set; }
         [Display(Name = "Ảnh CMND/CCCD")]
         //[Required(ErrorMessage = "Vui lòng nhập Ảnh CMND/CCCD")]
-        public string ImageList { get; set; }
+        public List<IFormFile> ImageList { get; set; }
         [Display(Name = "Gói Bảo Hiểm")]
         [Required(ErrorMessage = "Vui lòng chọn Gói Bảo Hiểm")]
         public double TienBaoHiem { get; set; }

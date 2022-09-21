@@ -131,7 +131,7 @@ namespace BaseSource.BackendApi.Controllers
                 DiaChi        = model.DiaChi,
                 StartDate     = model.StartDate,
                 EndDate       = model.StartDate.AddDays(model.ThoiGianMua),
-                ImageList     = model.ImageList,
+                //ImageList     = model.ImageList,
                 TienBaoHiem   = model.TienBaoHiem,
                 TienPhi       = model.TienPhi,
                 TienChietKhau = model.TienChietKhau,

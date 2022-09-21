@@ -29,7 +29,7 @@
 
             <!-- Modal body -->
             <div class="modal-body">
-                <form asp-action="Create" asp-controller="DichVu" data-name="ajaxFormBaoHiem">
+                <form asp-action="Create" asp-controller="DichVu" data-name="ajaxFormBaoHiem" enctype='multipart/form-data'>
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                     <div>
                         <h6>Thông tin khách hàng</h6>
@@ -156,11 +156,13 @@
                         <div class="row mb-3">
                             <label for="inputEmail3" class="col-lg-3 col-sm-12 col-12 col-form-label ">Hình ảnh <span class="text-danger">*</span></label>
                             <div class="col-lg-9 col-sm-12 col-12">
-                                <div class="dropzone dz-clickable" id="myDrop">
-                                    <div class="dz-default dz-message" data-dz-message="">
-                                        <span>Drop files here to upload</span>
-                                    </div>
+                                <div class="info-hd-header">
+                                    <i class="fa fa-image"></i> Upload chứng từ hợp đồng
                                 </div>
+                                @*<form id="frmBaoHiem" class="divChungTu" asp-action="UploadChungTu" method="post" enctype='multipart/form-data'>*@
+                                    <div class="list-image-hd">
+                                    </div>
+                                @*</form>*@
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -176,3 +178,33 @@
         </div>
     </div>
 </div>
+
+<script>
+    var arrImageHD = [];
+    $(".list-image-hd").imageUploader(
+        {
+            imagesInputName: "ImageList",
+            preloaded: arrImageHD
+        }
+    );
+
+    //$('#frmBaoHiem input[name=ListImage]').change(function() {
+    //    $('#frmBaoHiem').submit();
+    //});
+    //$('form[id="frmBaoHiem"]').submit(function(e) {
+    //    e.preventDefault();
+    //    var formData = new FormData(this);
+    //    var $form = $(this);
+    //    //$.ajax({
+    //    //    method: $form.attr("method"),
+    //    //    url: $form.attr("action"),
+    //    //    data: formData,
+    //    //    dataType: 'json',
+    //    //    contentType: false,
+    //    //    processData: false,
+    //    //    success: function(res) {
+    //    //    }
+    //    //});
+    //});
+
+</script>
