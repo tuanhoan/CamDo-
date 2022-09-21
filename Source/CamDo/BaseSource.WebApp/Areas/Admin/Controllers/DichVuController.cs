@@ -2,6 +2,7 @@
 using BaseSource.ApiIntegration.WebApi.DichVu;
 using BaseSource.ViewModels.BaoHiem;
 using BaseSource.ViewModels.Common;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -44,7 +45,7 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(BaoHiemCreate createBaoHiem)
+        public async Task<IActionResult> Create( BaoHiemCreate createBaoHiem)
         { 
             createBaoHiem.Type = Shared.Enums.ETypeBaoHiem.DangChoMua;
             createBaoHiem.ThoiGianMua = 360;
