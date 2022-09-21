@@ -109,6 +109,8 @@ namespace BaseSource.BackendApi.Controllers
         [HttpPost("Create")]
         public async Task<IActionResult> Create(BaoHiemCreate model)
         {
+            model.CuaHangId = CuaHangId;
+            model.UserId = UserId;
             if (!ModelState.IsValid)
             {
                 return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
@@ -139,7 +141,7 @@ namespace BaseSource.BackendApi.Controllers
 
             _db.BaoHiems.Add(sp);
             await _db.SaveChangesAsync();
-            return Ok(new ApiSuccessResult<string>(sp.Id.ToString()));
+            return Ok(new ApiSuccessResult<string>("Success"));
         }
         [HttpPost("Edit")]
         public async Task<IActionResult> Edit(BaoHiemEdit model)

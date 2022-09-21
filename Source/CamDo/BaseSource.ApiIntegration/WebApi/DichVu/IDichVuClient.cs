@@ -12,5 +12,6 @@ namespace BaseSource.ApiIntegration.WebApi.DichVu
     public interface IDichVuClient
     {
         Task<ApiResult<PagedResult<BaoHiemVm>>> GetPagings(BaohiemQr request);
+        Task<ApiResult<string>> Create(BaoHiemCreate request);
     }
 }

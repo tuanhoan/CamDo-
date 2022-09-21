@@ -108,7 +108,7 @@
                                                 <td>@index</td>
                                                 <td>@item.Ten</td>
                                                 <td>@item.StartDate.ToString("dd/MM/yyyy")</td>
-                                                <td>@item.Type.ToString()</td>
+                                                <td>@item.TienBaoHiem.ToString("N0")</td>
                                                 <td>@item.TienBaoHiem.ToString("N0")</td>
                                                 <td>@item.TongTien.ToString("N0")</td>
                                                 <td>@item.TienChietKhau.ToString("N0")</td>
@@ -375,7 +375,7 @@
         $(".insurance-nav").addClass("active");
 
         //show modal
-        $("#myModal").modal("show");
+        //$("#myModal").modal("show");
         // Dropzone.autoDiscover = false;
         // Dropzone.default.autoDiscover = false;
         $("div#myDrop").dropzone({

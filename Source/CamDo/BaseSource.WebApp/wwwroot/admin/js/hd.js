@@ -220,7 +220,7 @@ function saveHopDong() {
         var modal = $btnSubmit.data("modal");
         $btnSubmit.attr("disabled", "true");
 
-        $('#ListThuocTinhHangHoa').val(JSON.stringify(lstThuocTinh));
+        //$('#ListThuocTinhHangHoa').val(JSON.stringify(lstThuocTinh));
 
         $.ajax({
             method: $form.attr("method"),

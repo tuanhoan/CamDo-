@@ -42,7 +42,7 @@ namespace BaseSource.ViewModels.BaoHiem
         [Required(ErrorMessage = "Vui lòng nhập Thời Gian Mua")]
         public int ThoiGianMua { get; set; }
         [Display(Name = "Ảnh CMND/CCCD")]
-        [Required(ErrorMessage = "Vui lòng nhập Ảnh CMND/CCCD")]
+        //[Required(ErrorMessage = "Vui lòng nhập Ảnh CMND/CCCD")]
         public string ImageList { get; set; }
         [Display(Name = "Gói Bảo Hiểm")]
         [Required(ErrorMessage = "Vui lòng chọn Gói Bảo Hiểm")]

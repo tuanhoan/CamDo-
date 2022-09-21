@@ -39,15 +39,30 @@ namespace BaseSource.WebApp.Areas.Admin.Controllers
         }
         public async Task<IActionResult> MuaBaoHiem()
         {
-            var model = new CreateBaoHiemVM();
+            var model = new BaoHiemCreate();
             return PartialView("MuaBaoHiem", model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateBaoHiemVM createBaoHiem)
+        public async Task<IActionResult> Create(BaoHiemCreate createBaoHiem)
         {
-            await Task.Delay(1);
-            return Json(new ApiSuccessResult<string>("OK"));
+
+            createBaoHiem.Type = Shared.Enums.ETypeBaoHiem.DangChoMua;
+            createBaoHiem.ThoiGianMua = 360;
+            createBaoHiem.ImageList = "ádas";
+            createBaoHiem.CuaHangId = 1;
+            createBaoHiem.UserId = UserId;
+            if (!ModelState.IsValid)
+            {
+                return Json(new ApiErrorResult<string>(ModelState.GetListErrors()));
+            }
+           
+            var result = await _dichVuClient.Create(createBaoHiem);
+            if (!result.IsSuccessed)
+            {
+                return Json(new ApiErrorResult<string>(result.ValidationErrors));
+            }
+            return Json(new ApiSuccessResult<string>(result.ResultObj));
         }
     }
 }
