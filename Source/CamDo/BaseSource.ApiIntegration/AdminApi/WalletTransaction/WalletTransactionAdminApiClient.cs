@@ -18,7 +18,7 @@ namespace BaseSource.ApiIntegration.AdminApi.WalletTransaction
         {
             _httpClientFactory = httpClientFactory;
         }
-        public async Task<ApiResult<string>> Create(CreateGoiSanPhamVm model)
+        public async Task<ApiResult<string>> Create(WalletTransactionCreate model)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.PostAsync<ApiResult<string>>("/api/admin/WalletTransaction/Create", model);
@@ -35,7 +35,7 @@ namespace BaseSource.ApiIntegration.AdminApi.WalletTransaction
             return await client.PostAsyncFormUrl<ApiResult<string>>("/api/admin/WalletTransaction/Delete", dic);
         }
 
-        public async Task<ApiResult<string>> Edit(EditGoiSanPhamVm model)
+        public async Task<ApiResult<string>> Edit(WalletTransactionEdit model)
         {
             var client = _httpClientFactory.CreateClient(SystemConstants.AppSettings.BackendApiClient);
             return await client.PostAsync<ApiResult<string>>("/api/admin/WalletTransaction/Edit", model);

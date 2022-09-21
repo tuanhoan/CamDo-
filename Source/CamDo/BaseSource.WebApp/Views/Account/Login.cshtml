@@ -14,6 +14,7 @@
 
         <form action="/Account/Login?returnUrl=@ViewBag.ReturnUrl" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+             <span asp-validation-for="TaiKhoan" class="text-danger"></span>
             <div class="mb-3">
                 <input type="text" asp-for="UserName" class="account-input-field" placeholder="Tên đăng nhập">
                 <span asp-validation-for="UserName" class="text-danger"></span>
