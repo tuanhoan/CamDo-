@@ -45,6 +45,7 @@ namespace BaseSource.ViewModels.BaoHiem
         [Display(Name = "Ảnh CMND/CCCD")]
         //[Required(ErrorMessage = "Vui lòng nhập Ảnh CMND/CCCD")]
         public List<IFormFile> ImageList { get; set; }
+
         [Display(Name = "Gói Bảo Hiểm")]
         [Required(ErrorMessage = "Vui lòng chọn Gói Bảo Hiểm")]
         public double TienBaoHiem { get; set; }
