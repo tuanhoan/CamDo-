@@ -150,6 +150,25 @@ namespace BaseSource.BackendApi.Controllers
                 }
                 return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
             }
+            var checkBuy =await _db.GoiSanPham_LichSuMuas.Where(x=> x.UserId== existingUser.Id).ToListAsync();
+            if (!checkBuy.Any())
+            {
+                var UserProfile =await _db.UserProfiles.FirstOrDefaultAsync(x=> x.UserId == existingUser.Id);
+                if( UserProfile?.JoinedDate.AddDays(15) == DateTime.Now)
+                {
+                    ModelState.AddModelError(nameof(user.Password), "Tài khoản hết hạn sử dụng");
+                    return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
+                }
+            }
+            else
+            {
+                var datacheck = checkBuy.Select(x => x.EndDate).OrderByDescending(x => x).FirstOrDefault();
+                if (datacheck == DateTime.Now)
+                {
+                    ModelState.AddModelError(nameof(user.Password), "Tài khoản hết hạn sử dụng");
+                    return Ok(new ApiErrorResult<string>(ModelState.GetListErrors()));
+                }
+            }
 
             var jwtToken = await GenerateJwtToken(existingUser);
             return Ok(new ApiSuccessResult<string>(jwtToken));

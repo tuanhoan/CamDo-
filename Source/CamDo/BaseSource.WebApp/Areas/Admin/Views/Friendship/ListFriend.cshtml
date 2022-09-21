@@ -1,0 +1,152 @@
+﻿@model PagedResult<BaseSource.ViewModels.Friendship.FriendshipCardModel>
+@{
+    ViewData["Title"] = "Bạn bè";
+    var ListAuth = (List<string>)ViewBag.ListAuth;
+    var LstFriendRequest = (List<BaseSource.ViewModels.Friendship.FriendshipCardModel>)ViewBag.LstFriendRequest;
+}
+<div class="row">
+    <!-- table  Lastest Tickets -->
+    <div class="col-12 ">
+        <div class="card shadow h-100 mb-4 ">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h3 class="m-0 font-weight-bold">Danh sách bạn bè</h3>
+
+            </div>
+            <div class="card-body">
+                @if (ListAuth.Contains("CheckNoXau_ThemMoiBanBe"))
+                {
+                    <div class="row mb-2">
+                        <div class="col-md-12 d-flex">
+                            <a type="button" class="btn btn-primary btn-sm" data-id="0" href="@Url.Action("AddFriend","Friendship")">Thêm bạn bè</a>
+                        </div>
+                    </div>
+                }
+                @if (LstFriendRequest.Count > 0)
+                {
+                    var active = true;
+                    <h4 class="card-title">Lời mời kết bạn</h4>
+                    <div class="" id="slide-accept" style="position: relative;display: flex;">
+                        <div id="recipeCarousel" class="carousel slide w-100" data-ride="carousel">
+                            <div class="carousel-inner w-100" role="listbox">
+                                @foreach(var item in LstFriendRequest)
+                                {
+                                    if (active)
+                                    {
+                                        <div class="carousel-item active">
+                                            <div class="col-md-3 card">
+                                                <img class="card-img-top" src="/images/img_avatar.png" alt="Card image" style="width:160px; height:160px;margin: 0 auto;">
+                                                <div class="card-body" style="padding: 10px 10px 5px 10px">
+                                                    <h4 class="card-title">@item.Ten</h4>
+                                                    <p class="card-text">@item.SDT<br>@item.Email</p>
+                                                    <div id="@item.Id">
+                                                        <a href="javascript:void(0);" class="btn btn-primary" onclick="Accept('@item.Id')">Đồng ý</a>
+                                                        <a href="" class="btn btn-secondary" onclick="Deline('@item.Id')">Từ chối</a>
+                                                    </div>                                                    
+                                                </div>
+                                            </div>                                  
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="carousel-item">
+                                            <div class="col-md-3 col-sm-4 col-xs-5 card">
+                                                <img class="card-img-top" src="/images/img_avatar.png" alt="Card image" style="width:160px; height:160px;margin: 0 auto;">
+                                                <div class="card-body" style="padding: 10px 10px 5px 10px">
+                                                    <h4 class="card-title">@item.Ten</h4>
+                                                    <p class="card-text">@item.SDT<br>@item.Email</p>
+                                                    <div id="@item.Id">
+                                                        <a href="" class="btn btn-primary" onclick="Accept('@item.Id')">Đồng ý</a>
+                                                        <a href="" class="btn btn-secondary" onclick="Deline('@item.Id')">Từ chối</a>
+                                                    </div>
+                                                </div>
+                                            </div>                                  
+                                        </div>
+                                    }
+                                }
+                            </div>
+                            <a class="carousel-control-prev w-auto" href="#recipeCarousel" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon bg-dark border border-dark rounded-circle" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next w-auto" href="#recipeCarousel" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon bg-dark border border-dark rounded-circle" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                    </div>
+                    @section Styles{
+                        <link rel="stylesheet" href="/admin/libs/bootstrap/friendship.css"/>
+                        <link rel="stylesheet" href="/admin/libs/bootstrap/bootstrap.min.css">
+                    }
+                    @section Scripts{
+                        <script src="/admin/libs/bootstrap/bootstrap.min.js"></script>
+                        <script src="/admin/js/friendship.js"></script>
+                    }
+                }
+                
+                
+                <h4 class="card-title">Danh sách bạn bè</h4>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    #
+                                </th>
+                                <th scope="col">
+                                    Avatar
+                                </th>
+                                <th scope="col">
+                                    Họ Tên
+                                </th>
+                                <th scope="col">
+                                    Email
+                                </th>
+                                <th scope="col">
+                                    SĐT
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model.Items.Count >= 1)
+                            {
+
+                                int idx = ((Model.PageNumber - 1) * Model.PageSize + 1);
+                                var index = 1;
+                                foreach (var item in Model.Items)
+                                {
+
+                                    if (index <= Model.TotalItemCount)
+                                    {
+                                        <tr>
+                                            <td>@idx</td>
+                                            <td>
+                                                <img>
+                                            </td>
+                                            <td>
+                                                @item.Ten
+                                            </td>
+                                            <td>@item.Email</td>
+                                            <td>
+                                                @item.SDT
+                                            </td>
+                                        </tr>
+                                    }
+                                    idx++;
+                                    index++;
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td colspan="13" class="text-center">Không có dữ liệu</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

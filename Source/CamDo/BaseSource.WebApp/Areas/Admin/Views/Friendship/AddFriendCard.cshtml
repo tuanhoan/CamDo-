@@ -1,0 +1,43 @@
+﻿@model List<BaseSource.ViewModels.Friendship.FriendshipCardModel>
+<div class="row row-cols-1 row-cols-md-4 g-4" style="margin: 0 auto; justify-content: center;">
+    @foreach( var item in Model)
+    {
+        <div class="card" style="width:200px;margin-right: 10px;">
+            <img class="card-img-top" src="https://www.w3schools.com/bootstrap4/img_avatar1.png" alt="Card image" style="width:160px; height:160px;margin: 0 auto;">
+            <div class="card-body">
+                <h4 class="card-title">@item.Ten</h4>
+                <p class="card-text">@item.SDT<br>@item.Email</p>
+                <a href = "javascript:void(0);" class="btn btn-primary" onclick="AddFriend('@item.Id')" id="@item.Id">Thêm bạn bè</a>
+            </div>
+        </div> 
+    }                       
+</div>
+<script>
+function AddFriend(id) {
+    var element = $("#"+id);
+    $.ajax({
+        url: '@Url.Action("AddFriend", "Friendship")',
+        type: 'POST',
+        data: { FriendId: id},
+        success: function(res) {
+            if (res.isSuccessed == true) {
+                element.text("Đã yêu cầu");
+                element.attr("onclick","");
+                element.css("cursor","default");
+                toastr.info(res.resultObj);
+            }
+            else if (res.message != null) {
+                toastr.error(res.message);
+                element.attr("onclick","");
+                element.css("cursor","default");
+            }
+            else { 
+                toastr.error("Có lỗi xảy ra. Vui lòng đợi trong giây lát");
+            }
+        },
+        error: function(data) {
+            toastr.error("Có lỗi xảy ra. Vui lòng đợi trong giây lát");
+        }
+    });
+};
+</script>

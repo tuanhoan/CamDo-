@@ -91,7 +91,7 @@
                                             <button class="btn btn-sm btn-danger shadow-sm" data-toggle="btn-confirm" data-title="Are you sure lock user?" data-href="@Url.Action("LockUnLockUser", new { id = item.Id })" title="Lock user">Lock user</button>
                                         }
                                         <button class="btn btn-sm btn-warning shadow-sm" data-toggle="btn-confirm" data-title="Hệ thống sẽ reset về mật khẩu mặc định: 123456. Bạn có chắc chắc muốn reset mật khẩu" data-href="@Url.Action("ResetPassword", new { id = item.Id })" title="Reset Password">ResetPassword</button>
-                                         <button class="btn btn-sm btn-primary  btn-sm btnNapTien" data-userid="@item.Id">Nạp tiền</button>
+                                         <button class="btn btn-sm btn-primary  btn-sm" onclick="OpenModalThanhToan('@item.Id')">Nạp tiền</button>
                                     </td>
                                 </tr>
                             }
@@ -163,5 +163,12 @@
                 }
             });
         }
+        function OpenModalThanhToan(userid){
+            ajaxTypePost("@Url.Action("OpenModalThanhToan")", userid). then(res=> {
+                $("#_rsModalNapTien").html(res);
+                $("#modalNapTien").modal("show");
+            });
+        }
+
     </script>
 }

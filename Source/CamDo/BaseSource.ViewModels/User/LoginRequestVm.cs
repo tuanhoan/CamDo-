@@ -14,6 +14,7 @@ namespace BaseSource.ViewModels.User
         public string UserName { get; set; }
         [Required]
         public string Password { get; set; }
+        public string TaiKhoan { get; set; }
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
     }
 }
